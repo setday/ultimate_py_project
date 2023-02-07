@@ -4,4 +4,4 @@ Theme:
 
 Descripion:
 
-Authors: Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk.
+Authors: Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Lebedev Vasilii.
