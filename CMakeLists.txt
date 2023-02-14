@@ -8,4 +8,4 @@ add_executable(
 
         src/core/Core.cxx
         src/main.cxx
-        src/core/Compositor.cxx src/core/Compositor.h src/core/render/components/Scene.cxx src/core/render/components/Scene.h src/core/render/components/Object.cxx src/core/render/components/Object.h)
+        src/core/Compositor.cxx src/core/Compositor.h src/core/render/components/Scene.cxx src/core/render/components/Scene.h src/core/render/components/Object.cxx src/core/render/components/Object.h src/core/render/components/Demo/CubeScene.cpp src/core/render/components/Demo/CubeScene.h)
