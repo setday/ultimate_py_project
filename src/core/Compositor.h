@@ -4,8 +4,8 @@
 #include "render/components/Scene.h"
 
 namespace unreal_fluid::compositor {
-class Compositor {
-public:
+  class Compositor {
+  public:
     std::vector<render::Scene *> scenes;
 
     Compositor();
@@ -15,5 +15,5 @@ public:
     void update();
     void render();
     void destroy();
-};  // compositor class
-}  // namespace unreal_fluid::compositor
+  }; // compositor class
+} // namespace unreal_fluid::compositor

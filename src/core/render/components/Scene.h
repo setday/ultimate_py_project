@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-
 #include "Object.h"
 
 namespace unreal_fluid::render {
