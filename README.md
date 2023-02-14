@@ -5,7 +5,7 @@ Theme:
 Descripion:
 
 <<<<<<< Updated upstream
-Authors: Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk.
+Authors: Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Lebedev Vasilii.
 =======
 Authors: Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Lebedev Vasilii.
 

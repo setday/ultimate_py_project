@@ -1,7 +1,13 @@
-# Generated from CLion C/C++ Code Style settings
-BasedOnStyle: LLVM
+BasedOnStyle: Chromium
+PointerAlignment: Right
+IncludeBlocks: Merge
+
+AlignAfterOpenBracket: BlockIndent
+QualifierAlignment: Left
+SeparateDefinitionBlocks: Always
+EmptyLineAfterAccessModifier: Never
+
 AccessModifierOffset: -2
-AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: None
 AlignOperands: Align
 AllowAllArgumentsOnNextLine: false
@@ -44,7 +50,6 @@ MaxEmptyLinesToKeep: 2
 NamespaceIndentation: All
 ObjCSpaceAfterProperty: false
 ObjCSpaceBeforeProtocolList: true
-PointerAlignment: Right
 ReflowComments: false
 SpaceAfterCStyleCast: true
 SpaceAfterLogicalNot: false
