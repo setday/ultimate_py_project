@@ -8,8 +8,6 @@ namespace unreal_fluid::compositor {
     ~Compositor();
 
     void init();
-    void update();
-    void render();
     void destroy();
   }; // compositor class
-} // compositor
+} // namespace unreal_fluid::compositor

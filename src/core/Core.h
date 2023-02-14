@@ -17,7 +17,6 @@ namespace unreal_fluid {
   private:
     void init();
     void update();
-    void render();
     void shutdown();
   }; // core class
 } // namespace unreal_fluid
