@@ -1,10 +1,11 @@
 #pragma once
-#include "render/components/Scene.h"
+
 #include <vector>
+#include "render/components/Scene.h"
 
 namespace unreal_fluid::compositor {
-  class Compositor {
-  public:
+class Compositor {
+public:
     std::vector<render::Scene *> scenes;
 
     Compositor();
@@ -14,5 +15,5 @@ namespace unreal_fluid::compositor {
     void update();
     void render();
     void destroy();
-  }; // compositor class
-} // namespace unreal_fluid::compositor
+};  // compositor class
+}  // namespace unreal_fluid::compositor
