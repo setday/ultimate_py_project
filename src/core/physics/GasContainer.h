@@ -24,6 +24,6 @@ namespace unreal_fluid::physics {
         ~GasContainer();
 
     private:
-        void simulate(double d) override;
+        void simulate(double) override;
     };
 }

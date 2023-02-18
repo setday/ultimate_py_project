@@ -15,11 +15,14 @@
 #pragma once
 
 #include "PhysicsObject.h"
-namespace unreal_fluid::physics{
-    class FluidContainer : PhysicalObject{
+
+namespace unreal_fluid::physics {
+    class FluidContainer : PhysicalObject {
     public:
         FluidContainer();
+
         ~FluidContainer();
+
         void simulate(double) override;
     };
 }
