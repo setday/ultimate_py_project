@@ -16,10 +16,7 @@
 using namespace unreal_fluid;
 
 void AbstractObject::update() {
-}
-
-AbstractObject::AbstractObject(physics::PhysicsObject *physicsObject_, render::RenderObject *renderObject_) : physicsObject(physicsObject_),
-                                                                                                              renderObject(renderObject_) {
+//  physicsObject->update();
 }
 
 AbstractObject::~AbstractObject() {
@@ -28,5 +25,5 @@ AbstractObject::~AbstractObject() {
 }
 
 void AbstractObject::render() {
-  // ?????
+//  renderObject->render();
 }

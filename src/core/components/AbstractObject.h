@@ -15,21 +15,22 @@
 #pragma once
 #include "../physics/PhysicsObject.h"
 #include "../render/components/RenderObject.h"
-#include "ObjectFactory.h"
+
+class ObjectFactory;
 
 namespace unreal_fluid {
   class AbstractObject {
     friend ObjectFactory;
 
-
     physics::PhysicsObject *physicsObject;
     render::RenderObject *renderObject;
 
   protected:
-    ~AbstractObject();
-    AbstractObject(physics::PhysicsObject *physicsObject_, render::RenderObject *renderObject_);
+    AbstractObject() = default;
 
   public:
+    ~AbstractObject();
+
     void update();
     void render();
   }; // end of AbstractObject class

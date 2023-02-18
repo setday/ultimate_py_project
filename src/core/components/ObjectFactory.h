@@ -13,17 +13,20 @@
  */
 
 #pragma once
+#include "../physics/PhysicsObject.h"
 #include "AbstractObject.h"
-#include "..//physics//PhysicsObject.h"
 
 using namespace unreal_fluid;
 
 class ObjectFactory {
+public:
+  enum class Type {
+    FluidObject,
+    GasObject,
+    StaticObject
+  };
 
-  friend class AbstractObject;
-
-  enum class object_type{FluidObject, GasObject, StaticObject};
-  AbstractObject create(physics::PhysicsObject *type, render::RenderObject *renderObject);
+  AbstractObject *create(Type type);
 };
 
 // end of ObjectFactory.h

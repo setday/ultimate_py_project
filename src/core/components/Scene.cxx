@@ -12,7 +12,7 @@ void Scene::update() {
 }
 
 void Scene::render() {
-  for (AbstractObject* object: objects) {
+  for (AbstractObject *object: objects) {
     object->render();
   }
 }

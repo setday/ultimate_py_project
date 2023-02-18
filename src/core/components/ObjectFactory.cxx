@@ -13,6 +13,23 @@
 
 #include "ObjectFactory.h"
 
-AbstractObject ObjectFactory::create(physics::PhysicsObject *type, render::RenderObject *renderObject) {
-  return AbstractObject(type, renderObject);
+using namespace unreal_fluid;
+
+AbstractObject *ObjectFactory::create(Type type) {
+  auto *object = new AbstractObject();
+
+  object->renderObject = new render::RenderObject();
+  switch (type) {
+    case Type::FluidObject:
+      // object->physicsObject = new physics::FluidObject();
+      //      break;
+    case Type::GasObject:
+      // object->physicsObject = new physics::GasObject();
+      //    break;
+    case Type::StaticObject:
+      // object->physicsObject = new physics::StaticObject();
+      break;
+  }
+
+  return object;
 }
