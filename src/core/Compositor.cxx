@@ -1,29 +1,31 @@
-#pragma once
-
 #include "Compositor.h"
 
-namespace unreal_fluid::compositor {
+using namespace unreal_fluid::compositor;
 
-  Compositor::Compositor() = default;
-  Compositor::~Compositor() = default;
+Compositor::Compositor() {
+  _windowCompositor = new window::WindowCompositor();
+  _renderer = new render::Renderer();
+}
 
-  void Compositor::init() {
-    for (auto scene: scenes)
-      scene->init();
-  }
+Compositor::~Compositor() {
+  delete _windowCompositor;
+  delete _renderer;
+}
 
-  void Compositor::update() {
-    for (auto scene: scenes)
-      scene->update();
-  }
+void Compositor::init() {
+  _windowCompositor->init(500, 500);
+  _renderer->init();
+}
 
-  void Compositor::render() {
-    for (auto scene: scenes)
-      scene->render();
-  }
+void Compositor::update() {
+}
 
-  void Compositor::destroy() {
-    for (auto scene: scenes)
-      scene->clear();
-  }
-} // namespace unreal_fluid::compositor
+void Compositor::render() {
+  // _renderer->renderObject(nullptr);
+  _windowCompositor->swapBuffers();
+}
+
+void Compositor::destroy() {
+  _renderer->destroy();
+  _windowCompositor->destroy();
+}
