@@ -5,7 +5,7 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : PhysicsObject.h
+ * FILE NAME : StaticObject.h
  * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
@@ -14,21 +14,14 @@
 
 #pragma once
 
-#include "../Core.h"
-#include "vector"
+#include "PhysicsObject.h"
 
 namespace unreal_fluid::physics {
-    class PhysicalObject {
-    private:
-        //std::vector<StaticObject> solids;
-    public:
-        PhysicalObject() = default;
+    class StaticObject : PhysicalObject {
+        StaticObject();
 
-        ~PhysicalObject() = default;
+        ~StaticObject();
 
-        virtual void simulate(double) = 0;
+        void simulate(double) override;
     };
 }
-
-
-// end of PhysicsObject.h

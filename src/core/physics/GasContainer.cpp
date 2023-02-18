@@ -5,30 +5,23 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : PhysicsObject.h
+ * FILE NAME : GasContainer.cpp
  * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
 
-#pragma once
+#include "GasContainer.h"
 
-#include "../Core.h"
-#include "vector"
-
-namespace unreal_fluid::physics {
-    class PhysicalObject {
-    private:
-        //std::vector<StaticObject> solids;
-    public:
-        PhysicalObject() = default;
-
-        ~PhysicalObject() = default;
-
-        virtual void simulate(double) = 0;
-    };
+unreal_fluid::physics::GasContainer::GasContainer() {
+    //TODO
 }
 
+unreal_fluid::physics::GasContainer::~GasContainer() {
+    //TODO
+}
 
-// end of PhysicsObject.h
+void unreal_fluid::physics::GasContainer::simulate(double dt) {
+    //TODO
+}

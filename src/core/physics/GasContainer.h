@@ -5,7 +5,7 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : PhysicsObject.h
+ * FILE NAME : GasContainer.h
  * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
@@ -14,21 +14,16 @@
 
 #pragma once
 
-#include "../Core.h"
-#include "vector"
+#include "PhysicsObject.h"
 
 namespace unreal_fluid::physics {
-    class PhysicalObject {
-    private:
-        //std::vector<StaticObject> solids;
+    class GasContainer : physics::PhysicalObject {
     public:
-        PhysicalObject() = default;
+        GasContainer();
 
-        ~PhysicalObject() = default;
+        ~GasContainer();
 
-        virtual void simulate(double) = 0;
+    private:
+        void simulate(double d) override;
     };
 }
-
-
-// end of PhysicsObject.h
