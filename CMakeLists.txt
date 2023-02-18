@@ -17,6 +17,9 @@ add_executable(
 
         src/core/Compositor.cxx
 
+        src/core/render/components/Object.cxx
+        src/core/render/components/Scene.cxx
+        src/core/Compositor.cxx
         src/core/Core.cxx
         src/main.cxx
 )

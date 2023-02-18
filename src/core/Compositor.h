@@ -10,6 +10,8 @@ namespace unreal_fluid::compositor {
     render::Renderer *_renderer;
 
   public:
+    std::vector<render::Scene *> scenes;
+
     Compositor();
     ~Compositor();
 
@@ -18,4 +20,4 @@ namespace unreal_fluid::compositor {
     void render();
     void destroy();
   }; // compositor class
-} // compositor
+} // namespace unreal_fluid::compositor
