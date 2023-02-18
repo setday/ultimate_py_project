@@ -1,6 +1,6 @@
 #pragma once
 
 namespace unreal_fluid::render {
-  class Object {
+  class RenderObject {
   };
 } // namespace unreal_fluid::render

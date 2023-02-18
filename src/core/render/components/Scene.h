@@ -2,11 +2,11 @@
 
 #include <vector>
 
-#include "Object.h"
+#include "RenderObject.h"
 
 namespace unreal_fluid::render {
   class Scene {
-    std::vector<Object> objects;
+    std::vector<RenderObject *> objects;
 
   public:
     Scene() = default;
