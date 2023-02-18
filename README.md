@@ -1,6 +1,8 @@
 **HSE python project 2023.**
 
->>>>>>> Unreal fluid
+
+=======
+Theme: Unreal Fluid
 
 Authors: Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Lebedev Vasilii.
 

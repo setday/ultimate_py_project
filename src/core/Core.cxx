@@ -5,7 +5,7 @@
 using namespace unreal_fluid;
 
 Core::Core() {
-  std::cout << "Core::Core()" << std::endl;
+
 } // end of Core::Core() function
 
 Core::~Core() {

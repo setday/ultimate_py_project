@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include "./render/window_manager/WindowCompositor.h"
 #include "./render/Renderer.h"
 
@@ -9,7 +10,10 @@ namespace unreal_fluid::compositor {
     window::WindowCompositor *_windowCompositor;
     render::Renderer *_renderer;
 
+
   public:
+    std::vector<render::Scene *> scenes;
+
     Compositor();
     ~Compositor();
 
@@ -18,4 +22,4 @@ namespace unreal_fluid::compositor {
     void render();
     void destroy();
   }; // compositor class
-} // compositor
+} // namespace unreal_fluid::compositor
