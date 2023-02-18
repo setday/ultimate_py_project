@@ -20,7 +20,7 @@ void AbstractObject::update() {
 }
 
 AbstractObject::~AbstractObject() {
-  delete physicsObject;
+  // delete physicsObject;
   delete renderObject;
 }
 

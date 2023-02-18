@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Compositor.h"
 
 using namespace unreal_fluid::compositor;
