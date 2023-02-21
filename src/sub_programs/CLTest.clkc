@@ -1,0 +1,4 @@
+__kernel void add(__global int *a, __global int *b, __global int *c) {
+    int i = get_global_id(0);
+    c[i] = b[i] + a[i];
+}

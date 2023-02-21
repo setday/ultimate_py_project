@@ -4,30 +4,22 @@
 
 using namespace unreal_fluid;
 
-Core::Core() {
-
-} // end of Core::Core() function
-
-Core::~Core() {
-
+Core::Core() : _compositor(), clManager(), _isRunning(true) {
 }
 
-void Core::run() {
+Core::~Core() = default;
 
+void Core::run() {
 }
 
 void Core::init() {
-
 }
 
 void Core::update() {
-
 }
 
 void Core::render() {
-
 }
 
 void Core::shutdown() {
-
 }

@@ -1,10 +1,12 @@
 #include "Compositor.h"
+#include "../scenes/CLTestScene.cxx"
 
 using namespace unreal_fluid::compositor;
 
 Compositor::Compositor() {
   //_windowCompositor = new window::WindowCompositor();
   _renderer = new render::Renderer();
+  CLTestScene();
 }
 
 Compositor::~Compositor() {
