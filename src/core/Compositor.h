@@ -1,18 +1,18 @@
 #pragma once
 
-
-#include "./render/window_manager/WindowCompositor.h"
+// #include "./render/window_manager/WindowCompositor.h"
 #include "./render/Renderer.h"
+#include "./components/Scene.h"
 
 namespace unreal_fluid::compositor {
   class Compositor {
   private:
-    window::WindowCompositor *_windowCompositor;
+    // window::WindowCompositor *_windowCompositor;
     render::Renderer *_renderer;
 
 
   public:
-    std::vector<render::Scene *> scenes;
+    std::vector<Scene *> scenes;
 
     Compositor();
     ~Compositor();
