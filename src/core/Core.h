@@ -6,7 +6,7 @@
 namespace unreal_fluid {
   class Core {
   private:
-    bool _isRunning{};
+    bool _isRunning;
     compositor::Compositor _compositor;
     manager::CLManager clManager;
 
