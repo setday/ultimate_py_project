@@ -15,6 +15,9 @@ MANIFEST
 
 cmake-build-debug/
 cmake-build-release/
+
 include/
+libs/
+bin/
 
 *.zip
