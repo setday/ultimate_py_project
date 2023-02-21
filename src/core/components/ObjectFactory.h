@@ -26,7 +26,7 @@ public:
     StaticObject
   };
 
-  AbstractObject *create(Type type);
+  static AbstractObject *create(Type type);
 };
 
 // end of ObjectFactory.h

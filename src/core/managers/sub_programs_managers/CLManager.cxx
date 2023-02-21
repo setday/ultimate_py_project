@@ -18,14 +18,14 @@
 using namespace unreal_fluid::manager;
 
 CLManager::CLManager() {
-  std::cout << "Start constructing this garbadge\n";
+//  std::cout << "Start constructing this garbadge\n";
   std::vector<cl::Platform> platforms;
   cl::Platform::get(&platforms);
 
-  for (auto platform: platforms) {
+  for (const auto& platform: platforms) {
     std::vector<cl::Device> devices;
     platform.getDevices(CL_DEVICE_TYPE_ALL, &devices);
-    for (auto dev: devices) _devices.emplace_back(dev);
+    for (const auto& dev: devices) _devices.emplace_back(dev);
   }
 
   _context = new cl::Context(_devices.front());
