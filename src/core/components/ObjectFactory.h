@@ -13,7 +13,7 @@
  */
 
 #pragma once
-#include "../physics/PhysicsObject.h"
+
 #include "AbstractObject.h"
 
 using namespace unreal_fluid;

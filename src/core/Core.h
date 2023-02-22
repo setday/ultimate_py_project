@@ -1,14 +1,16 @@
 #pragma once
 
-#include "managers/sub_programs_managers/CLManager.h"
+#include "managers/sub_programs_managers/CL/CLManager.h"
 #include "Compositor.h"
 
 namespace unreal_fluid {
   class Core {
+  public:
+    manager::CLManager clManager;
+
   private:
     bool _isRunning;
     compositor::Compositor _compositor;
-    manager::CLManager clManager;
 
   public:
     Core();

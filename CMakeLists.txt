@@ -28,7 +28,8 @@ set(LIBS ${OPENGL_LIBRARIES} OpenCL OpenCLUtils OpenCLUtilsCpp OpenCLUtilsCppd O
 add_executable(
         ${PROJECT_NAME}
 
-        src/core/managers/sub_programs_managers/CLManager.cxx
+        src/core/components/CL/ClBuffer.cxx
+        src/core/managers/sub_programs_managers/CL/CLManager.cxx
 
         src/core/physics/PhysicsObject.cxx
         src/core/components/AbstractObject.cxx
@@ -43,7 +44,9 @@ add_executable(
         src/core/Compositor.cxx
         src/core/Core.cxx
         src/main.cxx
-        scenes/CLTestScene.cxx)
+
+        scenes/CLTestScene.cxx
+)
 
 message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})

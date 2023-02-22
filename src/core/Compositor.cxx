@@ -3,10 +3,10 @@
 
 using namespace unreal_fluid::compositor;
 
-Compositor::Compositor() {
+Compositor::Compositor(Core *core) : core(core) {
   //_windowCompositor = new window::WindowCompositor();
   _renderer = new render::Renderer();
-  CLTestScene();
+  CLTestScene(this);
 }
 
 Compositor::~Compositor() {

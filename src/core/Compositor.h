@@ -4,17 +4,23 @@
 #include "./render/Renderer.h"
 #include "./components/Scene.h"
 
+namespace unreal_fluid {
+  class Core;
+}
+
 namespace unreal_fluid::compositor {
   class Compositor {
+  public:
+    Core *core;
+
   private:
     // window::WindowCompositor *_windowCompositor;
     render::Renderer *_renderer;
 
-
   public:
     std::vector<Scene *> scenes;
 
-    Compositor();
+    Compositor(Core *core);
     ~Compositor();
 
     void init();

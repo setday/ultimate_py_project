@@ -4,7 +4,7 @@
 
 using namespace unreal_fluid;
 
-Core::Core() : _compositor(), clManager(), _isRunning(true) {
+Core::Core() : _compositor(this), clManager(), _isRunning(true) {
 }
 
 Core::~Core() = default;

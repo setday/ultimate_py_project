@@ -15,33 +15,41 @@
 #include "../src/core/Core.h"
 
 using namespace unreal_fluid;
-using namespace std::chrono;
 
 class CLTestScene : Scene {
 public:
-  CLTestScene() {
-    const int N = 10000000;
+  CLTestScene(compositor::Compositor *compositor) : Scene(compositor) {
+    const int N = 100000000;
     std::vector<int> first(N, 368575), second(N, 257808), result(N);
-    manager::CLManager manager;
+    manager::CLManager *manager = &(compositor->core->clManager);
 
-    manager.LoadProgram("CLTest.clkc", "add");
+    manager->LoadProgram("CLTest.clkc", "add");
 
-    int idA = manager.CreateBuffer<int>(CL_MEM_READ_ONLY, N);
-    int idB = manager.CreateBuffer<int>(CL_MEM_READ_ONLY, N);
-    int idC = manager.CreateBuffer<int>(CL_MEM_WRITE_ONLY, N);
+    auto idA = manager->CreateBuffer<int>(CL_MEM_READ_ONLY, N);
+    auto idB = manager->CreateBuffer<int>(CL_MEM_READ_ONLY, N);
+    auto idC = manager->CreateBuffer<int>(CL_MEM_WRITE_ONLY, N);
 
-    manager.WriteBuffer(idA, first);
-    manager.WriteBuffer(idB, second);
-    auto start = high_resolution_clock::now();
-    manager.ExecuteProgram("add", {idA, idB, idC}, N);
-    manager.ReadBuffer(idC, result);
-    std::cout << duration_cast<microseconds>(high_resolution_clock::now() - start).count() << "\n"; // 23870
+    auto start = std::chrono::high_resolution_clock::now();
+    {
+      idA->ReadFrom(first);
+      idB->ReadFrom(second);
+      manager->ExecuteProgram("add", {idA, idB, idC}, N);
+      idC->WriteTo(result);
+    }
+    std::cout << std::chrono::duration_cast<std::chrono::microseconds>(
+            std::chrono::high_resolution_clock::now() - start
+            ).count() << "\n"; // 3984
 
     first.assign(N, 368575), second.assign(N, 257808), result.assign(N, 0);
-    start = high_resolution_clock::now();
+
+    start = std::chrono::high_resolution_clock::now();
+    {
       for (int k = 0; k < N; ++k) {
         result[k] = first[k] + second[k];
       }
-    std::cout << duration_cast<microseconds>(high_resolution_clock::now() - start).count(); // 49276
+    }
+    std::cout << std::chrono::duration_cast<std::chrono::microseconds>(
+            std::chrono::high_resolution_clock::now() - start
+            ).count(); // 5951
   }
 };

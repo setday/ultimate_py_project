@@ -4,12 +4,16 @@
 #include "../render/components/RenderObject.h"
 #include "AbstractObject.h"
 
+namespace unreal_fluid::compositor {
+  class Compositor;
+}
+
 namespace unreal_fluid {
   class Scene {
     std::vector<AbstractObject *> objects;
 
   public:
-    Scene() = default;
+    Scene(compositor::Compositor *compositor) {};
     ~Scene() = default;
 
     virtual void init();

@@ -18,7 +18,6 @@
 using namespace unreal_fluid::manager;
 
 CLManager::CLManager() {
-//  std::cout << "Start constructing this garbadge\n";
   std::vector<cl::Platform> platforms;
   cl::Platform::get(&platforms);
 
@@ -35,6 +34,19 @@ CLManager::CLManager() {
 CLManager::~CLManager() {
   delete _context;
   delete _commandQueue;
+
+  for (auto *buffer: _buffers) {
+    delete buffer;
+  }
+}
+
+template<typename T>
+unreal_fluid::computing::CLBuffer<T> * CLManager::CreateBuffer(cl_mem_flags flags, size_t elementsCount) {
+  auto *buffer = new unreal_fluid::computing::CLBuffer<T>(_context, _commandQueue, flags, elementsCount);
+
+  _buffers.emplace_back(buffer);
+
+  return buffer;
 }
 
 void CLManager::LoadProgram(const std::string &fileName, const std::string &programName) {
@@ -51,10 +63,17 @@ void CLManager::LoadProgram(const std::string &fileName, const std::string &prog
   _programs[programName] = kernel;
 }
 
-void CLManager::ExecuteProgram(const std::string &programName, const std::vector<int> &bufferIDs, int numberOfRuns) {
-  for (int i = 0; i < bufferIDs.size(); ++i) {
-    _programs[programName].setArg(i, _buffers[bufferIDs[i]]);
+void CLManager::ExecuteProgram(const std::string &programName, const std::vector<computing::ICLBuffer *> &buffers, int numberOfRuns) {
+  for (int i = 0; i < buffers.size(); ++i) {
+    _programs[programName].setArg(i, _buffers[i]->GetBuffer());
   }
 
   _commandQueue->enqueueNDRangeKernel(_programs[programName], cl::NullRange, cl::NDRange(numberOfRuns), cl::NullRange);
+}
+
+void UselessFunctionCLManager() {
+  // This function is useless, but it is used to make sure that the compiler will not optimize out the template instantiation.
+  // This is needed to avoid linker errors.
+  CLManager manager;
+  manager.CreateBuffer<int>(CL_MEM_READ_WRITE, 10);
 }
