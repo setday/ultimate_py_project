@@ -4,30 +4,32 @@
 
 using namespace unreal_fluid;
 
-Core::Core() {
-
-} // end of Core::Core() function
-
-Core::~Core() {
-
+Core::Core() : _compositor(this) {
 }
 
-void Core::run() {
+Core::~Core() = default;
 
+void Core::Run() {
+  Init();
+
+  while (_isRunning) {
+    Update();
+  }
+
+  Shutdown();
 }
 
-void Core::init() {
-
+void Core::Init() {
+  _isRunning = true;
+  _compositor.Init();
 }
 
-void Core::update() {
-
+void Core::Update() {
+  _compositor.Update();
+  _compositor.Render();
 }
 
-void Core::render() {
-
-}
-
-void Core::shutdown() {
-
+void Core::Shutdown() {
+  _compositor.Destroy();
+  _isRunning = false;
 }

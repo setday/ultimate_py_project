@@ -2,11 +2,11 @@
 
 using namespace unreal_fluid::render;
 
-void Renderer::init() {
-  initGL();
+void Renderer::Init() const {
+  InitGl();
 } // end of Renderer::Renderer() function
 
-void Renderer::initGL() {
+void Renderer::InitGl() const {
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   glClearDepth(1.0f);
   glDepthFunc(GL_LEQUAL);
@@ -16,7 +16,7 @@ void Renderer::initGL() {
   // made RGBA frame mode
 } // end of Renderer::initGL() function
 
-void Renderer::renderObject(RenderObject *object) {
+void Renderer::RenderObject(const render::RenderObject *object) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
   glTranslatef(0.0f, 0.0f, -5.0f);
@@ -30,6 +30,6 @@ void Renderer::renderObject(RenderObject *object) {
   glEnd();
 } // end of Renderer::renderObject() function
 
-void Renderer::destroy() {
+void Renderer::Destroy() const {
   glDisable(GL_DEPTH_TEST);
 } // end of Renderer::destroy() function

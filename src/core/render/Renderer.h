@@ -11,11 +11,11 @@ namespace unreal_fluid::render {
     Renderer() = default;
     ~Renderer() = default;
 
-    void init();
-    void renderObject(RenderObject *object);
-    void destroy();
+    void Init() const;
+    void RenderObject(const render::RenderObject *object);
+    void Destroy() const;
 
   private:
-    void initGL();
+    void InitGl() const;
   }; // Renderer class
 } // namespace unreal_fluid::render

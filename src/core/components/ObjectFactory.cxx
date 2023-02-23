@@ -15,10 +15,10 @@
 
 using namespace unreal_fluid;
 
-AbstractObject *ObjectFactory::create(Type type) {
+AbstractObject *ObjectFactory::Create(Type type) {
   auto *object = new AbstractObject();
 
-  object->renderObject = new render::RenderObject();
+  object->_renderObject = new render::RenderObject();
   switch (type) {
     case Type::FluidObject:
       // object->physicsObject = new physics::FluidObject();

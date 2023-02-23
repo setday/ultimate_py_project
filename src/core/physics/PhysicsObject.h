@@ -6,7 +6,6 @@
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
  * FILE NAME : PhysicsObject.h
- * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -17,6 +16,5 @@
 namespace physics {
   class PhysicsObject;
 }
-
 
 // end of PhysicsObject.h

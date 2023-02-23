@@ -2,24 +2,24 @@
 
 using namespace unreal_fluid;
 
-void Scene::init() {
+void Scene::Init() {
+  // The base realization doesn't need to initialize resources
 }
 
-void Scene::update() {
-  for (AbstractObject *object: objects) {
-    object->update();
+void Scene::Update() {
+  for (AbstractObject const *object: objects) {
+    object->Update();
   }
 }
 
-void Scene::render() {
-  for (AbstractObject *object: objects) {
-    object->render();
+void Scene::Render() {
+  for (AbstractObject const *object: objects) {
+    object->Render();
   }
 }
 
-void Scene::clear() {
+void Scene::Clear() {
   for (AbstractObject *&object: objects) {
     delete &object;
-    object = nullptr;
   }
 }

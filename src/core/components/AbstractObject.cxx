@@ -15,15 +15,15 @@
 
 using namespace unreal_fluid;
 
-void AbstractObject::update() {
+void AbstractObject::Update() const {
 //  physicsObject->update();
 }
 
 AbstractObject::~AbstractObject() {
   // delete physicsObject;
-  delete renderObject;
+  delete _renderObject;
 }
 
-void AbstractObject::render() {
+void AbstractObject::Render() const {
 //  renderObject->render();
 }
