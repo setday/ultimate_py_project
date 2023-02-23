@@ -12,16 +12,19 @@
  */
 
 #include <iostream>
+
 #include "../src/core/Core.h"
 
 using namespace unreal_fluid;
 
-class CLTestScene : Scene {
+class ClTestScene : public Scene {
 public:
-  CLTestScene(compositor::Compositor *compositor) : Scene(compositor) {
-    const int N = 100000000;
-    std::vector<int> first(N, 368575), second(N, 257808), result(N);
-    manager::CLManager *manager = &(compositor->core->clManager);
+  explicit ClTestScene(compositor::Compositor const * compositor) : Scene(compositor) {
+    const int N = 1'000'000;
+    std::vector<int> first(N, 368575);
+    std::vector<int> second(N, 257808);
+    std::vector<int> result(N);
+    manager::CLManager *manager = &(compositor->GetCore()->clManager);
 
     manager->LoadProgram("CLTest.clkc", "add");
 
@@ -38,9 +41,11 @@ public:
     }
     std::cout << std::chrono::duration_cast<std::chrono::microseconds>(
             std::chrono::high_resolution_clock::now() - start
-            ).count() << "\n"; // 3984
+    ).count() << "\n"; // 3984
 
-    first.assign(N, 368575), second.assign(N, 257808), result.assign(N, 0);
+    first.assign(N, 368575);
+    second.assign(N, 257808);
+    result.assign(N, 0);
 
     start = std::chrono::high_resolution_clock::now();
     {
@@ -50,6 +55,8 @@ public:
     }
     std::cout << std::chrono::duration_cast<std::chrono::microseconds>(
             std::chrono::high_resolution_clock::now() - start
-            ).count(); // 5951
+    ).count(); // 5951
   }
+
+  ~ClTestScene() override = default;
 };

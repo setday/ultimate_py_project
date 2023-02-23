@@ -13,12 +13,12 @@ namespace unreal_fluid {
     std::vector<AbstractObject *> objects;
 
   public:
-    Scene(compositor::Compositor *compositor) {};
-    ~Scene() = default;
+    explicit Scene(compositor::Compositor const *) {};
+    virtual ~Scene() = default;
 
-    virtual void init();
-    virtual void update();
-    virtual void render();
-    virtual void clear();
+    virtual void Init();
+    virtual void Update();
+    virtual void Render();
+    virtual void Clear();
   };
 } // namespace unreal_fluid

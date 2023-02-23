@@ -10,22 +10,21 @@ namespace unreal_fluid {
 
 namespace unreal_fluid::compositor {
   class Compositor {
-  public:
-    Core *core;
-
   private:
     // window::WindowCompositor *_windowCompositor;
     render::Renderer *_renderer;
+    std::vector<Scene *> _scenes;
+    Core *_core;
 
   public:
-    std::vector<Scene *> scenes;
-
-    Compositor(Core *core);
+    explicit Compositor(Core *core);
     ~Compositor();
 
-    void init();
-    void update();
-    void render();
-    void destroy();
+    void Init();
+    void Update();
+    void Render();
+    void Destroy();
+
+    [[nodiscard]] Core *GetCore() const;
   }; // compositor class
 } // namespace unreal_fluid::compositor

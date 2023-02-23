@@ -41,13 +41,11 @@ namespace unreal_fluid::computing {
     friend unreal_fluid::manager::CLManager;
     friend void UselessFunctionCLBuffer();
 
-  private:
     cl::Buffer _buffer;
     cl::CommandQueue *_commandQueue;
     size_t _elementCount;
 
-  private:
-    CLBuffer(cl::Context *context, cl::CommandQueue *commandQueue, cl_mem_flags flags, size_t elementCount);
+    CLBuffer(cl::Context const * context, cl::CommandQueue *commandQueue, cl_mem_flags flags, size_t elementCount);
 
   public:
     ~CLBuffer() override;

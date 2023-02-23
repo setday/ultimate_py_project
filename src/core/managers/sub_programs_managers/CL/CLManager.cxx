@@ -71,7 +71,7 @@ void CLManager::ExecuteProgram(const std::string &programName, const std::vector
   _commandQueue->enqueueNDRangeKernel(_programs[programName], cl::NullRange, cl::NDRange(numberOfRuns), cl::NullRange);
 }
 
-void UselessFunctionCLManager() {
+[[maybe_unused]] void UselessFunctionClManager() {
   // This function is useless, but it is used to make sure that the compiler will not optimize out the template instantiation.
   // This is needed to avoid linker errors.
   CLManager manager;

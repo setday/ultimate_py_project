@@ -1,12 +1,11 @@
 #include "Compositor.h"
-#include "../scenes/CLTestScene.cxx"
+#include "../scenes/ClTestScene.cxx"
 
 using namespace unreal_fluid::compositor;
 
-Compositor::Compositor(Core *core) : core(core) {
+Compositor::Compositor(Core *core) : _core(core) {
   //_windowCompositor = new window::WindowCompositor();
   _renderer = new render::Renderer();
-  CLTestScene(this);
 }
 
 Compositor::~Compositor() {
@@ -14,20 +13,25 @@ Compositor::~Compositor() {
   delete _renderer;
 }
 
-void Compositor::init() {
+void Compositor::Init() {
   // _windowCompositor->init(500, 500);
-  _renderer->init();
+  _renderer->Init();
+  ClTestScene(this);
 }
 
-void Compositor::update() {
+void Compositor::Update() {
 }
 
-void Compositor::render() {
+void Compositor::Render() {
   // _renderer->renderObject(nullptr);
   // _windowCompositor->swapBuffers();
 }
 
-void Compositor::destroy() {
-  _renderer->destroy();
+void Compositor::Destroy() {
+  _renderer->Destroy();
   // _windowCompositor->destroy();
+}
+
+Core *Compositor::GetCore() const {
+  return _core;
 }

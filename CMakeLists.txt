@@ -39,13 +39,13 @@ add_executable(
         src/core/render/Renderer.cxx
 
         src/core/components/Scene.cxx
-        scenes/CLTestScene.cxx
+        scenes/ClTestScene.cxx
 
         src/core/Compositor.cxx
         src/core/Core.cxx
         src/main.cxx
 
-        scenes/CLTestScene.cxx
+        scenes/ClTestScene.cxx
 )
 
 message(${OPENGL_LIBRARIES})

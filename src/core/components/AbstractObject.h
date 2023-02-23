@@ -17,14 +17,16 @@
 #include "../physics/PhysicsObject.h"
 #include "../render/components/RenderObject.h"
 
-class ObjectFactory;
+namespace unreal_fluid {
+  class ObjectFactory;
+} // namespace unreal_fluid
 
 namespace unreal_fluid {
   class AbstractObject {
     friend ObjectFactory;
 
-    physics::PhysicsObject *physicsObject;
-    render::RenderObject *renderObject;
+    physics::PhysicsObject *_physicsObject;
+    render::RenderObject *_renderObject;
 
   protected:
     AbstractObject() = default;
@@ -32,8 +34,8 @@ namespace unreal_fluid {
   public:
     ~AbstractObject();
 
-    void update();
-    void render();
+    void Update() const;
+    void Render() const;
   }; // end of AbstractObject class
 } // namespace unreal_fluid
 

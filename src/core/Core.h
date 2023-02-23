@@ -9,19 +9,18 @@ namespace unreal_fluid {
     manager::CLManager clManager;
 
   private:
-    bool _isRunning;
+    bool _isRunning = false;
     compositor::Compositor _compositor;
 
   public:
     Core();
     ~Core();
 
-    void run();
+    void Run();
 
   private:
-    void init();
-    void update();
-    void render();
-    void shutdown();
+    void Init();
+    void Update();
+    void Shutdown();
   }; // core class
 } // namespace unreal_fluid

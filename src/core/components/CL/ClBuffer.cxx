@@ -16,9 +16,9 @@
 using namespace unreal_fluid::computing;
 
 template<typename T>
-CLBuffer<T>::CLBuffer(cl::Context *context, cl::CommandQueue *commandQueue, cl_mem_flags flags, size_t elementCount) :
-        _elementCount(elementCount), _commandQueue(commandQueue) {
-  _buffer = cl::Buffer(*context, flags, sizeof(T) * elementCount);
+CLBuffer<T>::CLBuffer(cl::Context const * context, cl::CommandQueue *commandQueue, cl_mem_flags flags, size_t elementCount) :
+        _elementCount(elementCount), _commandQueue(commandQueue),
+        _buffer(*context, flags, sizeof(T) * elementCount) {
 }
 
 template<typename T>
@@ -50,4 +50,5 @@ void unreal_fluid::computing::UselessFunctionCLBuffer() {
   auto *buffer = new unreal_fluid::computing::CLBuffer<int>(nullptr, nullptr, 0, 0);
   buffer->ReadFrom(data);
   buffer->WriteTo(data);
+  delete buffer;
 }
