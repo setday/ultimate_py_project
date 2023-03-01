@@ -28,7 +28,7 @@ namespace unreal_fluid::fluid {
     std::unordered_map<int, std::vector<Particle *>> ceils;
 
   public:
-    SimpleFluidContainer();
+    SimpleFluidContainer(double particleSize);
     ~SimpleFluidContainer();
 
     void simulate(double dt) override;

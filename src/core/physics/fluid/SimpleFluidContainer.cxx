@@ -16,6 +16,9 @@
 
 using namespace unreal_fluid::fluid;
 
+SimpleFluidContainer::SimpleFluidContainer(double particleSize) : particleSize(particleSize) {
+};
+
 std::vector<Particle *> *SimpleFluidContainer::getParticles() {
   return &particles;
 }
@@ -35,8 +38,8 @@ void SimpleFluidContainer::sort() {
 }
 
 int SimpleFluidContainer::getCell(Particle particle) {
-  return int(particle.getX()) + int(particle.getY()) * 2 * particleSize
-         + int(particle.getZ()) * 4 * particleSize * particleSize;
+  /// TODO: return what's needed
+  return 0;
 }
 
 //void SimpleFluidContainer::advect(double dt) {

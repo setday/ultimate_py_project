@@ -33,7 +33,7 @@ double fluid::Particle::getZ() const {
   return _position.z;
 }
 
-double fluid::Particle::radius() const {
+double fluid::Particle::getRadius() const {
   return _radius;
 }
 

@@ -33,7 +33,7 @@ namespace unreal_fluid::fluid {
     double getX() const;
     double getY() const;
     double getZ() const;
-    double radius() const;
+    double getRadius() const;
     void advect(double dt);
   };
 } // namespace unreal_fluid::fluid

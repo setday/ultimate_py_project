@@ -22,7 +22,7 @@ namespace unreal_fluid::fluid {
   class IFluidContainer {
 
   public:
-    IFluidContainer() = delete;
+    IFluidContainer();
     virtual ~IFluidContainer() = default;
 
     virtual void simulate(double dt) = 0;
