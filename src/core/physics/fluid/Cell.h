@@ -5,7 +5,7 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Ceil.h
+ * FILE NAME : Cell.h
  * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
@@ -13,6 +13,7 @@
  */
 
 #pragma once
+
 #include "../../maths/MathHeaders"
 
 using namespace unreal_fluid::math;
@@ -22,4 +23,4 @@ public:
   Vector3<int> coords;
 };
 
-// end of Ceil.h
+// end of Cell.h

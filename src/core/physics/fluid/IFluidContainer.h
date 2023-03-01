@@ -27,6 +27,6 @@ namespace unreal_fluid::fluid {
 
     virtual void simulate(double dt) = 0;
 
-    virtual const std::vector<Particle> *getParticles() = 0;
+    virtual const std::vector<Particle *> *getParticles() = 0;
   };
 } // namespace unreal_fluid::fluid

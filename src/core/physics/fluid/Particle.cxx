@@ -38,5 +38,5 @@ double fluid::Particle::radius() const {
 }
 
 void fluid::Particle::advect(double dt) {
-  _velocity.y -= dt * physics::G;
+  _velocity += dt * physics::G;
 }

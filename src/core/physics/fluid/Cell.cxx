@@ -5,7 +5,7 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Ceil.cxx
+ * FILE NAME : Cell.cxx
  * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of

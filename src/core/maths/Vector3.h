@@ -127,12 +127,12 @@ namespace unreal_fluid::math {
       return os;
     }
 
-    //    friend Vector3<T> operator/(const Vector3 &vec, float c) {
-    //      return Vector3(vec.x / c, vec.y / c, vec.z / c);
-    //    }
-    //
-    //    friend Vector3<T> operator*(float c, Vector3<T> &vec) {
-    //      return Vector3(vec.x * c, vec.y * c, vec.z * c);
-    //    }
+    friend Vector3<T> operator/(const Vector3 &vec, float c) {
+      return Vector3(vec.x / c, vec.y / c, vec.z / c);
+    }
+
+    friend Vector3<T> operator*(float c, const Vector3<T> &vec) {
+      return Vector3(vec.x * c, vec.y * c, vec.z * c);
+    }
   };
 } // namespace unreal_fluid::math

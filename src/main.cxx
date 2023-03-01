@@ -2,6 +2,6 @@
 
 int main() {
   unreal_fluid::Core core;
-//  core.Run();
+  core.Run();
   return 0;
 }

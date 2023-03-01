@@ -13,7 +13,8 @@
  */
 
 #pragma once
+#include "../maths/MathHeaders"
 
 namespace physics {
-  const double G = 9.81;
+  const vec3 G = {0, -9.81, 0};
 }

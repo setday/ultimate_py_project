@@ -16,7 +16,7 @@
 
 using namespace unreal_fluid::fluid;
 
-std::vector<Particle> *SimpleFluidContainer::getParticles() {
+std::vector<Particle *> *SimpleFluidContainer::getParticles() {
   return &particles;
 }
 
@@ -30,7 +30,7 @@ void SimpleFluidContainer::simulate(double dt) {
 void SimpleFluidContainer::sort() {
   ceils.clear();
   for (const auto &particle: particles) {
-    ceils[getCell(particle)].push_back(particle);
+    ceils[getCell(*particle)].push_back(particle);
   }
 }
 
@@ -45,7 +45,7 @@ int SimpleFluidContainer::getCell(Particle particle) {
 
 void SimpleFluidContainer::addExternalForces(double dt) const {
   for (auto particle: particles) {
-    particle.advect(dt);
+    particle->advect(dt);
   }
 }
 

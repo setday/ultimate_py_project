@@ -5,8 +5,8 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Vector3.h
- * PURPOSE   : usable vec3 realization
+ * FILE NAME : Particle.h
+ * PURPOSE   : particle realization (ZZZ)
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
