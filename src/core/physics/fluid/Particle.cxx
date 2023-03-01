@@ -13,6 +13,7 @@
  */
 
 #include "Particle.h"
+#include "../../physics/PhysicsDefs.h"
 
 fluid::Particle::Particle(const vec3 &velocity, const vec3 &position, double radius, double mass, void *metaData) : _velocity(velocity),
                                                                                                                     _position(position),
@@ -37,5 +38,5 @@ double fluid::Particle::radius() const {
 }
 
 void fluid::Particle::advect(double dt) {
-  _velocity.y -= dt * math::G;
+  _velocity.y -= dt * physics::G;
 }
