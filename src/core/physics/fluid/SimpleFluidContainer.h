@@ -13,26 +13,29 @@
  */
 
 #pragma once
-#include "IFluidContainer.h"
-#include "Ceil.h"
 #include <unordered_map>
 
+#include "IFluidContainer.h"
+#include "Cell.h"
+
+
 namespace unreal_fluid::fluid {
-  class FluidContainer : IFluidContainer {
+  class SimpleFluidContainer : IFluidContainer {
   private:
+    const double particleSize;
     std::vector<Particle> particles;
     std::unordered_map<int, std::vector<Particle>> ceils;
 
   public:
-    FluidContainer();
-    ~FluidContainer();
+    SimpleFluidContainer();
+    ~SimpleFluidContainer();
 
     void simulate(double dt) override;
     std::vector<Particle> *getParticles() override;
 
   private:
     void sort();
-    int getCeil(Particle particle);
+    int getCell(Particle particle);
 //    void advect(double dt);
     void addExternalForces(double dt) const;
 //    void project(double dt);

@@ -5,7 +5,7 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : FluidContainer.h
+ * FILE NAME : Ceil.h
  * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
@@ -13,20 +13,13 @@
  */
 
 #pragma once
-#include <vector>
-
 #include "../../maths/MathHeaders"
-#include "Particle.h"
 
-namespace unreal_fluid::fluid {
-  class IFluidContainer {
+using namespace unreal_fluid::math;
 
-  public:
-    IFluidContainer() = delete;
-    virtual ~IFluidContainer() = default;
+class Cell {
+public:
+  Vector3<int> coords;
+};
 
-    virtual void simulate(double dt) = 0;
-
-    virtual const std::vector<Particle> *getParticles() = 0;
-  };
-} // namespace unreal_fluid::fluid
+// end of Ceil.h

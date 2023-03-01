@@ -11,10 +11,7 @@ namespace unreal_fluid::math {
         i = 0x5f3759df - (i >> 1);
         float y = *(float*)&i;
         y *= (1.5F - 0.5F * x * y * y);
-        y *= (1.5F - 0.5F * x * y * y);
         return y * (1.5F - 0.5F * x * y * y);
     }
-
-    const double G = 9.81;
 
 } // namespace maths

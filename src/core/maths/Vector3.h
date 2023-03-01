@@ -6,15 +6,17 @@
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
  * FILE NAME : Vector3.h
- * PURPOSE   : ${PURPOSE}
+ * PURPOSE   : usable vec3 realization
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
 
 #pragma once
+
+#include <string>
+
 #include "MathHeaders"
-#include "string"
 
 namespace unreal_fluid::math {
 

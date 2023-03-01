@@ -12,43 +12,43 @@
  * authors of this project.
  */
 
-#include "FluidContainer.h"
+#include "SimpleFluidContainer.h"
 
 using namespace unreal_fluid::fluid;
 
-std::vector<Particle> *FluidContainer::getParticles() {
+std::vector<Particle> *SimpleFluidContainer::getParticles() {
   return &particles;
 }
 
-void FluidContainer::simulate(double dt) {
+void SimpleFluidContainer::simulate(double dt) {
   sort();
 //  advect(dt);
   addExternalForces(dt);
 //  project(dt);
 }
 
-void FluidContainer::sort() {
+void SimpleFluidContainer::sort() {
   ceils.clear();
-  for (const auto & particle : particles) {
-    ceils[getCeil(particle)].push_back(particle);
+  for (const auto &particle: particles) {
+    ceils[getCell(particle)].push_back(particle);
   }
 }
 
-int FluidContainer::getCeil(Particle particle) {
-  return int(particle.getX()) + int(particle.getY()) * 2 * particle.radius()
-         + int(particle.getZ()) * 4 * particle.radius() * particle.radius();
+int SimpleFluidContainer::getCell(Particle particle) {
+  return int(particle.getX()) + int(particle.getY()) * 2 * particleSize
+         + int(particle.getZ()) * 4 * particleSize * particleSize;
 }
 
-//void FluidContainer::advect(double dt) {
+//void SimpleFluidContainer::advect(double dt) {
 //
 //}
 
-void FluidContainer::addExternalForces(double dt) const {
-  for (auto particle : particles) {
+void SimpleFluidContainer::addExternalForces(double dt) const {
+  for (auto particle: particles) {
     particle.advect(dt);
   }
 }
 
-//void FluidContainer::project(double dt) {
+//void SimpleFluidContainer::project(double dt) {
 //
 //}
