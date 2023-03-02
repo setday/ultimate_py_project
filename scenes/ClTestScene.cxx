@@ -14,6 +14,7 @@
 #include <iostream>
 
 #include "../src/core/Core.h"
+#include "../src/core/components/Scene.h"
 
 using namespace unreal_fluid;
 

@@ -3,6 +3,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include "../../Definitions.h"
+
 #include "components/RenderObject.h"
 
 namespace unreal_fluid::render {
@@ -12,7 +14,8 @@ namespace unreal_fluid::render {
     ~Renderer() = default;
 
     void Init() const;
-    void RenderObject(const render::RenderObject *object);
+    void StartFrame() const;
+    void RenderObject(const render::RenderObject *object) const;
     void Destroy() const;
 
   private:
