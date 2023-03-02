@@ -38,4 +38,6 @@ public:
 # endif /* _CRTDBG_MAP_ALLOC */
 #endif /* _DEBUG */
 
+#include "utils/Logger.h"
+
 // end of Definitions.h

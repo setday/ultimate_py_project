@@ -11,7 +11,10 @@ find_package(OpenGL REQUIRED)
 include_directories(${OpenGL_INCLUDE_DIRS} include)
 
 if (WIN32)
-    link_directories(lib)
+    link_directories(
+            lib/CL
+            lib/GLFW
+    )
     include_directories(share/cmake/OpenCL)
     include_directories(share/cmake/OpenCLHeaders)
     include_directories(share/cmake/OpenCLHeadersCpp)
@@ -23,10 +26,22 @@ else ()
     return()
 endif()
 
-set(LIBS ${OPENGL_LIBRARIES} OpenCL OpenCLUtils OpenCLUtilsCpp OpenCLUtilsCppd OpenCLUtilsd)
+set(LIBS
+        ${OPENGL_LIBRARIES}
+
+        glfw3
+
+        OpenCL
+        OpenCLUtils
+        OpenCLUtilsCpp
+        OpenCLUtilsCppd
+        OpenCLUtilsd
+)
 
 add_executable(
         ${PROJECT_NAME}
+
+        src/utils/Logger.cxx
 
         src/core/components/CL/ClBuffer.cxx
         src/core/managers/sub_programs_managers/CL/CLManager.cxx
@@ -40,12 +55,13 @@ add_executable(
 
         src/core/components/Scene.cxx
         scenes/ClTestScene.cxx
+        scenes/GlTestScene.cxx
+
+        src/core/render/window_manager/WindowCompositor.cxx
 
         src/core/Compositor.cxx
         src/core/Core.cxx
         src/main.cxx
-
-        scenes/ClTestScene.cxx
 )
 
 message(${OPENGL_LIBRARIES})
