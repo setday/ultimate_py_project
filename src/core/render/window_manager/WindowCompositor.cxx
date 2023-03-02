@@ -1,21 +1,33 @@
-//
-// Copyright (c) 2023 Unreal Fluid. All rights reserved.
-//
+/***************************************************************
+ * Copyright (C) 2023
+ *    HSE SPb (Higher school of economics in Saint-Petersburg).
+ ***************************************************************/
+
+/* PROJECT   : ultimate_py_project
+ * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
+ * FILE NAME : WindowCompositor.cxx
+ * PURPOSE   : This is wrapper class for the glfw.
+ *
+ * No part of this file may be changed and used without agreement of
+ * authors of this project.
+ */
 
 #include "WindowCompositor.h"
 
 using namespace unreal_fluid::window;
 
 WindowCompositor::WindowCompositor() {
+  Logger::log(Logger::Level::INFO, "Initializing window compositor...");
+
   if (!glfwInit()) {
-    std::cout << "Failed to initialize GLFW" << std::endl;
+    Logger::log(Logger::Level::ERR, "Failed to initialize GLFW!");
     return;
   }
 
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+  glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
+  glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+
+  Logger::log(Logger::Level::INFO, "Window compositor initialized!");
 }
 
 WindowCompositor::~WindowCompositor() {
@@ -25,11 +37,13 @@ WindowCompositor::~WindowCompositor() {
 }
 
 void WindowCompositor::init(int width, int height) {
+  Logger::log(Logger::Level::INFO, "Creating window with size " + std::to_string(width) + "x" + std::to_string(height) + "...");
+
   if (_isAlive) destroy();
 
   _window = glfwCreateWindow(width, height, "Unreal Fluid", nullptr, nullptr);
   if (!_window) {
-    std::cout << "Failed to create GLFW window" << std::endl;
+    Logger::log(Logger::Level::ERR, "Failed to create window!");
     glfwTerminate();
     return;
   }
@@ -37,16 +51,21 @@ void WindowCompositor::init(int width, int height) {
   glfwMakeContextCurrent(_window);
   glfwSwapInterval(1);
 
-  _width = width;
-  _height = height;
-
   _isAlive = true;
+
+  Logger::log(Logger::Level::INFO, "Window created!");
 }
 
-void WindowCompositor::swapBuffers() {
+void WindowCompositor::update() {
   if (!_isAlive) return;
 
   glfwSwapBuffers(_window);
+
+  glfwPollEvents();
+
+  if (glfwWindowShouldClose(_window)) {
+    destroy();
+  }
 }
 
 void WindowCompositor::resize(int width, int height) {
@@ -59,7 +78,11 @@ void WindowCompositor::resize(int width, int height) {
 void WindowCompositor::destroy() {
   if (!_isAlive) return;
 
+  Logger::log(Logger::Level::INFO, "Destroying window...");
+
   glfwDestroyWindow(_window);
 
   _isAlive = false;
 }
+
+// end of WindowCompositor.cxx
