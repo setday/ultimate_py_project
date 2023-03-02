@@ -12,8 +12,8 @@ include_directories(${OpenGL_INCLUDE_DIRS} include)
 
 if (WIN32)
     link_directories(
-            lib/CL
-            lib/GLFW
+            lib/win32/CL
+            lib/win32/GLFW
     )
     include_directories(share/cmake/OpenCL)
     include_directories(share/cmake/OpenCLHeaders)
