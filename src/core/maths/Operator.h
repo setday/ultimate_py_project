@@ -19,6 +19,7 @@ namespace unreal_fluid::math {
 
   template<typename T>
   double inverseSqrt(T x) {
+    assert(x > 0);
     //TODO make pure double sqrt calculation
     auto temp = static_cast<float>(x);
     int i = *(int*)&temp;
@@ -30,6 +31,7 @@ namespace unreal_fluid::math {
 
   template<typename T>
   double sqrt(T x){
+    if (x == 0) return 0;
     return 1.0/ inverseSqrt(x);
   }
 

@@ -16,7 +16,7 @@
 
 #include <string>
 
-#include "MathHeaders"
+#include "Operator.h"
 
 namespace unreal_fluid::math {
 
@@ -94,15 +94,17 @@ namespace unreal_fluid::math {
 
     [[nodiscard]] T len2() const { return x * x + y * y + z * z; }
 
-    [[nodiscard]] double len() const { return root(len2()); }
+    [[nodiscard]] double len() const { return sqrt(len2()); }
 
     [[nodiscard]] double operator!() const { return len(); }
 
     Vector3 normalize() const {
+      assert(len() > 0);
       return this / len();
     }
 
     Vector3 *normalizeSelf() {
+      assert(len() > 0);
       return this /= len();
     }
 
@@ -116,6 +118,11 @@ namespace unreal_fluid::math {
 
     Vector3 cross(const Vector3 &v) const {
       return Vector3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
+    }
+
+    T project(const Vector3 &v) {
+      assert(v.len() > 0);
+      return this->dot(v) / v.len();
     }
 
     [[nodiscard]] std::string to_string() const {
