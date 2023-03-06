@@ -18,6 +18,8 @@
 #include <fstream>
 #include <string>
 
+#define _DEBUG
+
 #ifdef _DEBUG
 #define LOG_FATAL(message) Logger::log(Logger::Level::FATAL, message, __FILE__, __LINE__)
 #define LOG_ERROR(message) Logger::log(Logger::Level::ERR, message, __FILE__, __LINE__)

@@ -18,6 +18,7 @@
 
 #include "../scenes/ClTestScene.cxx"
 #include "../scenes/GlTestScene.cxx"
+#include "../scenes/Control.cxx"
 
 using namespace unreal_fluid::compositor;
 
@@ -39,6 +40,7 @@ void Compositor::Init() {
   _renderer->Init();
   _scenes.push_back(new ClTestScene(this));
   _scenes.push_back(new GlTestScene(this));
+  _scenes.push_back(new Control(this));
 
   Logger::log(Logger::Level::INFO, "Compositor initialized!");
 }

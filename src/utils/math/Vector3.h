@@ -16,8 +16,6 @@
 
 #include <string>
 
-#include "MathHeaders"
-
 namespace unreal_fluid::math {
 
   template<typename T>

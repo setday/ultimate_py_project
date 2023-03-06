@@ -32,8 +32,10 @@ void Core::Run() {
   while (_isRunning) {
     Update();
   }
+}
 
-  Shutdown();
+window::WindowCompositor *Core::GetWindowCompositor() const {
+  return _windowCompositor;
 }
 
 void Core::Init() {

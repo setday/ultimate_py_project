@@ -38,6 +38,7 @@ public:
 # endif /* _CRTDBG_MAP_ALLOC */
 #endif /* _DEBUG */
 
+#include "utils/math/MathHeaders"
 #include "utils/Logger.h"
 
 // end of Definitions.h
