@@ -3,12 +3,13 @@
 #include <vector>
 
 #include "../../../Definitions.h"
+#include "meshes/BasicMesh.h"
 
 namespace unreal_fluid::render {
   class RenderObject {
   public:
-    std::vector<std::vector<float>> vertices;
-    std::vector<std::vector<float>> colors;
+    mesh::BasicMesh mesh;
+    vec3f position = vec3f(0.0f, 0.0f, 0.0f);
 
     float zAxisAngle = 0.0f;
 

@@ -2,12 +2,16 @@
 
 using namespace unreal_fluid::render;
 
-void Renderer::Init() const {
-  Logger::log(Logger::Level::INFO, "Initializing renderer...");
+void Renderer::Init() {
+  Logger::logInfo("Initializing renderer...");
+
+  _shaderManager = new ShaderManager();
 
   InitGl();
 
-  Logger::log(Logger::Level::INFO, "Renderer initialized!");
+  ChangeRenderMode(RenderMode::SOLID);
+
+  Logger::logInfo("Renderer initialized!");
 } // end of Renderer::Renderer() function
 
 void Renderer::InitGl() const {
@@ -21,13 +25,6 @@ void Renderer::InitGl() const {
   glEnable(GL_DEPTH_TEST);
   glShadeModel(GL_SMOOTH);
 
-  // load camera matrix
-  // glMatrixMode(GL_PROJECTION);
-  // glLoadIdentity();
-  // gluPerspective(45.0f, 640.0f / 480.0f, 0.1f, 100.0f);
-  // glMatrixMode(GL_MODELVIEW);
-  // glLoadIdentity();
-
   // enable blending
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -39,8 +36,7 @@ void Renderer::InitGl() const {
   // enable texture 2d
   glEnable(GL_TEXTURE_2D);
 
-  // enable culling
-  glEnable(GL_CULL_FACE);
+  // set culling
   glCullFace(GL_BACK);
 
   // enable point smoothing
@@ -54,18 +50,47 @@ void Renderer::StartFrame() const {
 } // end of Renderer::startFrame() function
 
 void Renderer::RenderObject(const render::RenderObject *object) const {
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  gluPerspective(45.0f, 1, 0.01f, 100.0f);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  glRotatef(object->zAxisAngle, 0.f, 0.f, 1.f);
+  glTranslatef(object->position.x, object->position.y, object->position.z);
+  glRotatef(object->zAxisAngle, 0.f, 1.f, 0.f);
 
   glBegin(GL_TRIANGLES);
-  for (int i = 0; i < object->vertices.size(); i++) {
-    glColor3f(object->colors[i][0], object->colors[i][1], object->colors[i][2]);
-    glVertex3f(object->vertices[i][0], object->vertices[i][1], object->vertices[i][2]);
+  for (int i = 0; i < object->mesh.indices.size(); i++) {
+    auto vertex = object->mesh.vertices[object->mesh.indices[i]];
+    glColor4f(vertex.color.x, vertex.color.y, vertex.color.z, 1.f);
+    glNormal3f(vertex.normal.x, vertex.normal.y, vertex.normal.z);
+    glVertex3f(vertex.position.x, vertex.position.y, vertex.position.z);
   }
   glEnd();
 } // end of Renderer::renderObject() function
 
-void Renderer::Destroy() const {
+void Renderer::Destroy() {
   glDisable(GL_DEPTH_TEST);
+
+  delete _shaderManager;
 } // end of Renderer::destroy() function
+
+ShaderManager *Renderer::GetShaderManager() const {
+  return _shaderManager;
+} // end of Renderer::getShaderManager() function
+
+void Renderer::ChangeRenderMode(RenderMode mode) {
+  _renderMode = mode;
+
+  if (mode == RenderMode::WIREFRAME) {
+    glDisable(GL_CULL_FACE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  } else if (mode == RenderMode::SOLID) {
+    glEnable(GL_CULL_FACE);
+    glPolygonMode(GL_FRONT, GL_FILL);
+  } else if (mode == RenderMode::TEXTURED) {
+    glEnable(GL_CULL_FACE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  }
+} // end of Renderer::changeRenderMode() function
+
+// end of Renderer.cxx

@@ -15,9 +15,7 @@
 #pragma once
 
 #include <iostream>
-
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <functional>
 
 #include <GLFW/glfw3.h>
 
@@ -32,9 +30,13 @@ namespace unreal_fluid::window {
   class WindowCompositor {
   private:
     bool _isAlive = false;
+
     GLFWwindow* _window = nullptr;
+
     int _width = 0;
     int _height = 0;
+
+    static std::vector<std::function<void(int key, int action)>> _keyboardCallbacks;
 
   public:
     WindowCompositor();
@@ -56,6 +58,23 @@ namespace unreal_fluid::window {
     /// Returns if the window compositor is alive.
     /// @return True if the window compositor is alive.</returns>
     bool isAlive() const { return _isAlive; };
+
+    /// General callback for the keyboard.
+    /// @param window The window.
+    /// @param key The key.
+    /// @param scancode The scancode.
+    /// @param action The action.
+    /// @param mods The mods.
+    static void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+    /// Add keyboard callback.
+    /// @param callback The callback function.
+    void addKeyboardCallback(std::function<void(int key, int action)> callback);
+
+    /// Get size of the window.
+    /// @param width The width of the window.
+    /// @param height The height of the window.
+    void getSize(int& width, int& height) const;
   }; // end of window_compositor class
 } // end of unreal_fluid::window namespace
 

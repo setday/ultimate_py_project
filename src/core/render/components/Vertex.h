@@ -3,9 +3,9 @@
  *    HSE SPb (Higher school of economics in Saint-Petersburg).
  ***************************************************************/
 
-/* PROJECT   : UnrealFluidPhysics
+/* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : MainMath.h
+ * FILE NAME : Vertex.h
  * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
@@ -14,8 +14,19 @@
 
 #pragma once
 
-#include "Vector3.h"
-#include "Operator.h"
+#include "../../../Definitions.h"
 
-using vec3 = unreal_fluid::math::Vector3<double>;
-//using intvec3 = unreal_fluid::math::Vector3<int>;
+namespace unreal_fluid::render {
+  class Vertex {
+  public:
+    vec3f position;
+    vec3f normal;
+    vec3f color;
+
+  public:
+    Vertex() = default;
+    Vertex(vec3f position, vec3f normal, vec3f color);
+  };
+} // render
+
+// end of Vertex.h
