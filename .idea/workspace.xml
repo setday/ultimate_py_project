@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakePresetLoader"><![CDATA[{
+  "useNewFormat": true
+}]]></component>
+  <component name="CMakeReloadState">
+    <option name="reloaded" value="true" />
+  </component>
+  <component name="CMakeRunConfigurationManager">
+    <generated>
+      <config projectName="ultimate_py_project" targetName="ultimate_py_project" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+      <configuration PROFILE_NAME="Release" ENABLED="true" CONFIG_NAME="Release" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="7b9b3207-63ce-4a8c-9f60-ec2aa3b2a727" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/spets.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/fileColors.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/Compositor.cxx" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Compositor.cxx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/Core.cxx" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Core.cxx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/managers/sub_programs_managers/shader_manager/ShaderManager.cxx" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/managers/sub_programs_managers/shader_manager/ShaderManager.cxx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/render/Renderer.cxx" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/render/Renderer.cxx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/core/render/window_manager/WindowCompositor.cxx" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/render/window_manager/WindowCompositor.cxx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/Logger.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/Logger.h" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectApplicationVersion">
+    <option name="ide" value="CLion" />
+    <option name="majorVersion" value="2022" />
+    <option name="minorVersion" value="3.2" />
+  </component>
+  <component name="ProjectId" id="2MdhlpREBYwOtrGrNOjWWmdFKOe" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "last_opened_file_path": "E:/setday's dir/ultimate_py_project"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ultimate_py_project" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="ultimate_py_project" TARGET_NAME="ultimate_py_project" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="ultimate_py_project" RUN_TARGET_NAME="ultimate_py_project">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7b9b3207-63ce-4a8c-9f60-ec2aa3b2a727" name="Changes" comment="" />
+      <created>1678103520778</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1678103520778</updated>
+      <workItem from="1678103521911" duration="102000" />
+    </task>
+    <servers />
+  </component>
+</project>

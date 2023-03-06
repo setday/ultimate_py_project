@@ -21,17 +21,21 @@
 #define _DEBUG
 
 #ifdef _DEBUG
-#define LOG_FATAL(message) Logger::log(Logger::Level::FATAL, message, __FILE__, __LINE__)
-#define LOG_ERROR(message) Logger::log(Logger::Level::ERR, message, __FILE__, __LINE__)
-#define LOG_WARNING(message) Logger::log(Logger::Level::WARNING, message)
-#define LOG_INFO(message) Logger::log(Logger::Level::INFO, message)
-#define LOG_DEBUG(message) Logger::log(Logger::Level::DEBUG, message)
+#define LOG_DEBUG(...) Logger::log(Logger::Level::DEBUG, __VA_ARGS__)
+#define LOG_INFO(...) Logger::log(Logger::Level::INFO, __VA_ARGS__)
+#define LOG_WARNING(...) Logger::log(Logger::Level::WARNING, __VA_ARGS__)
+#define LOG_ERROR(...) { Logger::log(Logger::Level::ERR, __VA_ARGS__); \
+                         Logger::logPlace(__FILE__, __LINE__); }
+#define LOG_FATAL(...) { Logger::logPlace(__FILE__, __LINE__); \
+                         Logger::log(Logger::Level::FATAL, __VA_ARGS__); }
 #else
-#define LOG_FATAL(message) Logger::log(Logger::Level::FATAL, message, __FILE__, __LINE__)
-#define LOG_ERROR(message) Logger::log(Logger::Level::ERR, message, __FILE__, __LINE__)
-#define LOG_WARNING(message) {}
-#define LOG_INFO(message) Logger::log(Logger::Level::INFO, message)
-#define LOG_DEBUG(message) {}
+#define LOG_DEBUG(...)
+#define LOG_INFO(...)
+#define LOG_WARNING(...)
+#define LOG_ERROR(...) { Logger::log(Logger::Level::ERR, __VA_ARGS__); \
+                         Logger::logPlace(__FILE__, __LINE__); }
+#define LOG_FATAL(...) { Logger::logPlace(__FILE__, __LINE__); \
+                         Logger::log(Logger::Level::FATAL, __VA_ARGS__); }
 #endif
 
 class Logger {
@@ -44,44 +48,115 @@ public:
     FATAL
   };
 
-  /// Logs a message to the console or file depending on the level and mode.
+private:
+  template<typename Arg>
+  static void logObject(const Arg &object) {
+    std::cout << object;
+  }
+
+public:
+  /// Log a lots of objects.
   /// @param level The level of the message.
-  /// @param message The message to log.
-  /// @param file The file where the message was logged. (optional)
-  /// @param line The line where the message was logged. (optional)
-  template<typename T>
-  static void log(Level level, const T &message, std::string_view file = "", int line = -1) {
+  /// @param objects The objects to log.
+  /// @attention to use this method you should overload std::to_string for your class
+  template<typename... Args>
+  static void log(Level level, const Args &... objects) {
     switch (level) {
       case Level::DEBUG:
-        std::cout << "|===| [DEBUG] " << message << std::endl;
+        logObject("|===| [DEBUG] ");
         break;
       case Level::INFO:
-        std::cout << "> [INFO] " << message;
+        logObject("> [INFO] ");
         break;
       case Level::WARNING:
-        std::cout << "> [WARNING] " << message;
+        logObject("> [WARNING] ");
         break;
       case Level::ERR:
-        std::cout << ">>> [ERROR] " << message;
+        logObject(">>> [ERROR] ");
         break;
       case Level::FATAL:
-        std::cout << ">>> [FATAL] " << message;
+        logObject(">>> [FATAL] ");
         break;
     }
 
-    if (file != "" && line != -1) {
-      std::cout << " (in file " << file << " at line " << line << ")";
-    } else if (file != "") {
-      std::cout << " (in file " << file << ")";
-    } else if (line != -1) {
-      std::cout << " (at line " << line << ")";
-    }
+    ((logObject(objects), logObject(' ')), ...);
 
-    std::cout << std::endl;
+#if 0
+    if (file != "" && line != -1) {
+      logObjects(" (in file ", file, " at line ", line, ")");
+    } else if (file != "") {
+      logObjects(" (in file ", file, ")");
+    } else if (line != -1) {
+      logObjects(" (at line ", line, ")");
+    }
+#endif
+
+    logObject('\n');
 
     if (level == Level::FATAL) {
       exit(1);
     }
+  }
+
+  /// Log place of call
+  /// @param file file name
+  /// @param line line number
+  static void logPlace(std::string_view file = "", int line = -1) {
+    if (file != "" && line != -1) {
+      logObject(" (in file ");
+      logObject(file);
+      logObject(" at line ");
+      logObject(line);
+      logObject(")");
+    } else if (file != "") {
+      logObject(" (in file ");
+      logObject(file);
+      logObject(")");
+    } else if (line != -1) {
+      logObject(" (at line ");
+      logObject(line);
+      logObject(")");
+    }
+  }
+
+  /// Log a lots of objects with info level
+  /// @attention to use this method you should overload std::to_string for your class
+  /// @param objects objects to log
+  template<typename... Args>
+  static void logInfo(const Args &... objects) {
+    log(Level::INFO, objects...);
+  }
+
+  /// Log a lots of objects with debug level
+  /// @attention to use this method you should overload std::to_string for your class
+  /// @param objects objects to log
+  template<typename... Args>
+  static void logDebug(const Args &... objects) {
+    log(Level::DEBUG, objects...);
+  }
+
+  /// Log a lots of objects with warning level
+  /// @attention to use this method you should overload std::to_string for your class
+  /// @param objects objects to log
+  template<typename... Args>
+  static void logWarning(const Args &... objects) {
+    log(Level::WARNING, objects...);
+  }
+
+  /// Log a lots of objects with error level
+  /// @attention to use this method you should overload std::to_string for your class
+  /// @param objects objects to log
+  template<typename... Args>
+  static void logError(const Args &... objects) {
+    log(Level::ERR, objects...);
+  }
+
+  /// Log a lots of objects with fatal level
+  /// @attention to use this method you should overload std::to_string for your class
+  /// @param objects objects to log
+  template<typename... Args>
+  static void logFatal(const Args &... objects) {
+    log(Level::FATAL, objects...);
   }
 };
 

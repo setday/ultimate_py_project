@@ -3,7 +3,7 @@
 using namespace unreal_fluid::render;
 
 void Renderer::Init() {
-  Logger::log(Logger::Level::INFO, "Initializing renderer...");
+  Logger::logInfo("Initializing renderer...");
 
   _shaderManager = new ShaderManager();
 
@@ -11,7 +11,7 @@ void Renderer::Init() {
 
   ChangeRenderMode(RenderMode::SOLID);
 
-  Logger::log(Logger::Level::INFO, "Renderer initialized!");
+  Logger::logInfo("Renderer initialized!");
 } // end of Renderer::Renderer() function
 
 void Renderer::InitGl() const {

@@ -40,7 +40,7 @@ const Shader *ShaderManager::LoadShader(std::string_view path) {
 
   std::ifstream file(realPath);
   if (!file.is_open()) {
-    LOG_ERROR("ShaderManager : Can't open shader file: " + realPath);
+    LOG_ERROR("ShaderManager : Can't open shader file: ", realPath);
 
     return nullptr;
   }
@@ -62,7 +62,7 @@ const Shader *ShaderManager::LoadShader(std::string_view path) {
   } else if (fileType == "frag") {
     shader = new Shader(Shader::Type::FRAGMENT);
   } else {
-    LOG_ERROR("ShaderManager : Unknown shader type: " + std::string(path));
+    LOG_ERROR("ShaderManager : Unknown shader type: ", path);
     return nullptr;
   }
 
@@ -70,7 +70,7 @@ const Shader *ShaderManager::LoadShader(std::string_view path) {
     std::string infoLog;
 
     shader->GetLog(infoLog);
-    LOG_ERROR("ShaderManager : Shader (" + std::string(path) + ") compilation failed: " + std::string(infoLog));
+    LOG_ERROR("ShaderManager : Shader (", path, ") compilation failed: ", infoLog);
 
     delete shader;
 

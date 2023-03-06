@@ -19,17 +19,17 @@ using namespace unreal_fluid::window;
 std::vector<std::function<void(int key, int action)>> WindowCompositor::_keyboardCallbacks;
 
 WindowCompositor::WindowCompositor() {
-  Logger::log(Logger::Level::INFO, "Initializing window compositor...");
+  Logger::logInfo("Initializing window compositor...");
 
   if (!glfwInit()) {
-    Logger::log(Logger::Level::ERR, "Failed to initialize GLFW!");
+    Logger::logError("Failed to initialize GLFW!");
     return;
   }
 
   glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
   glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
-  Logger::log(Logger::Level::INFO, "Window compositor initialized!");
+  Logger::logInfo("Window compositor initialized!");
 }
 
 WindowCompositor::~WindowCompositor() {
@@ -39,13 +39,13 @@ WindowCompositor::~WindowCompositor() {
 }
 
 void WindowCompositor::init(int width, int height) {
-  Logger::log(Logger::Level::INFO, "Creating window with size " + std::to_string(width) + "x" + std::to_string(height) + "...");
+  Logger::logInfo("Creating window with size ", width, "x", height, "...");
 
   if (_isAlive) destroy();
 
   _window = glfwCreateWindow(width, height, "Unreal Fluid", nullptr, nullptr);
   if (!_window) {
-    Logger::log(Logger::Level::ERR, "Failed to create window!");
+    Logger::logError("Failed to create window!");
     glfwTerminate();
     return;
   }
@@ -57,7 +57,7 @@ void WindowCompositor::init(int width, int height) {
 
   _isAlive = true;
 
-  Logger::log(Logger::Level::INFO, "Window created!");
+  Logger::logInfo("Window created!");
 }
 
 void WindowCompositor::update() {
@@ -82,7 +82,7 @@ void WindowCompositor::resize(int width, int height) {
 void WindowCompositor::destroy() {
   if (!_isAlive) return;
 
-  Logger::log(Logger::Level::INFO, "Destroying window...");
+  Logger::logInfo("Destroying window...");
 
   glfwDestroyWindow(_window);
 
