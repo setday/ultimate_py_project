@@ -20,10 +20,13 @@
 
 namespace unreal_fluid::fluid {
   class IFluidContainer {
+
+  protected:
+    std::vector<Particle> particles;
   public:
     IFluidContainer() = default;
     virtual ~IFluidContainer() = default;
     virtual void simulate(double dt) = 0;
-    virtual const std::vector<Particle *> *getParticles() = 0;
+    virtual const std::vector<Particle> *getParticles() = 0;
   };
 } // namespace unreal_fluid::fluid

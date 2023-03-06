@@ -100,12 +100,12 @@ namespace unreal_fluid::math {
 
     Vector3 normalize() const {
       assert(len() > 0);
-      return this / len();
+      return *this / len();
     }
 
-    Vector3 *normalizeSelf() {
+    void normalizeSelf() {
       assert(len() > 0);
-      return this /= len();
+      *this /= len();
     }
 
     Vector3 operator*(const Vector3 &vec) const {
@@ -134,7 +134,7 @@ namespace unreal_fluid::math {
       return os;
     }
 
-    friend Vector3<T> operator/(const Vector3 &vec, float c) {
+    friend Vector3<T> operator/(const Vector3 &vec, T c) {
       return Vector3(vec.x / c, vec.y / c, vec.z / c);
     }
 

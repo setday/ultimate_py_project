@@ -22,14 +22,14 @@
 namespace unreal_fluid::fluid {
   class Fluid1Container : IFluidContainer {
   private:
-    std::vector<Particle *> particles;
     std::unordered_map<int, std::vector<Particle *>> cells;
+    void collide(Particle& p1, Particle& p2);
 
   public:
     Fluid1Container();
     ~Fluid1Container();
     void simulate(double dt) override;
-    std::vector<Particle *> *getParticles() override;
+    std::vector<Particle> *getParticles() override;
   private:
     void advect(double dt);
     void addExternalForces(double dt);

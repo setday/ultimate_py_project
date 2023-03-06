@@ -24,7 +24,7 @@ Fluid1Container::~Fluid1Container(){
   //destroy fluid
 };
 
-std::vector<Particle *> *Fluid1Container::getParticles() {
+std::vector<Particle> *Fluid1Container::getParticles() {
   return &particles;
 }
 
@@ -36,12 +36,22 @@ void Fluid1Container::advect(double dt) {
 
 }
 
-void Fluid1Container::interact(double dt) {
 
+
+void Fluid1Container::interact(double dt) {
+  for (int i = 0; i < particles.size(); ++i) {
+    for (int j = i + 1; j < particles.size(); ++j) {
+      collide(particles[i], particles[j]);
+    }
+  }
 }
 
 void Fluid1Container::simulate(double dt) {
   interact(dt);
   addExternalForces(dt);
   advect(dt);
+}
+
+void Fluid1Container::collide(Particle& p1, Particle& p2) {
+
 }
