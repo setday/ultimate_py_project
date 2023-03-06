@@ -1,20 +1,12 @@
-# C extensions
-*.so
-
-# Distribution / packaging
-dist/
-downloads/
-parts/
-sdist/
-var/
-wheels/
-.installed.cfg
-MANIFEST
-
-cmake-build-debug/
-cmake-build-release/
-
-bin/
-
-*.zip
-.idea/sonarlint/
+*
+!include
+!lib
+!CMakeLists.txt
+!.clang-format
+!.clang-tidy
+!README.md
+!scenes
+!src
+!.gitignore
+!.git
+!.github

@@ -1,4 +1,4 @@
-**HSE python project 2023.**
+**HSE python pressureSolving 2023.**
 
 
 =======

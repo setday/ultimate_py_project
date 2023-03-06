@@ -8,7 +8,7 @@
  * FILE NAME : PhysicsObject.cxx
  *
  * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * authors of this pressureSolving.
  */
 
 #include "PhysicsObject.h"

@@ -9,7 +9,7 @@
  * PURPOSE   : This is the main class of the project.
  *
  * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * authors of this pressureSolving.
  */
 
 #include <iostream>

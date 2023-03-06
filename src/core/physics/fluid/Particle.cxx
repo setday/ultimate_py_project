@@ -13,30 +13,27 @@
  */
 
 #include "Particle.h"
-#include "../../physics/PhysicsDefs.h"
 
-fluid::Particle::Particle(const vec3 &velocity, const vec3 &position, double radius, double mass, void *metaData) : _velocity(velocity),
-                                                                                                                    _position(position),
-                                                                                                                    _radius(radius),
-                                                                                                                    _mass(mass),
-                                                                                                                    metaData(metaData) {}
+fluid::Particle::Particle(const vec3 &velocity, const vec3 &position, double radius, double mass, void *metaData)
+        : _velocity(velocity),
+          _position(position),
+          _radius(radius),
+          _mass(mass),
+          metaData(metaData) {}
 
-double fluid::Particle::getX() const {
-  return _position.x;
+
+vec3 &fluid::Particle::getVelocity() {
+  return _velocity;
 }
 
-double fluid::Particle::getY() const {
-  return _position.y;
+vec3 &fluid::Particle::getPosition() {
+  return _position;
 }
 
-double fluid::Particle::getZ() const {
-  return _position.z;
-}
-
-double fluid::Particle::getRadius() const {
+double fluid::Particle::getRadius() {
   return _radius;
 }
 
-void fluid::Particle::advect(double dt) {
-  _velocity += dt * physics::G;
+double fluid::Particle::getMass() {
+  return _mass;
 }
