@@ -17,6 +17,7 @@
 #include "../src/core/components/Scene.h"
 #include "../src/core/render/components/meshes/Sphere.h"
 #include "../src/core/render/components/meshes/Plane.h"
+#include "../src/core/render/components/meshes/Cube.h"
 
 using namespace unreal_fluid;
 
@@ -24,6 +25,7 @@ class GlTestScene : public Scene {
 public:
   render::RenderObject *sphere;
   render::RenderObject *plane;
+  render::RenderObject *cube;
   const compositor::Compositor *compositor;
   const render::Shader *shader;
 
@@ -38,6 +40,11 @@ public:
     plane->position = {0.f, -1.f, -5.f};
     plane->zAxisAngle = 0.f;
 
+    cube = new render::RenderObject();
+    cube->mesh = render::mesh::Cube(.5f);
+    cube->position = {.75f, 0.f, -5.f};
+    cube->zAxisAngle = 0.f;
+
     shader = compositor->GetRenderer()->GetShaderManager()->LoadShader("test/triangle.vert");
   }
 
@@ -45,11 +52,13 @@ public:
     auto time = std::chrono::system_clock::now().time_since_epoch().count() / 1000000000.0;
 
     sphere->zAxisAngle = std::sin(time) * 200;
+    cube->zAxisAngle = -std::sin(time) * 200;
   }
 
   void Render() override {
     compositor->GetRenderer()->RenderObject(sphere);
     compositor->GetRenderer()->RenderObject(plane);
+    compositor->GetRenderer()->RenderObject(cube);
 
     // shader->ExecuteProgram();
   }

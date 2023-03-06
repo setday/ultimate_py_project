@@ -53,6 +53,7 @@ add_executable(
         src/core/render/components/meshes/BasicMesh.cxx
         src/core/render/components/meshes/Plane.cxx
         src/core/render/components/meshes/Sphere.cxx
+        src/core/render/components/meshes/Cube.cxx
 
         src/core/managers/sub_programs_managers/shader_manager/Shader.cxx
         src/core/managers/sub_programs_managers/shader_manager/ShaderManager.cxx

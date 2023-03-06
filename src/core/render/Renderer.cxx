@@ -9,7 +9,7 @@ void Renderer::Init() {
 
   InitGl();
 
-  ChangeRenderMode(RenderMode::WIREFRAME);
+  ChangeRenderMode(RenderMode::SOLID);
 
   Logger::log(Logger::Level::INFO, "Renderer initialized!");
 } // end of Renderer::Renderer() function
