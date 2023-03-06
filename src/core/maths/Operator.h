@@ -9,11 +9,11 @@
  * PURPOSE   : math operatots to use
  *
  * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * authors of this pressureSolving.
  */
 
 #pragma once
-#include "cmath"
+#include <assert.h>
 
 namespace unreal_fluid::math {
 
