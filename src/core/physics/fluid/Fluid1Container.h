@@ -19,17 +19,17 @@
 #include "IFluidContainer.h"
 #include "Cell.h"
 
-
+///Fluid1Container - Fluid simulating class, which implements FLIP simulation method (ITS NOT ABSOLUTELY RIGHT)
 namespace unreal_fluid::fluid {
-  class SimpleFluidContainer : IFluidContainer {
+  class Fluid1Container : IFluidContainer {
   private:
     const double particleSize;
     std::vector<Particle *> particles;
-    std::unordered_map<int, std::vector<Particle *>> ceils;
+    std::unordered_map<int, std::vector<Particle *>> cells;
 
   public:
-    SimpleFluidContainer(double particleSize);
-    ~SimpleFluidContainer();
+    Fluid1Container(double particleSize);
+    ~Fluid1Container();
 
     void simulate(double dt) override;
     std::vector<Particle *> *getParticles() override;

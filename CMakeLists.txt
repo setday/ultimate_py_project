@@ -65,6 +65,8 @@ add_executable(
 
         src/core/maths/Operator.h
         src/core/maths/Vector3.h
+
+        src/core/physics/fluid/Fluid1Container.cxx
 )
 
 message(${OPENGL_LIBRARIES})

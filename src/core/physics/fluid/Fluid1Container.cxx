@@ -12,32 +12,32 @@
  * authors of this project.
  */
 
-#include "SimpleFluidContainer.h"
+#include "Fluid1Container.h"
 
 using namespace unreal_fluid::fluid;
 
-SimpleFluidContainer::SimpleFluidContainer(double particleSize) : particleSize(particleSize) {
+Fluid1Container::Fluid1Container(double particleSize) : particleSize(particleSize) {
 };
 
-std::vector<Particle *> *SimpleFluidContainer::getParticles() {
+std::vector<Particle *> *Fluid1Container::getParticles() {
   return &particles;
 }
 
-void SimpleFluidContainer::simulate(double dt) {
+void Fluid1Container::simulate(double dt) {
   sort();
 //  advect(dt);
   addExternalForces(dt);
 //  project(dt);
 }
 
-void SimpleFluidContainer::sort() {
-  ceils.clear();
+void Fluid1Container::sort() {
+  cells.clear();
   for (const auto &particle: particles) {
-    ceils[getCell(*particle)].push_back(particle);
+    cells[getCell(*particle)].push_back(particle);
   }
 }
 
-int SimpleFluidContainer::getCell(Particle particle) {
+int Fluid1Container::getCell(Particle particle) {
   /// TODO: return what's needed
   return 0;
 }
@@ -46,7 +46,7 @@ int SimpleFluidContainer::getCell(Particle particle) {
 //
 //}
 
-void SimpleFluidContainer::addExternalForces(double dt) const {
+void Fluid1Container::addExternalForces(double dt) const {
   for (auto particle: particles) {
     particle->advect(dt);
   }
