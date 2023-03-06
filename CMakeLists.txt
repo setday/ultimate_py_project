@@ -62,6 +62,9 @@ add_executable(
         src/core/Compositor.cxx
         src/core/Core.cxx
         src/main.cxx
+
+        src/core/maths/Operator.h
+        src/core/maths/Vector3.h
 )
 
 message(${OPENGL_LIBRARIES})
