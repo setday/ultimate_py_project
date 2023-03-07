@@ -41,14 +41,11 @@ void Fluid1Container::advect(double dt) {
 }
 
 void Fluid1Container::interact(double dt) {
-  unreal_fluid::fluid::CellsDistribution cellsDistribution(particles);
-  auto p = cellsDistribution.nextPair();
-  while (p.first != nullptr || p.second != nullptr) {
-    auto &p1 = *p.first;
-    auto &p2 = *p.second;
-    if ((p1.c() - p2.c()).len() <= p1.r() + p2.r()) {
-      collide(p1, p2);
-    }
+  CellsDistribution cells(particles);
+  std::pair<Particle*, Particle*> p = cells.nextPair(), end = {nullptr, nullptr};
+  while (p != end) {
+    collide(p.first, p.second);
+    p = cells.nextPair();
   }
 }
 
