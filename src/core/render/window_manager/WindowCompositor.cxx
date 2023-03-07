@@ -98,7 +98,7 @@ void WindowCompositor::keyboardCallback(GLFWwindow *window, int key, int scancod
 }
 
 void WindowCompositor::addKeyboardCallback(std::function<void(int key, int action)> callback) {
-  _keyboardCallbacks.push_back(callback);
+  _keyboardCallbacks.emplace_back(callback);
 }
 
 void WindowCompositor::resizeCallback(GLFWwindow *window, int width, int height) {
@@ -108,7 +108,7 @@ void WindowCompositor::resizeCallback(GLFWwindow *window, int width, int height)
 }
 
 void WindowCompositor::addResizeCallback(std::function<void(int width, int height)> callback) {
-  _resizeCallbacks.push_back(callback);
+  _resizeCallbacks.emplace_back(callback);
 }
 
 void WindowCompositor::getSize(int& width, int& height) const {

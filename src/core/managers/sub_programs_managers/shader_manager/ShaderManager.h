@@ -19,12 +19,13 @@
 
 #include "../../../../Definitions.h"
 
-#include "Shader.h"
+#include "../../../render/components/shaders/ShaderProgram.h"
 
 namespace unreal_fluid::render {
   class ShaderManager {
   private:
     std::vector<Shader *> _shaders;
+    std::vector<ShaderProgram *> _programs;
     std::vector<std::string> _shaderPaths;
 
   public:
@@ -35,6 +36,15 @@ namespace unreal_fluid::render {
     /// @param path Path to shader file
     /// @return Shader pointer
     const Shader * LoadShader(std::string_view path);
+
+    /// Create program from shaders
+    /// @param shaders Shaders to create program from
+    /// @return Program
+    const ShaderProgram * CreateProgram(const std::vector<const Shader *> &shaders);
+
+    /// Reload shader
+    /// @param shader Shader to reload
+    void ReloadShader(Shader *shader);
 
     /// Reload all shaders
     void ReloadShaders();

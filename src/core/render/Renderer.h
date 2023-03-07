@@ -37,6 +37,11 @@ namespace unreal_fluid::render {
     /// Change render mode.
     /// @param mode New render mode.
     void ChangeRenderMode(RenderMode mode);
+
+    /// Change render resolution
+    /// @param width - width of camera
+    /// @param height - height of camera
+    void changeResolution(int width, int height);
   private:
     void InitGl() const;
   }; // Renderer class

@@ -37,7 +37,6 @@ namespace unreal_fluid::window {
     int _height = 0;
 
     static std::vector<std::function<void(int key, int action)>> _keyboardCallbacks;
-    static std::vector<std::function<void(float dX, float dY)>> _mouseCallbacks;
     static std::vector<std::function<void(int width, int height)>> _resizeCallbacks;
 
   public:

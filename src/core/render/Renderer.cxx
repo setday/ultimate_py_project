@@ -7,8 +7,8 @@ void Renderer::Init() {
 
   _shaderManager = new ShaderManager();
 
-  camera = Camera(vec3f(0.0f, 0.0f, 0.0f), vec3f(0.0f, 1.0f, 0.0f),
-                  vec3f(0.0f, 0.0f, -1.0f), 1.0f, 45.0f, 0.01f, 1000.0f);
+  camera = Camera(vec3f(0.0f, 0.0f, 0.0f), vec3f(0.0f, 0.0f, 1.0f),
+                  vec3f(0.0f, 1.0f, 0.0f), 1.0f, 45.0f, 0.01f, 1000.0f);
 
   InitGl();
 
@@ -54,17 +54,34 @@ void Renderer::StartFrame() const {
 
 void Renderer::RenderObject(const render::RenderObject *object) const {
   glMatrixMode(GL_MODELVIEW);
-  glLoadMatrixf((
-          camera.getProjectionMatrix() * object->modelMatrix
-          ).withTranspose().data());
 
-  vec2f viewportSize = camera.getResolution();
-  glViewport(0, 0, viewportSize.x, viewportSize.y);
+  GLuint projectionMatrixID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "projectionMatrix");
+  glUniformMatrix4fv(projectionMatrixID, 1, GL_FALSE, camera.getProjectionMatrix().data());
+  GLuint modelMatrixID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "modelMatrix");
+  glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, object->modelMatrix.data());
+
+  GLuint cameraPositionID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "cameraPosition");
+  glUniform3f(cameraPositionID, camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+  GLuint cameraDirectionID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "cameraDirection");
+  glUniform3f(cameraDirectionID, camera.getDirection().x, camera.getDirection().y, camera.getDirection().z);
+  GLuint cameraUpID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "cameraUp");
+  glUniform3f(cameraUpID, 0.f, 1.f, 0.f);
+
+  // send material data
+  GLuint materialAmbientID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "ambientColor");
+  glUniform3f(materialAmbientID, object->material.ambient_color.x, object->material.ambient_color.y, object->material.ambient_color.z);
+  GLuint materialDiffuseID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "diffuseColor");
+  glUniform3f(materialDiffuseID, object->material.diffuse_color.x, object->material.diffuse_color.y, object->material.diffuse_color.z);
+  GLuint materialSpecularID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "specularColor");
+  glUniform3f(materialSpecularID, object->material.specular_color.x, object->material.specular_color.y, object->material.specular_color.z);
+  GLuint materialShininessID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "shininess");
+  glUniform1f(materialShininessID, object->material.shininess);
+
+  object->shaderProgram->Execute();
 
   glBegin(GL_TRIANGLES);
   for (int i = 0; i < object->mesh.indices.size(); i++) {
     auto vertex = object->mesh.vertices[object->mesh.indices[i]];
-    glColor4f(vertex.color.x, vertex.color.y, vertex.color.z, 1.f);
     glNormal3f(vertex.normal.x, vertex.normal.y, vertex.normal.z);
     glVertex3f(vertex.position.x, vertex.position.y, vertex.position.z);
   }
@@ -95,5 +112,11 @@ void Renderer::ChangeRenderMode(RenderMode mode) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   }
 } // end of Renderer::changeRenderMode() function
+
+void Renderer::changeResolution(int width, int height) {
+  camera.setResolution(width, height);
+
+  glViewport(0, 0, width, height);
+}
 
 // end of Renderer.cxx
