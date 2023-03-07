@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <cmath>
 #include <string>
 
 namespace unreal_fluid::math {
@@ -92,12 +93,12 @@ namespace unreal_fluid::math {
 
     [[nodiscard]] T len2() const { return x * x + y * y + z * z; }
 
-    [[nodiscard]] double len() const { return root(len2()); }
+    [[nodiscard]] double len() const { return std::sqrt(len2()); }
 
     [[nodiscard]] double operator!() const { return len(); }
 
     Vector3 normalize() const {
-      return this / len();
+      return *this / len();
     }
 
     Vector3 *normalizeSelf() {

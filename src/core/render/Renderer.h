@@ -4,6 +4,7 @@
 
 #include "../managers/sub_programs_managers/shader_manager/ShaderManager.h"
 #include "components/RenderObject.h"
+#include "components/camera/Camera.h"
 
 namespace unreal_fluid::render {
   class Renderer {
@@ -19,6 +20,8 @@ namespace unreal_fluid::render {
     RenderMode _renderMode;
 
   public:
+    Camera camera;
+
     Renderer() = default;
     ~Renderer() = default;
 

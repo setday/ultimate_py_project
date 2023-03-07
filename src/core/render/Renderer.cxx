@@ -7,6 +7,9 @@ void Renderer::Init() {
 
   _shaderManager = new ShaderManager();
 
+  camera = Camera(vec3f(0.0f, 0.0f, 0.0f), vec3f(0.0f, 1.0f, 0.0f),
+                  vec3f(0.0f, 0.0f, -1.0f), 1.0f, 45.0f, 0.01f, 1000.0f);
+
   InitGl();
 
   ChangeRenderMode(RenderMode::SOLID);
@@ -50,13 +53,13 @@ void Renderer::StartFrame() const {
 } // end of Renderer::startFrame() function
 
 void Renderer::RenderObject(const render::RenderObject *object) const {
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  gluPerspective(45.0f, 1, 0.01f, 100.0f);
   glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  glTranslatef(object->position.x, object->position.y, object->position.z);
-  glRotatef(object->zAxisAngle, 0.f, 1.f, 0.f);
+  glLoadMatrixf((
+          camera.getProjectionMatrix() * object->modelMatrix
+          ).withTranspose().data());
+
+  vec2f viewportSize = camera.getResolution();
+  glViewport(0, 0, viewportSize.x, viewportSize.y);
 
   glBegin(GL_TRIANGLES);
   for (int i = 0; i < object->mesh.indices.size(); i++) {

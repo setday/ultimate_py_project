@@ -17,6 +17,7 @@
 using namespace unreal_fluid::window;
 
 std::vector<std::function<void(int key, int action)>> WindowCompositor::_keyboardCallbacks;
+std::vector<std::function<void(int width, int height)>> WindowCompositor::_resizeCallbacks;
 
 WindowCompositor::WindowCompositor() {
   Logger::logInfo("Initializing window compositor...");
@@ -54,6 +55,7 @@ void WindowCompositor::init(int width, int height) {
   glfwSwapInterval(1);
 
   glfwSetKeyCallback(_window, keyboardCallback);
+  glfwSetWindowSizeCallback(_window, resizeCallback);
 
   _isAlive = true;
 
@@ -97,6 +99,16 @@ void WindowCompositor::keyboardCallback(GLFWwindow *window, int key, int scancod
 
 void WindowCompositor::addKeyboardCallback(std::function<void(int key, int action)> callback) {
   _keyboardCallbacks.push_back(callback);
+}
+
+void WindowCompositor::resizeCallback(GLFWwindow *window, int width, int height) {
+  for (auto& callback : _resizeCallbacks) {
+    callback(width, height);
+  }
+}
+
+void WindowCompositor::addResizeCallback(std::function<void(int width, int height)> callback) {
+  _resizeCallbacks.push_back(callback);
 }
 
 void WindowCompositor::getSize(int& width, int& height) const {

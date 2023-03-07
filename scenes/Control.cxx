@@ -25,6 +25,9 @@ public:
     compositor->GetCore()->GetWindowCompositor()->addKeyboardCallback([this](int key, int action) {
       this->keyboardBindings(key, action);
     });
+    compositor->GetCore()->GetWindowCompositor()->addResizeCallback([this](int width, int height) {
+      this->resizeBindings(width, height);
+    });
   }
 
   void keyboardBindings(int key, int action) {
@@ -42,6 +45,10 @@ public:
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
       this->compositor->GetCore()->Shutdown();
     }
+  }
+
+  void resizeBindings(int width, int height) {
+    this->compositor->GetRenderer()->camera.setResolution(width, height);
   }
 
   ~Control() override = default;

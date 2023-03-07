@@ -66,6 +66,7 @@ add_executable(
         src/core/components/AbstractObject.cxx
         src/core/components/ObjectFactory.cxx
 
+        src/core/render/components/camera/Camera.cxx
         src/core/render/components/RenderObject.cxx
         src/core/render/Renderer.cxx
 

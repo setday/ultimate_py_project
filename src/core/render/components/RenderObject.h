@@ -10,6 +10,7 @@ namespace unreal_fluid::render {
   public:
     mesh::BasicMesh mesh;
     vec3f position = vec3f(0.0f, 0.0f, 0.0f);
+    mat4 modelMatrix = mat4();
 
     float zAxisAngle = 0.0f;
 

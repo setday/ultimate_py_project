@@ -37,6 +37,8 @@ namespace unreal_fluid::window {
     int _height = 0;
 
     static std::vector<std::function<void(int key, int action)>> _keyboardCallbacks;
+    static std::vector<std::function<void(float dX, float dY)>> _mouseCallbacks;
+    static std::vector<std::function<void(int width, int height)>> _resizeCallbacks;
 
   public:
     WindowCompositor();
@@ -70,6 +72,16 @@ namespace unreal_fluid::window {
     /// Add keyboard callback.
     /// @param callback The callback function.
     void addKeyboardCallback(std::function<void(int key, int action)> callback);
+
+    /// General callback for the resize.
+    /// @param window The window.
+    /// @param width The width.
+    /// @param height The height.
+    static void resizeCallback(GLFWwindow* window, int width, int height);
+
+    /// Add resize callback.
+    /// @param callback The callback function.
+    void addResizeCallback(std::function<void(int width, int height)> callback);
 
     /// Get size of the window.
     /// @param width The width of the window.
