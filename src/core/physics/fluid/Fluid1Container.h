@@ -15,14 +15,15 @@
 #pragma once
 
 #include <unordered_map>
-
+#include "../PhysicsHeaders.h"
 #include "IFluidContainer.h"
+#include "CellDistribution.h"
 
-///Fluid1Container - Fluid simulating class, which implements FLIP simulation method (ITS NOT ABSOLUTELY RIGHT)
+///Fluid1Container - Fluid simulating class, which implements ASS collision
 namespace unreal_fluid::fluid {
   class Fluid1Container : IFluidContainer {
   private:
-    std::unordered_map<int, std::vector<Particle *>> cells;
+
     void collide(Particle& p1, Particle& p2);
 
   public:

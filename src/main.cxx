@@ -1,4 +1,4 @@
-#include "core/maths/Operator.h"
+#include "core/maths/MathHeaders"
 #include "core/Core.h"
 
 int main() {

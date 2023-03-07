@@ -62,6 +62,11 @@ namespace unreal_fluid::math {
       return this;
     }
 
+
+    double distanceTo(Vector3<T>& v){
+      return (v - *this).len();
+    }
+
     template<typename R>
     Vector3 operator*(R c) const {
       return Vector3(x * c, y * c, z * c);

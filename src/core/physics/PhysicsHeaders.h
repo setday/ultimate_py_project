@@ -14,7 +14,14 @@
 
 #pragma once
 #include "../maths/MathHeaders"
+#include "string"
 
 namespace physics {
-  const vec3 G = {0, -9.81, 0};
+  const vec3 G = {0.0, -9.81, 0.0};
 }
+
+struct fluidDescriptor{
+  std::string name;
+  double particleRadius;
+  double particleMass;
+};

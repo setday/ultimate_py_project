@@ -21,16 +21,16 @@ using namespace math;
 namespace unreal_fluid::fluid {
   class Particle {
   private:
-    vec3 _velocity, _position;
-    double _radius, _mass;
+    vec3 _v, _c;
+    double _r, _m;
   public:
     void *metaData;
   public:
     Particle(const vec3 &velocity, const vec3 &position, double radius, double mass, void *metaData);
     ~Particle() = default;
-    vec3 &getVelocity();
-    vec3 &getPosition();
-    double getRadius();
-    double getMass();
+    vec3 &v();
+    vec3 &c();
+    double r();
+    double m();
   };
 } // namespace unreal_fluid::fluid

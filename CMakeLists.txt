@@ -66,7 +66,7 @@ add_executable(
         src/main.cxx
 
         src/core/maths/Operator.h
-        src/core/maths/Vector3.h)
+        src/core/maths/Vector3.h src/core/physics/fluid/CellsDistribution.cxx src/core/physics/fluid/CellsDistribution.h)
 
 message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
