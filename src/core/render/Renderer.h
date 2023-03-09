@@ -12,12 +12,19 @@ namespace unreal_fluid::render {
     enum class RenderMode {
       WIREFRAME,
       SOLID,
-      TEXTURED
+      TEXTURED,
+      RAY_TRACING
     };
 
   private:
     ShaderManager *_shaderManager;
     RenderMode _renderMode;
+    GLuint _fvbo;  // frame vertex buffer object
+    GLuint _fvao;  // frame vertex array object
+    GLuint _vbo;   // vertex buffer object for rendering objects
+    GLuint _vao;   // vertex array object for rendering objects
+    GLuint _ibo;   // index buffer object for rendering objects
+    GLuint _rtubo; // ray tracing uniform buffer object
 
   public:
     Camera camera;
@@ -26,9 +33,18 @@ namespace unreal_fluid::render {
     ~Renderer() = default;
 
     void Init();
-    void StartFrame() const;
-    void RenderObject(const render::RenderObject *object) const;
     void Destroy();
+
+    void StartFrame() const;
+    /// Render object.
+    /// @param object Object to render.
+    /// @attention projection only! If you render objects using ray tracing, you should use RenderAllObjects() instead.
+    void RenderObject(const render::RenderObject *object) const;
+    /// Render all objects.
+    /// @param objects Objects to render.
+    void RenderAllObjects(const std::vector<render::RenderObject *> &objects) const;
+    /// End rendering frame.
+    void EndFrame() const;
 
     /// Get shader manager.
     /// @return Shader manager.

@@ -56,6 +56,7 @@ void Compositor::Render() {
   for (auto scene : _scenes) {
     scene->Render();
   }
+  _renderer->EndFrame();
 }
 
 void Compositor::Destroy() {

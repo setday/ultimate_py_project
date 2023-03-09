@@ -28,20 +28,15 @@ public:
   render::RenderObject *plane;
   render::RenderObject *cube;
   const compositor::Compositor *compositor;
-  const render::ShaderProgram *program;
 
   explicit GlTestScene(compositor::Compositor const * compositor) : Scene(compositor), compositor(compositor) {
-    program = compositor->GetRenderer()->GetShaderManager()->CreateProgram({
-      compositor->GetRenderer()->GetShaderManager()->LoadShader("test/triangle.vert"),
-      compositor->GetRenderer()->GetShaderManager()->LoadShader("test/triangle.frag")
-    });
     sphere = new render::RenderObject();
     sphere->mesh = render::mesh::Sphere(.5f, 50, 50);
     sphere->position = {-.75f, 0.f, -5.f};
     sphere->zAxisAngle = 0.f;
     sphere->modelMatrix = mat4::rotation(sphere->zAxisAngle, {0.f, 0.f, 1.f});
     sphere->modelMatrix *= mat4::translation(sphere->position);
-    sphere->shaderProgram = program;
+    sphere->shaderProgram = compositor->GetRenderer()->GetShaderManager()->GetDefaultProgram();
     sphere->material = render::material::MaterialFactory::createMaterial(
             render::material::MaterialFactory::MaterialType::GOLD
             );
@@ -52,7 +47,7 @@ public:
     plane->zAxisAngle = 0.f;
     plane->modelMatrix = mat4::rotation(plane->zAxisAngle, {0.f, 0.f, 1.f});
     plane->modelMatrix *= mat4::translation(plane->position);
-    plane->shaderProgram = program;
+    plane->shaderProgram = compositor->GetRenderer()->GetShaderManager()->GetDefaultProgram();
     plane->material = render::material::MaterialFactory::createMaterial(
             render::material::MaterialFactory::MaterialType::CYAN_PLASTIC
     );
@@ -63,7 +58,7 @@ public:
     cube->zAxisAngle = 0.f;
     cube->modelMatrix = mat4::rotation(cube->zAxisAngle, {0.f, 0.f, 1.f});
     cube->modelMatrix *= mat4::translation(cube->position);
-    cube->shaderProgram = program;
+    cube->shaderProgram = compositor->GetRenderer()->GetShaderManager()->GetDefaultProgram();
     cube->material = render::material::MaterialFactory::createMaterial(
             render::material::MaterialFactory::MaterialType::RUBY
     );
@@ -86,16 +81,12 @@ public:
     static int timer = 0;
     timer++;
 
-    program->Execute();
-
-    compositor->GetRenderer()->RenderObject(sphere);
-    compositor->GetRenderer()->RenderObject(plane);
-    compositor->GetRenderer()->RenderObject(cube);
+    compositor->GetRenderer()->RenderAllObjects({cube, sphere, plane});
 
     if (timer % 200 == 0) {
-      // compositor->GetRenderer()->GetShaderManager()->ReloadShaders();
+      compositor->GetRenderer()->GetShaderManager()->ReloadShaders();
 
-      // Logger::logInfo("All shaders have been reloaded");
+      Logger::logInfo("All shaders have been reloaded");
     }
   }
 

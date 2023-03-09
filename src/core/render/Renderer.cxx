@@ -12,6 +12,34 @@ void Renderer::Init() {
 
   InitGl();
 
+  float frameVertices[] = {
+      -1.0f, -1.0f, 0.0f,0.0f, 0.0f,
+      1.0f,  -1.0f, 0.0f,1.0f, 0.0f,
+      -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+      1.0f,  1.0f, 0.0f, 1.0f, 1.0f
+  };
+
+  glGenVertexArrays(1, &_fvao);
+  glGenBuffers(1, &_fvbo);
+
+  glBindVertexArray(_fvao);
+  glBindBuffer(GL_ARRAY_BUFFER, _fvbo);
+
+  glBufferData(GL_ARRAY_BUFFER, 20 * sizeof(float), frameVertices, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)0);
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
+  glEnableVertexAttribArray(1);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
+
+  glGenVertexArrays(1, &_vao);
+  glGenBuffers(1, &_vbo);
+  glGenBuffers(1, &_ibo);
+
+  glGenBuffers(1, &_rtubo);
+
   ChangeRenderMode(RenderMode::SOLID);
 
   Logger::logInfo("Renderer initialized!");
@@ -53,40 +81,106 @@ void Renderer::StartFrame() const {
 } // end of Renderer::startFrame() function
 
 void Renderer::RenderObject(const render::RenderObject *object) const {
-  glMatrixMode(GL_MODELVIEW);
-
-  GLuint projectionMatrixID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "projectionMatrix");
-  glUniformMatrix4fv(projectionMatrixID, 1, GL_FALSE, camera.getProjectionMatrix().data());
-  GLuint modelMatrixID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "modelMatrix");
-  glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, object->modelMatrix.data());
-
-  GLuint cameraPositionID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "cameraPosition");
-  glUniform3f(cameraPositionID, camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
-  GLuint cameraDirectionID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "cameraDirection");
-  glUniform3f(cameraDirectionID, camera.getDirection().x, camera.getDirection().y, camera.getDirection().z);
-  GLuint cameraUpID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "cameraUp");
-  glUniform3f(cameraUpID, 0.f, 1.f, 0.f);
-
-  // send material data
-  GLuint materialAmbientID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "ambientColor");
-  glUniform3f(materialAmbientID, object->material.ambient_color.x, object->material.ambient_color.y, object->material.ambient_color.z);
-  GLuint materialDiffuseID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "diffuseColor");
-  glUniform3f(materialDiffuseID, object->material.diffuse_color.x, object->material.diffuse_color.y, object->material.diffuse_color.z);
-  GLuint materialSpecularID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "specularColor");
-  glUniform3f(materialSpecularID, object->material.specular_color.x, object->material.specular_color.y, object->material.specular_color.z);
-  GLuint materialShininessID = glGetUniformLocation(object->shaderProgram->GetProgramID(), "shininess");
-  glUniform1f(materialShininessID, object->material.shininess);
-
   object->shaderProgram->Execute();
 
-  glBegin(GL_TRIANGLES);
-  for (int i = 0; i < object->mesh.indices.size(); i++) {
-    auto vertex = object->mesh.vertices[object->mesh.indices[i]];
-    glNormal3f(vertex.normal.x, vertex.normal.y, vertex.normal.z);
-    glVertex3f(vertex.position.x, vertex.position.y, vertex.position.z);
-  }
-  glEnd();
+  GLuint programID = object->shaderProgram->GetProgramID();
+
+  GLuint projectionMatrixID = glGetUniformLocation(programID, "projectionMatrix");
+  glUniformMatrix4fv(projectionMatrixID, 1, GL_FALSE, camera.getProjectionMatrix().data());
+  GLuint modelMatrixID = glGetUniformLocation(programID, "modelMatrix");
+  glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, object->modelMatrix.data());
+
+  GLuint cameraID;
+  cameraID = glGetUniformLocation(programID, "camera.position");
+  glUniform3f(cameraID, camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+  cameraID = glGetUniformLocation(programID, "camera.direction");
+  glUniform3f(cameraID, camera.getDirection().x, camera.getDirection().y, camera.getDirection().z);
+  cameraID = glGetUniformLocation(programID, "camera.up");
+  glUniform3f(cameraID, 0.f, 1.f, 0.f);
+
+  // send material data
+  GLuint materialAmbientID = glGetUniformLocation(programID, "ambientColor");
+  glUniform3f(materialAmbientID, object->material.ambient_color.x, object->material.ambient_color.y, object->material.ambient_color.z);
+  GLuint materialDiffuseID = glGetUniformLocation(programID, "diffuseColor");
+  glUniform3f(materialDiffuseID, object->material.diffuse_color.x, object->material.diffuse_color.y, object->material.diffuse_color.z);
+  GLuint materialSpecularID = glGetUniformLocation(programID, "specularColor");
+  glUniform3f(materialSpecularID, object->material.specular_color.x, object->material.specular_color.y, object->material.specular_color.z);
+  GLuint materialShininessID = glGetUniformLocation(programID, "shininess");
+  glUniform1f(materialShininessID, object->material.shininess);
+
+  glBindVertexArray(_vao);
+  glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
+
+  glBufferData(GL_ARRAY_BUFFER, object->mesh.vertices.size() * sizeof(Vertex), object->mesh.vertices.data(), GL_DYNAMIC_DRAW);
+
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, position));
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, normal));
+  glEnableVertexAttribArray(2);
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, texCoord));
+
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, object->mesh.indices.size() * sizeof(unsigned int), object->mesh.indices.data(), GL_DYNAMIC_DRAW);
+
+  glDrawElements(GL_TRIANGLES, object->mesh.indices.size(), GL_UNSIGNED_INT, 0);
+
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
 } // end of Renderer::renderObject() function
+
+void Renderer::RenderAllObjects(const std::vector<render::RenderObject *> &objects) const {
+  if (_renderMode != RenderMode::RAY_TRACING) {
+    for (auto object : objects) {
+      RenderObject(object);
+    }
+
+    return;
+  }
+
+  // ray tracing path here
+  // copy all rtVertices and meshType to VBO than to GPU
+  // then render it
+
+  struct RayTracingVertex {
+    vec3f position;
+    unsigned int meshType;
+  };
+
+  std::vector<RayTracingVertex> rtVertices;
+  for (auto object : objects) {
+    for (int i = 0; i < object->mesh.indices.size(); i++) {
+      auto vertex = object->mesh.vertices[object->mesh.indices[i]];
+      rtVertices.push_back({vertex.position, object->mesh.meshType});
+    }
+  }
+
+  glBindBuffer(GL_UNIFORM_BUFFER, _rtubo);
+
+  GLuint rtProgramID = _shaderManager->GetRayTracingProgram()->GetProgramID();
+  glUniformBlockBinding(rtProgramID, glGetUniformBlockIndex(rtProgramID, "ObjectDataBuffer"), 0);
+  glBindBufferBase(GL_UNIFORM_BUFFER, 0, _rtubo);
+  glBufferData(GL_UNIFORM_BUFFER, sizeof(RayTracingVertex) * objects.size(), rtVertices.data(), GL_DYNAMIC_DRAW);
+}
+
+void Renderer::EndFrame() const {
+  if (_renderMode == RenderMode::RAY_TRACING) {
+    _shaderManager->GetRayTracingProgram()->Execute();
+
+    glBindVertexArray(_fvao);
+    glBindBuffer(GL_ARRAY_BUFFER, _fvbo);
+    glBindBuffer(GL_UNIFORM_BUFFER, _rtubo);
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+  }
+
+  glFinish();
+} // end of Renderer::endFrame() function
 
 void Renderer::Destroy() {
   glDisable(GL_DEPTH_TEST);

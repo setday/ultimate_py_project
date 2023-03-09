@@ -23,8 +23,25 @@ using namespace unreal_fluid::render;
 ShaderManager::ShaderManager() {
   _shaders.reserve(10);
   _shaderPaths.reserve(10);
+  _programs.reserve(10);
 
   glewInit();
+
+  // Load default shaders
+  const Shader *vert = LoadShader("default/simple.vert");
+  const Shader *frag = LoadShader("default/simple.frag");
+
+  if (vert && frag) {
+    _defaultProgram =  CreateProgram({vert, frag});
+  }
+
+  // Load ray tracing shaders
+  vert = LoadShader("rt/rt.vert");
+  frag = LoadShader("rt/rt.frag");
+
+  if (frag) {
+    _rtProgram = CreateProgram({vert, frag});
+  }
 }
 
 ShaderManager::~ShaderManager() {
@@ -83,6 +100,14 @@ const Shader *ShaderManager::LoadShader(std::string_view path) {
   _shaders.push_back(shader);
 
   return shader;
+}
+
+const ShaderProgram *ShaderManager::GetDefaultProgram() const {
+  return _defaultProgram;
+}
+
+const ShaderProgram *ShaderManager::GetRayTracingProgram() const {
+  return _rtProgram;
 }
 
 const ShaderProgram *ShaderManager::CreateProgram(const std::vector<const Shader *> &shaders) {

@@ -29,6 +29,10 @@ namespace unreal_fluid::math {
     Vector3() = default;
     ~Vector3() = default;
 
+    Vector3(T a) : x(a),
+                   y(a),
+                   z(a) {}
+
     Vector3(T x, T y, T z) : x(x),
                              y(y),
                              z(z) {}

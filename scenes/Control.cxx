@@ -45,6 +45,10 @@ public:
       this->compositor->GetRenderer()->ChangeRenderMode(this->renderMode);
     }
 
+    if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
+      this->compositor->GetRenderer()->ChangeRenderMode(render::Renderer::RenderMode::RAY_TRACING);
+    }
+
     positionChanged = false;
 
     if (key == GLFW_KEY_W) {
