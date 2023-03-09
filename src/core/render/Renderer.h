@@ -25,6 +25,7 @@ namespace unreal_fluid::render {
     GLuint _vao;   // vertex array object for rendering objects
     GLuint _ibo;   // index buffer object for rendering objects
     GLuint _rtubo; // ray tracing uniform buffer object
+    std::vector<const RenderObject *> _objectsToRender;
 
   public:
     Camera camera;
@@ -35,16 +36,16 @@ namespace unreal_fluid::render {
     void Init();
     void Destroy();
 
-    void StartFrame() const;
+    void StartFrame();
     /// Render object.
     /// @param object Object to render.
     /// @attention projection only! If you render objects using ray tracing, you should use RenderAllObjects() instead.
-    void RenderObject(const render::RenderObject *object) const;
+    void RenderObject(const render::RenderObject *object);
     /// Render all objects.
     /// @param objects Objects to render.
-    void RenderAllObjects(const std::vector<render::RenderObject *> &objects) const;
+    void RenderAllObjects(const std::vector<render::RenderObject *> &objects);
     /// End rendering frame.
-    void EndFrame() const;
+    void EndFrame();
 
     /// Get shader manager.
     /// @return Shader manager.

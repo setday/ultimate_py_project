@@ -75,12 +75,19 @@ void Renderer::InitGl() const {
   glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 } // end of Renderer::initGL() function
 
-void Renderer::StartFrame() const {
+void Renderer::StartFrame() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glLoadIdentity();
+
+  _objectsToRender.clear();
 } // end of Renderer::startFrame() function
 
-void Renderer::RenderObject(const render::RenderObject *object) const {
+void Renderer::RenderObject(const render::RenderObject *object) {
+  if (_renderMode == RenderMode::RAY_TRACING) {
+    _objectsToRender.push_back(object);
+
+    return;
+  }
+
   object->shaderProgram->Execute();
 
   GLuint programID = object->shaderProgram->GetProgramID();
@@ -130,47 +137,42 @@ void Renderer::RenderObject(const render::RenderObject *object) const {
   glBindVertexArray(0);
 } // end of Renderer::renderObject() function
 
-void Renderer::RenderAllObjects(const std::vector<render::RenderObject *> &objects) const {
-  if (_renderMode != RenderMode::RAY_TRACING) {
-    for (auto object : objects) {
-      RenderObject(object);
-    }
-
-    return;
-  }
-
-  // ray tracing path here
-  // copy all rtVertices and meshType to VBO than to GPU
-  // then render it
-
-  struct RayTracingVertex {
-    vec3f position;
-    unsigned int meshType;
-  };
-
-  std::vector<RayTracingVertex> rtVertices;
+void Renderer::RenderAllObjects(const std::vector<render::RenderObject *> &objects) {
   for (auto object : objects) {
-    for (int i = 0; i < object->mesh.indices.size(); i++) {
-      auto vertex = object->mesh.vertices[object->mesh.indices[i]];
-      rtVertices.push_back({vertex.position, object->mesh.meshType});
-    }
+    RenderObject(object);
   }
-
-  glBindBuffer(GL_UNIFORM_BUFFER, _rtubo);
-
-  GLuint rtProgramID = _shaderManager->GetRayTracingProgram()->GetProgramID();
-  glUniformBlockBinding(rtProgramID, glGetUniformBlockIndex(rtProgramID, "ObjectDataBuffer"), 0);
-  glBindBufferBase(GL_UNIFORM_BUFFER, 0, _rtubo);
-  glBufferData(GL_UNIFORM_BUFFER, sizeof(RayTracingVertex) * objects.size(), rtVertices.data(), GL_DYNAMIC_DRAW);
 }
 
-void Renderer::EndFrame() const {
+void Renderer::EndFrame() {
   if (_renderMode == RenderMode::RAY_TRACING) {
     _shaderManager->GetRayTracingProgram()->Execute();
+
+    struct RayTracingVertex {
+      mat4 modelMatrix;
+      vec3f position;
+      int meshType;
+    };
+
+    std::vector<RayTracingVertex> rtVertices;
+    for (auto object : _objectsToRender) {
+      for (int i = 0; i < object->mesh.indices.size(); i++) {
+        auto vertex = object->mesh.vertices[object->mesh.indices[i]];
+        rtVertices.push_back({
+          object->modelMatrix,
+          vertex.position,
+          object->mesh.meshType
+        });
+      }
+    }
 
     glBindVertexArray(_fvao);
     glBindBuffer(GL_ARRAY_BUFFER, _fvbo);
     glBindBuffer(GL_UNIFORM_BUFFER, _rtubo);
+
+    GLuint rtProgramID = _shaderManager->GetRayTracingProgram()->GetProgramID();
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(RayTracingVertex) * rtVertices.size(), rtVertices.data(), GL_DYNAMIC_DRAW);
+    glUniformBlockBinding(rtProgramID, glGetUniformBlockIndex(rtProgramID, "ObjectDataBuffer"), 0);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, _rtubo);
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
