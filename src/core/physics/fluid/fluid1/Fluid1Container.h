@@ -18,7 +18,6 @@
 #include "../../PhysicsHeaders.h"
 #include "../IFluidContainer.h"
 #include "CellsDistribution.h"
-#include "Fluid1Headers.h"
 
 ///Fluid1Container - Fluid simulating class, which implements ASS collision
 namespace unreal_fluid::fluid {
