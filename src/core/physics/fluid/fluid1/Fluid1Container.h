@@ -15,23 +15,21 @@
 #pragma once
 
 #include <unordered_map>
-#include "../PhysicsHeaders.h"
-#include "IFluidContainer.h"
-#include "CellDistribution.h"
+#include "../../PhysicsHeaders.h"
+#include "../IFluidContainer.h"
+#include "CellsDistribution.h"
+#include "Fluid1Headers.h"
 
 ///Fluid1Container - Fluid simulating class, which implements ASS collision
 namespace unreal_fluid::fluid {
   class Fluid1Container : IFluidContainer {
   private:
-
-    void collide(Particle& p1, Particle& p2);
-
+    double k;
   public:
-    Fluid1Container();
-    ~Fluid1Container();
     void simulate(double dt) override;
     std::vector<Particle> *getParticles() override;
   private:
+    void collide(Particle& p1, Particle& p2);
     void advect(double dt);
     void addExternalForces(double dt);
     void interact(double dt);

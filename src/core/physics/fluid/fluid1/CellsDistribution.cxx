@@ -37,7 +37,7 @@ fluid::CellsDistribution::CellsDistribution(std::vector<Particle> &particles) {
   int dx = 1, dy = 1, dz = 1; // константы Планка
   for (auto &particle: particles) {
     ++counter;
-    auto [x, y, z] = particle.c();
+    auto [x, y, z] = particle.c;
     x /= dx;
     y /= dy;
     z /= dz;

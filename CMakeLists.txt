@@ -46,7 +46,7 @@ add_executable(
         src/core/components/CL/ClBuffer.cxx
         src/core/managers/sub_programs_managers/CL/CLManager.cxx
 
-        src/core/physics/fluid/Fluid1Container.cxx
+        src/core/physics/fluid/fluid1/Fluid1Container.cxx
         src/core/physics/PhysicsObject.cxx
         src/core/physics/fluid/Particle.cxx
         src/core/components/AbstractObject.cxx
@@ -66,7 +66,7 @@ add_executable(
         src/main.cxx
 
         src/core/maths/Operator.h
-        src/core/maths/Vector3.h src/core/physics/fluid/CellsDistribution.cxx src/core/physics/fluid/CellsDistribution.h)
+        src/core/maths/Vector3.h src/core/physics/fluid/fluid1/CellsDistribution.cxx src/core/physics/fluid/fluid1/CellsDistribution.h)
 
 message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})

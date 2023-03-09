@@ -17,7 +17,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Particle.h"
+#include "../Particle.h"
 
 namespace unreal_fluid::fluid {
   class CellsDistribution {
