@@ -185,7 +185,7 @@ template<typename T>
     }
 
     static Matrix4x4 lookAt(const Vector3<T> &eye, const Vector3<T> &center, const Vector3<T> &up) {
-      Vector3<T> f = (center - eye).normalize();
+      Vector3<T> f = (eye - center).normalize();
       Vector3<T> s = up.cross(f).normalize();
       Vector3<T> u = f.cross(s);
 

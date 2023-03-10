@@ -31,9 +31,9 @@ void ShaderProgram::AttachShader(const Shader *shader) {
 }
 
 void ShaderProgram::ReattachShaders() {
-  for (const auto &shader : _attachedShaders) {
-    glDetachShader(_programID, shader->GetShaderID());
-  }
+  glDeleteProgram(_programID);
+
+  _programID = glCreateProgram();
 
   for (const auto &shader : _attachedShaders) {
     glAttachShader(_programID, shader->GetShaderID());
@@ -47,8 +47,6 @@ bool ShaderProgram::LinkProgram() const {
 
   GLint success;
   glGetProgramiv(_programID, GL_LINK_STATUS, &success);
-
-  glDetachShader(_programID, GL_VERTEX_SHADER);
 
   return success;
 }

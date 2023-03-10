@@ -20,7 +20,7 @@ out vec2 screenCoords;
 
 mat4 makeViewMatrix(vec3 pos, vec3 direction, vec3 up)
 {
-  vec3 backward = direction;
+  vec3 backward = -direction;
   vec3 right = normalize(cross(up, backward));
   vec3 upward = cross(backward, right);
 

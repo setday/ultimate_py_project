@@ -22,7 +22,7 @@ public:
   render::Renderer::RenderMode renderMode = render::Renderer::RenderMode::SOLID;
   vec3f cameraPosition = {0.f, 0.f, 0.f};
   bool positionChanged = false;
-  vec2f cameraRotation = {0.f, 0.f};
+  vec2f cameraRotation = {0.f, M_PI};
   bool angleChanged = false;
 
   explicit Control(compositor::Compositor const * compositor) : Scene(compositor), compositor(compositor) {
@@ -45,26 +45,22 @@ public:
       this->compositor->GetRenderer()->ChangeRenderMode(this->renderMode);
     }
 
-    if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
-      this->compositor->GetRenderer()->ChangeRenderMode(render::Renderer::RenderMode::RAY_TRACING);
-    }
-
     positionChanged = false;
 
     if (key == GLFW_KEY_W) {
-      cameraPosition -= this->compositor->GetRenderer()->camera.getDirection() / 4;
-      positionChanged = true;
-    }
-    if (key == GLFW_KEY_S) {
       cameraPosition += this->compositor->GetRenderer()->camera.getDirection() / 4;
       positionChanged = true;
     }
+    if (key == GLFW_KEY_S) {
+      cameraPosition -= this->compositor->GetRenderer()->camera.getDirection() / 4;
+      positionChanged = true;
+    }
     if (key == GLFW_KEY_D) {
-      cameraPosition += vec3f(0.f, 1.f, 0.f).cross(this->compositor->GetRenderer()->camera.getDirection()) / 4;
+      cameraPosition -= vec3f(0.f, 1.f, 0.f).cross(this->compositor->GetRenderer()->camera.getDirection()) / 4;
       positionChanged = true;
     }
     if (key == GLFW_KEY_A) {
-      cameraPosition -= vec3f(0.f, 1.f, 0.f).cross(this->compositor->GetRenderer()->camera.getDirection()) / 4;
+      cameraPosition += vec3f(0.f, 1.f, 0.f).cross(this->compositor->GetRenderer()->camera.getDirection()) / 4;
       positionChanged = true;
     }
 
@@ -78,12 +74,12 @@ public:
     }
 
     if (key == GLFW_KEY_UP) {
-      cameraRotation.x -= 0.1f;
+      cameraRotation.x += 0.1f;
       angleChanged = true;
     }
 
     if (key == GLFW_KEY_DOWN) {
-      cameraRotation.x += 0.1f;
+      cameraRotation.x -= 0.1f;
       angleChanged = true;
     }
 
@@ -107,6 +103,28 @@ public:
 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
       this->compositor->GetCore()->Shutdown();
+    }
+
+    if (key == GLFW_KEY_F2 && action == GLFW_PRESS) {
+      this->compositor->GetRenderer()->ChangeRenderMode(render::Renderer::RenderMode::WIREFRAME);
+
+      Logger::logInfo("Wireframe mode enabled");
+    }
+    if (key == GLFW_KEY_F1 && action == GLFW_PRESS) {
+      this->compositor->GetRenderer()->ChangeRenderMode(render::Renderer::RenderMode::SOLID);
+
+      Logger::logInfo("Solid mode enabled");
+    }
+    if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
+      this->compositor->GetRenderer()->ChangeRenderMode(render::Renderer::RenderMode::RAY_TRACING);
+
+      Logger::logInfo("Ray tracing mode enabled");
+    }
+
+    if (key == GLFW_KEY_F11 && action == GLFW_PRESS) {
+      this->compositor->GetRenderer()->GetShaderManager()->ReloadShaders();
+
+      Logger::logInfo("All shaders reloaded!");
     }
   }
 

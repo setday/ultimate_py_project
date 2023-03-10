@@ -6,6 +6,8 @@
 #include "components/RenderObject.h"
 #include "components/camera/Camera.h"
 
+/// FIXME: Rename methods to conform to the naming convention.
+
 namespace unreal_fluid::render {
   class Renderer {
   public:
@@ -43,6 +45,7 @@ namespace unreal_fluid::render {
     void RenderObject(const render::RenderObject *object);
     /// Render all objects.
     /// @param objects Objects to render.
+    [[deprecated("Use RenderObject() instead")]]
     void RenderAllObjects(const std::vector<render::RenderObject *> &objects);
     /// End rendering frame.
     void EndFrame();
@@ -61,5 +64,7 @@ namespace unreal_fluid::render {
     void changeResolution(int width, int height);
   private:
     void InitGl() const;
+
+    void InitBuffers();
   }; // Renderer class
 } // namespace unreal_fluid::render

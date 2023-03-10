@@ -28,20 +28,24 @@ ShaderManager::ShaderManager() {
   glewInit();
 
   // Load default shaders
-  const Shader *vert = LoadShader("default/simple.vert");
-  const Shader *frag = LoadShader("default/simple.frag");
+  const Shader *vertBase = LoadShader("default/simple.vert");
+  const Shader *fragBase = LoadShader("default/simple.frag");
 
-  if (vert && frag) {
-    _defaultProgram =  CreateProgram({vert, frag});
-  }
+  if (vertBase && fragBase) {
+    _defaultProgram = CreateProgram({vertBase, fragBase});
+  } else {
+    Logger::logFatal("ShaderManager : Can't load default shaders");
+  };
 
   // Load ray tracing shaders
-  vert = LoadShader("rt/rt.vert");
-  frag = LoadShader("rt/rt.frag");
+  const Shader *vertRT = LoadShader("rt/rt.vert");
+  const Shader *fragRT = LoadShader("rt/rt.frag");
 
-  if (frag) {
-    _rtProgram = CreateProgram({vert, frag});
-  }
+  if (fragRT && vertRT) {
+    _rtProgram = CreateProgram({vertRT, fragRT});
+  } else {
+    Logger::logFatal("ShaderManager : Can't load ray tracing shaders");
+  };
 }
 
 ShaderManager::~ShaderManager() {
