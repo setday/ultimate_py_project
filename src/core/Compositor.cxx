@@ -18,16 +18,15 @@
 
 #include "../scenes/ClTestScene.cxx"
 #include "../scenes/GlTestScene.cxx"
-#include "../scenes/Control.cxx"
 
 using namespace unreal_fluid::compositor;
 
 Compositor::Compositor(Core *core) : _core(core) {
-  Logger::logInfo("Creating compositor...");
+  Logger::log(Logger::Level::INFO, "Creating compositor...");
 
   _renderer = new render::Renderer();
 
-  Logger::logInfo("Compositor created!");
+  Logger::log(Logger::Level::INFO, "Compositor created!");
 }
 
 Compositor::~Compositor() {
@@ -35,14 +34,13 @@ Compositor::~Compositor() {
 }
 
 void Compositor::Init() {
-  Logger::logInfo("Initializing compositor...");
+  Logger::log(Logger::Level::INFO, "Initializing compositor...");
 
   _renderer->Init();
   _scenes.push_back(new ClTestScene(this));
   _scenes.push_back(new GlTestScene(this));
-  _scenes.push_back(new Control(this));
 
-  Logger::logInfo("Compositor initialized!");
+  Logger::log(Logger::Level::INFO, "Compositor initialized!");
 }
 
 void Compositor::Update() {
@@ -56,7 +54,6 @@ void Compositor::Render() {
   for (auto scene : _scenes) {
     scene->Render();
   }
-  _renderer->EndFrame();
 }
 
 void Compositor::Destroy() {

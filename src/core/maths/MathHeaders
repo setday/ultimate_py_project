@@ -3,24 +3,19 @@
  *    HSE SPb (Higher school of economics in Saint-Petersburg).
  ***************************************************************/
 
-/* PROJECT   : ultimate_py_project
+/* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Cube.h
+ * FILE NAME : MainMath.h
  * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * authors of this pressureSolving.
  */
 
 #pragma once
 
-#include "../BasicMesh.h"
+#include "Vector3.h"
+#include "Operator.h"
 
-namespace unreal_fluid::render::mesh {
-  class Cube : public BasicMesh {
-  public:
-    Cube(float size);
-  };
-} // unreal_fluid::render::mesh
-
-// end of Cube.h
+using vec3 = unreal_fluid::math::Vector3<double>;
+//using intvec3 = unreal_fluid::math::Vector3<int>;

@@ -32,20 +32,18 @@ void Core::Run() {
   while (_isRunning) {
     Update();
   }
-}
 
-window::WindowCompositor *Core::GetWindowCompositor() const {
-  return _windowCompositor;
+  Shutdown();
 }
 
 void Core::Init() {
-  Logger::logInfo("Initializing core...");
+  Logger::log(Logger::Level::INFO, "Initializing core...");
 
   _isRunning = true;
   _windowCompositor->init(500, 500);
   _compositor.Init();
 
-  Logger::logInfo("Core initialized!");
+  Logger::log(Logger::Level::INFO, "Core initialized!");
 }
 
 void Core::Update() {

@@ -8,13 +8,12 @@
  * FILE NAME : ClManager.cxx
  *
  * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * authors of this pressureSolving.
  */
 
+#include "CLManager.h"
 #include <fstream>
 #include <iostream>
-
-#include "CLManager.h"
 
 using namespace unreal_fluid::manager;
 
@@ -24,7 +23,7 @@ CLManager::CLManager() {
 
   for (const auto& platform: platforms) {
     std::vector<cl::Device> devices;
-    platform.getDevices(CL_DEVICE_TYPE_GPU, &devices);
+    platform.getDevices(CL_DEVICE_TYPE_ALL, &devices);
     for (const auto& dev: devices) _devices.emplace_back(dev);
   }
 
@@ -51,7 +50,7 @@ unreal_fluid::computing::CLBuffer<T> * CLManager::CreateBuffer(cl_mem_flags flag
 }
 
 void CLManager::LoadProgram(const std::string &fileName, const std::string &programName) {
-  std::ifstream file("src/sub_programs/" + fileName);
+  std::ifstream file("./../src/sub_programs/" + fileName);
   std::string source((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
   cl::Program program(*_context, source);
 

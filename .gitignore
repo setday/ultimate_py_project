@@ -1,5 +1,12 @@
-.idea/
-
-cmake-build-debug/
-cmake-build-release/
-bin/
+*
+!include
+!lib
+!CMakeLists.txt
+!.clang-format
+!.clang-tidy
+!README.md
+!scenes
+!src
+!.gitignore
+!.git
+!.github

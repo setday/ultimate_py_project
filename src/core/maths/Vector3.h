@@ -9,13 +9,14 @@
  * PURPOSE   : usable vec3 realization
  *
  * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * authors of this pressureSolving.
  */
 
 #pragma once
 
-#include <cmath>
 #include <string>
+
+#include "Operator.h"
 
 namespace unreal_fluid::math {
 
@@ -28,10 +29,6 @@ namespace unreal_fluid::math {
 
     Vector3() = default;
     ~Vector3() = default;
-
-    Vector3(T a) : x(a),
-                   y(a),
-                   z(a) {}
 
     Vector3(T x, T y, T z) : x(x),
                              y(y),
@@ -63,6 +60,11 @@ namespace unreal_fluid::math {
       y -= v.y;
       z -= v.z;
       return this;
+    }
+
+
+    double distanceTo(Vector3<T>& v){
+      return (v - *this).len();
     }
 
     template<typename R>
@@ -97,16 +99,18 @@ namespace unreal_fluid::math {
 
     [[nodiscard]] T len2() const { return x * x + y * y + z * z; }
 
-    [[nodiscard]] double len() const { return std::sqrt(len2()); }
+    [[nodiscard]] double len() const { return sqrt(len2()); }
 
     [[nodiscard]] double operator!() const { return len(); }
 
     Vector3 normalize() const {
+      assert(len() > 0);
       return *this / len();
     }
 
-    Vector3 *normalizeSelf() {
-      return this /= len();
+    void normalizeSelf() {
+      assert(len() > 0);
+      *this /= len();
     }
 
     Vector3 operator*(const Vector3 &vec) const {
@@ -121,6 +125,11 @@ namespace unreal_fluid::math {
       return Vector3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
     }
 
+    T project(const Vector3 &v) {
+      assert(v.len() > 0);
+      return this->dot(v) / v.len();
+    }
+
     [[nodiscard]] std::string to_string() const {
       return std::string("{" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + "}");
     }
@@ -130,7 +139,7 @@ namespace unreal_fluid::math {
       return os;
     }
 
-    friend Vector3<T> operator/(const Vector3 &vec, float c) {
+    friend Vector3<T> operator/(const Vector3 &vec, T c) {
       return Vector3(vec.x / c, vec.y / c, vec.z / c);
     }
 
