@@ -8,7 +8,7 @@
  * FILE NAME : ClManager.h
  *
  * No part of this file may be changed and used without agreement of
- * authors of this pressureSolving.
+ * authors of this project.
  */
 
 #pragma once

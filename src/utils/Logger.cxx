@@ -9,7 +9,7 @@
  * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
- * authors of this pressureSolving.
+ * authors of this project.
  */
 
 #include "Logger.h"
@@ -20,6 +20,12 @@ void LoggerExample() {
   LOG_WARNING("Hello, world!");
   LOG_INFO("Hello, world!");
   LOG_DEBUG("Hello, world!");
+
+  Logger::logFatal("Hello, world!", "LoggerExample", 1);
+  Logger::logError("Hello, world!", "LoggerExample", 2);
+  Logger::logWarning("Hello, world!", "LoggerExample", 3);
+  Logger::logInfo("Hello, world!", "LoggerExample", 4);
+  Logger::logDebug("Hello, world!", "LoggerExample", 5);
 }
 
 // end of Logger.cxx

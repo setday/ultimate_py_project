@@ -8,7 +8,7 @@
  * FILE NAME : Definitions.h
  *
  * No part of this file may be changed and used without agreement of
- * authors of this pressureSolving.
+ * authors of this project.
  */
 
 #pragma once
@@ -38,6 +38,7 @@ public:
 # endif /* _CRTDBG_MAP_ALLOC */
 #endif /* _DEBUG */
 
+#include "utils/math/MathHeaders"
 #include "utils/Logger.h"
 
 // end of Definitions.h

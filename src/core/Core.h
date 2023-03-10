@@ -9,7 +9,7 @@
  * PURPOSE   : This is the main class of the project.
  *
  * No part of this file may be changed and used without agreement of
- * authors of this pressureSolving.
+ * authors of this project.
  */
 
 #pragma once
@@ -17,8 +17,8 @@
 #include "../Definitions.h"
 
 #include "managers/sub_programs_managers/CL/CLManager.h"
-#include "render/window_manager/WindowCompositor.h"
 #include "Compositor.h"
+#include "render/window_manager/WindowCompositor.h"
 
 namespace unreal_fluid {
   class Core {
@@ -37,6 +37,13 @@ namespace unreal_fluid {
     /// @brief Run core.
     /// @details Run main loop of core.
     void Run();
+    /// @brief Shutdown core.
+    /// @details Shutdown all components of core.
+    void Shutdown();
+
+    /// Get window compositor.
+    /// @return Window compositor.
+    [[nodiscard]] window::WindowCompositor *GetWindowCompositor() const;
 
   private:
     /// @brief Initialize core.
@@ -45,9 +52,6 @@ namespace unreal_fluid {
     /// @brief Update core.
     /// @details Update all components of core.
     void Update();
-    /// @brief Shutdown core.
-    /// @details Shutdown all components of core.
-    void Shutdown();
   }; // core class
 } // namespace unreal_fluid
 

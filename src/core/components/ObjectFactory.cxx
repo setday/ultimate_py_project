@@ -8,7 +8,7 @@
  * FILE NAME : ObjectFactory.cxx
  *
  * No part of this file may be changed and used without agreement of
- * authors of this pressureSolving.
+ * authors of this project.
  */
 
 #include "ObjectFactory.h"

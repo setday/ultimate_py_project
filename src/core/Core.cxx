@@ -9,7 +9,7 @@
  * PURPOSE   : This is the main class of the project.
  *
  * No part of this file may be changed and used without agreement of
- * authors of this pressureSolving.
+ * authors of this project.
  */
 
 #include <iostream>
@@ -32,18 +32,20 @@ void Core::Run() {
   while (_isRunning) {
     Update();
   }
+}
 
-  Shutdown();
+window::WindowCompositor *Core::GetWindowCompositor() const {
+  return _windowCompositor;
 }
 
 void Core::Init() {
-  Logger::log(Logger::Level::INFO, "Initializing core...");
+  Logger::logInfo("Initializing core...");
 
   _isRunning = true;
   _windowCompositor->init(500, 500);
   _compositor.Init();
 
-  Logger::log(Logger::Level::INFO, "Core initialized!");
+  Logger::logInfo("Core initialized!");
 }
 
 void Core::Update() {

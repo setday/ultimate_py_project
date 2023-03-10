@@ -8,7 +8,7 @@
  * FILE NAME : CLTestScene.cxx
  *
  * No part of this file may be changed and used without agreement of
- * authors of this pressureSolving.
+ * authors of this project.
  */
 
 #include <iostream>
