@@ -13,14 +13,18 @@ include_directories(${OpenGL_INCLUDE_DIRS} include)
 if (WIN32)
     link_directories(
             lib/win32/CL
+            lib/win32/GL
             lib/win32/GLFW
     )
+
     include_directories(share/cmake/OpenCL)
     include_directories(share/cmake/OpenCLHeaders)
     include_directories(share/cmake/OpenCLHeadersCpp)
     include_directories(share/cmake/OpenCLICDLoader)
     include_directories(share/cmake/nCLUtils)
     include_directories(share/cmake/OpenCLUtilsCpp)
+
+    file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/lib/win32/DLLs/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/)
 else ()
     message(SEND_ERROR "Currently only Windows is supported")
     return()
@@ -30,18 +34,33 @@ set(LIBS
         ${OPENGL_LIBRARIES}
 
         glfw3
+        glfw3dll
 
         OpenCL
         OpenCLUtils
         OpenCLUtilsCpp
         OpenCLUtilsCppd
         OpenCLUtilsd
+
+        glew32
 )
 
 add_executable(
         ${PROJECT_NAME}
 
         src/utils/Logger.cxx
+
+        src/core/render/components/mesh/Vertex.cxx
+        src/core/render/components/mesh/BasicMesh.cxx
+        src/core/render/components/mesh/presets/Plane.cxx
+        src/core/render/components/mesh/presets/Sphere.cxx
+        src/core/render/components/mesh/presets/Cube.cxx
+
+        src/core/render/components/material/MaterialFactory.cxx
+
+        src/core/render/components/shaders/Shader.cxx
+        src/core/render/components/shaders/ShaderProgram.cxx
+        src/core/managers/sub_programs_managers/shader_manager/ShaderManager.cxx
 
         src/core/components/CL/ClBuffer.cxx
         src/core/managers/sub_programs_managers/CL/CLManager.cxx
@@ -52,14 +71,16 @@ add_executable(
         src/core/components/AbstractObject.cxx
         src/core/components/ObjectFactory.cxx
 
+        src/core/render/components/camera/Camera.cxx
         src/core/render/components/RenderObject.cxx
         src/core/render/Renderer.cxx
+
+        src/core/render/window_manager/WindowCompositor.cxx
 
         src/core/components/Scene.cxx
         scenes/ClTestScene.cxx
         scenes/GlTestScene.cxx
-
-        src/core/render/window_manager/WindowCompositor.cxx
+        scenes/Control.cxx
 
         src/core/Compositor.cxx
         src/core/Core.cxx
@@ -70,3 +91,5 @@ add_executable(
 
 message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/sub_programs/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/sub_programs/)
