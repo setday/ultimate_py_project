@@ -12,18 +12,40 @@
  */
 
 #include "AbstractObject.h"
+#include "../physics/fluid/Particle.h"
 
 using namespace unreal_fluid;
 
-void AbstractObject::Update() const {
-//  physicsObject->update();
+void AbstractObject::parse() {
+  physics::PhysObject::Type type = physObject->getType();
+  auto data = physObject->getData();
+  if (type == physics::PhysObject::Type::DEFAULT) {
+    throw "Incomplete type parsing";
+  } else if (type == physics::PhysObject::Type::FLUID1_CONTAINER) {
+    auto &particles = *reinterpret_cast<std::vector<fluid::Particle *> *>(data);
+
+    for (int pos = 0; pos < particles.size(); ++pos) {
+      if (pos == renderObjects.size()) {
+        auto sphere = new render::RenderObject;
+        sphere->position = particles[pos]->c;
+        sphere->modelMatrix = mat4::translation(sphere->position);
+        renderObjects.push_back(sphere);
+      } else {
+        renderObjects[pos]->modelMatrix = mat4::translation(particles[pos]->c);
+      }
+    }
+  }
+}
+
+void AbstractObject::update(double dt) {
+  physObject->simulate(dt);
 }
 
 AbstractObject::~AbstractObject() {
-  // delete physicsObject;
-  delete _renderObject;
 }
 
-void AbstractObject::Render() const {
-//  renderObject->render();
+void AbstractObject::render() {
+  for (auto &renderObject : renderObjects) {
+//    renderObject.;
+  }
 }

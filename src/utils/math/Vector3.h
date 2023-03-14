@@ -9,7 +9,7 @@
  * PURPOSE   : usable vec3 realization
  *
  * No part of this file may be changed and used without agreement of
- * authors of this pressureSolving.
+ * authors of this project.
  */
 
 #pragma once
@@ -39,9 +39,9 @@ namespace unreal_fluid::math {
                              z(z) {}
 
     template<typename G>
-    explicit Vector3(const Vector3<G> &v) : x(dynamic_cast<T>(v.x)),
-                                            y(dynamic_cast<T>(v.y)),
-                                            z(dynamic_cast<T>(v.z)) {
+    Vector3(const Vector3<G> &v) : x(static_cast<T>(v.x)),
+                                   y(static_cast<T>(v.y)),
+                                   z(static_cast<T>(v.z)) {
     }
 
     Vector3 operator+(const Vector3 &v) const {

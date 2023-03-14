@@ -24,11 +24,14 @@ namespace unreal_fluid::fluid {
   class Fluid1Container : IFluidContainer {
   private:
     double k;
+
   public:
     void simulate(double dt) override;
-    std::vector<Particle> *getParticles() override;
+
   private:
-    void collide(Particle& p1, Particle& p2);
+    unreal_fluid::physics::PhysObject::Type getType() override;
+    void * getData() override;
+    void collide(Particle &p1, Particle &p2);
     void advect(double dt);
     void addExternalForces(double dt);
     void interact(double dt);

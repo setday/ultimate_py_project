@@ -16,25 +16,21 @@
 
 using namespace unreal_fluid::fluid;
 
-std::vector<Particle> *Fluid1Container::getParticles() {
-  return &particles;
-}
-
 void Fluid1Container::addExternalForces(double dt) {
-  for (auto & particle : particles) {
-    particle.v += physics::G*dt;
+  for (auto &particle: particles) {
+    particle.v += ::physics::G * dt;
   }
 }
 
 void Fluid1Container::advect(double dt) {
-  for (auto & particle : particles) {
-    particle.c += particle.v* dt;
+  for (auto &particle: particles) {
+    particle.c += particle.v * dt;
   }
 }
 
 void Fluid1Container::interact(double dt) {
   CellsDistribution cells(particles);
-  std::pair<Particle*, Particle*> p = cells.nextPair(), end = {nullptr, nullptr};
+  std::pair<Particle *, Particle *> p = cells.nextPair(), end = {nullptr, nullptr};
   while (p != end) {
     collide(*p.first, *p.second);
     p = cells.nextPair();
@@ -59,4 +55,12 @@ void Fluid1Container::collide(Particle &p1, Particle &p2) {
     p1.v += y * (s / p1.m);
     p2.v -= y * (s / p2.m);
   }
+}
+
+void *Fluid1Container::getData() {
+  return &particles;
+}
+
+unreal_fluid::physics::PhysObject::Type Fluid1Container::getType() {
+  return physics::PhysObject::Type::FLUID1_CONTAINER;
 }

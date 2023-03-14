@@ -14,28 +14,22 @@
 
 #pragma once
 
-#include "../physics/PhysicsObject.h"
+#include "../physics/PhysObject.h"
 #include "../render/components/RenderObject.h"
 
 namespace unreal_fluid {
-  class ObjectFactory;
-} // namespace unreal_fluid
-
-namespace unreal_fluid {
   class AbstractObject {
-    friend ObjectFactory;
 
-    physics::PhysicsObject *_physicsObject;
-    render::RenderObject *_renderObject;
-
-  protected:
-    AbstractObject() = default;
+    physics::PhysObject *physObject;
+    std::vector<render::RenderObject *> renderObjects;
 
   public:
+    AbstractObject() = default;
     ~AbstractObject();
+    void render();
+    void update(double dt);
+    void parse();
 
-    void Update() const;
-    void Render() const;
   }; // end of AbstractObject class
 } // namespace unreal_fluid
 

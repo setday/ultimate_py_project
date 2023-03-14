@@ -7,14 +7,15 @@ void Scene::Init() {
 }
 
 void Scene::Update() {
-  for (AbstractObject const *object: objects) {
-    object->Update();
+  double dt = 0.2; // TODO what a fuck is going on with dt time
+  for (AbstractObject *object: objects) {
+    object->update(dt);
   }
 }
 
 void Scene::Render() {
-  for (AbstractObject const *object: objects) {
-    object->Render();
+  for (AbstractObject *object: objects) {
+    object->render();
   }
 }
 
