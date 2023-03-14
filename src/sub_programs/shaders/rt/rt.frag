@@ -38,6 +38,8 @@ struct Intersection {
     vec3 position;
     vec3 color;
     float reflectivity;
+    float refractivity;
+    float eta;
 };
 
 struct FunctionStackCell {
@@ -46,6 +48,7 @@ struct FunctionStackCell {
     vec3 color;
     Intersection i;
     float intensity;
+    float eta;
 };
 
 Intersection intersectSphere(Ray ray, vec3 center, float radius) {
@@ -54,18 +57,28 @@ Intersection intersectSphere(Ray ray, vec3 center, float radius) {
     float b = 2.0 * dot(oc, ray.direction);
     float c = dot(oc, oc) - radius * radius;
     float discriminant = b * b - 4.0 * a * c;
+    float eta = 1.5;
 
     vec3 color;
 
     color = vec3(0.8, 0.6, 0.2);
 
     if (discriminant < 0.0) {
-        return Intersection(0.0, vec3(0.0), vec3(0.0), vec3(0.0), 0.0);
+        return Intersection(0.0, vec3(0.0), vec3(0.0), vec3(0.0), 0.0, 0.0, 1.0);
     } else {
+        float normsign = 1;
         float t = (-b - sqrt(discriminant)) / (2.0 * a);
+
+        if (t < 0.0) {
+            normsign = -1;
+            t = (-b + sqrt(discriminant)) / (2.0 * a);
+            eta = 1.0;
+        }
+
         vec3 position = ray.origin + t * ray.direction;
-        vec3 normal = normalize(position - center);
-        return Intersection(t, normal, position, color, 0.2);
+        vec3 normal = normalize(position - center) * normsign;
+
+        return Intersection(t, normal, position, color, 0.3, 0.3, eta);
     }
 }
 
@@ -84,9 +97,9 @@ Intersection intersectPlane(Ray ray, vec3 normal, vec3 point) {
             color = vec3(1.0, 1.0, 1.0);
         }
 
-        return Intersection(t, normal, position, color, 0.5);
+        return Intersection(t, normal, position, color, 0.0, 0.0, 1.0);
     } else {
-        return Intersection(0.0, vec3(0.0), vec3(0.0), vec3(0.0), 0.0);
+        return Intersection(0.0, vec3(0.0), vec3(0.0), vec3(0.0), 0.0, 0.0, 1.0);
     }
 }
 
@@ -105,44 +118,40 @@ vec4 traceRay(Ray ray, int depth) {
         0,
         1,
         0,
-        0,
-        0,
         0
     );
     vec3 poses[] = vec3[](
         vec3(-0.75, -3.0, -5.0),
         vec3(0.0, -5.0, 0.0),
         vec3(0.75, -3.0, -5.0),
-        vec3(0.0, -5.0, 0.0),
-        vec3(0.0, -5.0, -2.0),
-        vec3(0.0, -5.0, -4.0)
+        vec3(0.0, -4.9, 0.0)
     );
 
     vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
 
     Intersection i;
 
-    stack[stackPointer].state = currentState;
+    stack[stackPointer].state = 0;
     stack[stackPointer].ray = ray;
     stack[stackPointer].color = rayColor;
     stack[stackPointer].intensity = intensity;
+    stack[stackPointer].i = i;
+    stack[stackPointer].eta = 1.0;
 
     while (stackPointer >= 0) {
         counter++;
-        currentState = stack[stackPointer].state;
         ray = stack[stackPointer].ray;
         rayColor = stack[stackPointer].color;
         intensity = stack[stackPointer].intensity;
         i = stack[stackPointer].i;
+        float eta = stack[stackPointer].eta;
 
         if (stack[stackPointer].state == 0) {
             i.t = -1.0;
 
-            depth--;
-
             Intersection tmpI;
 
-            for (int j = 0; j < 6; j++) {
+            for (int j = 0; j < 4; j++) {
                 if (meshTypes[j] == 0) {
                     tmpI = intersectSphere(ray, poses[j], 0.5);
                 } else if (meshTypes[j] == 1) {
@@ -160,13 +169,35 @@ vec4 traceRay(Ray ray, int depth) {
                 continue;
             }
 
-            Ray reflectedRay;
-            reflectedRay.direction = reflect(ray.direction, i.normal);
-            reflectedRay.origin = i.position + treshold * reflectedRay.direction;
+            stack[stackPointer].state = 1;
+            stack[stackPointer].i = i;
 
             vec3 lightDirection = normalize(vec3(0.0, -1.0, 0.0));
 
+            Ray reflectedRay;
+            reflectedRay.direction = -lightDirection;
+            reflectedRay.origin = i.position + treshold * reflectedRay.direction;
+
+            Intersection s;
+            s.t = -1.0;
+
+            for (int j = 0; j < 4; j++) {
+                if (meshTypes[j] == 0) {
+                    tmpI = intersectSphere(reflectedRay, poses[j], 0.5);
+                } else if (meshTypes[j] == 1) {
+                    tmpI = intersectPlane(reflectedRay, vec3(0.0, 1.0, 0.0), poses[j]);
+                }
+                if (tmpI.t > 0.0 && ((tmpI.t < s.t) || (s.t <= 0.0))) {
+                    s = tmpI;
+                }
+            }
+
+            if (s.t >= 0.0) {
+                continue;
+            }
+
             float diffuse = max(dot(i.normal, -lightDirection), 0.0);
+
             float specular = 0.0;
 
             if (diffuse > 0.0) {
@@ -179,15 +210,12 @@ vec4 traceRay(Ray ray, int depth) {
                 diffuse * i.color +
                 specular * vec3(1.0, 1.0, 1.0),
                 0.0
-            ) * intensity * (1 - i.reflectivity);
-
-            stack[stackPointer].state = 1;
-            stack[stackPointer].i = i;
+            ) * intensity * (1 - i.reflectivity - i.refractivity);
 
             continue;
         }
 
-        if (stackPointer == depth - 1) {
+        if (stackPointer >= depth - 1) {
             stackPointer--;
 
             continue;
@@ -205,6 +233,25 @@ vec4 traceRay(Ray ray, int depth) {
             stack[stackPointer].ray = reflectedRay;
             stack[stackPointer].color = rayColor;
             stack[stackPointer].intensity = intensity * i.reflectivity;
+            stack[stackPointer].eta = eta;
+
+            continue;
+        }
+
+        if (stack[stackPointer].state == 2) {
+            Ray refractionRay;
+            refractionRay.direction = refract(ray.direction, i.normal, eta / i.eta);
+            refractionRay.origin = i.position + treshold * refractionRay.direction;
+
+            stack[stackPointer].state = 3;
+
+            stackPointer++;
+
+            stack[stackPointer].state = 0;
+            stack[stackPointer].ray = refractionRay;
+            stack[stackPointer].color = rayColor;
+            stack[stackPointer].intensity = intensity * i.refractivity;
+            stack[stackPointer].eta = i.eta;
 
             continue;
         }
@@ -234,10 +281,9 @@ Ray MakeRay(float dx, float dy) {
 }
 
 void main() {
-    int depth = 7;
-    int samling = 3;
+    int depth = 4;
+    int samling = 1;
 
-    // super sampling 2x2
     vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
 
     for (int i = 0; i < samling; i++) {
@@ -249,5 +295,5 @@ void main() {
 
     color /= float(samling * samling);
 
-    outColor = color;
+    outColor = clamp(color, 0.0, 1.0);
 }

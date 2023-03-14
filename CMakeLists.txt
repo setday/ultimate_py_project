@@ -65,14 +65,11 @@ add_executable(
         src/core/components/CL/ClBuffer.cxx
         src/core/managers/sub_programs_managers/CL/CLManager.cxx
 
+        src/core/physics/fluid/fluid1/Fluid1Container.cxx
         src/core/physics/PhysicsObject.cxx
+        src/core/physics/fluid/Particle.cxx
         src/core/components/AbstractObject.cxx
         src/core/components/ObjectFactory.cxx
-
-        src/core/physics/PhysicalEngine.cxx
-        src/core/physics/fluid/Particle.cxx
-        src/core/physics/fluid/fluid1/CellsDistribution.cxx
-        src/core/physics/fluid/fluid1/Fluid1Container.cxx
 
         src/core/render/components/camera/Camera.cxx
         src/core/render/components/RenderObject.cxx
@@ -81,13 +78,16 @@ add_executable(
         src/core/render/window_manager/WindowCompositor.cxx
 
         src/core/components/Scene.cxx
-        #scenes/ClTestScene.cxx
-        #scenes/GlTestScene.cxx
-        #scenes/Control.cxx
+        scenes/ClTestScene.cxx
+        scenes/GlTestScene.cxx
+        scenes/Control.cxx
 
         src/core/Compositor.cxx
         src/core/Core.cxx
         src/main.cxx
+
+        src/core/physics/fluid/fluid1/CellsDistribution.cxx
+        src/core/physics/PhysicalEngine.cxx
 )
 
 message(${OPENGL_LIBRARIES})

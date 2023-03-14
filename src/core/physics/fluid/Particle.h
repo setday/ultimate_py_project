@@ -14,10 +14,10 @@
 
 #pragma once
 
-#include "../../maths/MathHeaders"
+#include "../../../Definitions.h"
 
-using namespace unreal_fluid;
-using namespace math;
+using namespace unreal_fluid::math;
+
 namespace unreal_fluid::fluid {
   class Particle {
   public:
