@@ -17,7 +17,7 @@
 
 using namespace unreal_fluid::fluid;
 
-std::pair<Particle *, Particle *> fluid::CellsDistribution::nextPair() {
+std::pair<Particle *, Particle *> CellsDistribution::nextPair() {
   while (cell.size() < 2 && current_cell < cells.size()) {
     cell = cells[cells_keys[++current_cell]];
   }
@@ -31,7 +31,7 @@ std::pair<Particle *, Particle *> fluid::CellsDistribution::nextPair() {
   return {cell[first], cell[second++]};
 }
 
-fluid::CellsDistribution::CellsDistribution(std::vector<Particle> &particles) {
+CellsDistribution::CellsDistribution(std::vector<Particle> &particles) {
   counter = 0, taken = 0;
   uint64_t id;
   int dx = 1, dy = 1, dz = 1; // константы Планка

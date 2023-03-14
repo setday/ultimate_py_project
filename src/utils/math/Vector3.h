@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <cassert>
 #include <cmath>
 #include <string>
 

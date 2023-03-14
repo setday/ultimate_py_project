@@ -13,9 +13,9 @@
  */
 
 #pragma once
+
 #include <vector>
 
-#include "../../maths/MathHeaders"
 #include "Particle.h"
 
 namespace unreal_fluid::fluid {

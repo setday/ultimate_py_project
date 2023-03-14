@@ -1,4 +1,3 @@
-#include "core/maths/MathHeaders"
 #include "core/Core.h"
 
 int main() {
