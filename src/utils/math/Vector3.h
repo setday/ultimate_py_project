@@ -108,12 +108,12 @@ namespace unreal_fluid::math {
     [[nodiscard]] double operator!() const { return len(); }
 
     Vector3 normalize() const {
-      assert(len() > 0);
+      assert(len2() > 0);
       return *this / len();
     }
 
     void normalizeSelf() {
-      assert(len() > 0);
+      assert(len2() > 0);
       *this /= len();
     }
 
@@ -130,7 +130,7 @@ namespace unreal_fluid::math {
     }
 
     T project(const Vector3 &v) {
-      assert(v.len() > 0);
+      assert(v.len2() > 0);
       return this->dot(v) / v.len();
     }
 

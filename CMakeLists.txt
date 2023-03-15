@@ -28,7 +28,7 @@ if (WIN32)
 else ()
     message(SEND_ERROR "Currently only Windows is supported")
     return()
-endif()
+endif ()
 
 set(LIBS
         ${OPENGL_LIBRARIES}
@@ -43,7 +43,7 @@ set(LIBS
         OpenCLUtilsd
 
         glew32
-)
+        )
 
 add_executable(
         ${PROJECT_NAME}
@@ -65,16 +65,13 @@ add_executable(
         src/core/components/CL/ClBuffer.cxx
         src/core/managers/sub_programs_managers/CL/CLManager.cxx
 
-        src/core/physics/fluid/fluid1/Fluid1Container.cxx
-        src/core/physics/PhysObject.cxx
-        src/core/physics/fluid/Particle.cxx
-        src/core/components/AbstractObject.cxx
-        #src/core/components/ObjectFactory.cxx
 
-        src/core/physics/PhysicalEngine.cxx
-        src/core/physics/fluid/Particle.cxx
         src/core/physics/fluid/fluid1/CellsDistribution.cxx
         src/core/physics/fluid/fluid1/Fluid1Container.cxx
+        src/core/physics/PhysObject.cxx
+        src/core/components/AbstractObject.cxx
+        #src/core/components/ObjectFactory.cxx
+        #src/core/physics/PhysicalEngine.cxx
 
         src/core/render/components/camera/Camera.cxx
         src/core/render/components/RenderObject.cxx
@@ -83,6 +80,7 @@ add_executable(
         src/core/render/window_manager/WindowCompositor.cxx
 
         src/core/components/Scene.cxx
+        scenes/ParserTestScene.cxx
         #scenes/ClTestScene.cxx
         #scenes/GlTestScene.cxx
         #scenes/Control.cxx
@@ -90,7 +88,7 @@ add_executable(
         src/core/Compositor.cxx
         src/core/Core.cxx
         src/main.cxx
-        scenes/ParserTestScene.cxx)
+)
 
 message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})

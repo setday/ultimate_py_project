@@ -14,16 +14,8 @@
 
 #pragma once
 
-#include <string>
-
 #include "../../Definitions.h"
 
-namespace physics {
+namespace unreal_fluid::physics {
   const vec3 G = {0.0, -9.81, 0.0};
 }
-
-struct fluidDescriptor {
-  std::string name;
-  double particleRadius;
-  double particleMass;
-};

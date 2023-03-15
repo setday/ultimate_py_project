@@ -6,7 +6,7 @@
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
  * FILE NAME : AbstractObject.h
- * PURPOSE   : Die to born
+ * PURPOSE   : Abstract object to store render object and a physical one
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -24,7 +24,7 @@ namespace unreal_fluid {
     std::vector<render::RenderObject *> renderObjects;
 
   public:
-    AbstractObject() = default;
+    AbstractObject();
     ~AbstractObject();
     void render();
     void update(double dt);
@@ -32,5 +32,3 @@ namespace unreal_fluid {
 
   }; // end of AbstractObject class
 } // namespace unreal_fluid
-
-// end of AbstractObject.h

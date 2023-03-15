@@ -9,7 +9,7 @@
  * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
- * authors of this pressureSolving.
+ * authors of this project.
  */
 
 #pragma once
@@ -20,7 +20,7 @@
 #include "CellsDistribution.h"
 
 ///Fluid1Container - Fluid simulating class, which implements ASS collision
-namespace unreal_fluid::fluid {
+namespace unreal_fluid::physics::fluid {
   class Fluid1Container : IFluidContainer {
   private:
     double k;
@@ -28,14 +28,15 @@ namespace unreal_fluid::fluid {
   public:
     void simulate(double dt) override;
 
-  private:
     unreal_fluid::physics::PhysObject::Type getType() override;
-    void * getData() override;
+    void *getData() override;
+
+  private:
     void collide(Particle &p1, Particle &p2);
     void advect(double dt);
     void addExternalForces(double dt);
     void interact(double dt);
   };
-} // namespace unreal_fluid::fluid
+} // namespace unreal_fluid::physics::fluid
 
 // end of FluidContainer.h

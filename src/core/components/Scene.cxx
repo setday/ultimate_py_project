@@ -7,7 +7,7 @@ void Scene::Init() {
 }
 
 void Scene::Update() {
-  double dt = 0.2; // TODO what a fuck is going on with dt time
+  double dt = 0.2; /// TODO what is going on with dt time?
   for (AbstractObject *object: objects) {
     object->update(dt);
   }

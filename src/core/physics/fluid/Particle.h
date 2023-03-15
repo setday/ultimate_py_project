@@ -6,25 +6,25 @@
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
  * FILE NAME : Particle.h
- * PURPOSE   : particle realization (ZZZ)
+ * PURPOSE   : particle realization
  *
  * No part of this file may be changed and used without agreement of
- * authors of this pressureSolving.
+ * authors of this project.
  */
 
 #pragma once
 
 #include "../../../Definitions.h"
 
-using namespace unreal_fluid::math;
-
-namespace unreal_fluid::fluid {
+namespace unreal_fluid::physics::fluid {
   class Particle {
   public:
-    vec3 v, c;
+    vec3 velocity, coords;
     double r, m;
+    void *metaData;
+
   public:
     Particle() = default;
     ~Particle() = default;
   };
-} // namespace unreal_fluid::fluid
+} // namespace unreal_fluid::physics::fluid

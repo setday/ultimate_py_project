@@ -8,7 +8,7 @@
  * FILE NAME : PhysObject.h
  *
  * No part of this file may be changed and used without agreement of
- * authors of this pressureSolving.
+ * authors of this project.
  */
 
 #pragma once
@@ -22,7 +22,7 @@ namespace unreal_fluid::physics {
   public:
     enum class Type {
       DEFAULT,
-      FLUID1_CONTAINER,
+      FLUID1_CONTAINER
     };
 
     virtual void simulate(double dt);

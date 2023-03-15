@@ -6,10 +6,10 @@
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
  * FILE NAME : FluidContainer.h
- * PURPOSE   : ${PURPOSE}
+ * PURPOSE   : abstract fluid container
  *
  * No part of this file may be changed and used without agreement of
- * authors of this pressureSolving.
+ * authors of this project.
  */
 
 #pragma once
@@ -18,8 +18,15 @@
 #include "../PhysObject.h"
 #include "Particle.h"
 
-namespace unreal_fluid::fluid {
-  class IFluidContainer : physics::PhysObject {
+namespace unreal_fluid::physics::fluid {
+
+  struct fluidDescriptor {
+    std::string name;
+    double particleRadius;
+    double particleMass;
+  };
+
+  class IFluidContainer : PhysObject {
 
   protected:
     std::vector<Particle> particles;
@@ -29,4 +36,4 @@ namespace unreal_fluid::fluid {
     virtual ~IFluidContainer() = default;
     virtual std::vector<Particle> *getParticles() = 0;
   };
-} // namespace unreal_fluid::fluid
+} // namespace unreal_fluid::physics::fluid

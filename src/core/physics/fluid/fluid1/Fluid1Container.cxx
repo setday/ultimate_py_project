@@ -9,22 +9,22 @@
  * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
- * authors of this pressureSolving.
+ * authors of this project.
  */
 
 #include "Fluid1Container.h"
 
-using namespace unreal_fluid::fluid;
+using namespace unreal_fluid::physics::fluid;
 
 void Fluid1Container::addExternalForces(double dt) {
   for (auto &particle: particles) {
-    particle.v += ::physics::G * dt;
+    particle.velocity += G * dt;
   }
 }
 
 void Fluid1Container::advect(double dt) {
   for (auto &particle: particles) {
-    particle.c += particle.v * dt;
+    particle.coords += particle.velocity * dt;
   }
 }
 
@@ -44,17 +44,15 @@ void Fluid1Container::simulate(double dt) {
 }
 
 void Fluid1Container::collide(Particle &p1, Particle &p2) {
-  auto y = p2.c - p1.c;
-  {
-    double push = (p1.r + p2.r - p1.c.distanceTo(p2.c)) / 2;
-    p2.c += y * push;
-    p1.c -= y * push;
-  }
-  {
-    double s = -(1 + k) * (p1.v.project(y) - p2.v.project(y)) * p1.m * p2.m / (p1.m + p2.m);
-    p1.v += y * (s / p1.m);
-    p2.v -= y * (s / p2.m);
-  }
+  vec3 y = p2.coords - p1.coords;
+
+  double push = (p1.r + p2.r - p1.coords.distanceTo(p2.coords)) / 2;
+  p2.coords += y * push;
+  p1.coords -= y * push;
+
+  double s = -(1 + k) * (p1.velocity.project(y) - p2.velocity.project(y)) * p1.m * p2.m / (p1.m + p2.m);
+  p1.velocity += y * (s / p1.m);
+  p2.velocity -= y * (s / p2.m);
 }
 
 void *Fluid1Container::getData() {

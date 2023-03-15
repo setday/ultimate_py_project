@@ -19,7 +19,7 @@
 
 #include "../Particle.h"
 
-namespace unreal_fluid::fluid {
+namespace unreal_fluid::physics::fluid {
   class CellsDistribution {
     friend class Fluid1Container;
 
