@@ -12,23 +12,27 @@
  * authors of this project.
  */
 
-#include "Fluid1Container.h"
+#include "SimpleFluidContainer.h"
 
 using namespace unreal_fluid::physics::fluid;
 
-void Fluid1Container::addExternalForces(double dt) {
+SimpleFluidContainer::SimpleFluidContainer(FluidDescriptor descriptor) {
+  /// TODO : write constructor implementation
+}
+
+void SimpleFluidContainer::addExternalForces(double dt) {
   for (auto &particle: particles) {
     particle.velocity += G * dt;
   }
 }
 
-void Fluid1Container::advect(double dt) {
+void SimpleFluidContainer::advect(double dt) {
   for (auto &particle: particles) {
     particle.coords += particle.velocity * dt;
   }
 }
 
-void Fluid1Container::interact(double dt) {
+void SimpleFluidContainer::interact(double dt) {
   CellsDistribution cells(particles);
   std::pair<Particle *, Particle *> p = cells.nextPair(), end = {nullptr, nullptr};
   while (p != end) {
@@ -37,13 +41,13 @@ void Fluid1Container::interact(double dt) {
   }
 }
 
-void Fluid1Container::simulate(double dt) {
+void SimpleFluidContainer::simulate(double dt) {
   interact(dt);
   addExternalForces(dt);
   advect(dt);
 }
 
-void Fluid1Container::collide(Particle &p1, Particle &p2) {
+void SimpleFluidContainer::collide(Particle &p1, Particle &p2) {
   vec3 y = p2.coords - p1.coords;
 
   double push = (p1.r + p2.r - p1.coords.distanceTo(p2.coords)) / 2;
@@ -55,10 +59,10 @@ void Fluid1Container::collide(Particle &p1, Particle &p2) {
   p2.velocity -= y * (s / p2.m);
 }
 
-void *Fluid1Container::getData() {
+void *SimpleFluidContainer::getData() {
   return &particles;
 }
 
-unreal_fluid::physics::PhysObject::Type Fluid1Container::getType() {
-  return physics::PhysObject::Type::FLUID1_CONTAINER;
+unreal_fluid::physics::PhysObject::Type SimpleFluidContainer::getType() {
+  return physics::PhysObject::Type::SIMPLE_FLUID_CONTAINER;
 }

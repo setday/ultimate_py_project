@@ -15,6 +15,7 @@
 #pragma once
 
 #include "../physics/PhysObject.h"
+#include "../physics/fluid/simple_fluid/SimpleFluidContainer.h"
 #include "../render/components/RenderObject.h"
 
 namespace unreal_fluid {
@@ -24,9 +25,9 @@ namespace unreal_fluid {
     std::vector<render::RenderObject *> renderObjects;
 
   public:
-    AbstractObject();
+    AbstractObject(physics::fluid::FluidDescriptor descriptor);
     ~AbstractObject();
-    void render();
+    const std::vector<render::RenderObject *>& getRenderObjects();
     void update(double dt);
     void parse();
 

@@ -12,7 +12,6 @@
  */
 
 #include <iostream>
-
 #include "../src/core/Core.h"
 #include "../src/core/components/Scene.h"
 
@@ -20,7 +19,7 @@ using namespace unreal_fluid;
 
 class ClTestScene : public Scene {
 public:
-  explicit ClTestScene(compositor::Compositor const * compositor) : Scene(compositor) {
+  explicit ClTestScene(const compositor::Compositor *compositor) : Scene(compositor) {
     const int N = 1'000'000;
     std::vector<int> first(N, 368575);
     std::vector<int> second(N, 257808);
@@ -41,8 +40,10 @@ public:
       idC->WriteTo(result);
     }
     std::cout << std::chrono::duration_cast<std::chrono::microseconds>(
-            std::chrono::high_resolution_clock::now() - start
-    ).count() << "\n"; // 3984
+                         std::chrono::high_resolution_clock::now() - start
+                 )
+                         .count()
+              << "\n"; // 3984
 
     first.assign(N, 368575);
     second.assign(N, 257808);
@@ -55,8 +56,9 @@ public:
       }
     }
     std::cout << std::chrono::duration_cast<std::chrono::microseconds>(
-            std::chrono::high_resolution_clock::now() - start
-    ).count(); // 5951
+                         std::chrono::high_resolution_clock::now() - start
+    )
+                         .count(); // 5951
   }
 
   ~ClTestScene() override = default;

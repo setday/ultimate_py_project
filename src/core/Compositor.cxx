@@ -13,12 +13,11 @@
  */
 
 #include "Compositor.h"
-
-#include "./components/Scene.h"
-
 #include "../scenes/ClTestScene.cxx"
-#include "../scenes/GlTestScene.cxx"
 #include "../scenes/Control.cxx"
+#include "../scenes/GlTestScene.cxx"
+#include "../scenes/ParserTestScene.cxx"
+#include "./components/Scene.h"
 
 using namespace unreal_fluid::compositor;
 
@@ -38,22 +37,23 @@ void Compositor::Init() {
   Logger::logInfo("Initializing compositor...");
 
   _renderer->Init();
-  _scenes.push_back(new ClTestScene(this));
-  _scenes.push_back(new GlTestScene(this));
+  //  _scenes.push_back(new ClTestScene(this));
+//    _scenes.push_back(new GlTestScene(this));
+  _scenes.push_back(new ParserTestScene(this));
   _scenes.push_back(new Control(this));
 
   Logger::logInfo("Compositor initialized!");
 }
 
 void Compositor::Update() {
-  for (auto scene : _scenes) {
+  for (auto scene: _scenes) {
     scene->Update();
   }
 }
 
 void Compositor::Render() {
   _renderer->StartFrame();
-  for (auto scene : _scenes) {
+  for (auto scene: _scenes) {
     scene->Render();
   }
   _renderer->EndFrame();
@@ -61,7 +61,7 @@ void Compositor::Render() {
 
 void Compositor::Destroy() {
   _renderer->Destroy();
-  for (auto scene : _scenes) {
+  for (auto scene: _scenes) {
     scene->Clear();
     delete scene;
   }

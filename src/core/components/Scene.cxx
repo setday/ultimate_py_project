@@ -13,12 +13,6 @@ void Scene::Update() {
   }
 }
 
-void Scene::Render() {
-  for (AbstractObject *object: objects) {
-    object->render();
-  }
-}
-
 void Scene::Clear() {
   for (AbstractObject *&object: objects) {
     delete &object;

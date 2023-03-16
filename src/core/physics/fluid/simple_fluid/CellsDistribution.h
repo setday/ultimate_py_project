@@ -16,12 +16,11 @@
 
 #include <unordered_map>
 #include <vector>
-
 #include "../Particle.h"
 
 namespace unreal_fluid::physics::fluid {
   class CellsDistribution {
-    friend class Fluid1Container;
+    friend class SimpleFluidContainer;
 
     CellsDistribution(std::vector<Particle> &particles);
     ~CellsDistribution() = default;
@@ -30,10 +29,10 @@ namespace unreal_fluid::physics::fluid {
     const int N = 1000; // world of cells size
     std::unordered_map<uint64_t, std::vector<Particle *>> cells;
     std::unordered_map<uint64_t, uint64_t> cells_keys;
-    std::vector<Particle*> cell;
+    std::vector<Particle *> cell;
 
     std::pair<Particle *, Particle *> nextPair();
-
   };
-}
+} // namespace unreal_fluid::physics::fluid
+
 // end of CellsDistribution.h

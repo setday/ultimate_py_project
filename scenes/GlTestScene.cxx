@@ -12,13 +12,12 @@
  */
 
 #include <cmath>
-
 #include "../src/core/Core.h"
 #include "../src/core/components/Scene.h"
 #include "../src/core/render/components/material/MaterialFactory.h"
-#include "../src/core/render/components/mesh/presets/Sphere.h"
-#include "../src/core/render/components/mesh/presets/Plane.h"
 #include "../src/core/render/components/mesh/presets/Cube.h"
+#include "../src/core/render/components/mesh/presets/Plane.h"
+#include "../src/core/render/components/mesh/presets/Sphere.h"
 
 using namespace unreal_fluid;
 
@@ -29,7 +28,8 @@ public:
   render::RenderObject *cube;
   const compositor::Compositor *compositor;
 
-  explicit GlTestScene(compositor::Compositor const * compositor) : Scene(compositor), compositor(compositor) {
+  explicit GlTestScene(const compositor::Compositor *compositor) : Scene(compositor),
+                                                                   compositor(compositor) {
     sphere = new render::RenderObject();
     sphere->mesh = render::mesh::Sphere(.5f, 50, 50);
     sphere->position = {-.75f, 0.f, -5.f};
@@ -39,7 +39,7 @@ public:
     sphere->shaderProgram = compositor->GetRenderer()->GetShaderManager()->GetDefaultProgram();
     sphere->material = render::material::MaterialFactory::createMaterial(
             render::material::MaterialFactory::MaterialType::GOLD
-            );
+    );
 
     plane = new render::RenderObject();
     plane->mesh = render::mesh::Plane(2.5f, 2.5f, 10, 10);

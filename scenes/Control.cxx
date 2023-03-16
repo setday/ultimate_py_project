@@ -25,13 +25,17 @@ public:
   vec2f cameraRotation = {0.f, M_PI};
   bool angleChanged = false;
 
-  explicit Control(compositor::Compositor const * compositor) : Scene(compositor), compositor(compositor) {
+  explicit Control(const compositor::Compositor *compositor) : Scene(compositor),
+                                                               compositor(compositor) {
     compositor->GetCore()->GetWindowCompositor()->addKeyboardCallback([this](int key, int action) {
       this->keyboardBindings(key, action);
     });
     compositor->GetCore()->GetWindowCompositor()->addResizeCallback([this](int width, int height) {
       this->resizeBindings(width, height);
     });
+  }
+
+  void Render() override {
   }
 
   void keyboardBindings(int key, int action) {

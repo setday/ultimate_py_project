@@ -16,8 +16,8 @@
 
 using namespace unreal_fluid;
 
-AbstractObject::AbstractObject() {
-  physObject = new physics::PhysObject;
+AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) {
+  physObject = new physics::fluid::SimpleFluidContainer(descriptor);
 }
 
 AbstractObject::~AbstractObject() {
@@ -29,7 +29,7 @@ void AbstractObject::parse() {
   auto data = physObject->getData();
   if (type == physics::PhysObject::Type::DEFAULT) {
     throw "Incomplete type parsing";
-  } else if (type == physics::PhysObject::Type::FLUID1_CONTAINER) {
+  } else if (type == physics::PhysObject::Type::SIMPLE_FLUID_CONTAINER) {
     auto &particles = *reinterpret_cast<std::vector<physics::fluid::Particle *> *>(data);
 
     for (int pos = 0; pos < particles.size(); ++pos) {
@@ -51,11 +51,8 @@ void AbstractObject::update(double dt) {
     return;
   }
   physObject->simulate(dt);
-  parse(); // does this look ok?
 }
 
-void AbstractObject::render() {
-  for (auto &renderObject: renderObjects) {
-    //    renderObject.render(); /// TODO: no render method in renderObject? I don't understand.
-  }
+const std::vector<render::RenderObject *> &AbstractObject::getRenderObjects() {
+  return renderObjects;
 }

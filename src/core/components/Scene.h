@@ -16,7 +16,7 @@ namespace unreal_fluid {
 
     virtual void Init();
     virtual void Update();
-    virtual void Render();
+    virtual void Render() = 0;
     virtual void Clear();
   };
 } // namespace unreal_fluid

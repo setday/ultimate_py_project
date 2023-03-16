@@ -66,8 +66,8 @@ add_executable(
         src/core/managers/sub_programs_managers/CL/CLManager.cxx
 
 
-        src/core/physics/fluid/fluid1/CellsDistribution.cxx
-        src/core/physics/fluid/fluid1/Fluid1Container.cxx
+        src/core/physics/fluid/simple_fluid/CellsDistribution.cxx
+        src/core/physics/fluid/simple_fluid/SimpleFluidContainer.cxx
         src/core/physics/PhysObject.cxx
         src/core/components/AbstractObject.cxx
         #src/core/components/ObjectFactory.cxx

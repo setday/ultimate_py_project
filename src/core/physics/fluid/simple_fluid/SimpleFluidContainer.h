@@ -19,13 +19,14 @@
 #include "../IFluidContainer.h"
 #include "CellsDistribution.h"
 
-///Fluid1Container - Fluid simulating class, which implements ASS collision
+///SimpleFluidContainer - Fluid simulating class, which implements ASS collision
 namespace unreal_fluid::physics::fluid {
-  class Fluid1Container : IFluidContainer {
+  class SimpleFluidContainer : public IFluidContainer {
   private:
     double k;
 
   public:
+    SimpleFluidContainer(FluidDescriptor descriptor);
     void simulate(double dt) override;
 
     unreal_fluid::physics::PhysObject::Type getType() override;

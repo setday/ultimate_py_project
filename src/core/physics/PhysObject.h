@@ -22,7 +22,7 @@ namespace unreal_fluid::physics {
   public:
     enum class Type {
       DEFAULT,
-      FLUID1_CONTAINER
+      SIMPLE_FLUID_CONTAINER
     };
 
     virtual void simulate(double dt);
