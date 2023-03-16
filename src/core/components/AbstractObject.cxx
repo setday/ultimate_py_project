@@ -18,6 +18,7 @@ using namespace unreal_fluid;
 
 AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) {
   physObject = new physics::fluid::SimpleFluidContainer(descriptor);
+  /// TODO: add nullptr check;
 }
 
 AbstractObject::~AbstractObject() {
@@ -28,7 +29,7 @@ void AbstractObject::parse() {
   physics::PhysObject::Type type = physObject->getType();
   auto data = physObject->getData();
   if (type == physics::PhysObject::Type::DEFAULT) {
-    throw "Incomplete type parsing";
+    Logger::logFatal("Can't parse empty object\n");
   } else if (type == physics::PhysObject::Type::SIMPLE_FLUID_CONTAINER) {
     auto &particles = *reinterpret_cast<std::vector<physics::fluid::Particle *> *>(data);
 
@@ -47,8 +48,7 @@ void AbstractObject::parse() {
 
 void AbstractObject::update(double dt) {
   if (physObject == nullptr) {
-    std::cout << "Can't simulate empty object\n";
-    return;
+    Logger::logFatal("Can't parse empty object\n");
   }
   physObject->simulate(dt);
 }

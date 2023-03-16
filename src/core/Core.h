@@ -27,7 +27,7 @@ namespace unreal_fluid {
 
   private:
     bool _isRunning = false;
-     window::WindowCompositor *_windowCompositor;
+    window::WindowCompositor *_windowCompositor;
     compositor::Compositor _compositor;
 
   public:

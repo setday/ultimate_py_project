@@ -17,7 +17,6 @@
 #include "../scenes/Control.cxx"
 #include "../scenes/GlTestScene.cxx"
 #include "../scenes/ParserTestScene.cxx"
-#include "./components/Scene.h"
 
 using namespace unreal_fluid::compositor;
 

@@ -1,3 +1,4 @@
+
 /***************************************************************
  * Copyright (C) 2023
  *    HSE SPb (Higher school of economics in Saint-Petersburg).
@@ -20,9 +21,6 @@
 
 namespace unreal_fluid {
   class Core;
-}
-
-namespace unreal_fluid {
   class Scene;
 }
 
