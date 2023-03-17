@@ -74,7 +74,7 @@ add_executable(
         src/core/render/components/RenderObject.cxx
         src/core/render/Renderer.cxx
 
-        src/core/render/window_manager/WindowCompositor.cxx
+        src/core/managers/window_manager/WindowCompositor.cxx
 
         src/core/components/Scene.cxx
         scenes/ParserTestScene.cxx

@@ -17,7 +17,7 @@
 #include <iostream>
 #include <functional>
 
-#include <GLFW/glfw3.h>
+#include "GLFW/glfw3.h"
 
 #include "../../../Definitions.h"
 
