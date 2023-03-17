@@ -16,15 +16,11 @@
 
 #include "../Definitions.h"
 
-#include "managers/sub_programs_managers/CL/CLManager.h"
 #include "Compositor.h"
 #include "render/window_manager/WindowCompositor.h"
 
 namespace unreal_fluid {
   class Core {
-  public:
-    manager::CLManager clManager;
-
   private:
     bool _isRunning = false;
     window::WindowCompositor *_windowCompositor;

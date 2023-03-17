@@ -17,8 +17,6 @@
 #include "../src/core/Core.h"
 #include "../src/core/components/AbstractObject.h"
 #include "../src/core/components/Scene.h"
-#include "../src/core/render/components/material/MaterialFactory.h"
-#include "../src/core/render/components/mesh/presets/Sphere.h"
 
 using namespace unreal_fluid;
 

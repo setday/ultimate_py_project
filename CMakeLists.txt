@@ -62,9 +62,6 @@ add_executable(
         src/core/render/components/shaders/ShaderProgram.cxx
         src/core/managers/sub_programs_managers/shader_manager/ShaderManager.cxx
 
-        src/core/components/CL/ClBuffer.cxx
-        src/core/managers/sub_programs_managers/CL/CLManager.cxx
-
 
         src/core/physics/fluid/simple_fluid/CellsDistribution.cxx
         src/core/physics/fluid/simple_fluid/SimpleFluidContainer.cxx

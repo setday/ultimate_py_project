@@ -13,7 +13,6 @@
  */
 
 #include "Compositor.h"
-#include "../scenes/ClTestScene.cxx"
 #include "../scenes/Control.cxx"
 #include "../scenes/GlTestScene.cxx"
 #include "../scenes/ParserTestScene.cxx"
@@ -24,7 +23,6 @@ Compositor::Compositor(Core *core) : _core(core) {
   Logger::logInfo("Creating compositor...");
 
   _renderer = new render::Renderer();
-
   Logger::logInfo("Compositor created!");
 }
 
@@ -36,10 +34,8 @@ void Compositor::Init() {
   Logger::logInfo("Initializing compositor...");
 
   _renderer->Init();
-  //  _scenes.push_back(new ClTestScene(this));
-//    _scenes.push_back(new GlTestScene(this));
   _scenes.push_back(new ParserTestScene(this));
-  _scenes.push_back(new Control(this));
+  //_scenes.push_back(new GlTestScene(this));
 
   Logger::logInfo("Compositor initialized!");
 }
