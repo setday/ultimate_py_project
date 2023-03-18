@@ -36,13 +36,20 @@ public:
   }
 
   void Update() override {
-      compositor->getSimulator()->simulate(dt);
+      //compositor->getSimulator()->simulate(dt);
   }
 
   void Render() override {
+      static int timer = 0;
+      timer++;
       for (auto & abstractObject : abstractObjects) {
           abstractObject->parse();
           compositor->getRenderer()->RenderAllObjects(abstractObject->getRenderObjects());
+      }
+      if (timer % 200 == 0) {
+          compositor->getRenderer()->GetShaderManager()->ReloadShaders();
+
+          Logger::logInfo("All shaders have been reloaded");
       }
   }
 

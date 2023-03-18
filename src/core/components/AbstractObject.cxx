@@ -34,11 +34,11 @@ void AbstractObject::parse() {
     for (int pos = 0; pos < particles.size(); ++pos) {
       if (pos == renderObjects.size()) {
         auto sphere = new render::RenderObject;
-        sphere->position = particles[pos]->coords;
+        sphere->position = particles[pos]->position;
         sphere->modelMatrix = mat4::translation(sphere->position);
         renderObjects.push_back(sphere);
       } else {
-        renderObjects[pos]->modelMatrix = mat4::translation(particles[pos]->coords);
+        renderObjects[pos]->modelMatrix = mat4::translation(particles[pos]->position);
       }
     }
   }

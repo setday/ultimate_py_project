@@ -30,18 +30,18 @@ std::pair<Particle *, Particle *> CellsDistribution::nextPair() {
   return {cell[first], cell[second++]};
 }
 
-CellsDistribution::CellsDistribution(std::vector<Particle> &particles) {
+CellsDistribution::CellsDistribution(std::vector<Particle*> &particles) {
   counter = 0, taken = 0;
   uint64_t id;
-  auto dx = 3 * particles.front().r; /// TODO: what should these constants be?
+  auto dx = 3 * particles.front()->radius; /// TODO: what should these constants be?
   for (auto &particle: particles) {
     ++counter;
-    auto [x, y, z] = particle.coords;
+    auto [x, y, z] = particle->position;
     x /= dx;
     y /= dx;
     z /= dx;
     id = ((uint64_t) x << 32) + ((uint64_t) y << 16) + (uint64_t) z;
-    cells[id].push_back(&particle);
+    cells[id].push_back(particle);
   }
   int k = 0;
   for (auto [key, value]: cells) {

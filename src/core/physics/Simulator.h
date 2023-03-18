@@ -20,7 +20,7 @@ namespace unreal_fluid::physics{
         void addPhysObject(PhysObject* physObject);
 
         /// @brief Simulates the scene
-        /// @details s
+        /// @details calls simulate() function of each PhysObject in the internal buffer and solve interactions between them.
         void simulate(double dt);
 
         /// @brief Clears the scene

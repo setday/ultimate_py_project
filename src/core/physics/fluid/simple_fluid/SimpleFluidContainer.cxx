@@ -17,28 +17,38 @@
 using namespace unreal_fluid::physics::fluid;
 
 SimpleFluidContainer::SimpleFluidContainer(FluidDescriptor descriptor) {
+    auto particle = new Particle();
+    particle->position = {0,0,0};
+    particles.push_back(particle);
   /// TODO : write constructor implementation
+}
+
+SimpleFluidContainer::~SimpleFluidContainer() {
+    for (auto & particle : particles) {
+        delete particle;
+    }
 }
 
 void SimpleFluidContainer::addExternalForces(double dt) {
   for (auto &particle: particles) {
-    particle.velocity += G * dt;
+    particle->velocity += G * dt;
   }
 }
 
 void SimpleFluidContainer::advect(double dt) {
-  for (auto &particle: particles) {
-    particle.coords += particle.velocity * dt;
+  for (auto particle: particles) {
+    particle->position += particle->velocity * dt;
   }
 }
 
 void SimpleFluidContainer::interact(double dt) {
-  CellsDistribution cells(particles);
+    //TODO repair CellsDistribution
+  /*CellsDistribution cells(particles);
   std::pair<Particle *, Particle *> p = cells.nextPair(), end = {nullptr, nullptr};
   while (p != end) {
     collide(*p.first, *p.second);
     p = cells.nextPair();
-  }
+  }*/
 }
 
 void SimpleFluidContainer::simulate(double dt) {
@@ -48,15 +58,15 @@ void SimpleFluidContainer::simulate(double dt) {
 }
 
 void SimpleFluidContainer::collide(Particle &p1, Particle &p2) {
-  vec3 y = p2.coords - p1.coords;
+  vec3 y = p2.position - p1.position;
 
-  double push = (p1.r + p2.r - p1.coords.distanceTo(p2.coords)) / 2;
-  p2.coords += y * push;
-  p1.coords -= y * push;
+  double push = (p1.radius + p2.radius - p1.position.distanceTo(p2.position)) / 2;
+  p2.position += y * push;
+  p1.position -= y * push;
 
-  double s = -(1 + k) * (p1.velocity.project(y) - p2.velocity.project(y)) * p1.m * p2.m / (p1.m + p2.m);
-  p1.velocity += y * (s / p1.m);
-  p2.velocity -= y * (s / p2.m);
+  double s = -(1 + k) * (p1.velocity.project(y) - p2.velocity.project(y)) * p1.mass * p2.mass / (p1.mass + p2.mass);
+  p1.velocity += y * (s / p1.mass);
+  p2.velocity -= y * (s / p2.mass);
 }
 
 void *SimpleFluidContainer::getData() {

@@ -21,21 +21,19 @@
 namespace unreal_fluid::physics::fluid {
 
   struct FluidDescriptor {
-    std::string name;
     double particleRadius;
     double particleMass;
   };
 
   class IFluidContainer : public PhysObject {
-
   protected:
-    std::vector<Particle> particles;
+    std::vector<Particle*> particles;
 
   public:
     IFluidContainer() = default;
     virtual ~IFluidContainer() = default;
 
-    std::vector<Particle> *getParticles() {
+    std::vector<Particle*> *getParticles() {
       return &particles;
     }
   };

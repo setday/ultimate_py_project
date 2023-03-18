@@ -22,7 +22,7 @@ namespace unreal_fluid::physics::fluid {
   class CellsDistribution {
     friend class SimpleFluidContainer;
 
-    CellsDistribution(std::vector<Particle> &particles);
+    CellsDistribution(std::vector<Particle*> &particles);
     ~CellsDistribution() = default;
 
     uint64_t taken, counter, current_cell, first, second;
