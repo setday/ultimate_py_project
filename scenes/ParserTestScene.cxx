@@ -22,30 +22,28 @@ using namespace unreal_fluid;
 
 class ParserTestScene : public Scene {
 public:
-  render::RenderObject *sphere;
   const compositor::Compositor *compositor;
-  AbstractObject *abstractObject;
+  std::vector<AbstractObject *>abstractObjects;
+  double dt;
 
   explicit ParserTestScene(const compositor::Compositor *compositor) : Scene(compositor),
                                                                        compositor(compositor) {
-    abstractObject = new AbstractObject({}); // TODO: which descriptor should we use?
+    abstractObjects.push_back(new AbstractObject({})); // TODO: which descriptor should we use?
+     for (auto & abstractObject : abstractObjects) {
+         compositor->getSimulator()->addPhysObject(const_cast<physics::PhysObject*>(abstractObject->getPhysObject()));
+     }
+     dt = 0.01;
   }
 
   void Update() override {
-    //    abstractObject->update(0.1);
+      compositor->getSimulator()->simulate(dt);
   }
 
   void Render() override {
-    static int timer = 0;
-    timer++;
-
-    compositor->GetRenderer()->RenderAllObjects(abstractObject->getRenderObjects());
-
-    if (timer % 200 == 0) {
-      compositor->GetRenderer()->GetShaderManager()->ReloadShaders();
-
-      Logger::logInfo("All shaders have been reloaded");
-    }
+      for (auto & abstractObject : abstractObjects) {
+          abstractObject->parse();
+          compositor->getRenderer()->RenderAllObjects(abstractObject->getRenderObjects());
+      }
   }
 
   ~ParserTestScene() override = default;

@@ -36,10 +36,10 @@ namespace unreal_fluid::render {
     mat4 _projection;
 
   private:
-    /// Update view matrix
+    /// update view matrix
     void updateViewMatrix();
 
-    /// Update projection matrix
+    /// update projection matrix
     void updateProjectionMatrix();
 
   public:

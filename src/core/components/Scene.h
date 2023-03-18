@@ -13,9 +13,8 @@ namespace unreal_fluid {
   public:
     explicit Scene(compositor::Compositor const *) {};
     virtual ~Scene() = default;
-
     virtual void Init();
-    virtual void Update();
+    virtual void Update() = 0;
     virtual void Render() = 0;
     virtual void Clear();
   };

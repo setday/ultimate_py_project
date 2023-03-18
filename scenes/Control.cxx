@@ -27,10 +27,10 @@ public:
 
   explicit Control(const compositor::Compositor *compositor) : Scene(compositor),
                                                                compositor(compositor) {
-    compositor->GetCore()->GetWindowCompositor()->addKeyboardCallback([this](int key, int action) {
+      compositor->getCore()->GetWindowCompositor()->addKeyboardCallback([this](int key, int action) {
       this->keyboardBindings(key, action);
     });
-    compositor->GetCore()->GetWindowCompositor()->addResizeCallback([this](int width, int height) {
+      compositor->getCore()->GetWindowCompositor()->addResizeCallback([this](int width, int height) {
       this->resizeBindings(width, height);
     });
   }
@@ -46,25 +46,25 @@ public:
         this->renderMode = render::Renderer::RenderMode::WIREFRAME;
       }
 
-      this->compositor->GetRenderer()->ChangeRenderMode(this->renderMode);
+        this->compositor->getRenderer()->ChangeRenderMode(this->renderMode);
     }
 
     positionChanged = false;
 
     if (key == GLFW_KEY_W) {
-      cameraPosition += this->compositor->GetRenderer()->camera.getDirection() / 4;
+      cameraPosition += this->compositor->getRenderer()->camera.getDirection() / 4;
       positionChanged = true;
     }
     if (key == GLFW_KEY_S) {
-      cameraPosition -= this->compositor->GetRenderer()->camera.getDirection() / 4;
+      cameraPosition -= this->compositor->getRenderer()->camera.getDirection() / 4;
       positionChanged = true;
     }
     if (key == GLFW_KEY_D) {
-      cameraPosition -= vec3f(0.f, 1.f, 0.f).cross(this->compositor->GetRenderer()->camera.getDirection()) / 4;
+      cameraPosition -= vec3f(0.f, 1.f, 0.f).cross(this->compositor->getRenderer()->camera.getDirection()) / 4;
       positionChanged = true;
     }
     if (key == GLFW_KEY_A) {
-      cameraPosition += vec3f(0.f, 1.f, 0.f).cross(this->compositor->GetRenderer()->camera.getDirection()) / 4;
+      cameraPosition += vec3f(0.f, 1.f, 0.f).cross(this->compositor->getRenderer()->camera.getDirection()) / 4;
       positionChanged = true;
     }
 
@@ -98,42 +98,42 @@ public:
     }
 
     if (positionChanged) {
-      this->compositor->GetRenderer()->camera.setPosition(cameraPosition);
+        this->compositor->getRenderer()->camera.setPosition(cameraPosition);
     }
 
     if (angleChanged) {
-      this->compositor->GetRenderer()->camera.setDirection(cameraRotation.y, cameraRotation.x);
+        this->compositor->getRenderer()->camera.setDirection(cameraRotation.y, cameraRotation.x);
     }
 
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-      this->compositor->GetCore()->Shutdown();
+        this->compositor->getCore()->Shutdown();
     }
 
     if (key == GLFW_KEY_F2 && action == GLFW_PRESS) {
-      this->compositor->GetRenderer()->ChangeRenderMode(render::Renderer::RenderMode::WIREFRAME);
+        this->compositor->getRenderer()->ChangeRenderMode(render::Renderer::RenderMode::WIREFRAME);
 
       Logger::logInfo("Wireframe mode enabled");
     }
     if (key == GLFW_KEY_F1 && action == GLFW_PRESS) {
-      this->compositor->GetRenderer()->ChangeRenderMode(render::Renderer::RenderMode::SOLID);
+        this->compositor->getRenderer()->ChangeRenderMode(render::Renderer::RenderMode::SOLID);
 
       Logger::logInfo("Solid mode enabled");
     }
     if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
-      this->compositor->GetRenderer()->ChangeRenderMode(render::Renderer::RenderMode::RAY_TRACING);
+        this->compositor->getRenderer()->ChangeRenderMode(render::Renderer::RenderMode::RAY_TRACING);
 
       Logger::logInfo("Ray tracing mode enabled");
     }
 
     if (key == GLFW_KEY_F11 && action == GLFW_PRESS) {
-      this->compositor->GetRenderer()->GetShaderManager()->ReloadShaders();
+        this->compositor->getRenderer()->GetShaderManager()->ReloadShaders();
 
       Logger::logInfo("All shaders reloaded!");
     }
   }
 
   void resizeBindings(int width, int height) {
-    this->compositor->GetRenderer()->changeResolution(width, height);
+      this->compositor->getRenderer()->changeResolution(width, height);
   }
 
   ~Control() override = default;

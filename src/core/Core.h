@@ -45,8 +45,8 @@ namespace unreal_fluid {
     /// @brief Initialize core.
     /// @details Initialize all components of core.
     void Init();
-    /// @brief Update core.
-    /// @details Update all components of core.
+    /// @brief update core.
+    /// @details update all components of core.
     void Update();
   }; // core class
 } // namespace unreal_fluid

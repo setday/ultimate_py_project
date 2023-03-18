@@ -28,9 +28,7 @@ AbstractObject::~AbstractObject() {
 void AbstractObject::parse() {
   physics::PhysObject::Type type = physObject->getType();
   auto data = physObject->getData();
-  if (type == physics::PhysObject::Type::DEFAULT) {
-    Logger::logFatal("Can't parse empty object\n");
-  } else if (type == physics::PhysObject::Type::SIMPLE_FLUID_CONTAINER) {
+  if (type == physics::PhysObject::Type::SIMPLE_FLUID_CONTAINER) {
     auto &particles = *reinterpret_cast<std::vector<physics::fluid::Particle *> *>(data);
 
     for (int pos = 0; pos < particles.size(); ++pos) {
@@ -44,15 +42,13 @@ void AbstractObject::parse() {
       }
     }
   }
-}
-
-void AbstractObject::update(double dt) {
-  if (physObject == nullptr) {
-    Logger::logFatal("Can't parse empty object\n");
-  }
-  physObject->simulate(dt);
+  Logger::logInfo("Parsing of a SIMPLE_FLUID_CONTAINER completed");
 }
 
 const std::vector<render::RenderObject *> &AbstractObject::getRenderObjects() {
   return renderObjects;
+}
+
+const physics::PhysObject *AbstractObject::getPhysObject() {
+    return physObject;
 }

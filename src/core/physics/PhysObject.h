@@ -21,15 +21,15 @@ namespace unreal_fluid::physics {
 
   public:
     enum class Type {
-      DEFAULT,
-      SIMPLE_FLUID_CONTAINER
+        SIMPLE_FLUID_CONTAINER,
+        SOLID
     };
 
-    virtual void simulate(double dt);
+    virtual void simulate(double dt) = 0;
 
   public:
-    virtual Type getType();
-    virtual void *getData();
+    virtual Type getType() = 0;
+    virtual void *getData() = 0;
   };
 } // namespace unreal_fluid::physics
 

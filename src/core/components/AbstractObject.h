@@ -19,17 +19,15 @@
 #include "../render/components/RenderObject.h"
 
 namespace unreal_fluid {
-  class AbstractObject {
+    class AbstractObject {
+        physics::PhysObject *physObject;
+        std::vector<render::RenderObject *> renderObjects;
 
-    physics::PhysObject *physObject;
-    std::vector<render::RenderObject *> renderObjects;
-
-  public:
-    AbstractObject(physics::fluid::FluidDescriptor descriptor);
-    ~AbstractObject();
-    const std::vector<render::RenderObject *>& getRenderObjects();
-    void update(double dt);
-    void parse();
-
-  }; // end of AbstractObject class
+    public:
+        explicit AbstractObject(physics::fluid::FluidDescriptor descriptor);
+        ~AbstractObject();
+        const std::vector<render::RenderObject *> &getRenderObjects();
+        const physics::PhysObject *getPhysObject();
+        void parse();
+    }; // end of AbstractObject class
 } // namespace unreal_fluid

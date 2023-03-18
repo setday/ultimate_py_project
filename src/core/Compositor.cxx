@@ -21,7 +21,7 @@ using namespace unreal_fluid::compositor;
 
 Compositor::Compositor(Core *core) : _core(core) {
   Logger::logInfo("Creating compositor...");
-
+  _simulator = new physics::Simulator;
   _renderer = new render::Renderer();
   Logger::logInfo("Compositor created!");
 }
@@ -30,7 +30,7 @@ Compositor::~Compositor() {
   delete _renderer;
 }
 
-void Compositor::Init() {
+void Compositor::init() {
   Logger::logInfo("Initializing compositor...");
 
   _renderer->Init();
@@ -40,13 +40,13 @@ void Compositor::Init() {
   Logger::logInfo("Compositor initialized!");
 }
 
-void Compositor::Update() {
+void Compositor::update() {
   for (auto scene: _scenes) {
     scene->Update();
   }
 }
 
-void Compositor::Render() {
+void Compositor::render() {
   _renderer->StartFrame();
   for (auto scene: _scenes) {
     scene->Render();
@@ -54,7 +54,7 @@ void Compositor::Render() {
   _renderer->EndFrame();
 }
 
-void Compositor::Destroy() {
+void Compositor::destroy() {
   _renderer->Destroy();
   for (auto scene: _scenes) {
     scene->Clear();
@@ -62,12 +62,16 @@ void Compositor::Destroy() {
   }
 }
 
-Core *Compositor::GetCore() const {
+Core *Compositor::getCore() const {
   return _core;
 }
 
-render::Renderer *Compositor::GetRenderer() const {
+render::Renderer *Compositor::getRenderer() const {
   return _renderer;
+}
+
+physics::Simulator *Compositor::getSimulator() const {
+    return _simulator;
 }
 
 // end of Compositor.cxx

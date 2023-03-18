@@ -16,8 +16,8 @@
 #pragma once
 
 #include "../Definitions.h"
-
 #include "./render/Renderer.h"
+#include "physics/Simulator.h"
 
 namespace unreal_fluid {
   class Core;
@@ -28,6 +28,7 @@ namespace unreal_fluid::compositor {
   class Compositor {
   private:
     render::Renderer *_renderer;
+    physics::Simulator *_simulator;
     std::vector<Scene *> _scenes;
     Core *_core;
 
@@ -37,24 +38,25 @@ namespace unreal_fluid::compositor {
 
     /// @brief Initialize compositor.
     /// @details Initialize all components of compositor.
-    void Init();
-    /// @brief Update compositor.
-    /// @details Update all components of compositor.
-    void Update();
-    /// @brief Render compositor.
-    /// @details Render all components of compositor.
-    void Render();
-    /// @brief Destroy compositor.
-    /// @details Destroy all components of compositor.
-    void Destroy();
+    void init();
+    /// @brief update compositor.
+    /// @details update all components of compositor.
+    void update();
+    /// @brief render compositor.
+    /// @details render all components of compositor.
+    void render();
+    /// @brief destroy compositor.
+    /// @details destroy all components of compositor.
+    void destroy();
 
     /// Get core.
     /// @return Core.
-    [[nodiscard]] Core *GetCore() const;
+    [[nodiscard]] Core *getCore() const;
 
     /// Get renderer.
     /// @return Renderer.
-    [[nodiscard]] render::Renderer *GetRenderer() const;
+    [[nodiscard]] render::Renderer *getRenderer() const;
+    [[nodiscard]] physics::Simulator *getSimulator() const;
   }; // compositor class
 } // namespace unreal_fluid::compositor
 
