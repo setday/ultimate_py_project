@@ -13,19 +13,21 @@
 
 #include "Simulator.h"
 
-void unreal_fluid::physics::Simulator::addPhysObject(unreal_fluid::physics::PhysObject *physObject) {
-    physObjects.push_back(physObject);
+using namespace unreal_fluid::physics;
+
+void Simulator::addPhysObject(PhysObject *physObject) {
+  physObjects.push_back(physObject);
 }
 
-void unreal_fluid::physics::Simulator::simulate(double dt) {
+void Simulator::simulate(double dt) {
     /// TODO: simulate solids and fluids
     for (auto & physObject : physObjects) {
         physObject->simulate(dt);
     }
 }
 
-void unreal_fluid::physics::Simulator::clearData() {
-    physObjects.clear();
+void Simulator::clearData() {
+  physObjects.clear();
 }
 
 // end of Simulator.cpp

@@ -13,51 +13,48 @@
 
 #include "AbstractObject.h"
 #include "../physics/fluid/Particle.h"
-#include "../src/core/render/components/mesh/presets/Sphere.h"
 #include "../src/core/render/components/material/MaterialFactory.h"
+#include "../src/core/render/components/mesh/presets/Sphere.h"
 
 using namespace unreal_fluid;
 
 AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) {
-    physObject = new physics::fluid::SimpleFluidContainer(descriptor);
-    /// TODO: add nullptr check;
-}
-
-AbstractObject::~AbstractObject() {
-    delete physObject;
+  physObject = new physics::fluid::SimpleFluidContainer(descriptor);
+  /// TODO: add nullptr check
 }
 
 void AbstractObject::parse() {
-    physics::PhysObject::Type type = physObject->getType();
-    auto data = physObject->getData();
-    if (type == physics::PhysObject::Type::SIMPLE_FLUID_CONTAINER) {
-        auto &particles = *reinterpret_cast<std::vector<physics::fluid::Particle *> *>(data);
-        if (particles.size() > renderObjects.size()) {
-            while (particles.size() > renderObjects.size()) {
-                renderObjects.push_back(new render::RenderObject);
-            }
-        } else if (particles.size() < renderObjects.size()) {
-            Logger::logFatal("Some particles got lost. From AbstractObject::parse()");
-        }
-        /// TODO: Coordinates translator. vec3f move = {-.75f, 0.f, -5.f} is a costil and shit
-        for (int i = 0; i < particles.size(); ++i) {
-            auto& particle = particles[i];
-            renderObjects[i]->mesh = render::mesh::Sphere((float) (particle->radius), 50, 50);
-            vec3f move = {-.75f, 0.f, -5.f};
-            renderObjects[i]->position = (vec3f) (particle->position) + move;
-            renderObjects[i]->zAxisAngle = 0.f;
-            renderObjects[i]->modelMatrix = mat4::rotation(renderObjects[i]->zAxisAngle, {0.f, 0.f, 1.f});
-            renderObjects[i]->modelMatrix *= mat4::translation(renderObjects[i]->position);
-            renderObjects[i]->material = render::material::MaterialFactory::createMaterial(
-                    render::material::MaterialFactory::MaterialType::GOLD);
-        }
+  physics::PhysObject::Type type = physObject->getType();
+  auto data = physObject->getData();
+  if (type == physics::PhysObject::Type::SIMPLE_FLUID_CONTAINER) {
+    auto &particles = *reinterpret_cast<std::vector<physics::fluid::Particle *> *>(data);
+    if (particles.size() > renderObjects.size()) {
+      while (particles.size() > renderObjects.size()) {
+        renderObjects.push_back(new render::RenderObject);
+      }
+    } else if (particles.size() < renderObjects.size()) {
+      Logger::logFatal("Some particles got lost. From AbstractObject::parse(). Segmentation fault");
     }
+    //TODO Coordinates translator. vec3f move = {-.75f, 0.f, -5.f} is a nonsense
+    for (int i = 0; i < particles.size(); ++i) {
+      auto &particle = particles[i];
+      renderObjects[i]->mesh = render::mesh::Sphere((float) (particle->radius), 50, 50);
+      vec3f move = {-.75f, 0.f, -5.f};
+      renderObjects[i]->position = particle->position + move;
+      renderObjects[i]->zAxisAngle = 0.f;
+      renderObjects[i]->modelMatrix = mat4::rotation(renderObjects[i]->zAxisAngle, {0.f, 0.f, 1.f});
+      renderObjects[i]->modelMatrix *= mat4::translation(renderObjects[i]->position);
+      renderObjects[i]->material = render::material::MaterialFactory::createMaterial(
+              render::material::MaterialFactory::MaterialType::GOLD
+      );
+    }
+  }
 }
 
 const std::vector<render::RenderObject *> &AbstractObject::getRenderObjects() {
-    return renderObjects;
+  return renderObjects;
 }
 
 const physics::PhysObject *AbstractObject::getPhysObject() {
-    return physObject;
+  return physObject;
 }

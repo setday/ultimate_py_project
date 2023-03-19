@@ -6,7 +6,7 @@
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
  * FILE NAME : AbstractObject.h
- * PURPOSE   : Abstract object to store render object and a physical one
+ * PURPOSE   : Abstract object to store render and physical objects in one
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -19,15 +19,15 @@
 #include "../render/components/RenderObject.h"
 
 namespace unreal_fluid {
-    class AbstractObject {
-        physics::PhysObject *physObject;
-        std::vector<render::RenderObject *> renderObjects;
+  class AbstractObject {
+    physics::PhysObject *physObject;
+    std::vector<render::RenderObject *> renderObjects;
 
-    public:
-        explicit AbstractObject(physics::fluid::FluidDescriptor descriptor);
-        ~AbstractObject();
-        const std::vector<render::RenderObject *> &getRenderObjects();
-        const physics::PhysObject *getPhysObject();
-        void parse();
-    }; // end of AbstractObject class
+  public:
+    explicit AbstractObject(physics::fluid::FluidDescriptor descriptor);
+    ~AbstractObject() = default;
+    const std::vector<render::RenderObject *> &getRenderObjects();
+    const physics::PhysObject *getPhysObject();
+    void parse();
+  }; // end of AbstractObject class
 } // namespace unreal_fluid

@@ -18,13 +18,13 @@ using namespace unreal_fluid::physics::fluid;
 
 SimpleFluidContainer::SimpleFluidContainer(FluidDescriptor descriptor) {
     k = 0.8;
+//    auto particle = new Particle();
+//    particle->position = {0, 0, 0};
+//    particle->mass = 1;
+//    particle->radius = 0.02;
+//    particle->velocity = {3, 0, 0};
+//    particles.push_back(particle);
     auto particle = new Particle();
-    particle->position = {0, 0, 0};
-    particle->mass = 1;
-    particle->radius = 0.5;
-    particle->velocity = {3, 0, 0};
-    particles.push_back(particle);
-    particle = new Particle();
     particle->position = {1.5, 0, 0};
     particle->mass = 1;
     particle->radius = 0.5;
@@ -73,7 +73,7 @@ void SimpleFluidContainer::simulate(double dt) {
         auto particle = new Particle();
         particle->position = {0, 0, 0};
         particle->mass = 1;
-        particle->radius = 0.1;
+        particle->radius = 0.02;
         particle->velocity = {3, 0, 0};
         particles.push_back(particle);
     }/// TODO: addParticle() method should be used
