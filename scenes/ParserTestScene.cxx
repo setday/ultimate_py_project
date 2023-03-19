@@ -36,7 +36,7 @@ public:
   }
 
   void Update() override {
-      //compositor->getSimulator()->simulate(dt);
+      compositor->getSimulator()->simulate(dt);
   }
 
   void Render() override {
@@ -44,6 +44,11 @@ public:
       timer++;
       for (auto & abstractObject : abstractObjects) {
           abstractObject->parse();
+          auto& ro = abstractObject->getRenderObjects();
+          for (int i = 0; i < ro.size(); ++i) {
+              //TODO this should be done in parse()
+              ro[i]->shaderProgram = compositor->getRenderer()->GetShaderManager()->GetDefaultProgram();
+          }
           compositor->getRenderer()->RenderAllObjects(abstractObject->getRenderObjects());
       }
       if (timer % 200 == 0) {

@@ -130,7 +130,7 @@ namespace unreal_fluid::math {
     }
 
     T project(const Vector3 &v) {
-      assert(v.len2() > 0);
+      assert(v.len2() >= 0);
       return this->dot(v) / v.len();
     }
 

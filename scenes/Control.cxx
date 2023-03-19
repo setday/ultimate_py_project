@@ -137,6 +137,18 @@ public:
   }
 
   ~Control() override = default;
+
+    void Init() override;
+
+    void Update() override;
+
+    void Clear() override;
 };
 
 // end of Control.cxx
+
+void Control::Init() {}
+
+void Control::Update() {}
+
+void Control::Clear() {}
