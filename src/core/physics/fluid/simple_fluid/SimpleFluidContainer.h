@@ -15,12 +15,13 @@
 #pragma once
 
 #include <unordered_map>
-#include "../../PhysicsHeaders.h"
+
+#include "../../PhysicsDefinitions.h"
 #include "../IFluidContainer.h"
 #include "CellsDistribution.h"
 
-///SimpleFluidContainer - Fluid simulating class, which implements ASS collision
 namespace unreal_fluid::physics::fluid {
+  /// SimpleFluidContainer - Fluid simulating class, which implements ASS collision
   class SimpleFluidContainer : public IFluidContainer {
   private:
     double k;

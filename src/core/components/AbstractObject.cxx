@@ -39,7 +39,7 @@ void AbstractObject::parse() {
         } else if (particles.size() < renderObjects.size()) {
             Logger::logFatal("Some particles got lost. From AbstractObject::parse()");
         }
-        //TODO Coordinates translator. vec3f move = {-.75f, 0.f, -5.f} is a costil and shit
+        /// TODO: Coordinates translator. vec3f move = {-.75f, 0.f, -5.f} is a costil and shit
         for (int i = 0; i < particles.size(); ++i) {
             auto& particle = particles[i];
             renderObjects[i]->mesh = render::mesh::Sphere((float) (particle->radius), 50, 50);

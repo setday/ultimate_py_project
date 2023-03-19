@@ -46,7 +46,7 @@ public:
           abstractObject->parse();
           auto& ro = abstractObject->getRenderObjects();
           for (int i = 0; i < ro.size(); ++i) {
-              //TODO this should be done in parse()
+              /// TODO: this should be done in parse()
               ro[i]->shaderProgram = compositor->getRenderer()->GetShaderManager()->GetDefaultProgram();
           }
           compositor->getRenderer()->RenderAllObjects(abstractObject->getRenderObjects());

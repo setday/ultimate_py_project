@@ -12,6 +12,7 @@
  */
 
 #pragma once
+
 #include <vector>
 
 namespace unreal_fluid::physics {

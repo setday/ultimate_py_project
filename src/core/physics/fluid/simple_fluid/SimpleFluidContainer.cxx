@@ -51,7 +51,7 @@ void SimpleFluidContainer::advect(double dt) {
 }
 
 void SimpleFluidContainer::interact(double dt) {
-    //TODO repair CellsDistribution
+    /// TODO: repair CellsDistribution
     for (int i = 0; i < particles.size(); ++i) {
         for (int j = i + 1; j < particles.size(); ++j) {
             if ((particles[i]->position - particles[j]->position).len() <
@@ -76,20 +76,34 @@ void SimpleFluidContainer::simulate(double dt) {
         particle->radius = 0.1;
         particle->velocity = {3, 0, 0};
         particles.push_back(particle);
-    }//TODO addParticle() method should be used
+    }/// TODO: addParticle() method should be used
     interact(dt);
     addExternalForces(dt);
     advect(dt);
 }
 
 void SimpleFluidContainer::collide(Particle &p1, Particle &p2) {
-    vec3 y = p2.position - p1.position;
-    double push = (p1.radius + p2.radius - p1.position.distanceTo(p2.position)) / 2;
-    p2.position += y * push;
-    p1.position -= y * push;
-    double s = -(1 + k) * (p1.velocity.project(y) - p2.velocity.project(y)) * p1.mass * p2.mass / (p1.mass + p2.mass);
-    p1.velocity += y * (s / p1.mass);
-    p2.velocity -= y * (s / p2.mass);
+  vec3 positionDiff = p1.position - p2.position;
+
+  if (positionDiff.len2() == 0)
+    return;
+
+  double distance = positionDiff.len();
+
+  double pushValue = (p1.radius + p2.radius - distance) / 2;
+  vec3 pushVector = positionDiff * pushValue / distance;
+
+  p1.position += pushVector;
+  p2.position -= pushVector;
+
+  double frictionValue =
+          -(1 + k) *
+          (p1.velocity.project(positionDiff) - p2.velocity.project(positionDiff)) /
+          (p1.mass + p2.mass);
+  vec3 frictionVector = positionDiff * frictionValue / distance;
+
+  p1.velocity += frictionVector * p1.mass;
+  p2.velocity -= frictionVector * p2.mass;
 }
 
 void *SimpleFluidContainer::getData() {
@@ -99,3 +113,5 @@ void *SimpleFluidContainer::getData() {
 unreal_fluid::physics::PhysObject::Type SimpleFluidContainer::getType() {
     return physics::PhysObject::Type::SIMPLE_FLUID_CONTAINER;
 }
+
+// end of FluidContainer.cxx

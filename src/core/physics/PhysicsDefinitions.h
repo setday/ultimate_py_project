@@ -5,7 +5,7 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : PhysicsDefs.h
+ * FILE NAME : PhysicsDefinitions.h
  * PURPOSE   : physical constants nd other definitions
  *
  * No part of this file may be changed and used without agreement of
@@ -19,3 +19,5 @@
 namespace unreal_fluid::physics {
   const vec3 G = {0.0, -9.81, 0.0};
 }
+
+// end of PhysicsDefinitions.h

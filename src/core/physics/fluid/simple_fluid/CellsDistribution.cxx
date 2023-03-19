@@ -20,18 +20,30 @@ std::pair<Particle *, Particle *> CellsDistribution::nextPair() {
   while (cell.size() < 2 && current_cell < cells.size()) {
     cell = cells[cells_keys[++current_cell]];
   }
-  if (current_cell == cells.size()) return {nullptr, nullptr};
-  if (second >= cell.size()) ++first, second = first + 1;
+
+  if (current_cell == cells.size())
+    return {nullptr, nullptr};
+
+  if (second >= cell.size()) {
+    first++;
+    second = first + 1;
+  }
+
   while (first >= cell.size() - 1 && current_cell < cells.size()) {
     cell = cells[cells_keys[++current_cell]];
-    first = 0, second = 1;
+    first = 0;
+    second = 1;
   }
-  if (current_cell == cells.size()) return {nullptr, nullptr};
+
+  if (current_cell == cells.size())
+    return {nullptr, nullptr};
+
   return {cell[first], cell[second++]};
 }
 
 CellsDistribution::CellsDistribution(std::vector<Particle*> &particles) {
-  counter = 0, taken = 0;
+  counter = 0;
+  taken = 0;
   uint64_t id;
   auto dx = 3 * particles.front()->radius; /// TODO: what should these constants be?
   for (auto &particle: particles) {
@@ -44,12 +56,15 @@ CellsDistribution::CellsDistribution(std::vector<Particle*> &particles) {
     cells[id].push_back(particle);
   }
   int k = 0;
-  for (auto [key, value]: cells) {
+  for (auto const& [key, value]: cells) {
     cells_keys[k] = key;
     ++k;
   }
   assert(k > 0);
   cell = cells[cells_keys[0]];
   current_cell = 0;
-  first = 0, second = 1;
+  first = 0;
+  second = 1;
 }
+
+// end of CellsDistribution.cxx

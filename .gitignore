@@ -9,3 +9,10 @@
 !.gitignore
 !.git
 !.github
+
+# insurance
+
+.idea
+cmake-build-release
+cmake-build-debug
+bin

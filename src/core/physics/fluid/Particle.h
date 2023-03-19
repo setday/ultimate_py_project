@@ -26,3 +26,5 @@ namespace unreal_fluid::physics::fluid {
     ~Particle() = default;
   };
 } // namespace unreal_fluid::physics::fluid
+
+// end of Particle.h

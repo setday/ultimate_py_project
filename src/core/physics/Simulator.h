@@ -1,9 +1,20 @@
-//
-// Created by User on 3/17/2023.
-//
+/***************************************************************
+ * Copyright (C) 2023
+ *    HSE SPb (Higher school of economics in Saint-Petersburg).
+ ***************************************************************/
+
+/* PROJECT   : ultimate_py_project
+ * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
+ * FILE NAME : Simulator.h
+ *
+ * No part of this file may be changed and used without agreement of
+ * authors of this project.
+ */
 
 #pragma once
-#include "vector"
+
+#include <vector>
+
 #include "PhysObject.h"
 
 namespace unreal_fluid::physics{
@@ -29,3 +40,4 @@ namespace unreal_fluid::physics{
     };
 }
 
+// end of Simulator.h
