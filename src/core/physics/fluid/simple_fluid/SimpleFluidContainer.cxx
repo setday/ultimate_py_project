@@ -51,6 +51,7 @@ void SimpleFluidContainer::advect(double dt) {
 
 void SimpleFluidContainer::interact(double dt) {
     /// TODO repair CellsDistribution
+    //*
     for (int i = 0; i < particles.size(); ++i) {
         for (int j = i + 1; j < particles.size(); ++j) {
             if ((particles[i]->position - particles[j]->position).len() <
@@ -59,12 +60,15 @@ void SimpleFluidContainer::interact(double dt) {
             }
         }
     }
-    /*CellsDistribution cells(particles);
+    //*/
+    /*
+    CellsDistribution cells(particles);
     std::pair<Particle *, Particle *> p = cells.nextPair(), end = {nullptr, nullptr};
     while (p != end) {
       collide(*p.first, *p.second);
       p = cells.nextPair();
-    }*/
+    }
+     //*/
 }
 
 void SimpleFluidContainer::simulate(double dt) {

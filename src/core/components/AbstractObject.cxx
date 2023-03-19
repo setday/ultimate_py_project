@@ -46,10 +46,12 @@ void AbstractObject::parse() {
   }
 }
 
-const std::vector<render::RenderObject *> &AbstractObject::getRenderObjects() const {
+[[nodiscard]]
+std::vector<render::RenderObject *> &AbstractObject::getRenderObjects() {
   return renderObjects;
 }
 
-const physics::PhysicalObject *AbstractObject::getPhysicalObject() const {
+[[nodiscard]]
+physics::PhysicalObject *AbstractObject::getPhysicalObject(){
   return physicalObject;
 }
