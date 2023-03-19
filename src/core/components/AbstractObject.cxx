@@ -28,26 +28,20 @@ void AbstractObject::parse() {
   auto data = physObject->getData();
   if (type == physics::PhysObject::Type::SIMPLE_FLUID_CONTAINER) {
     auto &particles = *reinterpret_cast<std::vector<physics::fluid::Particle *> *>(data);
-    if (particles.size() > renderObjects.size()) {
-      while (particles.size() > renderObjects.size()) {
-        renderObjects.push_back(new render::RenderObject);
-      }
-    } else if (particles.size() < renderObjects.size()) {
-      Logger::logFatal("Some particles got lost. From AbstractObject::parse()");
+    while (particles.size() > renderObjects.size()) {
+      renderObjects.push_back(new render::RenderObject);
+      renderObjects.back()->material = render::material::MaterialFactory::createMaterial(
+              render::material::MaterialFactory::MaterialType::GOLD
+      );
     }
-    //TODO Coordinates translator. vec3f move = {-.75f, 0.f, -5.f} is a nonsense
     for (int i = 0; i < particles.size(); ++i) {
       auto &particle = particles[i];
       auto renderObject = renderObjects[i];
-      renderObject->mesh = render::mesh::Sphere((float) (particle->radius), 50, 50);
+      renderObject->mesh = render::mesh::Sphere(particle->radius, 50, 50);
+      //TODO Coordinates translator. vec3f move = {-.75f, 0.f, -5.f} is a nonsense
       vec3f move = {-.75f, 0.f, -5.f};
       renderObject->position = particle->position + move;
-      renderObject->zAxisAngle = 0.f;
-//      renderObject->modelMatrix = mat4::rotation(renderObject->zAxisAngle, {0.f, 0.f, 1.f});
       renderObject->modelMatrix = mat4::translation(renderObject->position);
-      renderObject->material = render::material::MaterialFactory::createMaterial(
-              render::material::MaterialFactory::MaterialType::GOLD
-      );
     }
   }
 }
