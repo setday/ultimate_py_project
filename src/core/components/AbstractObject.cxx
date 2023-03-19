@@ -38,13 +38,14 @@ void AbstractObject::parse() {
     //TODO Coordinates translator. vec3f move = {-.75f, 0.f, -5.f} is a nonsense
     for (int i = 0; i < particles.size(); ++i) {
       auto &particle = particles[i];
-      renderObjects[i]->mesh = render::mesh::Sphere((float) (particle->radius), 50, 50);
+      auto renderObject = renderObjects[i];
+      renderObject->mesh = render::mesh::Sphere((float) (particle->radius), 50, 50);
       vec3f move = {-.75f, 0.f, -5.f};
-      renderObjects[i]->position = particle->position + move;
-      renderObjects[i]->zAxisAngle = 0.f;
-      renderObjects[i]->modelMatrix = mat4::rotation(renderObjects[i]->zAxisAngle, {0.f, 0.f, 1.f});
-      renderObjects[i]->modelMatrix *= mat4::translation(renderObjects[i]->position);
-      renderObjects[i]->material = render::material::MaterialFactory::createMaterial(
+      renderObject->position = particle->position + move;
+      renderObject->zAxisAngle = 0.f;
+//      renderObject->modelMatrix = mat4::rotation(renderObject->zAxisAngle, {0.f, 0.f, 1.f});
+      renderObject->modelMatrix = mat4::translation(renderObject->position);
+      renderObject->material = render::material::MaterialFactory::createMaterial(
               render::material::MaterialFactory::MaterialType::GOLD
       );
     }
