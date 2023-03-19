@@ -18,15 +18,13 @@ using namespace unreal_fluid;
 
 class Control : public Scene {
 public:
-  const compositor::Compositor *compositor;
   render::Renderer::RenderMode renderMode = render::Renderer::RenderMode::SOLID;
   vec3f cameraPosition = {0.f, 0.f, 0.f};
   bool positionChanged = false;
   vec2f cameraRotation = {0.f, (float)M_PI};
   bool angleChanged = false;
 
-  explicit Control(const compositor::Compositor *compositor) : Scene(compositor),
-                                                               compositor(compositor) {
+  explicit Control(const compositor::Compositor *compositor) : Scene(compositor) {
       compositor->getCore()->GetWindowCompositor()->addKeyboardCallback([this](int key, int action) {
       this->keyboardBindings(key, action);
     });
@@ -133,9 +131,9 @@ public:
       this->compositor->getRenderer()->changeResolution(width, height);
   }
 
-  void Update() override {}
+  void update() override {}
 
-  void Render() override {}
+  void render() override {}
 
   ~Control() override = default;
 };

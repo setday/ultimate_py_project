@@ -20,38 +20,27 @@ using namespace unreal_fluid;
 
 class ParserTestScene : public Scene {
 public:
-  const compositor::Compositor *compositor;
-  std::vector<AbstractObject *>abstractObjects;
-  double dt;
+  double dt = 0.01;
 
-  explicit ParserTestScene(const compositor::Compositor *compositor) : Scene(compositor),
-                                                                       compositor(compositor) {
-    abstractObjects.push_back(new AbstractObject({})); // TODO which descriptor should we use?
-     for (auto & abstractObject : abstractObjects) {
-         compositor->getSimulator()->addPhysObject(const_cast<physics::PhysicalObject*>(abstractObject->getPhysicalObject()));
+  explicit ParserTestScene(const compositor::Compositor *compositor) : Scene(compositor) {
+    objects.push_back(new AbstractObject({})); // TODO which descriptor should we use?
+     for (auto & abstractObject : objects) {
+       compositor->getSimulator()->addPhysicalObject(abstractObject->getPhysicalObject());
      }
-     dt = 0.01;
   }
 
-  void Update() override {
+  void update() override {
       compositor->getSimulator()->simulate(dt);
   }
 
-  void Render() override {
-      static int timer = 0;
-      timer++;
-      for (auto & abstractObject : abstractObjects) {
-          abstractObject->parse();
-          for (auto renderObject : abstractObject->getRenderObjects()) {
+  void render() override {
+      for (auto & object : objects) {
+          object->parse();
+          for (auto renderObject : object->getRenderObjects()) {
               /// TODO this should be done in parse()
               renderObject->shaderProgram = compositor->getRenderer()->GetShaderManager()->GetDefaultProgram();
           }
-          compositor->getRenderer()->RenderAllObjects(abstractObject->getRenderObjects());
-      }
-      if (timer % 200 == 0) {
-          compositor->getRenderer()->GetShaderManager()->ReloadShaders();
-
-          Logger::logInfo("All shaders have been reloaded");
+          compositor->getRenderer()->RenderAllObjects(object->getRenderObjects());
       }
   }
 

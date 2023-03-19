@@ -24,10 +24,10 @@ namespace unreal_fluid {
     std::vector<render::RenderObject *> renderObjects;
 
   public:
-    explicit AbstractObject(physics::fluid::FluidDescriptor descriptor);
+    AbstractObject(physics::fluid::FluidDescriptor descriptor);
     ~AbstractObject() = default;
-    const std::vector<render::RenderObject *> &getRenderObjects() const;
-    const physics::PhysicalObject *getPhysicalObject() const;
+    [[nodiscard]] std::vector<render::RenderObject *> &getRenderObjects() const;
+    [[nodiscard]] physics::PhysicalObject *getPhysicalObject() const;
     void parse();
   }; // end of AbstractObject class
 } // namespace unreal_fluid

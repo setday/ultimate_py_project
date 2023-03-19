@@ -29,8 +29,7 @@ public:
   render::RenderObject *cube;
   const compositor::Compositor *compositor;
 
-  explicit GlTestScene(const compositor::Compositor *compositor) : Scene(compositor),
-                                                                   compositor(compositor) {
+  explicit GlTestScene(const compositor::Compositor *compositor) : Scene(compositor) {
     sphere = new render::RenderObject();
     sphere->mesh = render::mesh::Sphere(.5f, 50, 50);
     sphere->position = {-.75f, 0.f, -5.f};
@@ -65,7 +64,7 @@ public:
     );
   }
 
-  void Update() override {
+  void update() override {
     auto time = std::chrono::system_clock::now().time_since_epoch().count() / 1000000000.0;
 
     sphere->zAxisAngle = std::sin(time / 10) * 100;
@@ -78,7 +77,7 @@ public:
     cube->modelMatrix *= mat4::translation(cube->position);
   }
 
-  void Render() override {
+  void render() override {
     static int timer = 0;
     timer++;
 

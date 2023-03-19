@@ -29,7 +29,7 @@ namespace unreal_fluid::physics {
     /// @brief Adds PhysicalObject to scene
     /// @details Adds PhysicalObject into an internal buffer.
     /// Call simulate() to simulate all of the PhysObjects in the buffer
-    void addPhysObject(PhysicalObject *physicalObject);
+    void addPhysicalObject(PhysicalObject *physicalObject);
 
     /// @brief Simulates the scene
     /// @details calls simulate() function of each PhysicalObject in the internal buffer and solve interactions between them.

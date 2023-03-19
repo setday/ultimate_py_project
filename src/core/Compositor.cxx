@@ -43,14 +43,14 @@ void Compositor::init() {
 
 void Compositor::update() {
   for (auto scene: _scenes) {
-    scene->Update();
+    scene->update();
   }
 }
 
 void Compositor::render() {
   _renderer->StartFrame();
   for (auto scene: _scenes) {
-    scene->Render();
+    scene->render();
   }
   _renderer->EndFrame();
 }
@@ -58,7 +58,7 @@ void Compositor::render() {
 void Compositor::destroy() {
   _renderer->Destroy();
   for (auto scene: _scenes) {
-    scene->Clear();
+    scene->clear();
     delete scene;
   }
 }

@@ -8,14 +8,16 @@
 
 namespace unreal_fluid {
   class Scene {
+  protected:
     std::vector<AbstractObject *> objects;
+    const compositor::Compositor *compositor;
 
   public:
-    explicit Scene(compositor::Compositor const *) {};
+    explicit Scene(const compositor::Compositor *compositor) : compositor(compositor) {}
     virtual ~Scene() = default;
-    virtual void Init();
-    virtual void Update() = 0;
-    virtual void Render() = 0;
-    virtual void Clear();
+    virtual void init();
+    virtual void update();
+    virtual void render();
+    virtual void clear();
   };
 } // namespace unreal_fluid

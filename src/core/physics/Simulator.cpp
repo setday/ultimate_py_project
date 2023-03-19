@@ -15,7 +15,7 @@
 
 using namespace unreal_fluid::physics;
 
-void Simulator::addPhysObject(PhysicalObject *physicalObject) {
+void Simulator::addPhysicalObject(PhysicalObject *physicalObject) {
   _physicalObjects.push_back(physicalObject);
 }
 
