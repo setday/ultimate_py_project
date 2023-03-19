@@ -16,7 +16,7 @@
 
 #include <vector>
 
-#include "../PhysObject.h"
+#include "../PhysicalObject.h"
 #include "Particle.h"
 
 namespace unreal_fluid::physics::fluid {
@@ -26,15 +26,15 @@ namespace unreal_fluid::physics::fluid {
     double particleMass;
   };
 
-  class IFluidContainer : public PhysObject {
+  class IFluidContainer : public PhysicalObject {
   protected:
-    std::vector<Particle*> particles;
+    std::vector<Particle *> particles;
 
   public:
     IFluidContainer() = default;
-    virtual ~IFluidContainer() = default;
+    ~IFluidContainer() override = default;
 
-    std::vector<Particle*> *getParticles() {
+    std::vector<Particle *> *getParticles() {
       return &particles;
     }
   };

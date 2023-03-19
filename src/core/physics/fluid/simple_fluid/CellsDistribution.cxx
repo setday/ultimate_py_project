@@ -18,7 +18,9 @@ using namespace unreal_fluid::physics::fluid;
 
 std::pair<Particle *, Particle *> CellsDistribution::nextPair() {
   while (cell.size() < 2 && current_cell < cells.size()) {
-    cell = cells[cells_keys[++current_cell]];
+    current_cell++;
+
+    cell = cells[cells_keys[current_cell]];
   }
 
   if (current_cell == cells.size())
@@ -30,9 +32,11 @@ std::pair<Particle *, Particle *> CellsDistribution::nextPair() {
   }
 
   while (first >= cell.size() - 1 && current_cell < cells.size()) {
-    cell = cells[cells_keys[++current_cell]];
+    current_cell++;
     first = 0;
     second = 1;
+
+    cell = cells[cells_keys[current_cell]];
   }
 
   if (current_cell == cells.size())
@@ -42,10 +46,8 @@ std::pair<Particle *, Particle *> CellsDistribution::nextPair() {
 }
 
 CellsDistribution::CellsDistribution(std::vector<Particle*> &particles) {
-  counter = 0;
-  taken = 0;
   uint64_t id;
-  auto dx = 3 * particles.front()->radius; /// TODO: what should these constants be?
+  auto dx = 3 * particles.front()->radius; /// TODO what should these constants be?
   for (auto &particle: particles) {
     ++counter;
     auto [x, y, z] = particle->position;

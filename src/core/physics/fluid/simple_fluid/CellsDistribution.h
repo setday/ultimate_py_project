@@ -26,7 +26,11 @@ namespace unreal_fluid::physics::fluid {
     CellsDistribution(std::vector<Particle*> &particles);
     ~CellsDistribution() = default;
 
-    uint64_t taken, counter, current_cell, first, second;
+    uint64_t taken = 0;
+    uint64_t counter = 0;
+    uint64_t current_cell;
+    uint64_t first;
+    uint64_t second;
     const int N = 1000; // world of cells size
     std::unordered_map<uint64_t, std::vector<Particle *>> cells;
     std::unordered_map<uint64_t, uint64_t> cells_keys;

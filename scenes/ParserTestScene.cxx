@@ -26,9 +26,9 @@ public:
 
   explicit ParserTestScene(const compositor::Compositor *compositor) : Scene(compositor),
                                                                        compositor(compositor) {
-    abstractObjects.push_back(new AbstractObject({})); // TODO: which descriptor should we use?
+    abstractObjects.push_back(new AbstractObject({})); // TODO which descriptor should we use?
      for (auto & abstractObject : abstractObjects) {
-         compositor->getSimulator()->addPhysObject(const_cast<physics::PhysObject*>(abstractObject->getPhysObject()));
+         compositor->getSimulator()->addPhysObject(const_cast<physics::PhysicalObject*>(abstractObject->getPhysicalObject()));
      }
      dt = 0.01;
   }
@@ -43,7 +43,7 @@ public:
       for (auto & abstractObject : abstractObjects) {
           abstractObject->parse();
           for (auto renderObject : abstractObject->getRenderObjects()) {
-              /// TODO: this should be done in parse()
+              /// TODO this should be done in parse()
               renderObject->shaderProgram = compositor->getRenderer()->GetShaderManager()->GetDefaultProgram();
           }
           compositor->getRenderer()->RenderAllObjects(abstractObject->getRenderObjects());

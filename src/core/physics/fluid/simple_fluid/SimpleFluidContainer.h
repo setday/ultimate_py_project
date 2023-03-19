@@ -24,18 +24,18 @@ namespace unreal_fluid::physics::fluid {
   /// SimpleFluidContainer - Fluid simulating class, which implements ASS collision
   class SimpleFluidContainer : public IFluidContainer {
   private:
-    double k;
+    double k = 0.8;
 
   public:
     explicit SimpleFluidContainer(FluidDescriptor descriptor);
     ~SimpleFluidContainer() override;
     void simulate(double dt) override;
 
-    unreal_fluid::physics::PhysObject::Type getType() override;
+    unreal_fluid::physics::PhysicalObject::Type getType() override;
     void *getData() override;
 
   private:
-    void collide(Particle &p1, Particle &p2);
+    void collide(Particle &p1, Particle &p2) const;
     void advect(double dt);
     void addExternalForces(double dt);
     void interact(double dt);

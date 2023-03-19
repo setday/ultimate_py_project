@@ -17,7 +17,6 @@
 using namespace unreal_fluid::physics::fluid;
 
 SimpleFluidContainer::SimpleFluidContainer(FluidDescriptor descriptor) {
-    k = 0.8;
 //    auto particle = new Particle();
 //    particle->position = {0, 0, 0};
 //    particle->mass = 1;
@@ -51,7 +50,7 @@ void SimpleFluidContainer::advect(double dt) {
 }
 
 void SimpleFluidContainer::interact(double dt) {
-    /// TODO: repair CellsDistribution
+    /// TODO repair CellsDistribution
     for (int i = 0; i < particles.size(); ++i) {
         for (int j = i + 1; j < particles.size(); ++j) {
             if ((particles[i]->position - particles[j]->position).len() <
@@ -76,13 +75,13 @@ void SimpleFluidContainer::simulate(double dt) {
         particle->radius = 0.02;
         particle->velocity = {3, 0, 0};
         particles.push_back(particle);
-    }/// TODO: addParticle() method should be used
+    }/// TODO addParticle() method should be used
     interact(dt);
     addExternalForces(dt);
     advect(dt);
 }
 
-void SimpleFluidContainer::collide(Particle &p1, Particle &p2) {
+void SimpleFluidContainer::collide(Particle &p1, Particle &p2) const {
   vec3 positionDiff = p1.position - p2.position;
 
   if (positionDiff.len2() == 0)
@@ -110,8 +109,8 @@ void *SimpleFluidContainer::getData() {
     return &particles;
 }
 
-unreal_fluid::physics::PhysObject::Type SimpleFluidContainer::getType() {
-    return physics::PhysObject::Type::SIMPLE_FLUID_CONTAINER;
+unreal_fluid::physics::PhysicalObject::Type SimpleFluidContainer::getType() {
+    return physics::PhysicalObject::Type::SIMPLE_FLUID_CONTAINER;
 }
 
 // end of FluidContainer.cxx

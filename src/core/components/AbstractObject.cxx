@@ -18,16 +18,16 @@
 
 using namespace unreal_fluid;
 
-AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) {
-  physObject = new physics::fluid::SimpleFluidContainer(descriptor);
-  /// TODO: add nullptr check
+AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) :
+    physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)) {
+  /// TODO add nullptr check
 }
 
 void AbstractObject::parse() {
-  physics::PhysObject::Type type = physObject->getType();
-  auto data = physObject->getData();
-  if (type == physics::PhysObject::Type::SIMPLE_FLUID_CONTAINER) {
-    auto &particles = *reinterpret_cast<std::vector<physics::fluid::Particle *> *>(data);
+  physics::PhysicalObject::Type type = physicalObject->getType();
+  void *data = physicalObject->getData();
+  if (type == physics::PhysicalObject::Type::SIMPLE_FLUID_CONTAINER) {
+    std::vector<physics::fluid::Particle *> &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(data);
     while (particles.size() > renderObjects.size()) {
       renderObjects.push_back(new render::RenderObject);
       renderObjects.back()->material = render::material::MaterialFactory::createMaterial(
@@ -37,8 +37,8 @@ void AbstractObject::parse() {
     for (int i = 0; i < particles.size(); ++i) {
       auto &particle = particles[i];
       auto renderObject = renderObjects[i];
-      renderObject->mesh = render::mesh::Sphere(particle->radius, 50, 50);
-      //TODO Coordinates translator. vec3f move = {-.75f, 0.f, -5.f} is a nonsense
+      renderObject->mesh = render::mesh::Sphere((float)particle->radius, 50, 50);
+      /// TODO Coordinates translator. vec3f move = {-.75f, 0.f, -5.f} is a nonsense
       vec3f move = {-.75f, 0.f, -5.f};
       renderObject->position = particle->position + move;
       renderObject->modelMatrix = mat4::translation(renderObject->position);
@@ -46,10 +46,10 @@ void AbstractObject::parse() {
   }
 }
 
-const std::vector<render::RenderObject *> &AbstractObject::getRenderObjects() {
+const std::vector<render::RenderObject *> &AbstractObject::getRenderObjects() const {
   return renderObjects;
 }
 
-const physics::PhysObject *AbstractObject::getPhysObject() {
-  return physObject;
+const physics::PhysicalObject *AbstractObject::getPhysicalObject() const {
+  return physicalObject;
 }

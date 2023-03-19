@@ -22,7 +22,7 @@ public:
   render::Renderer::RenderMode renderMode = render::Renderer::RenderMode::SOLID;
   vec3f cameraPosition = {0.f, 0.f, 0.f};
   bool positionChanged = false;
-  vec2f cameraRotation = {0.f, M_PI};
+  vec2f cameraRotation = {0.f, (float)M_PI};
   bool angleChanged = false;
 
   explicit Control(const compositor::Compositor *compositor) : Scene(compositor),
@@ -35,9 +35,6 @@ public:
     });
   }
 
-  void Render() override {
-  }
-
   void keyboardBindings(int key, int action) {
     if (key == GLFW_KEY_F1 && action == GLFW_PRESS) {
       if (this->renderMode == render::Renderer::RenderMode::WIREFRAME) {
@@ -46,7 +43,7 @@ public:
         this->renderMode = render::Renderer::RenderMode::WIREFRAME;
       }
 
-        this->compositor->getRenderer()->ChangeRenderMode(this->renderMode);
+      this->compositor->getRenderer()->ChangeRenderMode(this->renderMode);
     }
 
     positionChanged = false;
@@ -132,23 +129,15 @@ public:
     }
   }
 
-  void resizeBindings(int width, int height) {
+  void resizeBindings(int width, int height) const {
       this->compositor->getRenderer()->changeResolution(width, height);
   }
 
+  void Update() override {}
+
+  void Render() override {}
+
   ~Control() override = default;
-
-    void Init() override;
-
-    void Update() override;
-
-    void Clear() override;
 };
 
 // end of Control.cxx
-
-void Control::Init() {}
-
-void Control::Update() {}
-
-void Control::Clear() {}

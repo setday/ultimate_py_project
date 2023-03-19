@@ -15,19 +15,19 @@
 
 using namespace unreal_fluid::physics;
 
-void Simulator::addPhysObject(PhysObject *physObject) {
-  physObjects.push_back(physObject);
+void Simulator::addPhysObject(PhysicalObject *physicalObject) {
+  _physicalObjects.push_back(physicalObject);
 }
 
 void Simulator::simulate(double dt) {
-    /// TODO: simulate solids and fluids
-    for (auto & physObject : physObjects) {
+    /// TODO simulate solids and fluids
+    for (auto & physObject : _physicalObjects) {
         physObject->simulate(dt);
     }
 }
 
 void Simulator::clearData() {
-  physObjects.clear();
+  _physicalObjects.clear();
 }
 
 // end of Simulator.cpp
