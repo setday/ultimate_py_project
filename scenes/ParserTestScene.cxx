@@ -44,10 +44,9 @@ public:
       timer++;
       for (auto & abstractObject : abstractObjects) {
           abstractObject->parse();
-          auto& ro = abstractObject->getRenderObjects();
-          for (int i = 0; i < ro.size(); ++i) {
-              //TODO this should be done in parse()
-              ro[i]->shaderProgram = compositor->getRenderer()->GetShaderManager()->GetDefaultProgram();
+          for (auto renderObject : abstractObject->getRenderObjects()) {
+              /// TODO: this should be done in parse()
+              renderObject->shaderProgram = compositor->getRenderer()->GetShaderManager()->GetDefaultProgram();
           }
           compositor->getRenderer()->RenderAllObjects(abstractObject->getRenderObjects());
       }
