@@ -16,9 +16,9 @@ namespace unreal_fluid::render {
     mat4 modelMatrix = mat4();
 
     [[deprecated("It is strongly recommended to use modelMatrix instead of position")]]
-    vec3f position = vec3f(0.0f, 0.0f, 0.0f);
+    vec3f position;
     [[deprecated("It is strongly recommended to use modelMatrix instead of zAxisAngle")]]
-    float zAxisAngle = 0.0f;
+    float zAxisAngle;
 
     RenderObject() = default;
     ~RenderObject() = default;

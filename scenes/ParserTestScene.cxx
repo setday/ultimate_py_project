@@ -12,8 +12,6 @@
 * authors of this project.
 */
 
-
-#pragma once
 #include "../src/core/Core.h"
 #include "../src/core/components/AbstractObject.h"
 #include "../src/core/components/Scene.h"

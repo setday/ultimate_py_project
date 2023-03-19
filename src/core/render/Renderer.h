@@ -45,7 +45,6 @@ namespace unreal_fluid::render {
     void RenderObject(const render::RenderObject *object);
     /// render all objects.
     /// @param objects Objects to render.
-    [[deprecated("Use RenderObject() instead")]]
     void RenderAllObjects(const std::vector<render::RenderObject *> &objects);
     /// End rendering frame.
     void EndFrame();
