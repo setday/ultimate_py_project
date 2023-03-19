@@ -28,25 +28,20 @@ void AbstractObject::parse() {
   auto data = physObject->getData();
   if (type == physics::PhysObject::Type::SIMPLE_FLUID_CONTAINER) {
     auto &particles = *reinterpret_cast<std::vector<physics::fluid::Particle *> *>(data);
-    if (particles.size() > renderObjects.size()) {
-      while (particles.size() > renderObjects.size()) {
-        renderObjects.push_back(new render::RenderObject);
-      }
-    } else if (particles.size() < renderObjects.size()) {
-      Logger::logFatal("Some particles got lost. From AbstractObject::parse(). Segmentation fault");
-    }
-    //TODO Coordinates translator. vec3f move = {-.75f, 0.f, -5.f} is a nonsense
-    for (int i = 0; i < particles.size(); ++i) {
-      auto &particle = particles[i];
-      renderObjects[i]->mesh = render::mesh::Sphere((float) (particle->radius), 50, 50);
-      vec3f move = {-.75f, 0.f, -5.f};
-      renderObjects[i]->position = particle->position + move;
-      renderObjects[i]->zAxisAngle = 0.f;
-      renderObjects[i]->modelMatrix = mat4::rotation(renderObjects[i]->zAxisAngle, {0.f, 0.f, 1.f});
-      renderObjects[i]->modelMatrix *= mat4::translation(renderObjects[i]->position);
-      renderObjects[i]->material = render::material::MaterialFactory::createMaterial(
+    while (particles.size() > renderObjects.size()) {
+      renderObjects.push_back(new render::RenderObject);
+      renderObjects.back()->material = render::material::MaterialFactory::createMaterial(
               render::material::MaterialFactory::MaterialType::GOLD
       );
+    }
+    for (int i = 0; i < particles.size(); ++i) {
+      auto &particle = particles[i];
+      auto renderObject = renderObjects[i];
+      renderObject->mesh = render::mesh::Sphere(particle->radius, 50, 50);
+      //TODO Coordinates translator. vec3f move = {-.75f, 0.f, -5.f} is a nonsense
+      vec3f move = {-.75f, 0.f, -5.f};
+      renderObject->position = particle->position + move;
+      renderObject->modelMatrix = mat4::translation(renderObject->position);
     }
   }
 }
