@@ -35,7 +35,7 @@ namespace unreal_fluid::physics::fluid {
     void *getData() override;
 
   private:
-    void collide(Particle &p1, Particle &p2) const;
+    void collide(Particle *p1, Particle *p2) const;
     void advect(double dt);
     void addExternalForces(double dt);
     void interact(double dt);

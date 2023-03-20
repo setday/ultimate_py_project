@@ -17,56 +17,49 @@
 using namespace unreal_fluid::physics::fluid;
 
 std::pair<Particle *, Particle *> CellsDistribution::nextPair() {
-  while (cell.size() < 2 && current_cell < cells.size()) {
-    current_cell++;
+  if (cell_iterator == cells.end())
+    return terminator;
 
-    cell = cells[cells_keys[current_cell]];
-  }
-
-  if (current_cell == cells.size())
-    return {nullptr, nullptr};
-
-  if (second >= cell.size()) {
+  if (second >= cell_iterator->second.size()) {
     first++;
     second = first + 1;
   }
 
-  while (first >= cell.size() - 1 && current_cell < cells.size()) {
-    current_cell++;
+  while (
+          cell_iterator != cells.end() &&
+          second >= cell_iterator->second.size()
+          ) {
     first = 0;
     second = 1;
 
-    cell = cells[cells_keys[current_cell]];
+    cell_iterator++;
   }
 
-  if (current_cell == cells.size())
-    return {nullptr, nullptr};
+  if (cell_iterator == cells.end())
+    return terminator;
 
-  return {cell[first], cell[second++]};
+  return {cell_iterator->second[first], cell_iterator->second[second++]};
 }
 
-CellsDistribution::CellsDistribution(std::vector<Particle*> &particles) {
-  uint64_t id;
+CellsDistribution::CellsDistribution(std::vector<Particle *> &particles) {
   auto dx = 3 * particles.front()->radius; /// TODO what should these constants be?
-  for (auto &particle: particles) {
-    ++counter;
+  dx = 1; /// TODO what should these constants be?
+
+  for (Particle *particle : particles) {
     auto [x, y, z] = particle->position;
+
     x /= dx;
     y /= dx;
     z /= dx;
-    id = ((uint64_t) x << 32) + ((uint64_t) y << 16) + (uint64_t) z;
+
+    uint64_t id = ((uint64_t) x << 32) + ((uint64_t) y << 16) + (uint64_t) z;
     cells[id].push_back(particle);
   }
-  int k = 0;
-  for (auto const& [key, value]: cells) {
-    cells_keys[k] = key;
-    ++k;
-  }
-  assert(k > 0);
-  cell = cells[cells_keys[0]];
-  current_cell = 0;
+
   first = 0;
   second = 1;
+
+  cell_iterator = cells.begin();
 }
 
 // end of CellsDistribution.cxx

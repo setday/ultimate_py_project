@@ -50,63 +50,53 @@ void SimpleFluidContainer::advect(double dt) {
 }
 
 void SimpleFluidContainer::interact(double dt) {
-    /// TODO repair CellsDistribution
-    //*
-    for (int i = 0; i < particles.size(); ++i) {
-        for (int j = i + 1; j < particles.size(); ++j) {
-            if ((particles[i]->position - particles[j]->position).len() <
-                particles[i]->radius + particles[j]->radius) {
-                collide(*particles[i], *particles[j]);
-            }
-        }
-    }
-    //*/
-    /*
     CellsDistribution cells(particles);
-    std::pair<Particle *, Particle *> p = cells.nextPair(), end = {nullptr, nullptr};
-    while (p != end) {
-      collide(*p.first, *p.second);
+    std::pair<Particle *, Particle *> p = cells.nextPair();
+    while (p != CellsDistribution::terminator) {
+      collide(p.first, p.second);
       p = cells.nextPair();
     }
-     //*/
 }
 
 void SimpleFluidContainer::simulate(double dt) {
-    {
+  {
         auto particle = new Particle();
         particle->position = {0, 0, 0};
         particle->mass = 1;
         particle->radius = 0.02;
         particle->velocity = {3, 0, 0};
         particles.push_back(particle);
-    }/// TODO addParticle() method should be used
+    }
+    /// TODO addParticle() method should be used
     interact(dt);
     addExternalForces(dt);
     advect(dt);
 }
 
-void SimpleFluidContainer::collide(Particle &p1, Particle &p2) const {
-  vec3 positionDiff = p1.position - p2.position;
+void SimpleFluidContainer::collide(Particle *p1, Particle *p2) const {
+  vec3 positionDiff = p1->position - p2->position;
 
   if (positionDiff.len2() == 0)
     return;
 
   double distance = positionDiff.len();
-
-  double pushValue = (p1.radius + p2.radius - distance) / 2;
+  double pushValue = (p1->radius + p2->radius - distance) / 2;
   vec3 pushVector = positionDiff * pushValue / distance;
 
-  p1.position += pushVector;
-  p2.position -= pushVector;
+  if (pushValue < 0)
+    return;
+
+  p1->position += pushVector;
+  p2->position -= pushVector;
 
   double frictionValue =
           -(1 + k) *
-          (p1.velocity.project(positionDiff) - p2.velocity.project(positionDiff)) /
-          (p1.mass + p2.mass);
+          (p1->velocity.project(positionDiff) - p2->velocity.project(positionDiff)) /
+          (p1->mass + p2->mass);
   vec3 frictionVector = positionDiff * frictionValue / distance;
 
-  p1.velocity += frictionVector * p1.mass;
-  p2.velocity -= frictionVector * p2.mass;
+  p1->velocity += frictionVector * p1->mass;
+  p2->velocity -= frictionVector * p2->mass;
 }
 
 void *SimpleFluidContainer::getData() {

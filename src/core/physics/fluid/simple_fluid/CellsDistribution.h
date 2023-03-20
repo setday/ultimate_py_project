@@ -21,20 +21,19 @@
 
 namespace unreal_fluid::physics::fluid {
   class CellsDistribution {
-    friend class SimpleFluidContainer;
-
-    CellsDistribution(std::vector<Particle*> &particles);
-    ~CellsDistribution() = default;
-
-    uint64_t taken = 0;
-    uint64_t counter = 0;
-    uint64_t current_cell;
+  private:
     uint64_t first;
     uint64_t second;
-    const int N = 1000; // world of cells size
+    const int N = 1000;
     std::unordered_map<uint64_t, std::vector<Particle *>> cells;
-    std::unordered_map<uint64_t, uint64_t> cells_keys;
-    std::vector<Particle *> cell;
+    std::unordered_map<uint64_t, std::vector<Particle *>>::iterator cell_iterator;
+
+  public:
+    constexpr static std::pair<Particle *, Particle *> terminator = {nullptr, nullptr};
+
+  public:
+    CellsDistribution(std::vector<Particle *> &particles);
+    ~CellsDistribution() = default;
 
     std::pair<Particle *, Particle *> nextPair();
   };
