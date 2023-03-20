@@ -15,4 +15,6 @@
 .idea
 cmake-build-release
 cmake-build-debug
+cmake-build-debug-visual-studio
+cmake-build-release-visual-studio
 bin

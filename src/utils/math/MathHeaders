@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <cmath>
+
 #include "Vector3.h"
 #include "Vector2.h"
 #include "Operator.h"
@@ -27,4 +29,9 @@ using vec2f = unreal_fluid::math::Vector2<float>;
 
 using mat4 = unreal_fluid::math::Matrix4x4<float>;
 
-//using intvec3 = unreal_fluid::math::Vector3<int>;
+namespace unreal_fluid::math {
+  static const double PI       = 3.14159265358979323846;   // pi
+  static const double PI_2     = 1.57079632679489661923;   // pi/2
+  static const double PI_4     = 0.785398163397448309616;  // pi/4
+  static const double SQRT2    = 1.41421356237309504880;   // sqrt(2)
+}

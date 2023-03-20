@@ -12,17 +12,17 @@ include_directories(${OpenGL_INCLUDE_DIRS} include)
 
 if (WIN32)
     link_directories(
-            lib/win32/CL
+            # lib/win32/CL
             lib/win32/GL
             lib/win32/GLFW
     )
 
-    include_directories(share/cmake/OpenCL)
-    include_directories(share/cmake/OpenCLHeaders)
-    include_directories(share/cmake/OpenCLHeadersCpp)
-    include_directories(share/cmake/OpenCLICDLoader)
-    include_directories(share/cmake/nCLUtils)
-    include_directories(share/cmake/OpenCLUtilsCpp)
+    # include_directories(share/cmake/OpenCL)
+    # include_directories(share/cmake/OpenCLHeaders)
+    # include_directories(share/cmake/OpenCLHeadersCpp)
+    # include_directories(share/cmake/OpenCLICDLoader)
+    # include_directories(share/cmake/nCLUtils)
+    # include_directories(share/cmake/OpenCLUtilsCpp)
 
     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/lib/win32/DLLs/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/)
 else ()
@@ -36,11 +36,11 @@ set(LIBS
         glfw3
         glfw3dll
 
-        OpenCL
-        OpenCLUtils
-        OpenCLUtilsCpp
-        OpenCLUtilsCppd
-        OpenCLUtilsd
+        # OpenCL
+        # OpenCLUtils
+        # OpenCLUtilsCpp
+        # OpenCLUtilsCppd
+        # OpenCLUtilsd
 
         glew32
         )

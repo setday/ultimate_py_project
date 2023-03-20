@@ -21,7 +21,7 @@ public:
   render::Renderer::RenderMode renderMode = render::Renderer::RenderMode::SOLID;
   vec3f cameraPosition = {0.f, 0.f, 0.f};
   bool positionChanged = false;
-  vec2f cameraRotation = {0.f, (float)M_PI};
+  vec2f cameraRotation = {0.f, (float)math::PI};
   bool angleChanged = false;
 
   explicit Control(const compositor::Compositor *compositor) : Scene(compositor) {
