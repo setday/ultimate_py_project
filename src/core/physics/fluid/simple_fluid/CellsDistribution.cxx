@@ -18,8 +18,6 @@ using namespace unreal_fluid::physics::fluid;
 
 std::pair<Particle *, Particle *> CellsDistribution::nextPair() {
 
-  if (cell_iterator == cells.end()) return terminator;
-
   if (second >= cell_iterator->second.size()) {
     first++;
     second = first + 1;
@@ -37,15 +35,16 @@ std::pair<Particle *, Particle *> CellsDistribution::nextPair() {
 }
 
 CellsDistribution::CellsDistribution(std::vector<Particle *> &particles) {
-  /// TODO correct Cell Distribution of the particles. If the radius is large than dx, the distribution is not correct!
+
   double averageRadius = 0;
-  for (int i = 0; i < particles.size(); ++i) {
-    averageRadius += particles[i]->radius / particles.size();
+  for (const auto &particle: particles) {
+    averageRadius += particle->radius;
   }
+  averageRadius /= particles.size();
 
-  auto dx = 1; /// TODO dx should be equal to const*averageRadius; (const in [4..10]);
+  double dx = 1 ; // 3 * averageRadius;
 
-  for (Particle *particle: particles) {
+  for (const auto& particle: particles) {
     auto [x, y, z] = particle->position;
 
     x /= dx;

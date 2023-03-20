@@ -36,6 +36,7 @@ namespace unreal_fluid::physics::fluid {
     void advect(double dt);
     void addExternalForces(double dt);
     void interact(double dt);
+    void addParticle(vec3 position, vec3 velocity, double radius, double mass);
   };
 } // namespace unreal_fluid::physics::fluid
 

@@ -5,12 +5,13 @@
 
 /* PROJECT   : ultimate_py_project
 * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
-* FILE NAME : ParserTestScene.cxx
-* PURPOSE   : demonstrate how basic fluid simulation works
+* FILE NAME : Tools.cxx
+* PURPOSE   : time measurement
 *
 * No part of this file may be changed and used without agreement of
 * authors of this project.
 */
+
 #include "Tools.h"
 
 long long getMicroseconds() {
