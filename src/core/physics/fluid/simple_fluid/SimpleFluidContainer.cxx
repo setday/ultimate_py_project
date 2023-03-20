@@ -13,92 +13,96 @@
  */
 
 #include "SimpleFluidContainer.h"
+#include "random"
 
 using namespace unreal_fluid::physics::fluid;
 
 SimpleFluidContainer::SimpleFluidContainer(FluidDescriptor descriptor) {
-  auto particle = new Particle();
-  particle->position = {1.5, 0, 0};
-  particle->mass = 1;
-  particle->radius = 0.5;
-  particles.push_back(particle);
-  /// TODO : write constructor implementation
+    k = 0.1;
+    auto particle = new Particle();
+    particle->position = {0.01, -0.01, -0.01};
+    particle->mass = 1000000;
+    particle->radius = 0.3;
+    particles.push_back(particle);
+    /*particle = new Particle();
+    particle->position = {-0.5, 0, 0};
+    particle->mass = 1;
+    particle->radius = 0.3;
+    particle->velocity = {1,0,0};
+    particles.push_back(particle);*/
+    /// TODO : write constructor implementation
 }
 
 SimpleFluidContainer::~SimpleFluidContainer() {
-  for (auto &particle: particles) {
-    delete particle;
-  }
+    for (auto &particle: particles) {
+        delete particle;
+    }
 }
 
 void SimpleFluidContainer::addExternalForces(double dt) {
-  for (auto &particle: particles) {
-    particle->velocity += G * dt;
-  }
+    for (auto &particle: particles) {
+        particle->velocity += G * dt;
+    }
 }
 
 void SimpleFluidContainer::advect(double dt) {
-  for (auto particle: particles) {
-    particle->position += particle->velocity * dt;
-  }
+    for (auto particle: particles) {
+        particle->position += particle->velocity * dt;
+    }
 }
 
 void SimpleFluidContainer::interact(double dt) {
-  CellsDistribution cells(particles);
-  std::pair<Particle *, Particle *> p = cells.nextPair();
-  while (p != CellsDistribution::terminator) {
-    collide(p.first, p.second);
-    p = cells.nextPair();
-  }
+    for (int i = 0; i < particles.size(); ++i) {
+        for (int j = i + 1; j < particles.size(); ++j) {
+            if ((particles[i]->position - particles[j]->position).len() <= particles[i]->radius + particles[j]->radius){
+                collide(particles[i], particles[j]);
+            }
+        }
+    }
+   /* CellsDistribution cells(particles);
+    std::pair<Particle *, Particle *> p = cells.nextPair();
+    while (p != CellsDistribution::terminator) {
+        collide(p.first, p.second);
+        p = cells.nextPair();
+    }*/
 }
 
 void SimpleFluidContainer::simulate(double dt) {
-  /// TODO addParticle() method should be used
-
-  auto particle = new Particle();
-  particle->position = {0, 0, 0};
-  particle->mass = 1;
-  particle->radius = 0.02;
-  particle->velocity = {3, 0, 0};
-  particles.push_back(particle);
-
-  interact(dt);
-  addExternalForces(dt);
-  advect(dt);
+    /// TODO addParticle() method should be used
+    {
+        for (int i = 0; i < 1; ++i) {
+            double dX = 1.0*(rand() % 100)/100000;
+            double dZ = 1.0*(rand() % 100)/100000;
+            auto particle = new Particle;
+            particle->position = {dX, 1, -dZ};
+            particle->mass = 1;
+            particle->radius = 0.02;
+            particle->velocity = {0, -0.5, 0};
+            particles.push_back(particle);
+        }
+    }
+    interact(dt);
+    //addExternalForces(dt);
+    advect(dt);
 }
 
 void SimpleFluidContainer::collide(Particle *p1, Particle *p2) const {
-  vec3 positionDiff = p1->position - p2->position;
-
-  if (positionDiff.len2() == 0)
-    return;
-
-  double distance = positionDiff.len();
-  double pushValue = (p1->radius + p2->radius - distance) / 2;
-  vec3 pushVector = positionDiff * pushValue / distance;
-
-  if (pushValue < 0)
-    return;
-
-  p1->position += pushVector;
-  p2->position -= pushVector;
-
-  double momentumLength =
-          -(1 + k) *
-          (p1->velocity.project(positionDiff) - p2->velocity.project(positionDiff)) /
-          (p1->mass + p2->mass);
-  vec3 momentum = positionDiff * momentumLength / distance;
-
-  p1->velocity += momentum * p1->mass;
-  p2->velocity -= momentum * p2->mass;
+    vec3 y = p2->position - p1->position;
+    y.normalizeSelf();
+    double push = (p1->radius + p2->radius - p1->position.distanceTo(p2->position)) / (p1->mass + p2->mass);
+    p2->position += y * push * p1->mass;
+    p1->position -= y * push * p2->mass;
+    double s = -(1 + k) * (p1->velocity.project(y) - p2->velocity.project(y)) * p1->mass * p2->mass / (p1->mass + p2->mass);
+    p1->velocity += y * (s / p1->mass);
+    p2->velocity -= y * (s / p2->mass);
 }
 
 void *SimpleFluidContainer::getData() {
-  return &particles;
+    return &particles;
 }
 
 unreal_fluid::physics::PhysicalObject::Type SimpleFluidContainer::getType() {
-  return physics::PhysicalObject::Type::SIMPLE_FLUID_CONTAINER;
+    return physics::PhysicalObject::Type::SIMPLE_FLUID_CONTAINER;
 }
 
 // end of FluidContainer.cxx

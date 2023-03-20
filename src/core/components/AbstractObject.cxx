@@ -36,7 +36,10 @@ void AbstractObject::parse() {
       }
       auto &particle = particles[pos];
       auto &renderObject = renderObjects[pos];
-      renderObject->mesh = render::mesh::Sphere((float) particle->radius, 10, 10);
+      ///TODO dynamic sphere quality should be used. The large the radius, the higher the quality is
+      if (renderObject->mesh.indices.empty()){
+          renderObject->mesh = render::mesh::Sphere((float) particle->radius, 5, 5);
+      }///TODO less complex to check whether the mesh is empty should be used
       renderObject->position = particle->position;
       renderObject->modelMatrix = mat4::translation(renderObject->position);
     }

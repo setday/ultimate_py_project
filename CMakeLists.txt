@@ -83,7 +83,7 @@ add_executable(
         src/core/Compositor.cxx
         src/core/Core.cxx
         src/main.cxx
-)
+        src/utils/Tools.cxx src/utils/Tools.h)
 
 message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})

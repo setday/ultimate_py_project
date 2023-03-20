@@ -38,7 +38,6 @@ std::pair<Particle *, Particle *> CellsDistribution::nextPair() {
 
 CellsDistribution::CellsDistribution(std::vector<Particle *> &particles) {
   /// TODO correct Cell Distribution of the particles. If the radius is large than dx, the distribution is not correct!
-
   double averageRadius = 0;
   for (int i = 0; i < particles.size(); ++i) {
     averageRadius += particles[i]->radius / particles.size();
