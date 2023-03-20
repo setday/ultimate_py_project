@@ -89,14 +89,14 @@ void SimpleFluidContainer::collide(Particle *p1, Particle *p2) const {
   p1->position += pushVector;
   p2->position -= pushVector;
 
-  double forceMomentumLength =
+  double momentumLength =
           -(1 + k) *
           (p1->velocity.project(positionDiff) - p2->velocity.project(positionDiff)) /
           (p1->mass + p2->mass);
-  vec3 forceMomentum = positionDiff * forceMomentumLength / distance;
+  vec3 momentum = positionDiff * momentumLength / distance;
 
-  p1->velocity += forceMomentum * p1->mass;
-  p2->velocity -= forceMomentum * p2->mass;
+  p1->velocity += momentum * p1->mass;
+  p2->velocity -= momentum * p2->mass;
 }
 
 void *SimpleFluidContainer::getData() {
