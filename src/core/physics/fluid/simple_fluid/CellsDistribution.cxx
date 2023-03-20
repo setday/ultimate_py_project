@@ -28,7 +28,7 @@ std::pair<Particle *, Particle *> CellsDistribution::nextPair() {
   while (
           cell_iterator != cells.end() &&
           second >= cell_iterator->second.size()
-          ) {
+  ) {
     first = 0;
     second = 1;
 
@@ -42,10 +42,15 @@ std::pair<Particle *, Particle *> CellsDistribution::nextPair() {
 }
 
 CellsDistribution::CellsDistribution(std::vector<Particle *> &particles) {
-  auto dx = 3 * particles.front()->radius; /// TODO what should these constants be?
-  dx = 1; /// TODO what should these constants be?
+  /// TODO correct Cell Distribution of the particles. If the radius is large than dx, the distribution is not correct!
 
-  for (Particle *particle : particles) {
+  double averageRadius = 0;
+  for (int i = 0; i < particles.size(); ++i) {
+    averageRadius += particles[i]->radius / particles.size();
+  }
+  auto dx = 1; /// TODO dx should be equal to const*averageRadius; (const in [4..10]);
+  //
+  for (Particle *particle: particles) {
     auto [x, y, z] = particle->position;
 
     x /= dx;
@@ -60,6 +65,7 @@ CellsDistribution::CellsDistribution(std::vector<Particle *> &particles) {
   second = 1;
 
   cell_iterator = cells.begin();
+  Logger::logWarning(cells.size(), particles.size(), dx, averageRadius);
 }
 
 // end of CellsDistribution.cxx
