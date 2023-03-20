@@ -13,8 +13,7 @@
 
 #include <cmath>
 #include <chrono>
-#include "../src/core/Core.h"
-#include "../src/core/components/Scene.h"
+
 #include "../src/core/render/components/material/MaterialFactory.h"
 #include "../src/core/render/components/mesh/presets/Cube.h"
 #include "../src/core/render/components/mesh/presets/Plane.h"

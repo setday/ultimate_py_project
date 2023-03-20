@@ -18,8 +18,7 @@
 
 using namespace unreal_fluid;
 
-AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) :
-    physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)) {
+AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) : physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)) {
   /// TODO add nullptr check
 }
 
@@ -28,16 +27,16 @@ void AbstractObject::parse() {
   void *data = physicalObject->getData();
   if (type == physics::PhysicalObject::Type::SIMPLE_FLUID_CONTAINER) {
     std::vector<physics::fluid::Particle *> &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(data);
-    while (particles.size() > renderObjects.size()) {
-      renderObjects.push_back(new render::RenderObject);
-      renderObjects.back()->material = render::material::MaterialFactory::createMaterial(
-              render::material::MaterialFactory::MaterialType::GOLD
-      );
-    }
-    for (int i = 0; i < particles.size(); ++i) {
-      auto &particle = particles[i];
-      auto renderObject = renderObjects[i];
-      renderObject->mesh = render::mesh::Sphere((float)particle->radius, 50, 50);
+    for (int pos = 0; pos < particles.size(); ++pos) {
+      if (pos >= renderObjects.size()) {
+        renderObjects.push_back(new render::RenderObject);
+        renderObjects.back()->material = render::material::MaterialFactory::createMaterial(
+                render::material::MaterialFactory::MaterialType::GOLD
+        );
+      }
+      auto &particle = particles[pos];
+      auto &renderObject = renderObjects[pos];
+      renderObject->mesh = render::mesh::Sphere((float) particle->radius, 50, 50);
       /// TODO Coordinates translator. vec3f move = {-.75f, 0.f, -5.f} is a nonsense
       vec3f move = {-.75f, 0.f, -5.f};
       renderObject->position = particle->position + move;
@@ -46,12 +45,10 @@ void AbstractObject::parse() {
   }
 }
 
-[[nodiscard]]
-std::vector<render::RenderObject *> &AbstractObject::getRenderObjects() {
+[[nodiscard]] std::vector<render::RenderObject *> &AbstractObject::getRenderObjects() {
   return renderObjects;
 }
 
-[[nodiscard]]
-physics::PhysicalObject *AbstractObject::getPhysicalObject(){
+[[nodiscard]] physics::PhysicalObject *AbstractObject::getPhysicalObject() {
   return physicalObject;
 }

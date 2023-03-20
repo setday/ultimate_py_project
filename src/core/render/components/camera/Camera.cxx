@@ -58,7 +58,7 @@ void Camera::setDirection(float yaw, float pitch) {
 }
 
 vec2f Camera::getResolution() const {
-  return vec2f(_width, _height);
+  return {_width, _height};
 }
 
 void Camera::setResolution(int width, int height) {

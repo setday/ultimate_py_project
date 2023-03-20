@@ -14,7 +14,6 @@
 
 #pragma once
 
-#include <cassert>
 #include <cmath>
 #include <string>
 
@@ -108,13 +107,13 @@ namespace unreal_fluid::math {
     [[nodiscard]] double operator!() const { return len(); }
 
     Vector3 normalize() const {
-      assert(len2() > 0);
+      if (len() == 0) return {0, 0, 0};
       return *this / len();
     }
 
     void normalizeSelf() {
-      assert(len2() > 0);
-      *this /= len();
+      if (len() == 0) *this = {0, 0, 0};
+      else *this /= len();
     }
 
     Vector3 operator*(const Vector3 &vec) const {
@@ -130,7 +129,7 @@ namespace unreal_fluid::math {
     }
 
     T project(const Vector3 &v) {
-      assert(v.len2() >= 0);
+      if (len() == 0) return 0;
       return this->dot(v) / v.len();
     }
 
