@@ -53,7 +53,7 @@ namespace unreal_fluid::render {
     /// @return Shader manager.
     [[nodiscard]] ShaderManager *GetShaderManager() const;
 
-    /// Change render mode.
+      /// Change render mode.
     /// @param mode New render mode.
     void ChangeRenderMode(RenderMode mode);
 

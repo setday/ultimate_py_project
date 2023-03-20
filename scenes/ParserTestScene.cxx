@@ -27,10 +27,14 @@ public:
      for (auto & abstractObject : objects) {
        compositor->getSimulator()->addPhysicalObject(abstractObject->getPhysicalObject());
      }
+     compositor->getRenderer()->camera.setPosition({0.623032, 1.879672, 2.966535});
+     compositor->getRenderer()->camera.setDirection({0.182986, -0.389418, -0.902701});
   }
 
   void update() override {
       compositor->getSimulator()->simulate(dt);
+      Logger::logInfo("Position:", compositor->getRenderer()->camera.getPosition());
+      Logger::logInfo("Direction:", compositor->getRenderer()->camera.getDirection());
   }
 
   void render() override {

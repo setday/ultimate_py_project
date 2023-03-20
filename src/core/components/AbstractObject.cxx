@@ -36,10 +36,8 @@ void AbstractObject::parse() {
       }
       auto &particle = particles[pos];
       auto &renderObject = renderObjects[pos];
-      renderObject->mesh = render::mesh::Sphere((float) particle->radius, 50, 50);
-      /// TODO Coordinates translator. vec3f move = {-.75f, 0.f, -5.f} is a nonsense
-      vec3f move = {-.75f, 0.f, -5.f};
-      renderObject->position = particle->position + move;
+      renderObject->mesh = render::mesh::Sphere((float) particle->radius, 10, 10);
+      renderObject->position = particle->position;
       renderObject->modelMatrix = mat4::translation(renderObject->position);
     }
   }
