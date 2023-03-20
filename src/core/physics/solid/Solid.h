@@ -14,8 +14,12 @@
 
 #pragma once
 
-class Solid {
-  /// TODO write solid implementation
-};
+#include "../PhysicalObject.h"
+
+namespace unreal_fluid::physics::solid {
+  class Solid {
+    /// TODO write solid implementation
+  };
+}
 
 // end of Solid.h

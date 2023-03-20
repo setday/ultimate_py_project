@@ -13,3 +13,5 @@
  */
 
 #include "Solid.h"
+
+using namespace unreal_fluid::physics::solid;
