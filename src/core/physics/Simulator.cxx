@@ -5,7 +5,7 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Simulator.cpp
+ * FILE NAME : Simulator.cxx
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -20,10 +20,10 @@ void Simulator::addPhysicalObject(PhysicalObject *physicalObject) {
 }
 
 void Simulator::simulate(double dt) {
-    /// TODO simulate solids and fluids
-    for (auto & physObject : _physicalObjects) {
-        physObject->simulate(dt);
-    }
+  /// TODO simulate interaction between solids and fluids
+  for (auto &physObject: _physicalObjects) {
+    physObject->simulate(dt);
+  }
 }
 
 void Simulator::clearData() {

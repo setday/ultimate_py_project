@@ -62,12 +62,11 @@ add_executable(
         src/core/render/components/shaders/ShaderProgram.cxx
         src/core/managers/sub_programs_managers/shader_manager/ShaderManager.cxx
 
-
+        src/core/physics/Simulator.cxx
         src/core/physics/fluid/simple_fluid/CellsDistribution.cxx
         src/core/physics/fluid/simple_fluid/SimpleFluidContainer.cxx
+        src/core/physics/solid/Solid.cxx
         src/core/components/AbstractObject.cxx
-        #src/core/components/ObjectFactory.cxx
-        #src/core/physics/PhysicalEngine.cxx
 
         src/core/render/components/camera/Camera.cxx
         src/core/render/components/RenderObject.cxx
@@ -84,7 +83,7 @@ add_executable(
         src/core/Compositor.cxx
         src/core/Core.cxx
         src/main.cxx
-        src/core/physics/Simulator.cpp src/core/physics/Simulator.h)
+)
 
 message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
