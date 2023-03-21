@@ -5,7 +5,7 @@
 
 /* PROJECT   : ultimate_py_project
 * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
-* FILE NAME : ParserTestScene.cxx
+* FILE NAME : TestScene.cxx
 * PURPOSE   : demonstrate how basic fluid simulation works
 *
 * No part of this file may be changed and used without agreement of
@@ -19,19 +19,17 @@
 
 using namespace unreal_fluid;
 
-class ParserTestScene : public Scene {
+class TestScene : public Scene {
 public:
   double dt = 0.02;
 
-  explicit ParserTestScene(const compositor::Compositor *compositor) : Scene(compositor) {
+  explicit TestScene(const compositor::Compositor *compositor) : Scene(compositor) {
     objects.push_back(new AbstractObject({})); // TODO which descriptor should we use?
     for (auto &abstractObject: objects) {
       compositor->getSimulator()->addPhysicalObject(abstractObject->getPhysicalObject());
     }
     compositor->getRenderer()->camera.setPosition({0, 0, 2});
     compositor->getRenderer()->camera.setDirection({0, 0, -1});
-    //compositor->getRenderer()->camera.setPosition({0.623032, 1.879672, 2.966535});
-    //compositor->getRenderer()->camera.setDirection({0.182986, -0.389418, -0.902701});
   }
 
   void update() override {
@@ -59,5 +57,5 @@ public:
     Logger::logInfo("Rendering time:     ", getMicroseconds() - t);
   }
 
-  ~ParserTestScene() override = default;
+  ~TestScene() override = default;
 };

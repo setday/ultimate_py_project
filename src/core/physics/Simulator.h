@@ -14,7 +14,7 @@
 #pragma once
 
 #include <vector>
-
+#include "../../utils/math/MathHeaders"
 #include "PhysicalObject.h"
 
 namespace unreal_fluid::physics {

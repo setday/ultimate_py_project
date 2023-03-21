@@ -77,7 +77,7 @@ add_executable(
         src/core/managers/window_manager/WindowCompositor.cxx
 
         src/core/components/Scene.cxx
-        scenes/ParserTestScene.cxx
+        scenes/TestScene.cxx
         #scenes/ClTestScene.cxx
         #scenes/GlTestScene.cxx
         #scenes/Control.cxx

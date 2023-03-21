@@ -58,7 +58,10 @@ void SimpleFluidContainer::interact() {
 }
 
 void SimpleFluidContainer::simulate(double dt) {
-  addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, -0.5, 0}, 0.02, 1);
+  for (int i = 0; i < 1; ++i) {
+    addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, -0.5, 0}, 0.02, 1);
+    addParticle({1, double(rand() % 100) / 100000, double(rand() % 100) / 100000}, {-0.5, 0, 0}, 0.03, 2);
+  }
 
   interact();
   // addExternalForces(dt);

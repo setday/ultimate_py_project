@@ -15,7 +15,7 @@
 #include "Compositor.h"
 #include "../scenes/Control.cxx"
 #include "../scenes/GlTestScene.cxx"
-#include "../scenes/ParserTestScene.cxx"
+#include "../scenes/TestScene.cxx"
 
 using namespace unreal_fluid::compositor;
 
@@ -34,7 +34,7 @@ void Compositor::init() {
   Logger::logInfo("Initializing compositor...");
 
   _renderer->Init();
-  _scenes.push_back(new ParserTestScene(this));
+  _scenes.push_back(new TestScene(this));
   //_scenes.push_back(new GlTestScene(this));
   _scenes.push_back(new Control(this));
 

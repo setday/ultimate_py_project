@@ -15,7 +15,6 @@
 #pragma once
 
 #include <vector>
-
 #include "../PhysicalObject.h"
 #include "Particle.h"
 
