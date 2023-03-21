@@ -42,13 +42,13 @@ void SimpleFluidContainer::advect(double dt) {
 }
 
 void SimpleFluidContainer::interact() {
-  //    for (int i = 0; i < particles.size(); ++i) {
-  //      for (int j = i + 1; j < particles.size(); ++j) {
-  //        if ((particles[i]->position - particles[j]->position).len() <= particles[i]->radius + particles[j]->radius) {
-  //          collide(particles[i], particles[j]);
-  //        }
-  //      }
-  //    }
+//      for (int i = 0; i < particles.size(); ++i) {
+//        for (int j = i + 1; j < particles.size(); ++j) {
+//          if ((particles[i]->position - particles[j]->position).len() <= particles[i]->radius + particles[j]->radius) {
+//            collide(particles[i], particles[j]);
+//          }
+//        }
+//      }
 
   CellsDistributor cells(particles);
   for (auto bigParticle: cells.getBigParticles()) {

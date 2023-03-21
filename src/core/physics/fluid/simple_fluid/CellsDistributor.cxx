@@ -42,17 +42,17 @@ CellsDistributor::CellsDistributor(std::vector<Particle *> &particles) {
   for (const auto &particle: particles) averageRadius += particle->radius;
   averageRadius /= particles.size();
 
-  double cellSize = 25 * averageRadius;
+  double cellSize = 5 * averageRadius;
 
   for (const auto &particle: particles) {
-    if (particle->radius > cellSize) {
+    if (particle->radius >= cellSize) {
       big_particles.push_back(particle);
       continue;
     }
 
     math::Vector3<uint64_t> position = particle->position / cellSize;
     for (const auto &diff: bias) {
-      if ((position + diff).len() <= particle->radius && (position + diff).x >= 0 && (position + diff).y >= 0 && (position + diff).z >= 0) {
+      if (((position + diff) * cellSize).len() <= particle->radius && (position + diff).x >= 0 && (position + diff).y >= 0 && (position + diff).z >= 0) {
         cells[getId(position + diff)].push_back(particle);
       }
     }
@@ -61,7 +61,6 @@ CellsDistributor::CellsDistributor(std::vector<Particle *> &particles) {
   first = 0;
   second = 1;
   cell_iterator = cells.begin();
-  //  Logger::logWarning(cells.size(), particles.size(), dx, averageRadius);
 }
 
 std::vector<Particle *> &CellsDistributor::getBigParticles() {
