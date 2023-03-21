@@ -43,14 +43,14 @@ void Core::Init() {
 
   _isRunning = true;
   _windowCompositor->init(500, 500);
-    _compositor.init();
+  _compositor.init();
 
   Logger::logInfo("Core initialized!");
 }
 
 void Core::Update() {
-    _compositor.update();
-    _compositor.render();
+  _compositor.update();
+  _compositor.render();
   _windowCompositor->update();
 
   if (!_windowCompositor->isAlive()) {
@@ -59,7 +59,7 @@ void Core::Update() {
 }
 
 void Core::Shutdown() {
-    _compositor.destroy();
+  _compositor.destroy();
   _isRunning = false;
 }
 
