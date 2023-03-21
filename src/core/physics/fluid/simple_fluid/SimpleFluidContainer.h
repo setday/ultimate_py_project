@@ -27,8 +27,8 @@ namespace unreal_fluid::physics::fluid {
     explicit SimpleFluidContainer(FluidDescriptor descriptor);
     ~SimpleFluidContainer() override;
     void simulate(double dt) override;
-
-    unreal_fluid::physics::PhysicalObject::Type getType() override;
+    
+    PhysicalObject::Type getType() override;
     void *getData() override;
 
   private:
