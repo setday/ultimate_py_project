@@ -5,18 +5,18 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : CellsDistribution.cxx
+ * FILE NAME : CellsDistributor.cxx
  * PURPOSE   : distribute particles
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
 
-#include "CellsDistribution.h"
+#include "CellsDistributor.h"
 
 using namespace unreal_fluid::physics::fluid;
 
-std::pair<Particle *, Particle *> CellsDistribution::nextPair() {
+std::pair<Particle *, Particle *> CellsDistributor::nextPair() {
 
   if (second >= cell_iterator->second.size()) {
     first++;
@@ -34,7 +34,7 @@ std::pair<Particle *, Particle *> CellsDistribution::nextPair() {
   return {cell_iterator->second[first], cell_iterator->second[second++]};
 }
 
-CellsDistribution::CellsDistribution(std::vector<Particle *> &particles) {
+CellsDistributor::CellsDistributor(std::vector<Particle *> &particles) {
 
   double averageRadius = 0;
   for (const auto &particle: particles) {
@@ -62,4 +62,4 @@ CellsDistribution::CellsDistribution(std::vector<Particle *> &particles) {
   Logger::logWarning(cells.size(), particles.size(), dx, averageRadius);
 }
 
-// end of CellsDistribution.cxx
+// end of CellsDistributor.cxx

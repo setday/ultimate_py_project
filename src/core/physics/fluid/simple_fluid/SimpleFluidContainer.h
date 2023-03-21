@@ -5,7 +5,7 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : FluidContainer.h
+ * FILE NAME : SimpleFluidContainer.h
  * PURPOSE   : Simple fluid simulation class, which implements ASS collision
  *
  * No part of this file may be changed and used without agreement of
@@ -16,7 +16,7 @@
 
 #include "../../PhysicsDefinitions.h"
 #include "../IFluidContainer.h"
-#include "CellsDistribution.h"
+#include "CellsDistributor.h"
 
 namespace unreal_fluid::physics::fluid {
   class SimpleFluidContainer : public IFluidContainer {

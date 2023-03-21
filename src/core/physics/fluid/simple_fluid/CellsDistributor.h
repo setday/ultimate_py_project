@@ -5,8 +5,8 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : CellsDistribution.h
- * PURPOSE   : ${PURPOSE}
+ * FILE NAME : CellsDistributor.h
+ * PURPOSE   : distribute particles
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -20,7 +20,7 @@
 #include "../Particle.h"
 
 namespace unreal_fluid::physics::fluid {
-  class CellsDistribution {
+  class CellsDistributor {
   private:
     uint64_t first;
     uint64_t second;
@@ -32,11 +32,11 @@ namespace unreal_fluid::physics::fluid {
     constexpr static std::pair<Particle *, Particle *> terminator = {nullptr, nullptr};
 
   public:
-    CellsDistribution(std::vector<Particle *> &particles);
-    ~CellsDistribution() = default;
+    CellsDistributor(std::vector<Particle *> &particles);
+    ~CellsDistributor() = default;
 
     std::pair<Particle *, Particle *> nextPair();
   };
 } // namespace unreal_fluid::physics::fluid
 
-// end of CellsDistribution.h
+// end of CellsDistributor.h

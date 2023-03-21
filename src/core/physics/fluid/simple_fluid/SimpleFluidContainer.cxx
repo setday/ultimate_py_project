@@ -5,8 +5,8 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : FluidContainer.cxx
- * PURPOSE   : ${PURPOSE}
+ * FILE NAME : SimpleFluidContainer.cxx
+ * PURPOSE   : Simple fluid simulation class, which implements ASS collision
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -24,12 +24,7 @@ SimpleFluidContainer::SimpleFluidContainer(FluidDescriptor descriptor) {
   particle->mass = 1000000;
   particle->radius = 0.3;
   particles.push_back(particle);
-  /*particle = new Particle();
-    particle->position = {-0.5, 0, 0};
-    particle->mass = 1;
-    particle->radius = 0.3;
-    particle->velocity = {1,0,0};
-    particles.push_back(particle);*/
+
   /// TODO : write constructor implementation
 }
 
@@ -59,9 +54,10 @@ void SimpleFluidContainer::interact(double dt) {
       }
     }
   }
-  //   CellsDistribution cells`(particles);
+
+  //   CellsDistributor cells`(particles);
   //    std::pair<Particle *, Particle *> p = cells.nextPair();
-  //    while (p != CellsDistribution::terminator) {
+  //    while (p != CellsDistributor::terminator) {
   //        collide(p.first, p.second);
   //        p = cells.nextPair();
   //    }`

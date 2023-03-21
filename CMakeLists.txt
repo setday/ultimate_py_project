@@ -65,7 +65,7 @@ add_executable(
         src/utils/Tools.cxx
 
         src/core/physics/Simulator.cxx
-        src/core/physics/fluid/simple_fluid/CellsDistribution.cxx
+        src/core/physics/fluid/simple_fluid/CellsDistributor.cxx
         src/core/physics/fluid/simple_fluid/SimpleFluidContainer.cxx
         src/core/physics/solid/Solid.cxx
         src/core/components/AbstractObject.cxx

@@ -17,10 +17,12 @@
 
 namespace unreal_fluid::physics {
   class PhysicalObject {
+    friend class Simulator;
+
   public:
     enum class Type {
-        SIMPLE_FLUID_CONTAINER,
-        SOLID
+      SIMPLE_FLUID_CONTAINER,
+      SOLID
     };
 
     virtual ~PhysicalObject() = default;
