@@ -59,7 +59,7 @@ void CellsDistributor::update(std::vector<Particle *> &particles) {
       for (int dy = -1; dy <= 1; ++dy) {
         for (int dz = -1; dz <= 1; ++dz) {
           cellPosition = position + math::Vector3{dx, dy, dz};
-          if ((cellPosition * cellSize).len() <= particle->radius)
+          if ((cellPosition * cellSize - particle->position).len() <= particle->radius)
             cells[getId(cellPosition)].push_back(particle);
         }
       }
