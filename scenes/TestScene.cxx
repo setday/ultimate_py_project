@@ -33,13 +33,13 @@ public:
   }
 
   void update() override {
-    long long t = getMicroseconds();
+    long long start_time = getMicroseconds();
     compositor->getSimulator()->simulate(dt);
-    Logger::logInfo("Simulation time:    ", getMicroseconds() - t);
+    Logger::logInfo("Simulation time: ", getMicroseconds() - start_time);
   }
 
   void render() override {
-    long long t = getMicroseconds();
+    long long start_time = getMicroseconds();
     for (auto &object: objects) {
       object->parse();
       for (auto renderObject: object->getRenderObjects()) {
@@ -47,14 +47,14 @@ public:
         renderObject->shaderProgram = compositor->getRenderer()->GetShaderManager()->GetDefaultProgram();
       }
     }
-    Logger::logInfo("Parsing time:       ", getMicroseconds() - t);
-    t = getMicroseconds();
+    Logger::logInfo("Parsing time: ", getMicroseconds() - start_time);
+    start_time = getMicroseconds();
     for (auto &object: objects) {
       for (auto &i: object->getRenderObjects()) {
         compositor->getRenderer()->RenderObject(i);
       }
     }
-    Logger::logInfo("Rendering time:     ", getMicroseconds() - t);
+    Logger::logInfo("Rendering time:     ", getMicroseconds() - start_time);
   }
 
   ~TestScene() override = default;
