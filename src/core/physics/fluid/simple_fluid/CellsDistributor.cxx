@@ -55,11 +55,12 @@ void CellsDistributor::update(std::vector<Particle *> &particles) {
 
     math::Vector3<int64_t> position = particle->position / cellSize;
 
-    for (int dX = -1; dX <= 1; dX++) {
-      for (int dY = -1; dY <= 1; dY++) {
-        for (int dZ = -1; dZ <= 1; dZ++) {
-          cellPosition = {position.x + dX, position.y + dY, position.z + dZ};
-          cells[getId(cellPosition)].push_back(particle);
+    for (int dx = -1; dx <= 1; ++dx) {
+      for (int dy = -1; dy <= 1; ++dy) {
+        for (int dz = -1; dz <= 1; ++dz) {
+          cellPosition = position + math::Vector3{dx, dy, dz};
+          if ((cellPosition * cellSize).len() <= particle->radius)
+            cells[getId(cellPosition)].push_back(particle);
         }
       }
     }
