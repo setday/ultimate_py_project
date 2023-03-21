@@ -22,9 +22,10 @@ using namespace unreal_fluid;
 class TestScene : public Scene {
 public:
   double dt = 0.02;
+  long long timer = 0;
 
   explicit TestScene(const compositor::Compositor *compositor) : Scene(compositor) {
-    objects.push_back(new AbstractObject({})); // TODO which descriptor should we use?
+    objects.push_back(new AbstractObject({}, compositor)); // TODO which descriptor should we use?
     for (auto &abstractObject: objects) {
       compositor->getSimulator()->addPhysicalObject(abstractObject->getPhysicalObject());
     }
@@ -33,26 +34,32 @@ public:
   }
 
   void update() override {
-    long long start_time = getMicroseconds();
+    timer++;
+    static long long update_start_time = getMicroseconds();
+    long long time = getMicroseconds();
     compositor->getSimulator()->simulate(dt);
-    Logger::logInfo("Simulation time: ", getMicroseconds() - start_time);
+    update_start_time += getMicroseconds() - time;
+    if (timer % 30 == 0) {
+      Logger::logInfo("Simulation time: ", (getMicroseconds() - update_start_time) / 30);
+      update_start_time = getMicroseconds();
+    }
   }
 
   void render() override {
-    long long start_time = getMicroseconds();
     for (auto &object: objects) {
       object->parse();
-      for (auto renderObject: object->getRenderObjects()) {
-        /// TODO this should be done in parse()
-        renderObject->shaderProgram = compositor->getRenderer()->GetShaderManager()->GetDefaultProgram();
-      }
     }
-    Logger::logInfo("Parsing time: ", getMicroseconds() - start_time);
-    start_time = getMicroseconds();
+    static long long render_start_time = getMicroseconds();
+    long long time = getMicroseconds();
     for (auto &object: objects) {
       compositor->getRenderer()->RenderAllObjects(object->getRenderObjects());
     }
-    Logger::logInfo("Rendering time:     ", getMicroseconds() - start_time);
+    render_start_time += getMicroseconds() - time;
+    if (timer % 30 == 0) {
+      Logger::logInfo("Rendering time: ", (getMicroseconds() - render_start_time) / 30);
+      render_start_time = getMicroseconds();
+      timer = 0;
+    }
   }
 
   ~TestScene() override = default;

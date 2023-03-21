@@ -33,9 +33,10 @@ namespace unreal_fluid::physics::fluid {
     constexpr static std::pair<Particle *, Particle *> terminator = {nullptr, nullptr};
 
   public:
-    explicit CellsDistributor(std::vector<Particle *> &particles);
+    CellsDistributor() = default;
     ~CellsDistributor() = default;
 
+    void update(std::vector<Particle *> &particles);
     std::vector<Particle *> &getBigParticles();
     std::pair<Particle *, Particle *> nextPair();
   };

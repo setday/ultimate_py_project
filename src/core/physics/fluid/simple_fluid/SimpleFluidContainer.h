@@ -22,6 +22,7 @@ namespace unreal_fluid::physics::fluid {
   class SimpleFluidContainer : public IFluidContainer {
   private:
     double k = 0.1;
+    CellsDistributor distributor;
 
   public:
     explicit SimpleFluidContainer(FluidDescriptor descriptor);

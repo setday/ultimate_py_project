@@ -18,7 +18,7 @@
 
 using namespace unreal_fluid::physics::fluid;
 
-SimpleFluidContainer::SimpleFluidContainer(FluidDescriptor descriptor) {
+SimpleFluidContainer::SimpleFluidContainer(FluidDescriptor descriptor) : distributor(*new CellsDistributor())  {
   addParticle({0.01, -0.01, -0.01}, {0, 0, 0}, 0.3, 1000000);
   /// TODO : write constructor implementation
 }
@@ -42,10 +42,10 @@ void SimpleFluidContainer::advect(double dt) {
 }
 
 void SimpleFluidContainer::interact() {
-  CellsDistributor cells(particles);
-  std::pair<Particle *, Particle *> p = cells.nextPair();
+  distributor.update(particles);
+  std::pair<Particle *, Particle *> p = distributor.nextPair();
 
-  for (auto bigParticle: cells.getBigParticles()) {
+  for (auto bigParticle: distributor.getBigParticles()) {
     for (auto particle: particles) {
       if (particle->position != bigParticle->position && (particle->position - bigParticle->position).len() <= particle->radius + bigParticle->radius)
         collide(particle, bigParticle);
@@ -54,7 +54,7 @@ void SimpleFluidContainer::interact() {
 
   while (p != CellsDistributor::terminator) {
     collide(p.first, p.second);
-    p = cells.nextPair();
+    p = distributor.nextPair();
   }
 }
 

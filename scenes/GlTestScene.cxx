@@ -28,7 +28,7 @@ public:
   render::RenderObject *cube;
   const compositor::Compositor *compositor;
 
-  explicit GlTestScene(const compositor::Compositor *compositor) : Scene(compositor) {
+  explicit GlTestScene(const compositor::Compositor *compositor) : Scene(compositor), compositor(compositor) {
     sphere = new render::RenderObject();
     sphere->mesh = render::mesh::Sphere(.5f, 50, 50);
     sphere->position = {-.75f, 0.f, -5.f};
