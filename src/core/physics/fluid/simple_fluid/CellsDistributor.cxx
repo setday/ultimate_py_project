@@ -28,6 +28,7 @@ std::pair<Particle *, Particle *> CellsDistributor::nextPair() {
   while (cell_iterator != cells.end() && second >= cell_iterator->second.size()) {
     first = 0;
     second = 1;
+    cell_iterator->second.clear();
     cell_iterator++;
   }
 
@@ -37,7 +38,7 @@ std::pair<Particle *, Particle *> CellsDistributor::nextPair() {
 }
 
 void CellsDistributor::update(std::vector<Particle *> &particles) {
-  cells.clear(), big_particles.clear();
+  big_particles.clear();
 
   double averageRadius = 0;
   for (const auto &particle: particles) averageRadius += particle->radius;
