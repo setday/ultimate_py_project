@@ -42,14 +42,14 @@ CellsDistributor::CellsDistributor(std::vector<Particle *> &particles) {
   for (const auto &particle: particles) averageRadius += particle->radius;
   averageRadius /= particles.size();
 
-  double cellSize = 5 * averageRadius;
+  double cellSize = 25 * averageRadius;
 
   for (const auto &particle: particles) {
     if (particle->radius > cellSize) {
       big_particles.push_back(particle);
       continue;
     }
-    
+
     math::Vector3<uint64_t> position = particle->position / cellSize;
     for (const auto &diff: bias) {
       if ((position + diff).len() <= particle->radius && (position + diff).x >= 0 && (position + diff).y >= 0 && (position + diff).z >= 0) {

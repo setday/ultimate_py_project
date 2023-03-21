@@ -53,18 +53,14 @@ void SimpleFluidContainer::interact() {
   CellsDistributor cells(particles);
   for (auto bigParticle: cells.getBigParticles()) {
     for (auto particle: particles) {
-      if ((particle->position - bigParticle->position).len() <= particle->radius + bigParticle->radius) {
+      if (particle->position != bigParticle->position && (particle->position - bigParticle->position).len() <= particle->radius + bigParticle->radius)
         collide(particle, bigParticle);
-      }
     }
   }
   std::pair<Particle *, Particle *> p = cells.nextPair();
   while (p != CellsDistributor::terminator) {
-    //    std::cout << "Not a terminator\n";
-    if ((p.first->position - p.second->position).len() <= p.first->radius + p.second->radius) {
-      //      std::cout << "And even collides\n";
+    if ((p.first->position - p.second->position).len() <= p.first->radius + p.second->radius)
       collide(p.first, p.second);
-    }
     p = cells.nextPair();
   }
 }

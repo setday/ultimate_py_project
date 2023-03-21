@@ -149,5 +149,13 @@ namespace unreal_fluid::math {
     friend Vector3<T> operator*(float c, const Vector3<T> &vec) {
       return Vector3(vec.x * c, vec.y * c, vec.z * c);
     }
+
+    friend bool operator==(const Vector3 &vec, const Vector3 &other) {
+      return vec.x == other.x && vec.y == other.y && vec.z == other.z;
+    }
+
+    friend bool operator!=(const Vector3 &vec, const Vector3 &other) {
+      return !(vec == other);
+    }
   };
 } // namespace unreal_fluid::math
