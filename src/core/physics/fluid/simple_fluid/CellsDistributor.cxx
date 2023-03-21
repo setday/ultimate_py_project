@@ -42,7 +42,7 @@ CellsDistributor::CellsDistributor(std::vector<Particle *> &particles) {
   for (const auto &particle: particles) averageRadius += particle->radius;
   averageRadius /= particles.size();
 
-  double cellSize = 5 * averageRadius;
+  double cellSize = 2.5 * averageRadius;
 
   for (const auto &particle: particles) {
     if (particle->radius >= cellSize) {
