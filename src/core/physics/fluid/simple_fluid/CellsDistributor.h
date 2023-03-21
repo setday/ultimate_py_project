@@ -26,11 +26,6 @@ namespace unreal_fluid::physics::fluid {
     std::unordered_map<uint64_t, std::vector<Particle *>> cells;
     std::unordered_map<uint64_t, std::vector<Particle *>>::iterator cell_iterator;
     std::vector<Particle *> big_particles;
-    std::vector<math::Vector3<int>> bias{
-            {-1, 0, 0}, {-1, -1, 0}, {-1, 1, 0}, {-1, 0, -1}, {-1, 0, 1}, {-1, -1, -1}, {-1, 1, -1}, {-1, -1, 1}, {-1, 1, 1},
-            {0, 0, 0}, {0, -1, 0}, {0, 1, 0}, {0, 0, -1}, {0, 0, 1}, {0, -1, -1}, {0, 1, -1}, {0, -1, 1}, {0, 1, 1},
-            {1, 0, 0}, {1, -1, 0}, {1, 1, 0}, {1, 0, -1}, {1, 0, 1}, {1, -1, -1}, {1, 1, -1}, {1, -1, 1}, {1, 1, 1}
-    };
 
     static uint64_t getId(vec3 position);
 

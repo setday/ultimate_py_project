@@ -50,9 +50,7 @@ public:
     Logger::logInfo("Parsing time: ", getMicroseconds() - start_time);
     start_time = getMicroseconds();
     for (auto &object: objects) {
-      for (auto &i: object->getRenderObjects()) {
-        compositor->getRenderer()->RenderObject(i);
-      }
+      compositor->getRenderer()->RenderAllObjects(object->getRenderObjects());
     }
     Logger::logInfo("Rendering time:     ", getMicroseconds() - start_time);
   }

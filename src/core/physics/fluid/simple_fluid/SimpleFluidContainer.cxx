@@ -12,13 +12,13 @@
  * authors of this project.
  */
 
+#include <random>
+
 #include "SimpleFluidContainer.h"
-#include "random"
 
 using namespace unreal_fluid::physics::fluid;
 
 SimpleFluidContainer::SimpleFluidContainer(FluidDescriptor descriptor) {
-  k = 0.1;
   addParticle({0.01, -0.01, -0.01}, {0, 0, 0}, 0.3, 1000000);
   /// TODO : write constructor implementation
 }
@@ -43,16 +43,17 @@ void SimpleFluidContainer::advect(double dt) {
 
 void SimpleFluidContainer::interact() {
   CellsDistributor cells(particles);
+  std::pair<Particle *, Particle *> p = cells.nextPair();
+
   for (auto bigParticle: cells.getBigParticles()) {
     for (auto particle: particles) {
       if (particle->position != bigParticle->position && (particle->position - bigParticle->position).len() <= particle->radius + bigParticle->radius)
         collide(particle, bigParticle);
     }
   }
-  std::pair<Particle *, Particle *> p = cells.nextPair();
+
   while (p != CellsDistributor::terminator) {
-    if ((p.first->position - p.second->position).len() <= p.first->radius + p.second->radius)
-      collide(p.first, p.second);
+    collide(p.first, p.second);
     p = cells.nextPair();
   }
 }
@@ -69,14 +70,33 @@ void SimpleFluidContainer::simulate(double dt) {
 }
 
 void SimpleFluidContainer::collide(Particle *p1, Particle *p2) const {
-  vec3 y = p2->position - p1->position;
-  y.normalizeSelf();
-  double push = (p1->radius + p2->radius - p1->position.distanceTo(p2->position)) / (p1->mass + p2->mass);
-  p2->position += y * push * p1->mass;
-  p1->position -= y * push * p2->mass;
-  double s = -(1 + k) * (p1->velocity.project(y) - p2->velocity.project(y)) * p1->mass * p2->mass / (p1->mass + p2->mass);
-  p1->velocity += y * (s / p1->mass);
-  p2->velocity -= y * (s / p2->mass);
+  vec3 positionDiff = p1->position - p2->position;
+
+  if (positionDiff.len2() == 0)
+    return;
+
+  double distance = positionDiff.len();
+  vec3 positionDiffDirection = positionDiff / distance;
+
+  double pushValue =
+          (p1->radius + p2->radius - distance) /
+          (p1->mass + p2->mass);
+  vec3 pushVector = positionDiffDirection * pushValue;
+
+  if (pushValue < 0)
+    return;
+
+  p1->position += pushVector * p2->mass;
+  p2->position -= pushVector * p1->mass;
+
+  double momentumValue =
+          (1 + k) *
+          (p1->velocity.dot(positionDiffDirection) - p2->velocity.dot(positionDiffDirection)) /
+          (p1->mass + p2->mass);
+  vec3 momentum = positionDiffDirection * momentumValue;
+
+  p1->velocity -= momentum * p2->mass;
+  p2->velocity += momentum * p1->mass;
 }
 
 void *SimpleFluidContainer::getData() {

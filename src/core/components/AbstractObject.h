@@ -24,7 +24,7 @@ namespace unreal_fluid {
     std::vector<render::RenderObject *> renderObjects;
 
   public:
-    explicit AbstractObject(physics::fluid::FluidDescriptor descriptor);
+    AbstractObject(physics::fluid::FluidDescriptor descriptor);
     ~AbstractObject() = default;
     [[nodiscard]]
     std::vector<render::RenderObject *> &getRenderObjects();

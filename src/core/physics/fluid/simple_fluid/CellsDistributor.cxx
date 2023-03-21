@@ -50,10 +50,18 @@ CellsDistributor::CellsDistributor(std::vector<Particle *> &particles) {
       continue;
     }
 
-    math::Vector3<uint64_t> position = particle->position / cellSize;
-    for (const auto &diff: bias) {
-      if (((position + diff) * cellSize).len() <= particle->radius && (position + diff).x >= 0 && (position + diff).y >= 0 && (position + diff).z >= 0) {
-        cells[getId(position + diff)].push_back(particle);
+    math::Vector3<int64_t> position = particle->position / cellSize;
+    math::Vector3<int64_t> cellPosition;
+
+    for (int dX = -1; dX <= 1; dX++) {
+      for (int dY = -1; dY <= 1; dY++) {
+        for (int dZ = -1; dZ <= 1; dZ++) {
+          cellPosition.x = position.x + dX;
+          cellPosition.y = position.y + dY;
+          cellPosition.z = position.z + dZ;
+          uint64_t id = getId(cellPosition);
+          cells[id].push_back(particle);
+        }
       }
     }
   }
