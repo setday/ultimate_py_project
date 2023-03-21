@@ -24,12 +24,13 @@ public:
   double dt = 0.02;
 
   explicit TestScene(const compositor::Compositor *compositor) : Scene(compositor) {
-    objects.push_back(new AbstractObject({})); // TODO which descriptor should we use?
-    for (auto &abstractObject: objects) {
-      compositor->getSimulator()->addPhysicalObject(abstractObject->getPhysicalObject());
-    }
-    compositor->getRenderer()->camera.setPosition({0, 0, 2});
-    compositor->getRenderer()->camera.setDirection({0, 0, -1});
+      auto simpleFluid = new physics::fluid::SimpleFluidContainer({});
+      objects.push_back(new AbstractObject(simpleFluid));
+      for (auto &abstractObject: objects) {
+          compositor->getSimulator()->addPhysicalObject(abstractObject->getPhysicalObject());
+      }
+      compositor->getRenderer()->camera.setPosition({0, 0, 2});
+      compositor->getRenderer()->camera.setDirection({0, 0, -1});
   }
 
   void update() override {

@@ -14,22 +14,23 @@
 
 #pragma once
 
-#include "../physics/PhysicalObject.h"
+#include "../physics/IPhysicalObject.h"
 #include "../physics/fluid/simple_fluid/SimpleFluidContainer.h"
 #include "../render/components/RenderObject.h"
 
 namespace unreal_fluid {
   class AbstractObject {
-    physics::PhysicalObject *physicalObject;
+    physics::IPhysicalObject *physicalObject;
     std::vector<render::RenderObject *> renderObjects;
 
   public:
     explicit AbstractObject(physics::fluid::FluidDescriptor descriptor);
+    explicit AbstractObject(physics::IPhysicalObject* physObject);
     ~AbstractObject() = default;
     [[nodiscard]]
     std::vector<render::RenderObject *> &getRenderObjects();
     [[nodiscard]]
-    physics::PhysicalObject *getPhysicalObject();
+    physics::IPhysicalObject *getPhysicalObject();
     void parse();
   }; // end of AbstractObject class
 } // namespace unreal_fluid

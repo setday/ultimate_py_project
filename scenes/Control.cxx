@@ -112,7 +112,7 @@ public:
     if (key == GLFW_KEY_F1 && action == GLFW_PRESS) {
         this->compositor->getRenderer()->ChangeRenderMode(render::Renderer::RenderMode::SOLID);
 
-      Logger::logInfo("Solid mode enabled");
+      Logger::logInfo("ISolid mode enabled");
     }
     if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
         this->compositor->getRenderer()->ChangeRenderMode(render::Renderer::RenderMode::RAY_TRACING);

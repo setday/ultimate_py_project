@@ -5,8 +5,7 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Solid.h
- * PURPOSE   :
+ * FILE NAME : IPhysicalObject.h
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -14,12 +13,25 @@
 
 #pragma once
 
-#include "../PhysicalObject.h"
+#include <vector>
 
-namespace unreal_fluid::physics::solid {
-  class Solid : PhysicalObject {
-    PhysicalObject::Type getType() override;
+namespace unreal_fluid::physics {
+  class IPhysicalObject {
+    friend class Simulator;
+
+  public:
+    enum class Type {
+      SIMPLE_FLUID_CONTAINER,
+      SOLID_SPHERE
+    };
+
+    virtual ~IPhysicalObject() = default;
+
+    virtual void simulate(double dt) = 0;
+
+    virtual Type getType() = 0;
+    virtual void *getData() = 0;
   };
-}
+} // namespace unreal_fluid::physics
 
-// end of Solid.h
+// end of IPhysicalObject.h

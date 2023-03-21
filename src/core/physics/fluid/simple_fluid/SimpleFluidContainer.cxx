@@ -62,7 +62,6 @@ void SimpleFluidContainer::simulate(double dt) {
     addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, -0.5, 0}, 0.02, 1);
     addParticle({1, double(rand() % 100) / 100000, double(rand() % 100) / 100000}, {-0.5, 0, 0}, 0.03, 2);
   }
-
   interact();
   // addExternalForces(dt);
   advect(dt);
@@ -83,8 +82,8 @@ void *SimpleFluidContainer::getData() {
   return &particles;
 }
 
-unreal_fluid::physics::PhysicalObject::Type SimpleFluidContainer::getType() {
-  return physics::PhysicalObject::Type::SIMPLE_FLUID_CONTAINER;
+unreal_fluid::physics::IPhysicalObject::Type SimpleFluidContainer::getType() {
+  return physics::IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER;
 }
 
 void SimpleFluidContainer::addParticle(vec3 position, vec3 velocity, double radius, double mass) {
