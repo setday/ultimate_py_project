@@ -15,3 +15,7 @@
 #include "Solid.h"
 
 using namespace unreal_fluid::physics::solid;
+
+unreal_fluid::physics::PhysicalObject::Type Solid::getType() {
+  return unreal_fluid::physics::PhysicalObject::Type::SOLID;
+}

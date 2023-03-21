@@ -27,7 +27,7 @@ namespace unreal_fluid::physics::fluid {
     explicit SimpleFluidContainer(FluidDescriptor descriptor);
     ~SimpleFluidContainer() override;
     void simulate(double dt) override;
-    
+
     PhysicalObject::Type getType() override;
     void *getData() override;
 
@@ -35,7 +35,7 @@ namespace unreal_fluid::physics::fluid {
     void collide(Particle *p1, Particle *p2) const;
     void advect(double dt);
     void addExternalForces(double dt);
-    void interact(double dt);
+    void interact();
     void addParticle(vec3 position, vec3 velocity, double radius, double mass);
   };
 } // namespace unreal_fluid::physics::fluid

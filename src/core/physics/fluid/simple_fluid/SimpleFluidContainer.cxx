@@ -19,12 +19,7 @@ using namespace unreal_fluid::physics::fluid;
 
 SimpleFluidContainer::SimpleFluidContainer(FluidDescriptor descriptor) {
   k = 0.1;
-  auto particle = new Particle();
-  particle->position = {0.01, -0.01, -0.01};
-  particle->mass = 1000000;
-  particle->radius = 0.3;
-  particles.push_back(particle);
-
+  addParticle({0.01, -0.01, -0.01}, {0, 0, 0}, 0.3, 1000000);
   /// TODO : write constructor implementation
 }
 
@@ -46,28 +41,39 @@ void SimpleFluidContainer::advect(double dt) {
   }
 }
 
-void SimpleFluidContainer::interact(double dt) {
-  for (int i = 0; i < particles.size(); ++i) {
-    for (int j = i + 1; j < particles.size(); ++j) {
-      if ((particles[i]->position - particles[j]->position).len() <= particles[i]->radius + particles[j]->radius) {
-        collide(particles[i], particles[j]);
+void SimpleFluidContainer::interact() {
+  //    for (int i = 0; i < particles.size(); ++i) {
+  //      for (int j = i + 1; j < particles.size(); ++j) {
+  //        if ((particles[i]->position - particles[j]->position).len() <= particles[i]->radius + particles[j]->radius) {
+  //          collide(particles[i], particles[j]);
+  //        }
+  //      }
+  //    }
+
+  CellsDistributor cells(particles);
+  for (auto bigParticle: cells.getBigParticles()) {
+    for (auto particle: particles) {
+      if ((particle->position - bigParticle->position).len() <= particle->radius + bigParticle->radius) {
+        collide(particle, bigParticle);
       }
     }
   }
-
-  //   CellsDistributor cells`(particles);
-  //    std::pair<Particle *, Particle *> p = cells.nextPair();
-  //    while (p != CellsDistributor::terminator) {
-  //        collide(p.first, p.second);
-  //        p = cells.nextPair();
-  //    }`
+  std::pair<Particle *, Particle *> p = cells.nextPair();
+  while (p != CellsDistributor::terminator) {
+    //    std::cout << "Not a terminator\n";
+    if ((p.first->position - p.second->position).len() <= p.first->radius + p.second->radius) {
+      //      std::cout << "And even collides\n";
+      collide(p.first, p.second);
+    }
+    p = cells.nextPair();
+  }
 }
 
 void SimpleFluidContainer::simulate(double dt) {
   addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, -0.5, 0}, 0.02, 1);
 
-  interact(dt);
-  //  addExternalForces(dt);
+  interact();
+  // addExternalForces(dt);
   advect(dt);
 }
 

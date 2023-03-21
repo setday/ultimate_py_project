@@ -17,8 +17,8 @@
 #include "../PhysicalObject.h"
 
 namespace unreal_fluid::physics::solid {
-  class Solid {
-    /// TODO write solid implementation
+  class Solid : PhysicalObject {
+    PhysicalObject::Type getType() override;
   };
 }
 

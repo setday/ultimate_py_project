@@ -18,6 +18,8 @@ using namespace unreal_fluid::physics::fluid;
 
 std::pair<Particle *, Particle *> CellsDistributor::nextPair() {
 
+  if (cell_iterator == cells.end()) return terminator;
+
   if (second >= cell_iterator->second.size()) {
     first++;
     second = first + 1;
@@ -37,29 +39,37 @@ std::pair<Particle *, Particle *> CellsDistributor::nextPair() {
 CellsDistributor::CellsDistributor(std::vector<Particle *> &particles) {
 
   double averageRadius = 0;
-  for (const auto &particle: particles) {
-    averageRadius += particle->radius;
-  }
+  for (const auto &particle: particles) averageRadius += particle->radius;
   averageRadius /= particles.size();
 
-  double dx = 1 ; // 3 * averageRadius;
+  double cellSize = 5 * averageRadius;
 
-  for (const auto& particle: particles) {
-    auto [x, y, z] = particle->position;
-
-    x /= dx;
-    y /= dx;
-    z /= dx;
-
-    uint64_t id = ((uint64_t) x << 32) + ((uint64_t) y << 16) + (uint64_t) z;
-    cells[id].push_back(particle);
+  for (const auto &particle: particles) {
+    if (particle->radius > cellSize) {
+      big_particles.push_back(particle);
+      continue;
+    }
+    
+    math::Vector3<uint64_t> position = particle->position / cellSize;
+    for (const auto &diff: bias) {
+      if ((position + diff).len() <= particle->radius && (position + diff).x >= 0 && (position + diff).y >= 0 && (position + diff).z >= 0) {
+        cells[getId(position + diff)].push_back(particle);
+      }
+    }
   }
 
   first = 0;
   second = 1;
-
   cell_iterator = cells.begin();
-  Logger::logWarning(cells.size(), particles.size(), dx, averageRadius);
+  //  Logger::logWarning(cells.size(), particles.size(), dx, averageRadius);
+}
+
+std::vector<Particle *> &CellsDistributor::getBigParticles() {
+  return big_particles;
+}
+
+uint64_t CellsDistributor::getId(vec3 position) {
+  return ((uint64_t) (position.x) << 32) + ((uint64_t) (position.y) << 16) + (uint64_t) position.z;
 }
 
 // end of CellsDistributor.cxx
