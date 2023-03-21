@@ -5,8 +5,8 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : SimpleFluidContainer.h
- * PURPOSE   : Simple fluid simulation class, which implements ASS collision
+ * FILE NAME : SolidSphere
+ * PURPOSE   : solid class
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -14,27 +14,24 @@
 
 #include "SolidSphere.h"
 
-unreal_fluid::physics::solid::SolidSphere::SolidSphere(vec3 position, double radius) {
-    this->position = position;
-    this->radius = radius;
+using namespace unreal_fluid::physics::solid;
+
+SolidSphere::SolidSphere(vec3 position, double radius) : position(position),
+                                                         radius(radius) {}
+
+unreal_fluid::physics::IPhysicalObject::Type SolidSphere::getType() {
+  return physics::IPhysicalObject::Type::SOLID_SPHERE;
 }
 
-unreal_fluid::physics::IPhysicalObject::Type unreal_fluid::physics::solid::SolidSphere::getType() {
-    return unreal_fluid::physics::IPhysicalObject::Type::SOLID_SPHERE;
+const vec3 &SolidSphere::getPosition() const {
+  return position;
 }
 
-void *unreal_fluid::physics::solid::SolidSphere::getData() {
-    return this;
+double SolidSphere::getRadius() const {
+  return radius;
 }
 
-const vec3 &unreal_fluid::physics::solid::SolidSphere::getPosition() const {
-    return position;
+void *SolidSphere::getData() {
+  /// TODO this is usless function, how to remove it?
+  return this;
 }
-
-double unreal_fluid::physics::solid::SolidSphere::getRadius() const {
-    return radius;
-}
-
-void unreal_fluid::physics::solid::SolidSphere::simulate(double dt) {}
-
-

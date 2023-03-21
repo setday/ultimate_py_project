@@ -5,34 +5,30 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : SimpleFluidContainer.h
- * PURPOSE   : Simple fluid simulation class, which implements ASS collision
+ * FILE NAME : SolidSphere.h
+ * PURPOSE   : Solid class
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
 
 #pragma once
-#include "../IPhysicalObject.h"
 #include "../../../utils/math/MathHeaders"
+#include "../IPhysicalObject.h"
 
-namespace unreal_fluid::physics::solid{
-    class SolidSphere : public IPhysicalObject{
-        vec3 position{};
-        double radius;
-    public:
-        SolidSphere(vec3 position, double radius);
-        ~SolidSphere() override = default;
-        Type getType() override;
-        void *getData() override;
+namespace unreal_fluid::physics::solid {
+  class SolidSphere : public IPhysicalObject {
+    vec3 position;
+    double radius;
 
-    private:
-        void simulate(double dt) override;
+  private:
+    void simulate(double dt) override{};
 
-    public:
-        [[nodiscard]] const vec3 &getPosition() const;
-        [[nodiscard]] double getRadius() const;
-    };
-}
-
-
+  public:
+    SolidSphere(vec3 position, double radius);
+    Type getType() override;
+    void *getData() override;
+    [[nodiscard]] const vec3 &getPosition() const;
+    [[nodiscard]] double getRadius() const;
+  };
+} // namespace unreal_fluid::physics::solid
