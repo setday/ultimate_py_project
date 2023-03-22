@@ -48,6 +48,7 @@ set(LIBS
 add_executable(
         ${PROJECT_NAME}
 
+        src/utils/timer/Timer.cxx
         src/utils/Logger.cxx
 
         src/core/render/components/mesh/Vertex.cxx

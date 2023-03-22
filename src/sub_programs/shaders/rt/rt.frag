@@ -66,7 +66,7 @@ Intersection intersectSphere(Ray ray, vec3 center, float radius) {
     if (discriminant < 0.0) {
         return Intersection(0.0, vec3(0.0), vec3(0.0), vec3(0.0), 0.0, 0.0, 1.0);
     } else {
-        float normsign = 1;
+        int normsign = 1;
         float t = (-b - sqrt(discriminant)) / (2.0 * a);
 
         if (t < 0.0) {
@@ -118,13 +118,23 @@ vec4 traceRay(Ray ray, int depth) {
         0,
         1,
         0,
+        0,
+        0,
+        0,
+        0,
+        0,
         0
     );
     vec3 poses[] = vec3[](
         vec3(-0.75, -3.0, -5.0),
         vec3(0.0, -5.0, 0.0),
         vec3(0.75, -3.0, -5.0),
-        vec3(0.0, -4.9, 0.0)
+        vec3(0.0, -4.9, 1.0),
+        vec3(1.0, -4.9, 0.0),
+        vec3(0.0, -4.9, -1.0),
+        vec3(-1.0, -4.9, 0.0),
+        vec3(0.0, -5.9, 0.0),
+        vec3(0.0, -3.9, 0.0)
     );
 
     vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
@@ -151,7 +161,7 @@ vec4 traceRay(Ray ray, int depth) {
 
             Intersection tmpI;
 
-            for (int j = 0; j < 4; j++) {
+            for (int j = 0; j < 9; j++) {
                 if (meshTypes[j] == 0) {
                     tmpI = intersectSphere(ray, poses[j], 0.5);
                 } else if (meshTypes[j] == 1) {
@@ -281,8 +291,8 @@ Ray MakeRay(float dx, float dy) {
 }
 
 void main() {
-    int depth = 4;
-    int samling = 1;
+    int depth = 8;
+    int samling = 3;
 
     vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
 

@@ -31,21 +31,19 @@ ShaderManager::ShaderManager() {
   const Shader *vertBase = LoadShader("default/simple.vert");
   const Shader *fragBase = LoadShader("default/simple.frag");
 
-  if (vertBase && fragBase) {
-    _defaultProgram = CreateProgram({vertBase, fragBase});
-  } else {
+  if (vertBase == nullptr || fragBase == nullptr)
     Logger::logFatal("ShaderManager : Can't load default shaders");
-  };
+
+  _defaultProgram = CreateProgram({vertBase, fragBase});
 
   // Load ray tracing shaders
   const Shader *vertRT = LoadShader("rt/rt.vert");
   const Shader *fragRT = LoadShader("rt/rt.frag");
 
-  if (fragRT && vertRT) {
-    _rtProgram = CreateProgram({vertRT, fragRT});
-  } else {
+  if (fragRT == nullptr || vertRT == nullptr)
     Logger::logFatal("ShaderManager : Can't load ray tracing shaders");
-  };
+
+  _rtProgram = CreateProgram({vertRT, fragRT});
 }
 
 ShaderManager::~ShaderManager() {

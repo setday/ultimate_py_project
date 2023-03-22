@@ -33,6 +33,8 @@ namespace unreal_fluid::compositor {
     std::vector<Scene *> _scenes;
     Core *_core;
 
+    utils::Timer _timer;
+
   public:
     explicit Compositor(Core *core);
     ~Compositor();

@@ -29,6 +29,8 @@ namespace unreal_fluid::render {
     GLuint _rtubo; // ray tracing uniform buffer object
     std::vector<const RenderObject *> _objectsToRender;
 
+    utils::Timer _timer;
+
   public:
     Camera camera;
 
@@ -45,7 +47,6 @@ namespace unreal_fluid::render {
     void RenderObject(const render::RenderObject *object);
     /// Render all objects.
     /// @param objects Objects to render.
-    [[deprecated("Use RenderObject() instead")]]
     void RenderAllObjects(const std::vector<render::RenderObject *> &objects);
     /// End rendering frame.
     void EndFrame();

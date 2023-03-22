@@ -15,6 +15,9 @@ void Renderer::Init() {
 
   ChangeRenderMode(RenderMode::SOLID);
 
+  _timer.pause();
+  _timer.reset();
+
   Logger::logInfo("Renderer initialized!");
 } // end of Renderer::Renderer() function
 
@@ -80,6 +83,8 @@ void Renderer::InitBuffers() {
 
 void Renderer::StartFrame() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  _timer.resume();
 
   _objectsToRender.clear();
 } // end of Renderer::startFrame() function
@@ -200,6 +205,14 @@ void Renderer::EndFrame() {
   }
 
   glFinish();
+
+  _timer.pause();
+  _timer.incrementCounter();
+
+  if (_timer.getCounter() >= 400) {
+    Logger::logInfo("Rendering time: ", _timer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms");
+    _timer.reset();
+  }
 } // end of Renderer::endFrame() function
 
 void Renderer::Destroy() {
