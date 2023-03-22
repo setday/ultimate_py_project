@@ -17,9 +17,11 @@
 #include "../../PhysicsDefinitions.h"
 #include "../IFluidContainer.h"
 #include "CellsDistributor.h"
+#include "../../Simulator.h"
 
 namespace unreal_fluid::physics::fluid {
   class SimpleFluidContainer : public IFluidContainer {
+      friend Simulator;
   private:
     double k;
 
@@ -37,6 +39,8 @@ namespace unreal_fluid::physics::fluid {
     void addExternalForces(double dt);
     void interact();
     void addParticle(vec3 position, vec3 velocity, double radius, double mass);
+    void interact(solid::ISolid* solid) override;
+    void collideWithSolidSphere(solid::SolidSphere* sphere);
   };
 } // namespace unreal_fluid::physics::fluid
 

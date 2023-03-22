@@ -84,7 +84,7 @@ add_executable(
         src/core/Compositor.cxx
         src/core/Core.cxx
         src/main.cxx
-        scenes/SimpleFluidScene.cxx src/core/physics/fluid/simple_fluid/CollisionPairs.cpp src/core/physics/fluid/simple_fluid/CollisionPairs.h src/core/physics/solid/SolidSphere.cpp src/core/physics/solid/SolidSphere.h)
+        scenes/SimpleFluidScene.cxx src/core/physics/fluid/simple_fluid/CollisionPairs.cpp src/core/physics/fluid/simple_fluid/CollisionPairs.h src/core/physics/solid/sphere/SolidSphere.cpp src/core/physics/solid/sphere/SolidSphere.h src/core/physics/solid/ISolid.h)
 
 message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})

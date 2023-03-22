@@ -15,13 +15,13 @@
 
 #include <vector>
 #include "../../utils/math/MathHeaders"
-#include "IPhysicalObject.h"
+#include "solid/sphere/SolidSphere.h"
 
 namespace unreal_fluid::physics {
   class Simulator {
   private:
-    std::vector<IPhysicalObject *> _physicalObjects;
-
+    std::vector<IPhysicalObject *> dynamicObjects;
+    std::vector<solid::ISolid*> solidObjects;
   public:
     Simulator() = default;
     ~Simulator() = default;

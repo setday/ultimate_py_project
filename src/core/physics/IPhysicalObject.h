@@ -15,7 +15,11 @@
 
 #include <vector>
 
+
 namespace unreal_fluid::physics {
+    namespace solid{
+        class ISolid;
+    }
   class IPhysicalObject {
     friend class Simulator;
 
@@ -28,7 +32,7 @@ namespace unreal_fluid::physics {
     virtual ~IPhysicalObject() = default;
 
     virtual void simulate(double dt) = 0;
-
+    virtual void interact(solid::ISolid* solid) = 0;
     virtual Type getType() = 0;
     virtual void *getData() = 0;
   };

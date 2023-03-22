@@ -14,7 +14,7 @@
 #include "AbstractObject.h"
 #include "../src/core/render/components/material/MaterialFactory.h"
 #include "../src/core/render/components/mesh/presets/Sphere.h"
-#include "../src/core/physics/solid/SolidSphere.h"
+#include "../physics/solid/sphere/SolidSphere.h"
 
 using namespace unreal_fluid;
 

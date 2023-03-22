@@ -13,9 +13,26 @@
  */
 
 #include "CollisionPairs.h."
+#include "CollisionPairs.h"
 
-void unreal_fluid::physics::fluid::CollisionPairs::particleAndParticle(unreal_fluid::physics::fluid::Particle *p1,
-                                                                       unreal_fluid::physics::fluid::Particle *p2,
-                                                                       double k) {
 
+void unreal_fluid::physics::fluid::CollisionPairs::particleAndParticle(Particle *p1, Particle *p2, double k) {
+    vec3 y = p2->position - p1->position;
+    y.normalizeSelf();
+    double push = (p1->radius + p2->radius - p1->position.distanceTo(p2->position)) / (p1->mass + p2->mass);
+    p2->position += y * push * p1->mass;
+    p1->position -= y * push * p2->mass;
+    double s = -(1 + k) * (p1->velocity.project(y) - p2->velocity.project(y)) * p1->mass * p2->mass / (p1->mass + p2->mass);
+    p1->velocity += y * (s / p1->mass);
+    p2->velocity -= y * (s / p2->mass);
+}
+
+void
+unreal_fluid::physics::fluid::CollisionPairs::particleAndSolidSphere(Particle *p, solid::SolidSphere *s, double k) {
+    vec3 y = s->getPosition() - p->position;
+    y.normalizeSelf();
+    vec3 spherePosition = s->getPosition();
+    double push = s->getRadius() + p->radius - p->position.distanceTo(spherePosition);
+    p->position -= y * push;
+    p->velocity -= y*(1+k)*p->velocity.project(y);
 }

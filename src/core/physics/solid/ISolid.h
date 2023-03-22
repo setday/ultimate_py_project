@@ -5,21 +5,19 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : SimpleFluidContainer.h
+ * FILE NAME : SimpleFluidContainer.cxx
  * PURPOSE   : Simple fluid simulation class, which implements ASS collision
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
+
+
 #pragma once
-#include "../Particle.h"
-#include "../../solid/sphere/SolidSphere.h"
+#include "../IPhysicalObject.h"
 
-namespace unreal_fluid::physics::fluid{
-    class CollisionPairs{
-    public:
-        static void particleAndParticle(Particle* p1, Particle* p2, double k);
-        static void particleAndSolidSphere(Particle* p, solid::SolidSphere* solid, double k);
+namespace unreal_fluid::physics::solid{
+    class ISolid : public IPhysicalObject{
+
     };
-
 }

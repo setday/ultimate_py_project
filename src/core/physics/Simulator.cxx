@@ -16,18 +16,28 @@
 using namespace unreal_fluid::physics;
 
 void Simulator::addPhysicalObject(IPhysicalObject *physicalObject) {
-  _physicalObjects.push_back(physicalObject);
+    if (physicalObject->getType() == IPhysicalObject::Type::SOLID_SPHERE) {
+        solidObjects.push_back((solid::ISolid *) physicalObject);
+    } else {
+        dynamicObjects.push_back(physicalObject);
+    }
 }
 
 void Simulator::simulate(double dt) {
-  /// TODO simulate interaction between solids and fluids
-  for (auto &physObject: _physicalObjects) {
-    physObject->simulate(dt);
-  }
+    for (auto &physObject: dynamicObjects) {
+        physObject->simulate(dt);
+    }
+
+    for (auto &physObject: dynamicObjects) {
+        for (auto & solidObject : solidObjects) {
+            physObject->interact(solidObject);
+        }
+    }
 }
 
 void Simulator::clearData() {
-  _physicalObjects.clear();
+    dynamicObjects.clear();
+    solidObjects.clear();
 }
 
 // end of Simulator.cpp
