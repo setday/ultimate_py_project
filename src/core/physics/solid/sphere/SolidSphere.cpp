@@ -34,5 +34,3 @@ unreal_fluid::physics::IPhysicalObject::Type SolidSphere::getType() {
 void *SolidSphere::getData() {
   return this;
 }
-
-void SolidSphere::interact(ISolid *solid) {}

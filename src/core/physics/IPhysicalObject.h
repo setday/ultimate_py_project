@@ -17,25 +17,26 @@
 
 
 namespace unreal_fluid::physics {
-    namespace solid{
-        class ISolid;
-    }
-  class IPhysicalObject {
-    friend class Simulator;
+    class Simulator;
 
-  public:
-    enum class Type {
-      SIMPLE_FLUID_CONTAINER,
-      SOLID_SPHERE
+    class IPhysicalObject {
+        friend class Simulator;
+
+    public:
+        enum class Type {
+            SIMPLE_FLUID_CONTAINER,
+            SOLID_SPHERE
+        };
+
+        virtual ~IPhysicalObject() = default;
+
+        virtual Type getType() = 0;
+
+        virtual void *getData() = 0;
+
+    private:
+        virtual void simulate(double dt) = 0;
     };
-
-    virtual ~IPhysicalObject() = default;
-
-    virtual void simulate(double dt) = 0;
-    virtual void interact(solid::ISolid* solid) = 0;
-    virtual Type getType() = 0;
-    virtual void *getData() = 0;
-  };
 } // namespace unreal_fluid::physics
 
 // end of IPhysicalObject.h

@@ -12,6 +12,7 @@
  */
 
 #include "Simulator.h"
+#include "fluid/simple_fluid/CollisionPairs.h"
 
 using namespace unreal_fluid::physics;
 
@@ -30,7 +31,7 @@ void Simulator::simulate(double dt) {
 
     for (auto &physObject: dynamicObjects) {
         for (auto & solidObject : solidObjects) {
-            physObject->interact(solidObject);
+            interact(physObject, solidObject);
         }
     }
 }
@@ -38,6 +39,20 @@ void Simulator::simulate(double dt) {
 void Simulator::clearData() {
     dynamicObjects.clear();
     solidObjects.clear();
+}
+
+void Simulator::interact(IPhysicalObject *dynamicObject, solid::ISolid *solid) {
+   if (dynamicObject->getType() == IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER){
+       auto fluid = (fluid::SimpleFluidContainer*)dynamicObject;
+       if (solid->getType() == IPhysicalObject::Type::SOLID_SPHERE){
+           auto sphere = (solid::SolidSphere*)solid;
+           for (auto & particle : fluid->particles) {
+               if ((particle->position - sphere->position).len() <= particle->radius + sphere->radius){
+                   fluid::CollisionPairs::particleAndSolidSphere(particle, sphere, fluid->k);
+               }
+           }
+       }
+   }
 }
 
 // end of Simulator.cpp

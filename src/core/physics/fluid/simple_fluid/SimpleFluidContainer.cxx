@@ -68,7 +68,7 @@ void SimpleFluidContainer::interact() {
 
 void SimpleFluidContainer::simulate(double dt) {
     for (int i = 0; i < 10; ++i) {
-        addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, -0.5, 0}, 0.02, 1);
+        addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, 0, 0}, 0.02, 1);
         //addParticle({1, double(rand() % 100) / 100000, double(rand() % 100) / 100000}, {-0.5, 0, 0}, 0.03, 2);
     }
     interact();
@@ -95,20 +95,6 @@ void SimpleFluidContainer::addParticle(vec3 position, vec3 velocity, double radi
     particle->radius = radius;
     particle->velocity = velocity;
     particles.push_back(particle);
-}
-
-void SimpleFluidContainer::interact(unreal_fluid::physics::solid::ISolid *solid) {
-    if (solid->getType() == Type::SOLID_SPHERE) {
-        collideWithSolidSphere((solid::SolidSphere *) solid);
-    }
-}
-
-void SimpleFluidContainer::collideWithSolidSphere(unreal_fluid::physics::solid::SolidSphere *sphere) {
-    for (auto &particle: particles) {
-        if ((particle->position - sphere->getPosition()).len() <= particle->radius + sphere->getRadius()) {
-            CollisionPairs::particleAndSolidSphere(particle, sphere, k);
-        }
-    }
 }
 
 // end of FluidContainer.cxx

@@ -12,7 +12,6 @@
  * authors of this project.
  */
 
-#include "CollisionPairs.h."
 #include "CollisionPairs.h"
 
 

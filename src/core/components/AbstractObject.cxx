@@ -18,10 +18,6 @@
 
 using namespace unreal_fluid;
 
-AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) : physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)) {
-  /// TODO add nullptr check
-}
-
 AbstractObject::AbstractObject(physics::IPhysicalObject* physObject) {
     physicalObject = physObject;
 }

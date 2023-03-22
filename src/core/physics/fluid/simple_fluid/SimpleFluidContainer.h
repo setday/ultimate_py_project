@@ -19,29 +19,40 @@
 #include "CellsDistributor.h"
 #include "../../Simulator.h"
 
+namespace unreal_fluid::physics {
+    class Simulator;
+}
+
 namespace unreal_fluid::physics::fluid {
-  class SimpleFluidContainer : public IFluidContainer {
-      friend Simulator;
-  private:
-    double k;
+    class SimpleFluidContainer : public IFluidContainer {
+        friend class ::unreal_fluid::physics::Simulator;
 
-  public:
-    explicit SimpleFluidContainer(FluidDescriptor descriptor);
-    ~SimpleFluidContainer() override;
-    void simulate(double dt) override;
+    private:
+        double k;
 
-    IPhysicalObject::Type getType() override;
-    void *getData() override;
+    public:
+        explicit SimpleFluidContainer(FluidDescriptor descriptor);
 
-  private:
-    void collide(Particle *p1, Particle *p2) const;
-    void advect(double dt);
-    void addExternalForces(double dt);
-    void interact();
-    void addParticle(vec3 position, vec3 velocity, double radius, double mass);
-    void interact(solid::ISolid* solid) override;
-    void collideWithSolidSphere(solid::SolidSphere* sphere);
-  };
+        ~SimpleFluidContainer() override;
+
+        IPhysicalObject::Type getType() override;
+
+        void *getData() override;
+
+    private:
+
+        void simulate(double dt) override;
+
+        void collide(Particle *p1, Particle *p2) const;
+
+        void advect(double dt);
+
+        void addExternalForces(double dt);
+
+        void interact();
+
+        void addParticle(vec3 position, vec3 velocity, double radius, double mass);
+    };
 } // namespace unreal_fluid::physics::fluid
 
 // end of FluidContainer.h
