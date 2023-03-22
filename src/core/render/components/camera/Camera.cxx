@@ -37,8 +37,25 @@ vec3f Camera::getPosition() const {
 }
 
 void Camera::setPosition(const vec3f &position) {
-  _position = position;
+  _targetPosition = position;
+  _interpolationFactor = 0.f;
+  _interpolationTimer.reset();
+}
+
+void Camera::setPositionHard(const vec3f &position) {
+  _targetPosition = _position = position;
   updateViewMatrix();
+}
+
+void Camera::updatePosition() {
+  _interpolationFactor += 0.1f;
+
+  if (_interpolationFactor < 1.f) {
+    _position = _position.lerped(_targetPosition, _interpolationFactor);
+    updateViewMatrix();
+  } else {
+    _position = _targetPosition;
+  }
 }
 
 vec3f Camera::getDirection() const {

@@ -24,26 +24,6 @@ ShaderManager::ShaderManager() {
   _shaders.reserve(10);
   _shaderPaths.reserve(10);
   _programs.reserve(10);
-
-  glewInit();
-
-  // Load default shaders
-  const Shader *vertBase = LoadShader("default/simple.vert");
-  const Shader *fragBase = LoadShader("default/simple.frag");
-
-  if (vertBase == nullptr || fragBase == nullptr)
-    Logger::logFatal("ShaderManager : Can't load default shaders");
-
-  _defaultProgram = CreateProgram({vertBase, fragBase});
-
-  // Load ray tracing shaders
-  const Shader *vertRT = LoadShader("rt/rt.vert");
-  const Shader *fragRT = LoadShader("rt/rt.frag");
-
-  if (fragRT == nullptr || vertRT == nullptr)
-    Logger::logFatal("ShaderManager : Can't load ray tracing shaders");
-
-  _rtProgram = CreateProgram({vertRT, fragRT});
 }
 
 ShaderManager::~ShaderManager() {
@@ -102,14 +82,6 @@ const Shader *ShaderManager::LoadShader(std::string_view path) {
   _shaders.push_back(shader);
 
   return shader;
-}
-
-const ShaderProgram *ShaderManager::GetDefaultProgram() const {
-  return _defaultProgram;
-}
-
-const ShaderProgram *ShaderManager::GetRayTracingProgram() const {
-  return _rtProgram;
 }
 
 const ShaderProgram *ShaderManager::CreateProgram(const std::vector<const Shader *> &shaders) {
@@ -185,6 +157,52 @@ void ShaderManager::ReloadShaders() {
   for (auto & _program : _programs) {
     _program->ReattachShaders();
   }
+}
+
+const ShaderProgram *DefaultShaderManager::_defaultProgram = nullptr;
+const ShaderProgram *DefaultShaderManager::_rtProgram = nullptr;
+DefaultShaderManager DefaultShaderManager::_instance = DefaultShaderManager();
+
+const ShaderProgram *DefaultShaderManager::GetDefaultProgram() {
+  if (_defaultProgram == nullptr) {
+    // Load default shaders
+    const Shader *vertBase = _instance.LoadShader("default/simple.vert");
+    const Shader *fragBase = _instance.LoadShader("default/simple.frag");
+
+    if (vertBase != nullptr && fragBase != nullptr)
+      _defaultProgram = _instance.CreateProgram({vertBase, fragBase});
+
+    if (_defaultProgram == nullptr)
+      Logger::logFatal("DefaultShaderManager : Default program is not loaded!",
+                       "It can cause a segmentation fault, so the program will be closed!");
+
+    Logger::logInfo("DefaultShaderManager : Default program is loaded!");
+  }
+
+  return _defaultProgram;
+}
+
+const ShaderProgram *DefaultShaderManager::GetRayTracingProgram() {
+  if (_rtProgram == nullptr) {
+    // Load ray tracing shaders
+    const Shader *vertRT = _instance.LoadShader("rt/rt.vert");
+    const Shader *fragRT = _instance.LoadShader("rt/rt.frag");
+
+    if (fragRT != nullptr && vertRT != nullptr)
+      _rtProgram = _instance.CreateProgram({vertRT, fragRT});
+
+    if (_rtProgram == nullptr)
+      Logger::logFatal("DefaultShaderManager : Ray tracing program is not loaded!",
+                       "It can cause a segmentation fault, so the program will be closed!");
+
+    Logger::logInfo("DefaultShaderManager : Ray tracing program is loaded!");
+  }
+
+  return _rtProgram;
+}
+
+void DefaultShaderManager::ReloadShaders() {
+  static_cast<ShaderManager &>(_instance).ReloadShaders();
 }
 
 // end of ShaderManager.cxx

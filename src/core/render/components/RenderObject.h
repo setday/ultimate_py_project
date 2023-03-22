@@ -4,14 +4,14 @@
 
 #include "mesh/BasicMesh.h"
 #include "material/BaseMaterial.h"
-#include "shaders/ShaderProgram.h"
+#include "../../managers/sub_programs_managers/shader_manager/ShaderManager.h"
 
 namespace unreal_fluid::render {
   class RenderObject {
   public:
     mesh::BasicMesh mesh;
     material::BaseMaterial material;
-    const ShaderProgram *shaderProgram = nullptr;
+    const ShaderProgram *shaderProgram = render::DefaultShaderManager::GetDefaultProgram();
 
     mat4 modelMatrix = mat4();
 

@@ -5,6 +5,8 @@ using namespace unreal_fluid::render;
 void Renderer::Init() {
   Logger::logInfo("Initializing renderer...");
 
+  glewInit();
+
   _shaderManager = new ShaderManager();
 
   camera = Camera(vec3f(0.0f, 0.0f, 0.0f), vec3f(0.0f, 0.0f, -1.0f),
@@ -153,9 +155,9 @@ void Renderer::RenderAllObjects(const std::vector<render::RenderObject *> &objec
 
 void Renderer::EndFrame() {
   if (_renderMode == RenderMode::RAY_TRACING) {
-    _shaderManager->GetRayTracingProgram()->Execute();
+    DefaultShaderManager::GetRayTracingProgram()->Execute();
 
-    GLuint programID = _shaderManager->GetRayTracingProgram()->GetProgramID();
+    GLuint programID = DefaultShaderManager::GetRayTracingProgram()->GetProgramID();
 
     struct RayTracingVertex {
       mat4 modelMatrix;

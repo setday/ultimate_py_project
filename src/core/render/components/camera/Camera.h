@@ -35,6 +35,10 @@ namespace unreal_fluid::render {
     mat4 _view;
     mat4 _projection;
 
+    vec3f _targetPosition;
+    float _interpolationFactor;
+    utils::Timer _interpolationTimer;
+
   private:
     /// Update view matrix
     void updateViewMatrix();
@@ -60,9 +64,16 @@ namespace unreal_fluid::render {
     /// @return position of camera
     vec3f getPosition() const;
 
-    /// Set position of camera
+    /// Set position of camera with interpolation
     /// @param position - position of camera
     void setPosition(const vec3f &position);
+
+    /// Set position of camera without interpolation
+    /// @param position - position of camera
+    void setPositionHard(const vec3f &position);
+
+    /// Update camera position
+    void updatePosition();
 
     /// Get direction of camera
     /// @return direction of camera

@@ -34,27 +34,27 @@ public:
   explicit GlTestScene(compositor::Compositor const * compositor) : Scene(compositor), compositor(compositor) {
     sphere = new render::RenderObject();
     sphere->mesh = render::mesh::Sphere(.5f, 50, 50);
-    sphere->modelMatrix = mat4::rotation(0.f, {0.f, 0.f, 1.f});
-    sphere->modelMatrix *= mat4::translation({-.75f, 0.f, -5.f});
-    sphere->shaderProgram = compositor->GetRenderer()->GetShaderManager()->GetDefaultProgram();
+    sphere->modelMatrix =
+            mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
+            mat4::translation({-.75f, 0.f, -5.f});
     sphere->material = render::material::MaterialFactory::createMaterial(
             render::material::MaterialFactory::MaterialType::WATTER
             );
 
     plane = new render::RenderObject();
     plane->mesh = render::mesh::Plane(2.5f, 2.5f, 10, 10);
-    plane->modelMatrix = mat4::rotation(0.f, {0.f, 0.f, 1.f});
-    plane->modelMatrix *= mat4::translation({0.f, -1.f, -5.f});
-    plane->shaderProgram = compositor->GetRenderer()->GetShaderManager()->GetDefaultProgram();
+    plane->modelMatrix =
+            mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
+            mat4::translation({0.f, -1.f, -5.f});
     plane->material = render::material::MaterialFactory::createMaterial(
             render::material::MaterialFactory::MaterialType::CYAN_PLASTIC
     );
 
     cube = new render::RenderObject();
     cube->mesh = render::mesh::Cube(.5f);
-    cube->modelMatrix = mat4::rotation(0.f, {0.f, 0.f, 1.f});
-    cube->modelMatrix *= mat4::translation({.75f, 0.f, -5.f});
-    cube->shaderProgram = compositor->GetRenderer()->GetShaderManager()->GetDefaultProgram();
+    cube->modelMatrix =
+            mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
+            mat4::translation({.75f, 0.f, -5.f});
     cube->material = render::material::MaterialFactory::createMaterial(
             render::material::MaterialFactory::MaterialType::RUBY
     );
@@ -63,11 +63,13 @@ public:
   void Update() override {
     auto time = utils::Timer::getCurrentTimeAsDouble();
 
-    sphere->modelMatrix = mat4::rotationY(std::sin(time / 10) * 100);
-    sphere->modelMatrix *= mat4::translation({-.75f, 0.f, -5.f});
+    sphere->modelMatrix =
+            mat4::rotationY(std::sin(time / 10) * 100) *
+            mat4::translation({-.75f, 0.f, -5.f});
 
-    cube->modelMatrix = mat4::rotationY(-std::sin(time / 10) * 100);
-    cube->modelMatrix *= mat4::translation({.75f, 0.f, -5.f});
+    cube->modelMatrix =
+            mat4::rotationY(-std::sin(time / 10) * 100) *
+            mat4::translation({.75f, 0.f, -5.f});
   }
 
   void Render() override {

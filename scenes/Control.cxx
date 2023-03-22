@@ -21,9 +21,9 @@ public:
   const compositor::Compositor *compositor;
   render::Renderer::RenderMode renderMode = render::Renderer::RenderMode::SOLID;
   vec3f cameraPosition = {0.f, 0.f, 0.f};
-  bool positionChanged = false;
+  vec3f cameraSpeed = {0.f, 0.f, 0.f};
   vec2f cameraRotation = {0.f, M_PI};
-  bool angleChanged = false;
+  vec2f cameraRotationSpeed = {0.f, 0.f};
 
   explicit Control(compositor::Compositor const * compositor) : Scene(compositor), compositor(compositor) {
     compositor->GetCore()->GetWindowCompositor()->addKeyboardCallback([this](int key, int action) {
@@ -45,65 +45,35 @@ public:
       this->compositor->GetRenderer()->ChangeRenderMode(this->renderMode);
     }
 
-    positionChanged = false;
+    if (key == GLFW_KEY_W)
+      cameraSpeed += this->compositor->GetRenderer()->camera.getDirection() / 8;
+    if (key == GLFW_KEY_S)
+      cameraSpeed -= this->compositor->GetRenderer()->camera.getDirection() / 8;
+    if (key == GLFW_KEY_D)
+      cameraSpeed -= vec3f(0.f, 1.f, 0.f).cross(this->compositor->GetRenderer()->camera.getDirection()) / 8;
+    if (key == GLFW_KEY_A)
+      cameraSpeed += vec3f(0.f, 1.f, 0.f).cross(this->compositor->GetRenderer()->camera.getDirection()) / 8;
 
-    if (key == GLFW_KEY_W) {
-      cameraPosition += this->compositor->GetRenderer()->camera.getDirection() / 4;
-      positionChanged = true;
-    }
-    if (key == GLFW_KEY_S) {
-      cameraPosition -= this->compositor->GetRenderer()->camera.getDirection() / 4;
-      positionChanged = true;
-    }
-    if (key == GLFW_KEY_D) {
-      cameraPosition -= vec3f(0.f, 1.f, 0.f).cross(this->compositor->GetRenderer()->camera.getDirection()) / 4;
-      positionChanged = true;
-    }
-    if (key == GLFW_KEY_A) {
-      cameraPosition += vec3f(0.f, 1.f, 0.f).cross(this->compositor->GetRenderer()->camera.getDirection()) / 4;
-      positionChanged = true;
-    }
+    if (key == GLFW_KEY_SPACE)
+      cameraSpeed += vec3f(0.f, 1.f, 0.f) / 8;
+    if (key == GLFW_KEY_LEFT_SHIFT)
+      cameraSpeed -= vec3f(0.f, 1.f, 0.f) / 8;
 
-    if (key == GLFW_KEY_SPACE) {
-      cameraPosition += vec3f(0.f, 1.f, 0.f) / 4;
-      positionChanged = true;
-    }
-    if (key == GLFW_KEY_LEFT_SHIFT) {
-      cameraPosition -= vec3f(0.f, 1.f, 0.f) / 4;
-      positionChanged = true;
-    }
+    cameraSpeed.clampSelf(-0.1f, 0.1f);
 
-    if (key == GLFW_KEY_UP) {
-      cameraRotation.x += 0.1f;
-      angleChanged = true;
-    }
+    if (key == GLFW_KEY_UP)
+      cameraRotationSpeed.x += 0.02f;
+    if (key == GLFW_KEY_DOWN)
+      cameraRotationSpeed.x -= 0.02f;
+    if (key == GLFW_KEY_LEFT)
+      cameraRotationSpeed.y += 0.02f;
+    if (key == GLFW_KEY_RIGHT)
+      cameraRotationSpeed.y -= 0.02f;
 
-    if (key == GLFW_KEY_DOWN) {
-      cameraRotation.x -= 0.1f;
-      angleChanged = true;
-    }
+    cameraRotationSpeed.clampSelf(-0.2f, 0.2f);
 
-    if (key == GLFW_KEY_LEFT) {
-      cameraRotation.y += 0.1f;
-      angleChanged = true;
-    }
-
-    if (key == GLFW_KEY_RIGHT) {
-      cameraRotation.y -= 0.1f;
-      angleChanged = true;
-    }
-
-    if (positionChanged) {
-      this->compositor->GetRenderer()->camera.setPosition(cameraPosition);
-    }
-
-    if (angleChanged) {
-      this->compositor->GetRenderer()->camera.setDirection(cameraRotation.y, cameraRotation.x);
-    }
-
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
       this->compositor->GetCore()->Shutdown();
-    }
 
     if (key == GLFW_KEY_F2 && action == GLFW_PRESS) {
       this->compositor->GetRenderer()->ChangeRenderMode(render::Renderer::RenderMode::WIREFRAME);
@@ -123,6 +93,7 @@ public:
 
     if (key == GLFW_KEY_F11 && action == GLFW_PRESS) {
       this->compositor->GetRenderer()->GetShaderManager()->ReloadShaders();
+      render::DefaultShaderManager::ReloadShaders();
 
       Logger::logInfo("All shaders reloaded!");
     }
@@ -130,6 +101,21 @@ public:
 
   void resizeBindings(int width, int height) {
     this->compositor->GetRenderer()->changeResolution(width, height);
+  }
+
+  void Update() override {
+    cameraPosition += cameraSpeed;
+    if (cameraSpeed.len2() > 0.0001f) {
+      this->compositor->GetRenderer()->camera.setPositionHard(cameraPosition);
+    }
+    cameraSpeed *= 0.9f;
+
+    cameraRotation += cameraRotationSpeed;
+    cameraRotation.x = std::min(std::max(cameraRotation.x, -1.57f), 1.57f);
+    if (cameraRotationSpeed.len2() > 0.000001f) {
+      this->compositor->GetRenderer()->camera.setDirection(cameraRotation.y, cameraRotation.x);
+    }
+    cameraRotationSpeed *= 0.85f;
   }
 
   ~Control() override = default;

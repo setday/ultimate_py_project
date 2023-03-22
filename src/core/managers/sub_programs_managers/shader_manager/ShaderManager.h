@@ -27,12 +27,10 @@ namespace unreal_fluid::render {
     std::vector<Shader *> _shaders;
     std::vector<ShaderProgram *> _programs;
     std::vector<std::string> _shaderPaths;
-    const ShaderProgram *_defaultProgram;
-    const ShaderProgram *_rtProgram;
 
   public:
     ShaderManager();
-    ~ShaderManager();
+    virtual ~ShaderManager();
 
     /// Load shader from file
     /// @param path Path to shader file
@@ -44,20 +42,32 @@ namespace unreal_fluid::render {
     /// @return Program
     const ShaderProgram * CreateProgram(const std::vector<const Shader *> &shaders);
 
-    /// Get default program
-    /// @return Default program
-    const ShaderProgram * GetDefaultProgram() const;
-
-    /// Get ray tracing program
-    /// @return Ray tracing program
-    const ShaderProgram * GetRayTracingProgram() const;
-
     /// Reload shader
     /// @param shader Shader to reload
     void ReloadShader(Shader *shader);
 
     /// Reload all shaders
     void ReloadShaders();
+  };
+
+  class DefaultShaderManager : private ShaderManager {
+  private:
+    static const ShaderProgram *_defaultProgram;
+    static const ShaderProgram *_rtProgram;
+
+    static DefaultShaderManager _instance;
+
+  public:
+    /// Get default program
+    /// @return Default program
+    static const ShaderProgram * GetDefaultProgram();
+
+    /// Get ray tracing program
+    /// @return Ray tracing program
+    static const ShaderProgram * GetRayTracingProgram();
+
+    /// Reload all shaders
+    static void ReloadShaders();
   };
 } // namespace unreal_fluid::render
 
