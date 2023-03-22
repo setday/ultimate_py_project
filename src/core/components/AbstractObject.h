@@ -17,6 +17,7 @@
 #include "../physics/IPhysicalObject.h"
 #include "../physics/fluid/simple_fluid/SimpleFluidContainer.h"
 #include "../render/components/RenderObject.h"
+#include "../physics/solid/mesh/SolidMesh.h"
 
 namespace unreal_fluid {
   class AbstractObject {

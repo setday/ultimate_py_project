@@ -16,8 +16,6 @@
 #include "../src/core/components/AbstractObject.h"
 #include "../src/core/components/Scene.h"
 #include "../src/utils/Tools.h"
-#include "../src/core/physics/solid/sphere/SolidSphere.h"
-
 using namespace unreal_fluid;
 
 class SimpleFluidScene : public Scene {

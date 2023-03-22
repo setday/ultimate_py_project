@@ -12,7 +12,7 @@
  */
 
 #include "Simulator.h"
-#include "fluid/simple_fluid/CollisionPairs.h"
+#include "fluid/CollisionPairs.h"
 
 using namespace unreal_fluid::physics;
 

@@ -13,7 +13,8 @@
  */
 
 #include "SimpleFluidContainer.h"
-#include "CollisionPairs.h"
+#include "../CollisionPairs.h"
+
 #include "random"
 
 using namespace unreal_fluid::physics::fluid;
@@ -40,18 +41,28 @@ void SimpleFluidContainer::advect(double dt) {
     for (auto particle: particles) {
         particle->position += particle->velocity * dt;
     }
+    {
+        for (auto p : particles) {
+            double yMin = -1;
+            if (p->position.y - p->radius < yMin) {
+                double push = yMin - p->position.y + p->radius;
+                p->position.y += push;
+                p->velocity.y = -k*p->velocity.y;
+            }
+        }
+    }//TODO this is the temporary measure to prevent particles from falling down. Solids should be used
 }
 
 void SimpleFluidContainer::interact() {
-    /*for (int i = 0; i < particles.size(); ++i) {
+    for (int i = 0; i < particles.size(); ++i) {
         for (int j = i + 1; j < particles.size(); ++j) {
             if ((particles[i]->position - particles[j]->position).len() <
                 particles[i]->radius + particles[j]->radius) {
                 collide(particles[i], particles[j]);
             }
         }
-    }*/
-    CellsDistributor cells(particles);
+    }
+    /*CellsDistributor cells(particles);
     for (auto bigParticle: cells.getBigParticles()) {
       for (auto particle: particles) {
         if (particle->position != bigParticle->position && (particle->position - bigParticle->position).len() <= particle->radius + bigParticle->radius)
@@ -63,7 +74,7 @@ void SimpleFluidContainer::interact() {
       if ((p.first->position - p.second->position).len() <= p.first->radius + p.second->radius)
         collide(p.first, p.second);
       p = cells.nextPair();
-    }
+    }*/
 }
 
 void SimpleFluidContainer::simulate(double dt) {

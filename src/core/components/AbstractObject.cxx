@@ -44,7 +44,6 @@ void AbstractObject::parse() {
       renderObject->modelMatrix = mat4::translation(renderObject->position);
     }
   }else if (type == physics::IPhysicalObject::Type::SOLID_SPHERE){
-      Logger::logInfo("starting");
       if (renderObjects.empty()){
           renderObjects.push_back(new render::RenderObject);
       }
@@ -54,7 +53,8 @@ void AbstractObject::parse() {
       }
       renderObjects[0]->position = solidSphere->getPosition();
       renderObjects[0]->modelMatrix = mat4::translation(renderObjects[0]->position);
-      Logger::logInfo("completed");
+  }else if (type == physics::IPhysicalObject::Type::SOLID_MESH){
+      Logger::logInfo("Mesh");
   }
 }
 
