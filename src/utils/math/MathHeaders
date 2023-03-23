@@ -16,7 +16,6 @@
 
 #include <cmath>
 
-#include "Triangle.h"
 #include "Vector3.h"
 #include "Vector2.h"
 #include "Operator.h"

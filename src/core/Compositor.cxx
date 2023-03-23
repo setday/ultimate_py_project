@@ -43,7 +43,7 @@ void Compositor::init() {
   Logger::logInfo("Compositor initialized!");
 }
 
-void Compositor::Update() {
+void Compositor::update() {
   _timer.resume();
 
   for (auto scene : _scenes) {
@@ -53,7 +53,7 @@ void Compositor::Update() {
   _timer.pause();
 }
 
-void Compositor::Render() {
+void Compositor::render() {
   _timer.resume();
 
   _renderer->StartFrame();

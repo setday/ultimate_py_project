@@ -36,7 +36,6 @@ void AbstractObject::parse() {
         auto renderObject = new render::RenderObject;
         renderObject->material = render::material::MaterialFactory::createMaterial(render::material::MaterialFactory::MaterialType::GOLD);
         renderObject->mesh = render::mesh::Sphere((float) particles[pos]->radius, int(particles[pos]->radius * 500), int(particles[pos]->radius * 500));
-        renderObject->shaderProgram = compositor->getRenderer()->GetShaderManager()->GetDefaultProgram();
         /// TODO check if this dynamic quality is correct
         renderObjects.push_back(renderObject);
       }
@@ -51,7 +50,6 @@ void AbstractObject::parse() {
       auto renderObject = new render::RenderObject;
       renderObject->material = render::material::MaterialFactory::createMaterial(render::material::MaterialFactory::MaterialType::GREEN_PLASTIC);
       renderObject->mesh = render::mesh::Sphere((float) solidSphere->getRadius(), 50, 50);
-      renderObject->shaderProgram = compositor->getRenderer()->GetShaderManager()->GetDefaultProgram();
       renderObjects.emplace_back(renderObject);
     }
     renderObjects.back()->position = solidSphere->getPosition();
