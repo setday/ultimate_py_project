@@ -25,7 +25,10 @@ public:
   long long timer = 0;
 
   explicit TestScene(const compositor::Compositor *compositor) : Scene(compositor) {
-    objects.push_back(new AbstractObject({}, compositor)); // TODO which descriptor should we use?
+    auto sphere = new physics::solid::SolidSphere({0,0,0}, 0.3);
+    objects.push_back(new AbstractObject(sphere, compositor));
+    auto simpleFluid = new physics::fluid::SimpleFluidContainer({});
+    objects.push_back(new AbstractObject(simpleFluid, compositor));
     for (auto &abstractObject: objects) {
       compositor->getSimulator()->addPhysicalObject(abstractObject->getPhysicalObject());
     }

@@ -30,7 +30,7 @@ void AbstractObject::parse() {
   physics::IPhysicalObject::Type type = physicalObject->getType();
   void *data = physicalObject->getData();
   if (type == physics::IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER) {
-    std::vector<physics::fluid::Particle *> &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(data);
+    auto &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(data);
     for (int pos = 0; pos < particles.size(); ++pos) {
       if (pos >= renderObjects.size()) {
         auto renderObject = new render::RenderObject;
@@ -46,15 +46,16 @@ void AbstractObject::parse() {
       renderObject->modelMatrix = mat4::translation(renderObject->position);
     }
   } else if (type == physics::IPhysicalObject::Type::SOLID_SPHERE) {
-    if (renderObjects.empty()) {
-      renderObjects.push_back(new render::RenderObject);
-    }
     auto solidSphere = reinterpret_cast<physics::solid::SolidSphere *>(data);
-    if (renderObjects[0]->mesh.indices.empty()) {
-      renderObjects[0]->mesh = render::mesh::Sphere((float) solidSphere->getRadius(), 50, 50);
+    if (renderObjects.empty()) {
+      auto renderObject = new render::RenderObject;
+      renderObject->material = render::material::MaterialFactory::createMaterial(render::material::MaterialFactory::MaterialType::GREEN_PLASTIC);
+      renderObject->mesh = render::mesh::Sphere((float) solidSphere->getRadius(), 50, 50);
+      renderObject->shaderProgram = compositor->getRenderer()->GetShaderManager()->GetDefaultProgram();
+      renderObjects.emplace_back(renderObject);
     }
-    renderObjects[0]->position = solidSphere->getPosition();
-    renderObjects[0]->modelMatrix = mat4::translation(renderObjects[0]->position);
+    renderObjects.back()->position = solidSphere->getPosition();
+    renderObjects.back()->modelMatrix = mat4::translation(renderObjects[0]->position);
   } else if (type == physics::IPhysicalObject::Type::SOLID_MESH) {
     Logger::logInfo("Mesh");
   }
