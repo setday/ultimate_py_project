@@ -18,6 +18,8 @@
 #include <fstream>
 #include <string>
 
+#define _DEBUG
+
 #ifdef _DEBUG
 #define LOG_DEBUG(...) Logger::log(Logger::Level::DEBUG, __VA_ARGS__)
 #define LOG_INFO(...) Logger::log(Logger::Level::INFO, __VA_ARGS__)

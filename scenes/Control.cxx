@@ -19,7 +19,6 @@ using namespace unreal_fluid;
 class Control : public Scene {
 public:
   const compositor::Compositor *compositor;
-  render::Renderer::RenderMode renderMode = render::Renderer::RenderMode::SOLID;
   vec3f cameraPosition = {0.f, 0.f, 0.f};
   vec3f cameraSpeed = {0.f, 0.f, 0.f};
   vec2f cameraRotation = {0.f, M_PI};
@@ -35,16 +34,6 @@ public:
   }
 
   void keyboardBindings(int key, int action) {
-    if (key == GLFW_KEY_F1 && action == GLFW_PRESS) {
-      if (this->renderMode == render::Renderer::RenderMode::WIREFRAME) {
-        this->renderMode = render::Renderer::RenderMode::SOLID;
-      } else {
-        this->renderMode = render::Renderer::RenderMode::WIREFRAME;
-      }
-
-      this->compositor->GetRenderer()->ChangeRenderMode(this->renderMode);
-    }
-
     if (key == GLFW_KEY_W)
       cameraSpeed += this->compositor->GetRenderer()->camera.getDirection() / 15;
     if (key == GLFW_KEY_S)
