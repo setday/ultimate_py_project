@@ -17,6 +17,11 @@
 #include "../../PhysicsDefinitions.h"
 #include "../IFluidContainer.h"
 #include "CellsDistributor.h"
+#include "../../Simulator.h"
+
+namespace unreal_fluid::physics {
+    class Simulator;
+}
 
 namespace unreal_fluid::physics::fluid {
   class SimpleFluidContainer : public IFluidContainer {

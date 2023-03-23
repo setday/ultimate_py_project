@@ -5,7 +5,7 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : PhysicalObject.h
+ * FILE NAME : IPhysicalObject.h
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -15,23 +15,29 @@
 
 #include <vector>
 
+
 namespace unreal_fluid::physics {
-  class PhysicalObject {
-    friend class Simulator;
+    class Simulator;
 
-  public:
-    enum class Type {
-      SIMPLE_FLUID_CONTAINER,
-      SOLID
+    class IPhysicalObject {
+        friend class Simulator;
+
+    public:
+        enum class Type {
+            SIMPLE_FLUID_CONTAINER,
+            SOLID_SPHERE,
+            SOLID_MESH
+        };
+
+        virtual ~IPhysicalObject() = default;
+
+        virtual Type getType() = 0;
+
+        virtual void *getData() = 0;
+
+    private:
+        virtual void simulate(double dt) = 0;
     };
-
-    virtual ~PhysicalObject() = default;
-
-    virtual void simulate(double dt) = 0;
-
-    virtual Type getType() = 0;
-    virtual void *getData() = 0;
-  };
 } // namespace unreal_fluid::physics
 
-// end of PhysicalObject.h
+// end of IPhysicalObject.h

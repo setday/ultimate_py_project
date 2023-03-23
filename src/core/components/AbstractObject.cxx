@@ -14,16 +14,22 @@
 #include "AbstractObject.h"
 #include "../src/core/render/components/material/MaterialFactory.h"
 #include "../src/core/render/components/mesh/presets/Sphere.h"
+#include "../physics/solid/sphere/SolidSphere.h"
 
 using namespace unreal_fluid;
 
 AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor, const compositor::Compositor *compositor) : physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)),
-                                                                                                                 compositor(compositor) {}
+                                                                                                                       compositor(compositor) {
+}
+
+AbstractObject::AbstractObject(physics::PhysicalObject *physicalObject, const compositor::Compositor *compositor) : physicalObject(physicalObject),
+                                                                                                                    compositor(compositor) {
+}
 
 void AbstractObject::parse() {
-  physics::PhysicalObject::Type type = physicalObject->getType();
+  physics::IPhysicalObject::Type type = physicalObject->getType();
   void *data = physicalObject->getData();
-  if (type == physics::PhysicalObject::Type::SIMPLE_FLUID_CONTAINER) {
+  if (type == physics::IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER) {
     std::vector<physics::fluid::Particle *> &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(data);
     for (int pos = 0; pos < particles.size(); ++pos) {
       if (pos >= renderObjects.size()) {
@@ -39,6 +45,18 @@ void AbstractObject::parse() {
       renderObject->position = particle->position;
       renderObject->modelMatrix = mat4::translation(renderObject->position);
     }
+  }else if (type == physics::IPhysicalObject::Type::SOLID_SPHERE){
+      if (renderObjects.empty()){
+          renderObjects.push_back(new render::RenderObject);
+      }
+      auto solidSphere = reinterpret_cast<physics::solid::SolidSphere*>(data);
+      if (renderObjects[0]->mesh.indices.empty()) {
+          renderObjects[0]->mesh = render::mesh::Sphere((float)solidSphere->getRadius(), 50, 50);
+      }
+      renderObjects[0]->position = solidSphere->getPosition();
+      renderObjects[0]->modelMatrix = mat4::translation(renderObjects[0]->position);
+  }else if (type == physics::IPhysicalObject::Type::SOLID_MESH){
+      Logger::logInfo("Mesh");
   }
 }
 
@@ -46,6 +64,6 @@ void AbstractObject::parse() {
   return renderObjects;
 }
 
-[[nodiscard]] physics::PhysicalObject *AbstractObject::getPhysicalObject() {
+[[nodiscard]] physics::IPhysicalObject *AbstractObject::getPhysicalObject() {
   return physicalObject;
 }

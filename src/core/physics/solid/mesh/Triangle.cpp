@@ -3,19 +3,15 @@
  *    HSE SPb (Higher school of economics in Saint-Petersburg).
  ***************************************************************/
 
-/* PROJECT   : ultimate_py_project
+/* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Solid.cxx
- * PURPOSE   : ${PURPOSE}
+ * FILE NAME : SolidSphere.h
+ * PURPOSE   : ISolid class
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
 
-#include "Solid.h"
+#include "Triangle.h"
 
-using namespace unreal_fluid::physics::solid;
-
-unreal_fluid::physics::PhysicalObject::Type Solid::getType() {
-  return physics::PhysicalObject::Type::SOLID;
-}
+unreal_fluid::physics::solid::Triangle::Triangle(const vec3 &v1, const vec3 &v2, const vec3 &v3) : v1(v1), v2(v2), v3(v3) {}
