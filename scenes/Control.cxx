@@ -46,18 +46,18 @@ public:
     }
 
     if (key == GLFW_KEY_W)
-      cameraSpeed += this->compositor->GetRenderer()->camera.getDirection() / 8;
+      cameraSpeed += this->compositor->GetRenderer()->camera.getDirection() / 15;
     if (key == GLFW_KEY_S)
-      cameraSpeed -= this->compositor->GetRenderer()->camera.getDirection() / 8;
+      cameraSpeed -= this->compositor->GetRenderer()->camera.getDirection() / 15;
     if (key == GLFW_KEY_D)
-      cameraSpeed -= vec3f(0.f, 1.f, 0.f).cross(this->compositor->GetRenderer()->camera.getDirection()) / 8;
+      cameraSpeed -= vec3f(0.f, 1.f, 0.f).cross(this->compositor->GetRenderer()->camera.getDirection()) / 15;
     if (key == GLFW_KEY_A)
-      cameraSpeed += vec3f(0.f, 1.f, 0.f).cross(this->compositor->GetRenderer()->camera.getDirection()) / 8;
+      cameraSpeed += vec3f(0.f, 1.f, 0.f).cross(this->compositor->GetRenderer()->camera.getDirection()) / 15;
 
     if (key == GLFW_KEY_SPACE)
-      cameraSpeed += vec3f(0.f, 1.f, 0.f) / 8;
+      cameraSpeed += vec3f(0.f, 1.f, 0.f) / 15;
     if (key == GLFW_KEY_LEFT_SHIFT)
-      cameraSpeed -= vec3f(0.f, 1.f, 0.f) / 8;
+      cameraSpeed -= vec3f(0.f, 1.f, 0.f) / 15;
 
     cameraSpeed.clampSelf(-0.1f, 0.1f);
 

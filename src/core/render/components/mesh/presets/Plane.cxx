@@ -51,6 +51,8 @@ Plane::Plane(float width, float height, unsigned int widthSegments, unsigned int
       indices.push_back(first + 1);
     }
   }
+
+  meshType = 1;
 }
 
 // end of Plane.cxx

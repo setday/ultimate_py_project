@@ -10,7 +10,7 @@ void Renderer::Init() {
   _shaderManager = new ShaderManager();
 
   camera = Camera(vec3f(0.0f, 0.0f, 0.0f), vec3f(0.0f, 0.0f, -1.0f),
-                  vec3f(0.0f, 1.0f, 0.0f), 1.0f, 45.0f, 0.01f, 1000.0f);
+                  vec3f(0.0f, 1.0f, 0.0f), 1.0f, 70.0f, 0.01f, 1000.0f);
 
   InitGl();
   InitBuffers();
@@ -174,6 +174,8 @@ void Renderer::EndFrame() {
           vertex.position,
           object->mesh.meshType
         });
+
+        break;
       }
     }
 
@@ -190,6 +192,10 @@ void Renderer::EndFrame() {
     glUniform1i(frameID, camera.getResolution().x);
     frameID = glGetUniformLocation(programID, "frame.height");
     glUniform1i(frameID, camera.getResolution().y);
+
+    GLuint objectsCountID;
+    objectsCountID = glGetUniformLocation(programID, "objectCount");
+    glUniform1i(objectsCountID, (int)(rtVertices.size()));
 
     glBindVertexArray(_fvao);
     glBindBuffer(GL_ARRAY_BUFFER, _fvbo);

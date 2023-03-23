@@ -45,6 +45,8 @@ Sphere::Sphere(float radius, unsigned int rings, unsigned int sectors) {
       }
     }
   }
+
+  meshType = 2;
 }
 
 // end of Sphere.cxx
