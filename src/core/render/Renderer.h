@@ -29,6 +29,8 @@ namespace unreal_fluid::render {
     GLuint _rtubo; // ray tracing uniform buffer object
     std::vector<const RenderObject *> _objectsToRender;
 
+    utils::Timer _timer;
+
   public:
     Camera camera;
 
@@ -39,11 +41,11 @@ namespace unreal_fluid::render {
     void Destroy();
 
     void StartFrame();
-    /// render object.
+    /// Render object.
     /// @param object Object to render.
     /// @attention projection only! If you render objects using ray tracing, you should use RenderAllObjects() instead.
     void RenderObject(const render::RenderObject *object);
-    /// render all objects.
+    /// Render all objects.
     /// @param objects Objects to render.
     void RenderAllObjects(const std::vector<render::RenderObject *> &objects);
     /// End rendering frame.
@@ -53,7 +55,7 @@ namespace unreal_fluid::render {
     /// @return Shader manager.
     [[nodiscard]] ShaderManager *GetShaderManager() const;
 
-      /// Change render mode.
+    /// Change render mode.
     /// @param mode New render mode.
     void ChangeRenderMode(RenderMode mode);
 

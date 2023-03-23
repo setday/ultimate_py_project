@@ -14,7 +14,6 @@
 
 #pragma once
 
-#include <cassert>
 #include <cmath>
 
 namespace unreal_fluid::math {

@@ -5,7 +5,7 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : MainMath.h
+ * FILE NAME : MathHeaders.h
  * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
@@ -16,6 +16,7 @@
 
 #include <cmath>
 
+#include "Triangle.h"
 #include "Vector3.h"
 #include "Vector2.h"
 #include "Operator.h"

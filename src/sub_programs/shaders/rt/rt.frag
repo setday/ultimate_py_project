@@ -1,14 +1,14 @@
 #version 330 core
 
-layout(std140) uniform ObjectData {
+uniform ObjectData {
     mat4 modelMatrix;
     mat4 invModelMatrix;
     bool hasInverse;
     vec3 vertex;
     int meshType;
-} objects[];
+} objects[10];
 
-uniform uint objectCount;
+uniform int objectCount;
 
 struct Camera {
     vec3 position;
@@ -59,21 +59,23 @@ Intersection intersectSphere(Ray ray, vec3 center, float radius) {
     float discriminant = b * b - 4.0 * a * c;
     float eta = 1.5;
 
-    vec3 color;
-
-    color = vec3(0.8, 0.6, 0.2);
+    vec3 color = vec3(0.8, 0.6, 0.2);
 
     if (discriminant < 0.0) {
         return Intersection(0.0, vec3(0.0), vec3(0.0), vec3(0.0), 0.0, 0.0, 1.0);
     } else {
-        float normsign = 1;
-        float t = (-b - sqrt(discriminant)) / (2.0 * a);
+        float sqrt_discriminant = sqrt(discriminant);
+        float denom = 2.0 * a;
+        float t = (-b - sqrt_discriminant);
+        int normsign = 1;
 
         if (t < 0.0) {
             normsign = -1;
-            t = (-b + sqrt(discriminant)) / (2.0 * a);
+            t += 2 * sqrt_discriminant;
             eta = 1.0;
         }
+
+        t /= denom;
 
         vec3 position = ray.origin + t * ray.direction;
         vec3 normal = normalize(position - center) * normsign;
@@ -117,14 +119,12 @@ vec4 traceRay(Ray ray, int depth) {
     int meshTypes[] = int[](
         0,
         1,
-        0,
         0
     );
     vec3 poses[] = vec3[](
-        vec3(-0.75, -3.0, -5.0),
-        vec3(0.0, -5.0, 0.0),
-        vec3(0.75, -3.0, -5.0),
-        vec3(0.0, -4.9, 0.0)
+        vec3(-0.75, -0.0, -5.0),
+        vec3(0.0, -1.0, -5.0),
+        vec3(0.75, -0.0, -5.0)
     );
 
     vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
@@ -151,10 +151,11 @@ vec4 traceRay(Ray ray, int depth) {
 
             Intersection tmpI;
 
-            for (int j = 0; j < 4; j++) {
-                if (meshTypes[j] == 0) {
+            for (int j = 0; j < objectCount; j++) {
+                int meshType = objects[j].meshType;
+                if (meshType == 2) {
                     tmpI = intersectSphere(ray, poses[j], 0.5);
-                } else if (meshTypes[j] == 1) {
+                } else if (meshType == 1) {
                     tmpI = intersectPlane(ray, vec3(0.0, 1.0, 0.0), poses[j]);
                 }
                 if (tmpI.t > 0.0 && ((tmpI.t < i.t) || (i.t <= 0.0))) {
@@ -162,7 +163,7 @@ vec4 traceRay(Ray ray, int depth) {
                 }
             }
 
-            if (i.t < 0.0) {
+            if (i.t < 0.0 || intensity < 0.01) {
                 color += vec4(0.2, 0.25, 0.5, 0.0) * intensity;
 
                 stackPointer--;
@@ -181,10 +182,10 @@ vec4 traceRay(Ray ray, int depth) {
             Intersection s;
             s.t = -1.0;
 
-            for (int j = 0; j < 4; j++) {
-                if (meshTypes[j] == 0) {
+            for (int j = 0; j < objectCount; j++) {
+                if (objects[j].meshType == 2) {
                     tmpI = intersectSphere(reflectedRay, poses[j], 0.5);
-                } else if (meshTypes[j] == 1) {
+                } else if (objects[j].meshType == 1) {
                     tmpI = intersectPlane(reflectedRay, vec3(0.0, 1.0, 0.0), poses[j]);
                 }
                 if (tmpI.t > 0.0 && ((tmpI.t < s.t) || (s.t <= 0.0))) {
@@ -267,22 +268,24 @@ Ray MakeRay(float dx, float dy) {
     vec3 up = normalize(cross(right, camera.direction));
 
     float aspect = float(frame.width) / float(frame.height);
+    float fov = 70.0f;
+    float half_tan_fov = tan(fov * 0.5 * 3.141592 / 180.0);
 
     // generate ray from camera
     Ray ray;
     ray.origin = camera.position;
     ray.direction = normalize(
         camera.direction +
-        (2.0 * (gl_FragCoord.x + dx) / frame.width - 1.0) * right * aspect +
-        (2.0 * (gl_FragCoord.y + dy) / frame.height - 1.0) * up
+        (2.0 * (gl_FragCoord.x + dx) / frame.width - 1.0) * right * aspect * half_tan_fov +
+        (2.0 * (gl_FragCoord.y + dy) / frame.height - 1.0) * up * half_tan_fov
     );
 
     return ray;
 }
 
 void main() {
-    int depth = 4;
-    int samling = 1;
+    int depth = 8;
+    int samling = 3;
 
     vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
 

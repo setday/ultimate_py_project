@@ -176,7 +176,7 @@ template<typename T>
     }
 
     static Matrix4x4 perspective(T fov, T aspect, T near, T far) {
-      T f = 1 / tan(fov / 2);
+      T f = 1 / tan(fov / 180.f * M_PI / 2);
 
       return Matrix4x4(f / aspect, 0, 0, 0,
                        0, f, 0, 0,

@@ -48,6 +48,7 @@ set(LIBS
 add_executable(
         ${PROJECT_NAME}
 
+        src/utils/timer/Timer.cxx
         src/utils/Logger.cxx
 
         src/core/render/components/mesh/Vertex.cxx
@@ -55,6 +56,12 @@ add_executable(
         src/core/render/components/mesh/presets/Plane.cxx
         src/core/render/components/mesh/presets/Sphere.cxx
         src/core/render/components/mesh/presets/Cube.cxx
+
+        src/core/render/components/material/MaterialFactory.cxx
+
+        src/core/render/components/shaders/Shader.cxx
+        src/core/render/components/shaders/ShaderProgram.cxx
+        src/core/managers/sub_programs_managers/shader_manager/ShaderManager.cxx
 
         src/core/render/components/material/MaterialFactory.cxx
 

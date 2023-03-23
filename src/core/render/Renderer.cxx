@@ -5,15 +5,20 @@ using namespace unreal_fluid::render;
 void Renderer::Init() {
   Logger::logInfo("Initializing renderer...");
 
+  glewInit();
+
   _shaderManager = new ShaderManager();
 
   camera = Camera(vec3f(0.0f, 0.0f, 0.0f), vec3f(0.0f, 0.0f, -1.0f),
-                  vec3f(0.0f, 1.0f, 0.0f), 1.0f, 45.0f, 0.01f, 1000.0f);
+                  vec3f(0.0f, 1.0f, 0.0f), 1.0f, 70.0f, 0.01f, 1000.0f);
 
   InitGl();
   InitBuffers();
 
   ChangeRenderMode(RenderMode::SOLID);
+
+  _timer.pause();
+  _timer.reset();
 
   Logger::logInfo("Renderer initialized!");
 } // end of Renderer::Renderer() function
@@ -80,6 +85,8 @@ void Renderer::InitBuffers() {
 
 void Renderer::StartFrame() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  _timer.resume();
 
   _objectsToRender.clear();
 } // end of Renderer::startFrame() function
@@ -148,9 +155,9 @@ void Renderer::RenderAllObjects(const std::vector<render::RenderObject *> &objec
 
 void Renderer::EndFrame() {
   if (_renderMode == RenderMode::RAY_TRACING) {
-    _shaderManager->GetRayTracingProgram()->Execute();
+    DefaultShaderManager::GetRayTracingProgram()->Execute();
 
-    GLuint programID = _shaderManager->GetRayTracingProgram()->GetProgramID();
+    GLuint programID = DefaultShaderManager::GetRayTracingProgram()->GetProgramID();
 
     struct RayTracingVertex {
       mat4 modelMatrix;
@@ -167,6 +174,8 @@ void Renderer::EndFrame() {
           vertex.position,
           object->mesh.meshType
         });
+
+        break;
       }
     }
 
@@ -184,6 +193,10 @@ void Renderer::EndFrame() {
     frameID = glGetUniformLocation(programID, "frame.height");
     glUniform1i(frameID, camera.getResolution().y);
 
+    GLuint objectsCountID;
+    objectsCountID = glGetUniformLocation(programID, "objectCount");
+    glUniform1i(objectsCountID, (int)(rtVertices.size()));
+
     glBindVertexArray(_fvao);
     glBindBuffer(GL_ARRAY_BUFFER, _fvbo);
     glBindBuffer(GL_UNIFORM_BUFFER, _rtubo);
@@ -200,6 +213,14 @@ void Renderer::EndFrame() {
   }
 
   glFinish();
+
+  _timer.pause();
+  _timer.incrementCounter();
+
+  if (_timer.getCounter() >= 400) {
+    Logger::logInfo("Rendering time: ", _timer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms");
+    _timer.reset();
+  }
 } // end of Renderer::endFrame() function
 
 void Renderer::Destroy() {

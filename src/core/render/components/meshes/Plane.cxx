@@ -30,10 +30,9 @@ Plane::Plane(float width, float height, unsigned int widthSegments, unsigned int
 
       vec3f position = x * right + y * forward;
       vec3f normal = up; /// FIXME: normal should be calculated
-      vec2f texCoord = {(float)i / widthSegments, (float)j / heightSegments};
+      vec3f color = {1.f * i / heightSegments, 1.f * j / widthSegments, 0.f}; /// TODO: recolor me
 
-
-      vertices.emplace_back(position, normal, texCoord);
+      vertices.emplace_back(position, normal, color);
     }
   }
 
@@ -51,8 +50,6 @@ Plane::Plane(float width, float height, unsigned int widthSegments, unsigned int
       indices.push_back(first + 1);
     }
   }
-
-  meshType = 1;
 }
 
 // end of Plane.cxx
