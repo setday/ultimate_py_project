@@ -19,7 +19,6 @@
 #include "fluid/simple_fluid/SimpleFluidContainer.h"
 
 
-
 namespace unreal_fluid::physics {
     class Simulator {
     private:

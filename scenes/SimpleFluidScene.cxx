@@ -24,9 +24,9 @@ public:
 
     explicit SimpleFluidScene(const compositor::Compositor *compositor) : Scene(compositor) {
         auto sphere = new physics::solid::SolidSphere({0,0,0}, 0.3);
-        objects.push_back(new AbstractObject(sphere));
+        objects.push_back(new AbstractObject(sphere, compositor));
         auto simpleFluid = new physics::fluid::SimpleFluidContainer({});
-        objects.push_back(new AbstractObject(simpleFluid));
+        objects.push_back(new AbstractObject(simpleFluid, compositor));
         for (auto &abstractObject: objects) {
             compositor->getSimulator()->addPhysicalObject(abstractObject->getPhysicalObject());
         }

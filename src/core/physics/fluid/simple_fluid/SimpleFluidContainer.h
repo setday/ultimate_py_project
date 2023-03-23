@@ -34,7 +34,7 @@ namespace unreal_fluid::physics::fluid {
     ~SimpleFluidContainer() override;
     void simulate(double dt) override;
 
-    PhysicalObject::Type getType() override;
+    IPhysicalObject::Type getType() override;
     void *getData() override;
 
   private:

@@ -64,7 +64,13 @@ add_executable(
 
         src/utils/Tools.cxx
 
+        src/core/physics/solid/sphere/SolidSphere.cxx
+        src/core/physics/solid/mesh/SolidMesh.cxx
+        src/core/physics/solid/mesh/Triangle.cxx
+
         src/core/physics/Simulator.cxx
+
+        src/core/physics/fluid/CollisionPairs.cxx
         src/core/physics/fluid/simple_fluid/CellsDistributor.cxx
         src/core/physics/fluid/simple_fluid/SimpleFluidContainer.cxx
         src/core/components/AbstractObject.cxx
@@ -84,7 +90,7 @@ add_executable(
         src/core/Compositor.cxx
         src/core/Core.cxx
         src/main.cxx
-        scenes/SimpleFluidScene.cxx src/core/physics/fluid/CollisionPairs.cpp src/core/physics/fluid/CollisionPairs.h src/core/physics/solid/sphere/SolidSphere.cpp src/core/physics/solid/sphere/SolidSphere.h src/core/physics/solid/ISolid.h src/core/physics/solid/mesh/SolidMesh.cpp src/core/physics/solid/mesh/SolidMesh.h src/core/physics/solid/mesh/Triangle.cpp src/core/physics/solid/mesh/Triangle.h)
+)
 
 message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
