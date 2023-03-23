@@ -28,6 +28,7 @@ std::pair<Particle *, Particle *> CellsDistributor::nextPair() {
   while (cell_iterator != cells.end() && second >= cell_iterator->second.size()) {
     first = 0;
     second = 1;
+    cell_iterator->second.clear();
     cell_iterator++;
   }
 
@@ -36,13 +37,15 @@ std::pair<Particle *, Particle *> CellsDistributor::nextPair() {
   return {cell_iterator->second[first], cell_iterator->second[second++]};
 }
 
-CellsDistributor::CellsDistributor(std::vector<Particle *> &particles) {
+void CellsDistributor::update(std::vector<Particle *> &particles) {
+  big_particles.clear();
 
   double averageRadius = 0;
   for (const auto &particle: particles) averageRadius += particle->radius;
   averageRadius /= particles.size();
 
-  double cellSize = 5 * averageRadius;
+  double cellSize = 2.5 * averageRadius;
+  math::Vector3<int64_t> cellPosition;
 
   for (const auto &particle: particles) {
     if (particle->radius >= cellSize) {
@@ -50,10 +53,15 @@ CellsDistributor::CellsDistributor(std::vector<Particle *> &particles) {
       continue;
     }
 
-    math::Vector3<uint64_t> position = particle->position / cellSize;
-    for (const auto &diff: bias) {
-      if (((position + diff) * cellSize).len() <= particle->radius && (position + diff).x >= 0 && (position + diff).y >= 0 && (position + diff).z >= 0) {
-        cells[getId(position + diff)].push_back(particle);
+    math::Vector3<int64_t> position = particle->position / cellSize;
+
+    for (int dx = -1; dx <= 1; ++dx) {
+      for (int dy = -1; dy <= 1; ++dy) {
+        for (int dz = -1; dz <= 1; ++dz) {
+          cellPosition = position + math::Vector3{dx, dy, dz};
+          if ((cellPosition * cellSize - particle->position).len() <= particle->radius)
+            cells[getId(cellPosition)].push_back(particle);
+        }
       }
     }
   }

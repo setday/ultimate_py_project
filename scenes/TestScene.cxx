@@ -22,40 +22,44 @@ using namespace unreal_fluid;
 class TestScene : public Scene {
 public:
   double dt = 0.02;
+  long long timer = 0;
 
   explicit TestScene(const compositor::Compositor *compositor) : Scene(compositor) {
-      auto simpleFluid = new physics::fluid::SimpleFluidContainer({});
-      objects.push_back(new AbstractObject(simpleFluid));
-      for (auto &abstractObject: objects) {
-          compositor->getSimulator()->addPhysicalObject(abstractObject->getPhysicalObject());
-      }
-      compositor->getRenderer()->camera.setPosition({0, 0, 2});
-      compositor->getRenderer()->camera.setDirection({0, 0, -1});
+    objects.push_back(new AbstractObject({}, compositor)); // TODO which descriptor should we use?
+    for (auto &abstractObject: objects) {
+      compositor->getSimulator()->addPhysicalObject(abstractObject->getPhysicalObject());
+    }
+    compositor->getRenderer()->camera.setPosition({0, 0, 2});
+    compositor->getRenderer()->camera.setDirection({0, 0, -1});
   }
 
   void update() override {
-    long long t = getMicroseconds();
+    timer++;
+    static long long update_start_time = getMicroseconds();
+    long long time = getMicroseconds();
     compositor->getSimulator()->simulate(dt);
-    Logger::logInfo("Simulation time:    ", getMicroseconds() - t);
+    update_start_time += getMicroseconds() - time;
+    if (timer % 30 == 0) {
+      Logger::logInfo("Simulation time: ", (getMicroseconds() - update_start_time) / 30);
+      update_start_time = getMicroseconds();
+    }
   }
 
   void render() override {
-    long long t = getMicroseconds();
     for (auto &object: objects) {
       object->parse();
-      for (auto renderObject: object->getRenderObjects()) {
-        /// TODO this should be done in parse()
-        renderObject->shaderProgram = compositor->getRenderer()->GetShaderManager()->GetDefaultProgram();
-      }
     }
-    Logger::logInfo("Parsing time:       ", getMicroseconds() - t);
-    t = getMicroseconds();
+    static long long render_start_time = getMicroseconds();
+    long long time = getMicroseconds();
     for (auto &object: objects) {
-      for (auto &i: object->getRenderObjects()) {
-        compositor->getRenderer()->RenderObject(i);
-      }
+      compositor->getRenderer()->RenderAllObjects(object->getRenderObjects());
     }
-    Logger::logInfo("Rendering time:     ", getMicroseconds() - t);
+    render_start_time += getMicroseconds() - time;
+    if (timer % 30 == 0) {
+      Logger::logInfo("Rendering time: ", (getMicroseconds() - render_start_time) / 30);
+      render_start_time = getMicroseconds();
+      timer = 0;
+    }
   }
 
   ~TestScene() override = default;

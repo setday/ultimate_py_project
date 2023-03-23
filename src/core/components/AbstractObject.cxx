@@ -18,8 +18,12 @@
 
 using namespace unreal_fluid;
 
-AbstractObject::AbstractObject(physics::IPhysicalObject* physObject) {
-    physicalObject = physObject;
+AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor, const compositor::Compositor *compositor) : physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)),
+                                                                                                                       compositor(compositor) {
+}
+
+AbstractObject::AbstractObject(physics::PhysicalObject *physicalObject, const compositor::Compositor *compositor) : physicalObject(physicalObject),
+                                                                                                                    compositor(compositor) {
 }
 
 void AbstractObject::parse() {
@@ -29,17 +33,15 @@ void AbstractObject::parse() {
     std::vector<physics::fluid::Particle *> &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(data);
     for (int pos = 0; pos < particles.size(); ++pos) {
       if (pos >= renderObjects.size()) {
-        renderObjects.push_back(new render::RenderObject);
-        renderObjects.back()->material = render::material::MaterialFactory::createMaterial(
-                render::material::MaterialFactory::MaterialType::GOLD
-        );
+        auto renderObject = new render::RenderObject;
+        renderObject->material = render::material::MaterialFactory::createMaterial(render::material::MaterialFactory::MaterialType::GOLD);
+        renderObject->mesh = render::mesh::Sphere((float) particles[pos]->radius, int(particles[pos]->radius * 500), int(particles[pos]->radius * 500));
+        renderObject->shaderProgram = compositor->getRenderer()->GetShaderManager()->GetDefaultProgram();
+        /// TODO check if this dynamic quality is correct
+        renderObjects.push_back(renderObject);
       }
       auto &particle = particles[pos];
       auto &renderObject = renderObjects[pos];
-      ///TODO dynamic sphere quality should be used. The large the radius, the higher the quality is
-      if (renderObject->mesh.indices.empty()) {
-        renderObject->mesh = render::mesh::Sphere((float) particle->radius, 15, 15);
-      } ///TODO less complex to check whether the mesh is empty should be used
       renderObject->position = particle->position;
       renderObject->modelMatrix = mat4::translation(renderObject->position);
     }

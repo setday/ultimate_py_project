@@ -26,11 +26,6 @@ namespace unreal_fluid::physics::fluid {
     std::unordered_map<uint64_t, std::vector<Particle *>> cells;
     std::unordered_map<uint64_t, std::vector<Particle *>>::iterator cell_iterator;
     std::vector<Particle *> big_particles;
-    std::vector<math::Vector3<int>> bias{
-            {-1, 0, 0}, {-1, -1, 0}, {-1, 1, 0}, {-1, 0, -1}, {-1, 0, 1}, {-1, -1, -1}, {-1, 1, -1}, {-1, -1, 1}, {-1, 1, 1},
-            {0, 0, 0}, {0, -1, 0}, {0, 1, 0}, {0, 0, -1}, {0, 0, 1}, {0, -1, -1}, {0, 1, -1}, {0, -1, 1}, {0, 1, 1},
-            {1, 0, 0}, {1, -1, 0}, {1, 1, 0}, {1, 0, -1}, {1, 0, 1}, {1, -1, -1}, {1, 1, -1}, {1, -1, 1}, {1, 1, 1}
-    };
 
     static uint64_t getId(vec3 position);
 
@@ -38,9 +33,10 @@ namespace unreal_fluid::physics::fluid {
     constexpr static std::pair<Particle *, Particle *> terminator = {nullptr, nullptr};
 
   public:
-    explicit CellsDistributor(std::vector<Particle *> &particles);
+    CellsDistributor() = default;
     ~CellsDistributor() = default;
 
+    void update(std::vector<Particle *> &particles);
     std::vector<Particle *> &getBigParticles();
     std::pair<Particle *, Particle *> nextPair();
   };

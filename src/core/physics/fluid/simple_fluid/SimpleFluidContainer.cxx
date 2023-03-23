@@ -12,17 +12,17 @@
  * authors of this project.
  */
 
+#include <random>
+
 #include "SimpleFluidContainer.h"
 #include "../CollisionPairs.h"
 
-#include "random"
-
 using namespace unreal_fluid::physics::fluid;
 
-SimpleFluidContainer::SimpleFluidContainer(FluidDescriptor descriptor) {
-    k = 0.1;
-    //addParticle({0.01, -0.01, -0.01}, {0, 0, 0}, 0.3, 1000000);
-    /// TODO : write constructor implementation
+SimpleFluidContainer::SimpleFluidContainer(FluidDescriptor descriptor) : distributor(*new CellsDistributor())  {
+  k = 0.1;
+  // addParticle({0.01, -0.01, -0.01}, {0, 0, 0}, 0.3, 1000000);
+  /// TODO : write constructor implementation
 }
 
 SimpleFluidContainer::~SimpleFluidContainer() {
@@ -54,27 +54,20 @@ void SimpleFluidContainer::advect(double dt) {
 }
 
 void SimpleFluidContainer::interact() {
-    for (int i = 0; i < particles.size(); ++i) {
-        for (int j = i + 1; j < particles.size(); ++j) {
-            if ((particles[i]->position - particles[j]->position).len() <
-                particles[i]->radius + particles[j]->radius) {
-                collide(particles[i], particles[j]);
-            }
-        }
+  distributor.update(particles);
+  std::pair<Particle *, Particle *> p = distributor.nextPair();
+
+  for (auto bigParticle: distributor.getBigParticles()) {
+    for (auto particle: particles) {
+      if (particle->position != bigParticle->position && (particle->position - bigParticle->position).len() <= particle->radius + bigParticle->radius)
+        collide(particle, bigParticle);
     }
-    /*CellsDistributor cells(particles);
-    for (auto bigParticle: cells.getBigParticles()) {
-      for (auto particle: particles) {
-        if (particle->position != bigParticle->position && (particle->position - bigParticle->position).len() <= particle->radius + bigParticle->radius)
-          collide(particle, bigParticle);
-      }
-    }
-    std::pair<Particle *, Particle *> p = cells.nextPair();
-    while (p != CellsDistributor::terminator) {
-      if ((p.first->position - p.second->position).len() <= p.first->radius + p.second->radius)
-        collide(p.first, p.second);
-      p = cells.nextPair();
-    }*/
+  }
+
+  while (p != CellsDistributor::terminator) {
+    collide(p.first, p.second);
+    p = distributor.nextPair();
+  }
 }
 
 void SimpleFluidContainer::simulate(double dt) {
@@ -88,7 +81,34 @@ void SimpleFluidContainer::simulate(double dt) {
 }
 
 void SimpleFluidContainer::collide(Particle *p1, Particle *p2) const {
-    CollisionPairs::particleAndParticle(p1, p2, k);
+  // CollisionPairs::particleAndParticle(p1, p2, k);
+  vec3 positionDiff = p1->position - p2->position;
+
+  if (positionDiff.len2() == 0)
+    return;
+
+  double distance = positionDiff.len();
+  vec3 positionDiffDirection = positionDiff / distance;
+
+  double pushValue =
+          (p1->radius + p2->radius - distance) /
+          (p1->mass + p2->mass);
+  vec3 pushVector = positionDiffDirection * pushValue;
+
+  if (pushValue < 0)
+    return;
+
+  p1->position += pushVector * p2->mass;
+  p2->position -= pushVector * p1->mass;
+
+  double momentumValue =
+          (1 + k) *
+          (p1->velocity.dot(positionDiffDirection) - p2->velocity.dot(positionDiffDirection)) /
+          (p1->mass + p2->mass);
+  vec3 momentum = positionDiffDirection * momentumValue;
+
+  p1->velocity -= momentum * p2->mass;
+  p2->velocity += momentum * p1->mass;
 }
 
 void *SimpleFluidContainer::getData() {

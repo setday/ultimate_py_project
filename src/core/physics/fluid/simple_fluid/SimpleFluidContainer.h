@@ -24,35 +24,26 @@ namespace unreal_fluid::physics {
 }
 
 namespace unreal_fluid::physics::fluid {
-    class SimpleFluidContainer : public IFluidContainer {
-        friend class ::unreal_fluid::physics::Simulator;
+  class SimpleFluidContainer : public IFluidContainer {
+  private:
+    double k = 0.1;
+    CellsDistributor distributor;
 
-    private:
-        double k;
+  public:
+    explicit SimpleFluidContainer(FluidDescriptor descriptor);
+    ~SimpleFluidContainer() override;
+    void simulate(double dt) override;
 
-    public:
-        explicit SimpleFluidContainer(FluidDescriptor descriptor);
+    PhysicalObject::Type getType() override;
+    void *getData() override;
 
-        ~SimpleFluidContainer() override;
-
-        IPhysicalObject::Type getType() override;
-
-        void *getData() override;
-
-    private:
-
-        void simulate(double dt) override;
-
-        void collide(Particle *p1, Particle *p2) const;
-
-        void advect(double dt);
-
-        void addExternalForces(double dt);
-
-        void interact();
-
-        void addParticle(vec3 position, vec3 velocity, double radius, double mass);
-    };
+  private:
+    void collide(Particle *p1, Particle *p2) const;
+    void advect(double dt);
+    void addExternalForces(double dt);
+    void interact();
+    void addParticle(vec3 position, vec3 velocity, double radius, double mass);
+  };
 } // namespace unreal_fluid::physics::fluid
 
 // end of FluidContainer.h
