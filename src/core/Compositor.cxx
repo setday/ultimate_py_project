@@ -25,6 +25,8 @@ Compositor::Compositor(Core *core) : _core(core) {
 
   _timer.pause();
   _timer.reset();
+  _renderingTimer.pause();
+  _renderingTimer.reset();
 
   Logger::logInfo("Compositor created!");
 }
@@ -45,16 +47,20 @@ void Compositor::init() {
 
 void Compositor::update() {
   _timer.resume();
+  _simulationTimer.resume();
 
   for (auto scene : _scenes) {
     scene->update();
   }
 
+  _simulationTimer.pause();
   _timer.pause();
+  _simulationTimer.incrementCounter();
 }
 
 void Compositor::render() {
   _timer.resume();
+  _renderingTimer.resume();
 
   _renderer->StartFrame();
   for (auto scene: _scenes) {
@@ -62,13 +68,24 @@ void Compositor::render() {
   }
   _renderer->EndFrame();
 
+  _renderingTimer.pause();
   _timer.pause();
+  _renderingTimer.incrementCounter();
   _timer.incrementCounter();
 
-  if (_timer.getCounter() >= 400 || _timer.getElapsedTime() >= 0.5) {
-    Logger::logInfo("| Time to crate a frame: ", _timer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms",
-            " | FPS: ", 1 / _timer.getAverageTime(), " |");
+  if (_timer.getCounter() >= 400 || _timer.getElapsedTime() >= 1.5) {
+    Logger::logInfo(
+            "\n", "-------------------------------------------->\n",
+            "| Time to crate a frame: ", _timer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms\n",
+            "| FPS: ", 1 / _timer.getAverageTime(), "\n",
+            "-------------------------------------------->\n",
+            "| Time to render a frame: ", _renderingTimer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms\n",
+            "| Time to simulate a frame: ", _simulationTimer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms\n",
+            "-------------------------------------------->"
+            );
     _timer.reset();
+    _renderingTimer.reset();
+    _simulationTimer.reset();
   }
 }
 

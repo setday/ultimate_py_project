@@ -29,8 +29,6 @@ namespace unreal_fluid::render {
     GLuint _rtubo; // ray tracing uniform buffer object
     std::vector<const RenderObject *> _objectsToRender;
 
-    utils::Timer _timer;
-
   public:
     Camera camera;
 

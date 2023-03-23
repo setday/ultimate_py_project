@@ -15,14 +15,13 @@
 #include "../src/core/Core.h"
 #include "../src/core/components/AbstractObject.h"
 #include "../src/core/components/Scene.h"
-#include "../src/utils/Tools.h"
 
 using namespace unreal_fluid;
 
 class TestScene : public Scene {
 public:
   double dt = 0.02;
-  long long timer = 0;
+  utils::Timer timer;
 
   explicit TestScene(const compositor::Compositor *compositor) : Scene(compositor) {
     auto sphere = new physics::solid::SolidSphere({0,0,0}, 0.3);
@@ -37,31 +36,23 @@ public:
   }
 
   void update() override {
-    timer++;
-    static long long update_start_time = getMicroseconds();
-    long long time = getMicroseconds();
     compositor->getSimulator()->simulate(dt);
-    update_start_time += getMicroseconds() - time;
-    if (timer % 30 == 0) {
-      Logger::logInfo("Simulation time: ", (getMicroseconds() - update_start_time) / 30);
-      update_start_time = getMicroseconds();
+    for (auto &object: objects) {
+      object->parse();
+    }
+
+    timer.incrementCounter();
+
+    if (timer.getCounter() == 100) {
+      auto &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(((physics::fluid::SimpleFluidContainer *) objects[1]->getPhysicalObject())->getData());
+      std::cout << "Number of particles: " << particles.size() << std::endl;
+      timer.reset();
     }
   }
 
   void render() override {
     for (auto &object: objects) {
-      object->parse();
-    }
-    static long long render_start_time = getMicroseconds();
-    long long time = getMicroseconds();
-    for (auto &object: objects) {
       compositor->getRenderer()->RenderAllObjects(object->getRenderObjects());
-    }
-    render_start_time += getMicroseconds() - time;
-    if (timer % 30 == 0) {
-      Logger::logInfo("Rendering time: ", (getMicroseconds() - render_start_time) / 30);
-      render_start_time = getMicroseconds();
-      timer = 0;
     }
   }
 

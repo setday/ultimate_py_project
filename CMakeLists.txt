@@ -69,8 +69,6 @@ add_executable(
         src/core/render/components/shaders/ShaderProgram.cxx
         src/core/managers/sub_programs_managers/shader_manager/ShaderManager.cxx
 
-        src/utils/Tools.cxx
-
         src/core/physics/solid/sphere/SolidSphere.cxx
         src/core/physics/solid/mesh/SolidMesh.cxx
         src/core/physics/solid/mesh/Triangle.cxx

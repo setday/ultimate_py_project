@@ -33,6 +33,8 @@ namespace unreal_fluid::compositor {
     Core *_core;
 
     utils::Timer _timer;
+    utils::Timer _renderingTimer;
+    utils::Timer _simulationTimer;
 
   public:
     explicit Compositor(Core *core);
