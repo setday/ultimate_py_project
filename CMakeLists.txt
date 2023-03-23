@@ -48,15 +48,19 @@ set(LIBS
 add_executable(
         ${PROJECT_NAME}
 
+        src/utils/timer/Timer.cxx
         src/utils/Logger.cxx
 
-        src/core/render/components/Vertex.cxx
-        src/core/render/components/meshes/BasicMesh.cxx
-        src/core/render/components/meshes/Plane.cxx
-        src/core/render/components/meshes/Sphere.cxx
-        src/core/render/components/meshes/Cube.cxx
+        src/core/render/components/mesh/Vertex.cxx
+        src/core/render/components/mesh/BasicMesh.cxx
+        src/core/render/components/mesh/presets/Plane.cxx
+        src/core/render/components/mesh/presets/Sphere.cxx
+        src/core/render/components/mesh/presets/Cube.cxx
 
-        src/core/managers/sub_programs_managers/shader_manager/Shader.cxx
+        src/core/render/components/material/MaterialFactory.cxx
+
+        src/core/render/components/shaders/Shader.cxx
+        src/core/render/components/shaders/ShaderProgram.cxx
         src/core/managers/sub_programs_managers/shader_manager/ShaderManager.cxx
 
         src/core/components/CL/ClBuffer.cxx
@@ -66,6 +70,7 @@ add_executable(
         src/core/components/AbstractObject.cxx
         src/core/components/ObjectFactory.cxx
 
+        src/core/render/components/camera/Camera.cxx
         src/core/render/components/RenderObject.cxx
         src/core/render/Renderer.cxx
 

@@ -27,6 +27,9 @@ Compositor::Compositor(Core *core) : _core(core) {
 
   _renderer = new render::Renderer();
 
+  _timer.pause();
+  _timer.reset();
+
   Logger::logInfo("Compositor created!");
 }
 
@@ -46,15 +49,31 @@ void Compositor::Init() {
 }
 
 void Compositor::Update() {
+  // _timer.resume();
+
   for (auto scene : _scenes) {
     scene->Update();
   }
+
+  // _timer.pause();
 }
 
 void Compositor::Render() {
+  _timer.resume();
+
   _renderer->StartFrame();
   for (auto scene : _scenes) {
     scene->Render();
+  }
+  _renderer->EndFrame();
+
+  _timer.pause();
+  _timer.incrementCounter();
+
+  if (_timer.getCounter() >= 400 || _timer.getElapsedTime() >= 0.5) {
+    Logger::logInfo("| Time to crate a frame: ", _timer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms",
+            " | FPS: ", 1 / _timer.getAverageTime(), " |");
+    _timer.reset();
   }
 }
 

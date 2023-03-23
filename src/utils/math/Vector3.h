@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <cmath>
 #include <string>
 
 namespace unreal_fluid::math {
@@ -27,6 +28,10 @@ namespace unreal_fluid::math {
 
     Vector3() = default;
     ~Vector3() = default;
+
+    Vector3(T a) : x(a),
+                   y(a),
+                   z(a) {}
 
     Vector3(T x, T y, T z) : x(x),
                              y(y),
@@ -92,12 +97,12 @@ namespace unreal_fluid::math {
 
     [[nodiscard]] T len2() const { return x * x + y * y + z * z; }
 
-    [[nodiscard]] double len() const { return root(len2()); }
+    [[nodiscard]] double len() const { return std::sqrt(len2()); }
 
     [[nodiscard]] double operator!() const { return len(); }
 
     Vector3 normalize() const {
-      return this / len();
+      return *this / len();
     }
 
     Vector3 *normalizeSelf() {
@@ -114,6 +119,33 @@ namespace unreal_fluid::math {
 
     Vector3 cross(const Vector3 &v) const {
       return Vector3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
+    }
+
+    /// Linear interpolation between two vectors
+    /// @param v - vector to interpolate to
+    /// @param t - interpolation coefficient
+    /// @attention This is experimental and may be removed in future
+    Vector3 lerped(const Vector3 &v, float t) const {
+      return *this * (1 - t) + v * t;
+    }
+
+    /// Clamp vector to the given range
+    /// @param min - minimum value
+    /// @param max - maximum value
+    Vector3 clampSelf(const Vector3 &min, const Vector3 &max) {
+      x = std::min(std::max(x, min.x), max.x);
+      y = std::min(std::max(y, min.y), max.y);
+      z = std::min(std::max(z, min.z), max.z);
+      return *this;
+    }
+
+    /// Clamp vector to the given range
+    /// @param min - minimum value
+    /// @param max - maximum value
+    Vector3 clamp(const Vector3 &min, const Vector3 &max) const {
+      return Vector3(std::min(std::max(x, min.x), max.x),
+                     std::min(std::max(y, min.y), max.y),
+                     std::min(std::max(z, min.z), max.z));
     }
 
     [[nodiscard]] std::string to_string() const {

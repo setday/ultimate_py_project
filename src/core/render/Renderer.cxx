@@ -5,11 +5,20 @@ using namespace unreal_fluid::render;
 void Renderer::Init() {
   Logger::logInfo("Initializing renderer...");
 
+  glewInit();
+
   _shaderManager = new ShaderManager();
 
+  camera = Camera(vec3f(0.0f, 0.0f, 0.0f), vec3f(0.0f, 0.0f, -1.0f),
+                  vec3f(0.0f, 1.0f, 0.0f), 1.0f, 70.0f, 0.01f, 1000.0f);
+
   InitGl();
+  InitBuffers();
 
   ChangeRenderMode(RenderMode::SOLID);
+
+  _timer.pause();
+  _timer.reset();
 
   Logger::logInfo("Renderer initialized!");
 } // end of Renderer::Renderer() function
@@ -44,29 +53,175 @@ void Renderer::InitGl() const {
   glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 } // end of Renderer::initGL() function
 
-void Renderer::StartFrame() const {
+void Renderer::InitBuffers() {
+  float frameVertices[] = {
+          -1.0f, -1.0f, 0.0f,0.0f, 0.0f,
+          1.0f,  -1.0f, 0.0f,1.0f, 0.0f,
+          -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+          1.0f,  1.0f, 0.0f, 1.0f, 1.0f
+  };
+
+  glGenVertexArrays(1, &_fvao);
+  glGenBuffers(1, &_fvbo);
+
+  glBindVertexArray(_fvao);
+  glBindBuffer(GL_ARRAY_BUFFER, _fvbo);
+
+  glBufferData(GL_ARRAY_BUFFER, 20 * sizeof(float), frameVertices, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)0);
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
+  glEnableVertexAttribArray(1);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
+
+  glGenVertexArrays(1, &_vao);
+  glGenBuffers(1, &_vbo);
+  glGenBuffers(1, &_ibo);
+
+  glGenBuffers(1, &_rtubo);
+}
+
+void Renderer::StartFrame() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glLoadIdentity();
+
+  _timer.resume();
+
+  _objectsToRender.clear();
 } // end of Renderer::startFrame() function
 
-void Renderer::RenderObject(const render::RenderObject *object) const {
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  gluPerspective(45.0f, 1, 0.01f, 100.0f);
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  glTranslatef(object->position.x, object->position.y, object->position.z);
-  glRotatef(object->zAxisAngle, 0.f, 1.f, 0.f);
+void Renderer::RenderObject(const render::RenderObject *object) {
+  if (_renderMode == RenderMode::RAY_TRACING) {
+    _objectsToRender.push_back(object);
 
-  glBegin(GL_TRIANGLES);
-  for (int i = 0; i < object->mesh.indices.size(); i++) {
-    auto vertex = object->mesh.vertices[object->mesh.indices[i]];
-    glColor4f(vertex.color.x, vertex.color.y, vertex.color.z, 1.f);
-    glNormal3f(vertex.normal.x, vertex.normal.y, vertex.normal.z);
-    glVertex3f(vertex.position.x, vertex.position.y, vertex.position.z);
+    return;
   }
-  glEnd();
+
+  object->shaderProgram->Execute();
+
+  GLuint programID = object->shaderProgram->GetProgramID();
+
+  GLuint projectionMatrixID = glGetUniformLocation(programID, "projectionMatrix");
+  glUniformMatrix4fv(projectionMatrixID, 1, GL_FALSE, camera.getProjectionMatrix().data());
+  GLuint modelMatrixID = glGetUniformLocation(programID, "modelMatrix");
+  glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, object->modelMatrix.data());
+
+  GLuint cameraID;
+  cameraID = glGetUniformLocation(programID, "camera.position");
+  glUniform3f(cameraID, camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+  cameraID = glGetUniformLocation(programID, "camera.direction");
+  glUniform3f(cameraID, camera.getDirection().x, camera.getDirection().y, camera.getDirection().z);
+  cameraID = glGetUniformLocation(programID, "camera.up");
+  glUniform3f(cameraID, 0.f, 1.f, 0.f);
+
+  // send material data
+  GLuint materialAmbientID = glGetUniformLocation(programID, "ambientColor");
+  glUniform3f(materialAmbientID, object->material.ambient_color.x, object->material.ambient_color.y, object->material.ambient_color.z);
+  GLuint materialDiffuseID = glGetUniformLocation(programID, "diffuseColor");
+  glUniform3f(materialDiffuseID, object->material.diffuse_color.x, object->material.diffuse_color.y, object->material.diffuse_color.z);
+  GLuint materialSpecularID = glGetUniformLocation(programID, "specularColor");
+  glUniform3f(materialSpecularID, object->material.specular_color.x, object->material.specular_color.y, object->material.specular_color.z);
+  GLuint materialShininessID = glGetUniformLocation(programID, "shininess");
+  glUniform1f(materialShininessID, object->material.shininess);
+
+  glBindVertexArray(_vao);
+  glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ibo);
+
+  glBufferData(GL_ARRAY_BUFFER, object->mesh.vertices.size() * sizeof(Vertex), object->mesh.vertices.data(), GL_DYNAMIC_DRAW);
+
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, position));
+  glEnableVertexAttribArray(1);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, normal));
+  glEnableVertexAttribArray(2);
+  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, texCoord));
+
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, object->mesh.indices.size() * sizeof(unsigned int), object->mesh.indices.data(), GL_DYNAMIC_DRAW);
+
+  glDrawElements(GL_TRIANGLES, object->mesh.indices.size(), GL_UNSIGNED_INT, 0);
+
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
 } // end of Renderer::renderObject() function
+
+void Renderer::RenderAllObjects(const std::vector<render::RenderObject *> &objects) {
+  for (auto object : objects) {
+    RenderObject(object);
+  }
+}
+
+void Renderer::EndFrame() {
+  if (_renderMode == RenderMode::RAY_TRACING) {
+    DefaultShaderManager::GetRayTracingProgram()->Execute();
+
+    GLuint programID = DefaultShaderManager::GetRayTracingProgram()->GetProgramID();
+
+    struct RayTracingVertex {
+      mat4 modelMatrix;
+      vec3f position;
+      int meshType;
+    };
+
+    std::vector<RayTracingVertex> rtVertices;
+    for (auto object : _objectsToRender) {
+      for (int i = 0; i < object->mesh.indices.size(); i++) {
+        auto vertex = object->mesh.vertices[object->mesh.indices[i]];
+        rtVertices.push_back({
+          object->modelMatrix,
+          vertex.position,
+          object->mesh.meshType
+        });
+
+        break;
+      }
+    }
+
+    GLuint cameraID;
+    cameraID = glGetUniformLocation(programID, "camera.position");
+    glUniform3f(cameraID, camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+    cameraID = glGetUniformLocation(programID, "camera.direction");
+    glUniform3f(cameraID, camera.getDirection().x, camera.getDirection().y, camera.getDirection().z);
+    cameraID = glGetUniformLocation(programID, "camera.up");
+    glUniform3f(cameraID, 0.f, 1.f, 0.f);
+
+    GLuint frameID;
+    frameID = glGetUniformLocation(programID, "frame.width");
+    glUniform1i(frameID, camera.getResolution().x);
+    frameID = glGetUniformLocation(programID, "frame.height");
+    glUniform1i(frameID, camera.getResolution().y);
+
+    GLuint objectsCountID;
+    objectsCountID = glGetUniformLocation(programID, "objectCount");
+    glUniform1i(objectsCountID, (int)(rtVertices.size()));
+
+    glBindVertexArray(_fvao);
+    glBindBuffer(GL_ARRAY_BUFFER, _fvbo);
+    glBindBuffer(GL_UNIFORM_BUFFER, _rtubo);
+
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(RayTracingVertex) * rtVertices.size(), rtVertices.data(), GL_DYNAMIC_DRAW);
+    glUniformBlockBinding(programID, glGetUniformBlockIndex(programID, "ObjectDataBuffer"), 0);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, _rtubo);
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+  }
+
+  glFinish();
+
+  _timer.pause();
+  _timer.incrementCounter();
+
+  if (_timer.getCounter() >= 400) {
+    Logger::logInfo("Rendering time: ", _timer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms");
+    _timer.reset();
+  }
+} // end of Renderer::endFrame() function
 
 void Renderer::Destroy() {
   glDisable(GL_DEPTH_TEST);
@@ -92,5 +247,11 @@ void Renderer::ChangeRenderMode(RenderMode mode) {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   }
 } // end of Renderer::changeRenderMode() function
+
+void Renderer::changeResolution(int width, int height) {
+  camera.setResolution(width, height);
+
+  glViewport(0, 0, width, height);
+}
 
 // end of Renderer.cxx

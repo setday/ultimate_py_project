@@ -5,7 +5,8 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Definitions.h
+ * FILE NAME : Cube.h
+ * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -13,8 +14,13 @@
 
 #pragma once
 
-#include "utils/math/MathHeaders"
-#include "utils/Logger.h"
-#include "utils/timer/Timer.h"
+#include "../BasicMesh.h"
 
-// end of Definitions.h
+namespace unreal_fluid::render::mesh {
+  class Cube : public BasicMesh {
+  public:
+    Cube(float size);
+  };
+} // unreal_fluid::render::mesh
+
+// end of Cube.h
