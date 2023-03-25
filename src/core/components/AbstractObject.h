@@ -21,13 +21,12 @@
 
 namespace unreal_fluid {
   class AbstractObject {
-    const compositor::Compositor *compositor;
     physics::IPhysicalObject *physicalObject;
     std::vector<render::RenderObject *> renderObjects;
 
   public:
-    AbstractObject(physics::IPhysicalObject *physObject, const compositor::Compositor *compositor);
-    AbstractObject(physics::fluid::FluidDescriptor descriptor, const compositor::Compositor *compositor);
+    AbstractObject(physics::IPhysicalObject *physObject);
+    AbstractObject(physics::fluid::FluidDescriptor descriptor);
     ~AbstractObject() = default;
     [[nodiscard]] std::vector<render::RenderObject *> &getRenderObjects();
     [[nodiscard]] physics::IPhysicalObject *getPhysicalObject();
