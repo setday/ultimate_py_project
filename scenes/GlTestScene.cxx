@@ -55,12 +55,10 @@ public:
     cube->modelMatrix =
             mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
             mat4::translation({.75f, 0.f, -5.f});
-    cube->material = render::material::MaterialFactory::createMaterial(
-            render::material::MaterialFactory::MaterialType::RUBY
-    );
+    cube->material = render::material::MaterialFactory::createMaterial(unreal_fluid::render::material::MaterialFactory::MaterialType::RED_PLASTIC);
   }
 
-  void Update() override {
+  void update() {
     auto time = utils::Timer::getCurrentTimeAsDouble();
 
     sphere->modelMatrix =
@@ -72,11 +70,11 @@ public:
             mat4::translation({.75f, 0.f, -5.f});
   }
 
-  void Render() override {
+  void render() {
     static int timer = 0;
     timer++;
 
-    compositor->GetRenderer()->RenderAllObjects({cube, sphere, plane});
+    compositor->getRenderer()->RenderAllObjects({cube, sphere, plane});
 
     if (timer % 200 == 0) {
       // compositor->GetRenderer()->GetShaderManager()->ReloadShaders();
