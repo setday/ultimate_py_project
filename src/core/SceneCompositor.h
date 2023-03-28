@@ -5,7 +5,7 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Compositor.h
+ * FILE NAME : SceneCompositor.h
  * PURPOSE   : This class is responsible for rendering.
  *
  * No part of this file may be changed and used without agreement of
@@ -23,43 +23,54 @@ namespace unreal_fluid {
 }
 
 namespace unreal_fluid {
-  class Scene;
+  class IScene;
 }
 
 namespace unreal_fluid::compositor {
-  class Compositor {
+  class SceneCompositor {
   private:
     render::Renderer *_renderer;
-    std::vector<Scene *> _scenes;
+    std::vector<IScene *> _scenes;
     Core *_core;
 
     utils::Timer _timer;
 
   public:
-    explicit Compositor(Core *core);
-    ~Compositor();
+    explicit SceneCompositor(Core *core);
+    ~SceneCompositor();
 
     /// @brief Initialize compositor.
     /// @details Initialize all components of compositor.
-    void Init();
-    /// @brief Update compositor.
-    /// @details Update all components of compositor.
-    void Update();
-    /// @brief Render compositor.
-    /// @details Render all components of compositor.
-    void Render();
-    /// @brief Destroy compositor.
-    /// @details Destroy all components of compositor.
-    void Destroy();
+    void init();
+    /// @brief update compositor.
+    /// @details update all components of compositor.
+    void update();
+    /// @brief render compositor.
+    /// @details render all components of compositor.
+    void render();
+    /// @brief destroy compositor.
+    /// @details destroy all components of compositor.
+    void destroy();
+
+    /// Load scene.
+    /// @param scene Scene.
+    template<typename S>
+    void loadScene() {
+      static_assert(std::is_base_of<IScene, S>::value, "Scene must be derived from Scene class");
+      _scenes.push_back(new S(this));
+    }
+    /// Unload scene.
+    /// @param scene Scene.
+    void unloadScene(IScene *scene);
 
     /// Get core.
     /// @return Core.
-    [[nodiscard]] Core *GetCore() const;
+    [[nodiscard]] Core *getCore() const;
 
     /// Get renderer.
     /// @return Renderer.
-    [[nodiscard]] render::Renderer *GetRenderer() const;
+    [[nodiscard]] render::Renderer *getRenderer() const;
   }; // compositor class
 } // namespace unreal_fluid::compositor
 
-// end of Compositor.h
+// end of SceneCompositor.h

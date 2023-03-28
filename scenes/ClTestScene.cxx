@@ -14,18 +14,18 @@
 #include <iostream>
 
 #include "../src/core/Core.h"
-#include "../src/core/components/Scene.h"
+#include "../src/core/components/scene/Scene.h"
 
 using namespace unreal_fluid;
 
 class ClTestScene : public Scene {
 public:
-  explicit ClTestScene(compositor::Compositor const * compositor) : Scene(compositor) {
+  explicit ClTestScene(compositor::SceneCompositor const * compositor) : Scene(compositor) {
     const int N = 1'000'000;
     std::vector<int> first(N, 368575);
     std::vector<int> second(N, 257808);
     std::vector<int> result(N);
-    manager::CLManager *manager = &(compositor->GetCore()->clManager);
+    manager::CLManager *manager = &(compositor->getCore()->clManager);
 
     manager->LoadProgram("CLTest.clkc", "add");
 

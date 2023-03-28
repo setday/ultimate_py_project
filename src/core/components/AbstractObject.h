@@ -28,14 +28,21 @@ namespace unreal_fluid {
     physics::PhysicsObject *_physicsObject;
     render::RenderObject *_renderObject;
 
-  protected:
-    AbstractObject() = default;
+  public:
+    AbstractObject() = default; /// TODO: should be protected
+    AbstractObject(physics::PhysicsObject *physicsObject,
+                   render::RenderObject *renderObject) : _physicsObject(physicsObject),
+                                                         _renderObject(renderObject) {} // TODO: should be deleted
 
   public:
     ~AbstractObject();
 
-    void Update() const;
-    void Render() const;
+    /// Get physics object.
+    /// @return Physics object.
+    physics::PhysicsObject *getPhysicsObject() const;
+    /// Get render object.
+    /// @return Render object.
+    render::RenderObject *getRenderObject() const;
   }; // end of AbstractObject class
 } // namespace unreal_fluid
 

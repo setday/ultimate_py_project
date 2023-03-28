@@ -5,8 +5,8 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Sphere.h
- * PURPOSE   : ${PURPOSE}
+ * FILE NAME : PhysicalScene.h
+ * PURPOSE   : Class that realizes update of physical scene.
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -14,13 +14,14 @@
 
 #pragma once
 
-#include "BasicMesh.h"
+#include "IScene.h"
 
-namespace unreal_fluid::render::mesh {
-  class Sphere : public BasicMesh {
+namespace unreal_fluid {
+  class PhysicalScene : public virtual IScene {
   public:
-    Sphere(float radius, unsigned int rings, unsigned int sectors);
+    /// Update scene.
+    void update() override;
   };
-} // unreal_fluid::render::mesh
+};
 
-// end of Sphere.h
+// end of PhysicalScene.h

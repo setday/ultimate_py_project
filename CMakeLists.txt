@@ -76,12 +76,16 @@ add_executable(
 
         src/core/render/window_manager/WindowCompositor.cxx
 
-        src/core/components/Scene.cxx
+        src/core/components/scene/PhysicalScene.cxx
+        src/core/components/scene/RenderScene.cxx
+        src/core/components/scene/Scene.cxx
+
         scenes/ClTestScene.cxx
         scenes/GlTestScene.cxx
         scenes/Control.cxx
+        scenes/SceneLoader.cxx
 
-        src/core/Compositor.cxx
+        src/core/SceneCompositor.cxx
         src/core/Core.cxx
         src/main.cxx
 )
@@ -90,3 +94,4 @@ message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/sub_programs/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/sub_programs/)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/objects/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/objects/)

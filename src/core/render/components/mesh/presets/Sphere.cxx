@@ -24,9 +24,9 @@ Sphere::Sphere(float radius, unsigned int rings, unsigned int sectors) {
 
   for (unsigned int r = 0; r < rings; r++) {
     for (unsigned int s = 0; s < sectors; s++) {
-      float const y = cos(M_PI * r * dRings);
-      float const x = cos(2 * M_PI * s * dSectors) * sin(M_PI * r * dRings);
-      float const z = sin(2 * M_PI * s * dSectors) * sin(M_PI * r * dRings);
+      float const y = -cos(M_PI * r * dRings);
+      float const x = -cos(2 * M_PI * s * dSectors) * sin(M_PI * r * dRings);
+      float const z = -sin(2 * M_PI * s * dSectors) * sin(M_PI * r * dRings);
 
       vertices.emplace_back(
               vec3f{x * radius, y * radius, z * radius},
@@ -34,16 +34,13 @@ Sphere::Sphere(float radius, unsigned int rings, unsigned int sectors) {
               vec2f{(float)s / (float)sectors, (float)r / (float)rings}
               );
 
-      if (r != rings - 1 && s != sectors - 1) {
+      if (r != rings - 1) {
         indices.emplace_back(r * sectors + s);
-        indices.emplace_back(r * sectors + (s + 1));
-        indices.emplace_back((r + 1) * sectors + (s + 1));
-
-        indices.emplace_back(r * sectors + s);
-        indices.emplace_back((r + 1) * sectors + (s + 1));
         indices.emplace_back((r + 1) * sectors + s);
       }
     }
+
+    indices.emplace_back(RESET_INDEX);
   }
 
   meshType = 2;

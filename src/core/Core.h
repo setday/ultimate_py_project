@@ -17,7 +17,7 @@
 #include "../Definitions.h"
 
 #include "managers/sub_programs_managers/CL/CLManager.h"
-#include "Compositor.h"
+#include "SceneCompositor.h"
 #include "render/window_manager/WindowCompositor.h"
 
 namespace unreal_fluid {
@@ -27,19 +27,19 @@ namespace unreal_fluid {
 
   private:
     bool _isRunning = false;
-     window::WindowCompositor *_windowCompositor;
-    compositor::Compositor _compositor;
+    window::WindowCompositor *_windowCompositor;
+    compositor::SceneCompositor _compositor;
 
   public:
     Core();
     ~Core();
 
-    /// @brief Run core.
-    /// @details Run main loop of core.
-    void Run();
-    /// @brief Shutdown core.
-    /// @details Shutdown all components of core.
-    void Shutdown();
+    /// @brief run core.
+    /// @details run main loop of core.
+    void run();
+    /// @brief shutdown core.
+    /// @details shutdown all components of core.
+    void shutdown();
 
     /// Get window compositor.
     /// @return Window compositor.
@@ -48,10 +48,10 @@ namespace unreal_fluid {
   private:
     /// @brief Initialize core.
     /// @details Initialize all components of core.
-    void Init();
-    /// @brief Update core.
-    /// @details Update all components of core.
-    void Update();
+    void init();
+    /// @brief update core.
+    /// @details update all components of core.
+    void update();
   }; // core class
 } // namespace unreal_fluid
 

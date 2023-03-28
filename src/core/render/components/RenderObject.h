@@ -1,3 +1,17 @@
+/***************************************************************
+ * Copyright (C) 2023
+ *    HSE SPb (Higher school of economics in Saint-Petersburg).
+ ***************************************************************/
+
+/* PROJECT   : ultimate_py_project
+ * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
+ * FILE NAME : RenderObject.h
+ * PURPOSE   : Class that realizes render object.
+ *
+ * No part of this file may be changed and used without agreement of
+ * authors of this project.
+ */
+
 #pragma once
 
 #include <vector>
@@ -9,18 +23,26 @@
 namespace unreal_fluid::render {
   class RenderObject {
   public:
+    mat4 modelMatrix = mat4();
+
     mesh::BasicMesh mesh;
     material::BaseMaterial material;
     const ShaderProgram *shaderProgram = render::DefaultShaderManager::GetDefaultProgram();
 
-    mat4 modelMatrix = mat4();
-
-    [[deprecated("It is strongly recommended to use modelMatrix instead of position")]]
-    vec3f position = vec3f(0.0f, 0.0f, 0.0f);
-    [[deprecated("It is strongly recommended to use modelMatrix instead of zAxisAngle")]]
-    float zAxisAngle = 0.0f;
-
     RenderObject() = default;
     ~RenderObject() = default;
+
+    /// Load render object from file.
+    /// @param path Path to file.
+    /// @attention Only .obj files are supported.
+    void loadFromFile(std::string_view path);
+
+  private:
+    /// Load render object from .obj file.
+    /// @param file File to load.
+    /// @return True if success, false otherwise.
+    bool loadFromObjFile(std::ifstream &file);
   };
 } // namespace unreal_fluid::render
+
+// end of RenderObject.h

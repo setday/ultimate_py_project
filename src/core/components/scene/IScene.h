@@ -5,8 +5,8 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Mesh.h
- * PURPOSE   : ${PURPOSE}
+ * FILE NAME : IScene.h
+ * PURPOSE   : Interface of scene.
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -16,23 +16,27 @@
 
 #include <vector>
 
-#include "Vertex.h"
+#include "../../../Definitions.h"
 
-#define RESET_INDEX UINT_MAX
+#include "../../SceneCompositor.h"
+#include "../AbstractObject.h"
 
-namespace unreal_fluid::render::mesh {
-  class BasicMesh {
+namespace unreal_fluid {
+  class IScene {
+  protected:
+    const compositor::SceneCompositor *compositor;
+
+    std::vector<AbstractObject *> objects;
+
   public:
-    std::vector<Vertex> vertices;
-    std::vector<unsigned int> indices;
+    IScene() = default;
+    virtual ~IScene() = default;
 
-    std::vector<Vertex> rtVertices;
-    int meshType = 0;
-
-  public:
-    BasicMesh() = default;
-    BasicMesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &indices);
+    /// Update scene.
+    virtual void update() = 0;
+    /// Render scene.
+    virtual void render() = 0;
   };
-} // unreal_fluid::render::mesh
+}
 
-// end of Mesh.h
+// end of IScene.h

@@ -41,11 +41,11 @@ namespace unreal_fluid::render {
     void Destroy();
 
     void StartFrame();
-    /// Render object.
+    /// render object.
     /// @param object Object to render.
     /// @attention projection only! If you render objects using ray tracing, you should use RenderAllObjects() instead.
     void RenderObject(const render::RenderObject *object);
-    /// Render all objects.
+    /// render all objects.
     /// @param objects Objects to render.
     void RenderAllObjects(const std::vector<render::RenderObject *> &objects);
     /// End rendering frame.

@@ -30,6 +30,10 @@ void Renderer::InitGl() const {
   glClearColor(0.05f, 0.05f, 0.1f, 0.0f);
   glClearDepth(1.0f);
 
+
+  glEnable(GL_PRIMITIVE_RESTART);
+  glPrimitiveRestartIndex(RESET_INDEX);
+
   glDepthFunc(GL_LEQUAL);
   glEnable(GL_DEPTH_TEST);
   glShadeModel(GL_SMOOTH);
@@ -117,11 +121,11 @@ void Renderer::RenderObject(const render::RenderObject *object) {
 
   // send material data
   GLuint materialAmbientID = glGetUniformLocation(programID, "ambientColor");
-  glUniform3f(materialAmbientID, object->material.ambient_color.x, object->material.ambient_color.y, object->material.ambient_color.z);
+  glUniform3f(materialAmbientID, object->material.ambientColor.x, object->material.ambientColor.y, object->material.ambientColor.z);
   GLuint materialDiffuseID = glGetUniformLocation(programID, "diffuseColor");
-  glUniform3f(materialDiffuseID, object->material.diffuse_color.x, object->material.diffuse_color.y, object->material.diffuse_color.z);
+  glUniform3f(materialDiffuseID, object->material.diffuseColor.x, object->material.diffuseColor.y, object->material.diffuseColor.z);
   GLuint materialSpecularID = glGetUniformLocation(programID, "specularColor");
-  glUniform3f(materialSpecularID, object->material.specular_color.x, object->material.specular_color.y, object->material.specular_color.z);
+  glUniform3f(materialSpecularID, object->material.specularColor.x, object->material.specularColor.y, object->material.specularColor.z);
   GLuint materialShininessID = glGetUniformLocation(programID, "shininess");
   glUniform1f(materialShininessID, object->material.shininess);
 
@@ -140,7 +144,7 @@ void Renderer::RenderObject(const render::RenderObject *object) {
 
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, object->mesh.indices.size() * sizeof(unsigned int), object->mesh.indices.data(), GL_DYNAMIC_DRAW);
 
-  glDrawElements(GL_TRIANGLES, object->mesh.indices.size(), GL_UNSIGNED_INT, 0);
+  glDrawElements(GL_TRIANGLE_STRIP, object->mesh.indices.size(), GL_UNSIGNED_INT, 0);
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
