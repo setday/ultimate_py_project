@@ -42,20 +42,17 @@ namespace unreal_fluid::render {
     explicit Shader(Type _type);
     ~Shader();
 
-    /// Load program from string
+    /// Build shader from string of source code
     /// @param source Source code
     /// @return True if success
-    bool LoadProgram(std::string_view source);
-
-    /// Execute program
-    void ExecuteProgram() const;
+    bool build(std::string_view source);
 
     /// Get shader id
     /// @return Shader id
-    GLuint GetShaderID() const;
+    GLuint getShaderId() const;
     /// Get log
     /// @param log Log
-    void GetLog(std::string &log) const;
+    void getLog(std::string &log) const;
   };
 } // namespace unreal_fluid::render
 

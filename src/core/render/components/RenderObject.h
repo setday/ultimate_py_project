@@ -5,7 +5,7 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : RenderObject.h
+ * FILE NAME : renderObject.h
  * PURPOSE   : Class that realizes render object.
  *
  * No part of this file may be changed and used without agreement of
@@ -17,7 +17,7 @@
 #include <vector>
 
 #include "mesh/BasicMesh.h"
-#include "material/BaseMaterial.h"
+#include "material/BasicMaterial.h"
 #include "../../managers/sub_programs_managers/shader_manager/ShaderManager.h"
 
 namespace unreal_fluid::render {
@@ -26,7 +26,7 @@ namespace unreal_fluid::render {
     mat4 modelMatrix = mat4();
 
     mesh::BasicMesh mesh;
-    material::BaseMaterial material;
+    material::BasicMaterial material;
     const ShaderProgram *shaderProgram = render::DefaultShaderManager::GetDefaultProgram();
 
     RenderObject() = default;
@@ -45,4 +45,4 @@ namespace unreal_fluid::render {
   };
 } // namespace unreal_fluid::render
 
-// end of RenderObject.h
+// end of renderObject.h

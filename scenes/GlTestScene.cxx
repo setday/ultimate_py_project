@@ -13,7 +13,7 @@
 
 #include "../src/core/Core.h"
 #include "../src/core/components/scene/Scene.h"
-#include "../src/core/render/components/material/MaterialFactory.h"
+#include "../src/core/render/components/material/MaterialPresets.h"
 #include "../src/core/render/components/mesh/presets/Sphere.h"
 #include "../src/core/render/components/mesh/presets/Plane.h"
 #include "../src/core/render/components/mesh/presets/Cube.h"
@@ -22,44 +22,38 @@ using namespace unreal_fluid;
 
 class GlTestScene : public Scene {
 public:
-  render::RenderObject *sphere;
-  render::RenderObject *plane;
-  render::RenderObject *cube;
+  std::unique_ptr<render::RenderObject> sphere;
+  std::unique_ptr<render::RenderObject> plane;
+  std::unique_ptr<render::RenderObject> cube;
 
   AbstractObject *object;
 
   utils::Timer timer;
 
   explicit GlTestScene(compositor::SceneCompositor const * compositor) : Scene(compositor) {
-    sphere = new render::RenderObject();
+    sphere = std::make_unique<render::RenderObject>();
     sphere->modelMatrix =
             mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
             mat4::translation({-.75f, 0.f, -5.f});
     sphere->mesh = render::mesh::Sphere(.5f, 50, 50);
-    sphere->material = render::material::MaterialFactory::createMaterial(
-            render::material::MaterialFactory::MaterialType::WATTER
-            );
-    objects.push_back(new AbstractObject{nullptr, sphere});
+    sphere->material = render::material::Water();
+    objects.push_back(new AbstractObject{nullptr, sphere.get()});
 
-    plane = new render::RenderObject();
+    plane = std::make_unique<render::RenderObject>();
     plane->mesh = render::mesh::Plane(300, 300, 50, 50);
     plane->modelMatrix =
             mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
             mat4::translation({0.f, -1.f, -5.f});
-    plane->material = render::material::MaterialFactory::createMaterial(
-            render::material::MaterialFactory::MaterialType::CYAN_PLASTIC
-            );
-    objects.push_back(new AbstractObject{nullptr, plane});
+    plane->material = render::material::CyanPlastic();
+    objects.push_back(new AbstractObject{nullptr, plane.get()});
 
-    cube = new render::RenderObject();
+    cube = std::make_unique<render::RenderObject>();
     cube->mesh = render::mesh::Cube(.5f);
     cube->modelMatrix =
             mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
             mat4::translation({.75f, 0.f, -5.f});
-    cube->material = render::material::MaterialFactory::createMaterial(
-            render::material::MaterialFactory::MaterialType::RUBY
-            );
-    objects.push_back(new AbstractObject{nullptr, cube});
+    cube->material = render::material::Ruby();
+    objects.push_back(new AbstractObject{nullptr, cube.get()});
 
     render::RenderObject *tree = new render::RenderObject();
     tree->loadFromFile("Lowpoly_tree_sample.obj");
@@ -78,9 +72,7 @@ public:
               mat4::rotation(rand() % 360, {0.f, 1.f, 0.f}) *
               mat4::scale((rand() % 50 + 50) / 200.f) *
               mat4::translation(position);
-      object->material = render::material::MaterialFactory::createMaterial(
-              render::material::MaterialFactory::MaterialType::RUBY
-              );
+      object->material = render::material::Ruby();
       objects.push_back(new AbstractObject{nullptr, object});
     }
 
@@ -102,9 +94,7 @@ public:
               mat4::rotation(rand() % 360, {0.f, 1.f, 0.f}) *
               mat4::scale((rand() % 50 + 50) / 50.f) *
               mat4::translation(position);
-      object->material = render::material::MaterialFactory::createMaterial(
-              render::material::MaterialFactory::MaterialType::EMERALD
-      );
+      object->material = render::material::Emerald();
       objects.push_back(new AbstractObject{nullptr, object});
     }
 

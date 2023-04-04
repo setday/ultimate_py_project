@@ -108,6 +108,14 @@ namespace unreal_fluid::render {
     /// Get view with projection matrix
     /// @return view with projection matrix
     mat4 getFullMatrix() const;
+
+    /// Get right vector
+    /// @return right vector
+    vec3f getRight() const;
+
+    /// Get up vector
+    /// @return up vector
+    vec3f getUp() const;
   };
 } // unreal_fluid::render
 

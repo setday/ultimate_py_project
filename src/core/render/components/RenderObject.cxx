@@ -5,7 +5,7 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : RenderObject.cxx
+ * FILE NAME : renderObject.cxx
  * PURPOSE   : Class that realizes render object.
  *
  * No part of this file may be changed and used without agreement of
@@ -119,4 +119,4 @@ bool RenderObject::loadFromObjFile(std::ifstream &file) {
   return true;
 }
 
-// end of RenderObject.cxx
+// end of renderObject.cxx

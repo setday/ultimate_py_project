@@ -28,7 +28,7 @@ class Scene : public PhysicalScene, public RenderScene {
 
   protected:
     /// Get renderer of compositor.
-    /// @return Renderer.
+    /// @return Renderer.Render.
     [[nodiscard]] render::Renderer *getRenderer() const;
     /// Get core that owns this compositor.
     /// @return Core.

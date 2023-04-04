@@ -12,6 +12,8 @@
  * authors of this project.
  */
 
+#include <memory>
+
 #include "ShaderProgram.h"
 
 using namespace unreal_fluid::render;
@@ -24,25 +26,25 @@ ShaderProgram::~ShaderProgram() {
   glDeleteProgram(_programID);
 }
 
-void ShaderProgram::AttachShader(const Shader *shader) {
-  glAttachShader(_programID, shader->GetShaderID());
+void ShaderProgram::attachShader(const Shader *shader) {
+  glAttachShader(_programID, shader->getShaderId());
 
   _attachedShaders.push_back(shader);
 }
 
-void ShaderProgram::ReattachShaders() {
+void ShaderProgram::reattachShaders() {
   glDeleteProgram(_programID);
 
   _programID = glCreateProgram();
 
   for (const auto &shader : _attachedShaders) {
-    glAttachShader(_programID, shader->GetShaderID());
+    glAttachShader(_programID, shader->getShaderId());
   }
 
   glLinkProgram(_programID);
 }
 
-bool ShaderProgram::LinkProgram() const {
+bool ShaderProgram::linkProgram() const {
   glLinkProgram(_programID);
 
   GLint success;
@@ -51,7 +53,7 @@ bool ShaderProgram::LinkProgram() const {
   return success;
 }
 
-void ShaderProgram::Execute() const {
+void ShaderProgram::activate() const {
   GLint success;
   glGetProgramiv(_programID, GL_LINK_STATUS, &success);
   if (!success) {
@@ -62,22 +64,22 @@ void ShaderProgram::Execute() const {
   glUseProgram(_programID);
 }
 
-unsigned int ShaderProgram::GetProgramID() const {
+[[nodiscard]]
+unsigned int ShaderProgram::getId() const {
   return _programID;
 }
 
-void ShaderProgram::GetLog(std::string &log) const {
+void ShaderProgram::getLog(std::string &log) const {
   GLint length;
 
   glGetProgramiv(_programID, GL_INFO_LOG_LENGTH, &length);
 
   if (length > 0) {
-    char *logBuffer = new char[length];
+    auto logBuffer = std::unique_ptr<char[]>(new char[length]);
 
-    glGetProgramInfoLog(_programID, length, nullptr, logBuffer);
+    glGetProgramInfoLog(_programID, length, nullptr, logBuffer.get());
 
-    log = logBuffer;
-    delete[] logBuffer;
+    log = logBuffer.get();
   }
 }
 

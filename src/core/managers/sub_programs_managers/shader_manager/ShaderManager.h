@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -24,20 +25,20 @@
 namespace unreal_fluid::render {
   class ShaderManager {
   private:
-    std::vector<Shader *> _shaders;
-    std::vector<ShaderProgram *> _programs;
+    std::vector<std::unique_ptr<Shader>> _shaders;
+    std::vector<std::unique_ptr<ShaderProgram>> _programs;
     std::vector<std::string> _shaderPaths;
 
   public:
     ShaderManager();
-    virtual ~ShaderManager();
+    virtual ~ShaderManager() = default;
 
     /// Load shader from file
     /// @param path Path to shader file
     /// @return Shader pointer
     const Shader * LoadShader(std::string_view path);
 
-    /// Create program from shaders
+    /// create program from shaders
     /// @param shaders Shaders to create program from
     /// @return Program
     const ShaderProgram * CreateProgram(const std::vector<const Shader *> &shaders);
@@ -54,6 +55,7 @@ namespace unreal_fluid::render {
   private:
     static const ShaderProgram *_defaultProgram;
     static const ShaderProgram *_rtProgram;
+    static const ShaderProgram *_postProcessingProgram;
 
     static DefaultShaderManager _instance;
 
@@ -62,9 +64,13 @@ namespace unreal_fluid::render {
     /// @return Default program
     static const ShaderProgram * GetDefaultProgram();
 
-    /// Get ray tracing program
-    /// @return Ray tracing program
+    /// Get default ray tracing program
+    /// @return Default ray tracing program
     static const ShaderProgram * GetRayTracingProgram();
+
+    /// Get default post processing program
+    /// @return Default post processing program
+    static const ShaderProgram * GetPostProcessingProgram();
 
     /// Reload all shaders
     static void ReloadShaders();

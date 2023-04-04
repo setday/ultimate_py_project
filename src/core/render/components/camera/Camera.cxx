@@ -26,8 +26,9 @@ void Camera::updateProjectionMatrix() {
 }
 
 Camera::Camera(const vec3f &position, const vec3f &direction, const vec3f &up, float aspect, float fov, float near,
-               float far) : _position(position), _direction(direction), _up(up), _fov(fov), _near(near), _far(far),
-                            _aspect(aspect), _height(500.f), _width(500.f), _view(), _projection() {
+               float far) : _position(position), _direction(direction.normalize()), _up(up.normalize()),
+               _right(direction.cross(up).normalize()), _fov(fov), _near(near), _far(far), _aspect(aspect),
+               _height(500.f), _width(500.f), _view(), _projection() {
   updateViewMatrix();
   updateProjectionMatrix();
 }
@@ -63,7 +64,10 @@ vec3f Camera::getDirection() const {
 }
 
 void Camera::setDirection(const vec3f &direction) {
-  _direction = direction;
+  _direction = direction.normalize();
+
+  _right = _direction.cross(_up).normalize();
+
   updateViewMatrix();
 }
 
@@ -71,7 +75,8 @@ void Camera::setDirection(float yaw, float pitch) {
   _direction.z = cos(yaw) * cos(pitch);
   _direction.y = sin(pitch);
   _direction.x = sin(yaw) * cos(pitch);
-  updateViewMatrix();
+
+  setDirection(_direction);
 }
 
 vec2f Camera::getResolution() const {
@@ -95,6 +100,14 @@ mat4 Camera::getProjectionMatrix() const {
 
 mat4 Camera::getFullMatrix() const {
   return _view * _projection;
+}
+
+vec3f Camera::getRight() const {
+  return _right;
+}
+
+vec3f Camera::getUp() const {
+  return _up;
 }
 
 // end of Camera.cxx

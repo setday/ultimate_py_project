@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include "../Definitions.h"
 
 #include "./render/Renderer.h"
@@ -29,7 +31,7 @@ namespace unreal_fluid {
 namespace unreal_fluid::compositor {
   class SceneCompositor {
   private:
-    render::Renderer *_renderer;
+    std::unique_ptr<render::Renderer> _renderer;
     std::vector<IScene *> _scenes;
     Core *_core;
 
@@ -37,7 +39,7 @@ namespace unreal_fluid::compositor {
 
   public:
     explicit SceneCompositor(Core *core);
-    ~SceneCompositor();
+    ~SceneCompositor() = default;
 
     /// @brief Initialize compositor.
     /// @details Initialize all components of compositor.
@@ -57,7 +59,7 @@ namespace unreal_fluid::compositor {
     template<typename S>
     void loadScene() {
       static_assert(std::is_base_of<IScene, S>::value, "Scene must be derived from Scene class");
-      _scenes.push_back(new S(this));
+      _scenes.emplace_back(new S(this));
     }
     /// Unload scene.
     /// @param scene Scene.
@@ -68,7 +70,7 @@ namespace unreal_fluid::compositor {
     [[nodiscard]] Core *getCore() const;
 
     /// Get renderer.
-    /// @return Renderer.
+    /// @return Renderer.Render.
     [[nodiscard]] render::Renderer *getRenderer() const;
   }; // compositor class
 } // namespace unreal_fluid::compositor

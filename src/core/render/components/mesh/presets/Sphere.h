@@ -17,7 +17,7 @@
 #include "../BasicMesh.h"
 
 namespace unreal_fluid::render::mesh {
-  class Sphere : public BasicMesh {
+  struct Sphere : BasicMesh {
   public:
     Sphere(float radius, unsigned int rings, unsigned int sectors);
   };

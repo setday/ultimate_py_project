@@ -17,15 +17,13 @@
 #include "../../../../Definitions.h"
 
 namespace unreal_fluid::render {
-  class Vertex {
-  public:
+  struct Vertex {
     vec3f position;
     vec3f normal;
     vec2f texCoord;
 
-  public:
     Vertex() = default;
-    Vertex(vec3f position, vec3f normal, vec2f texCoord);
+    Vertex(vec3f position, vec3f normal, vec2f texCoord) : position(position), normal(normal), texCoord(texCoord) {}
   };
 } // render
 

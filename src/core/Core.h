@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <memory>
+
 #include "../Definitions.h"
 
 #include "managers/sub_programs_managers/CL/CLManager.h"
@@ -27,12 +29,12 @@ namespace unreal_fluid {
 
   private:
     bool _isRunning = false;
-    window::WindowCompositor *_windowCompositor;
+    std::unique_ptr<window::WindowCompositor> _windowCompositor;
     compositor::SceneCompositor _compositor;
 
   public:
     Core();
-    ~Core();
+    ~Core() = default;
 
     /// @brief run core.
     /// @details run main loop of core.
@@ -43,7 +45,7 @@ namespace unreal_fluid {
 
     /// Get window compositor.
     /// @return Window compositor.
-    [[nodiscard]] window::WindowCompositor *GetWindowCompositor() const;
+    [[nodiscard]] window::WindowCompositor *getWindowCompositor() const;
 
   private:
     /// @brief Initialize core.

@@ -15,7 +15,7 @@
 
 using namespace unreal_fluid;
 
-AbstractObject *ObjectFactory::Create(Type type) {
+AbstractObject *ObjectFactory::create(Type type) {
   auto *object = new AbstractObject();
 
   object->_renderObject = new render::RenderObject();

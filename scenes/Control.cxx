@@ -26,10 +26,10 @@ public:
   explicit Control(compositor::SceneCompositor const * compositor) : IScene() {
     this->compositor = compositor;
 
-    compositor->getCore()->GetWindowCompositor()->addKeyboardCallback([this](int key, int action) {
+    compositor->getCore()->getWindowCompositor()->addKeyboardCallback([this](int key, int action) {
       this->keyboardBindings(key, action);
     });
-    compositor->getCore()->GetWindowCompositor()->addResizeCallback([this](int width, int height) {
+    compositor->getCore()->getWindowCompositor()->addResizeCallback([this](int width, int height) {
       this->resizeBindings(width, height);
     });
   }
@@ -40,9 +40,9 @@ public:
     if (key == GLFW_KEY_S)
       cameraSpeed -= this->compositor->getRenderer()->camera.getDirection() / 15;
     if (key == GLFW_KEY_D)
-      cameraSpeed -= vec3f(0.f, 1.f, 0.f).cross(this->compositor->getRenderer()->camera.getDirection()) / 15;
+      cameraSpeed += this->compositor->getRenderer()->camera.getRight() / 15;
     if (key == GLFW_KEY_A)
-      cameraSpeed += vec3f(0.f, 1.f, 0.f).cross(this->compositor->getRenderer()->camera.getDirection()) / 15;
+      cameraSpeed -= this->compositor->getRenderer()->camera.getRight() / 15;
 
     if (key == GLFW_KEY_SPACE)
       cameraSpeed += vec3f(0.f, 1.f, 0.f) / 15;
@@ -66,23 +66,23 @@ public:
       this->compositor->getCore()->shutdown();
 
     if (key == GLFW_KEY_F2 && action == GLFW_PRESS) {
-      this->compositor->getRenderer()->ChangeRenderMode(render::Renderer::RenderMode::WIREFRAME);
+      this->compositor->getRenderer()->changeRenderMode(render::Renderer::RenderMode::WIREFRAME);
 
       Logger::logInfo("Wireframe mode enabled");
     }
     if (key == GLFW_KEY_F1 && action == GLFW_PRESS) {
-      this->compositor->getRenderer()->ChangeRenderMode(render::Renderer::RenderMode::SOLID);
+      this->compositor->getRenderer()->changeRenderMode(render::Renderer::RenderMode::SOLID);
 
       Logger::logInfo("Solid mode enabled");
     }
     if (key == GLFW_KEY_F5 && action == GLFW_PRESS) {
-      this->compositor->getRenderer()->ChangeRenderMode(render::Renderer::RenderMode::RAY_TRACING);
+      this->compositor->getRenderer()->changeRenderMode(render::Renderer::RenderMode::RAY_TRACING);
 
       Logger::logInfo("Ray tracing mode enabled");
     }
 
     if (key == GLFW_KEY_F11 && action == GLFW_PRESS) {
-      this->compositor->getRenderer()->GetShaderManager()->ReloadShaders();
+      this->compositor->getRenderer()->getShaderManager()->ReloadShaders();
       render::DefaultShaderManager::ReloadShaders();
 
       Logger::logInfo("All shaders reloaded!");

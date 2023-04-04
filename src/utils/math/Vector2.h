@@ -28,16 +28,16 @@ namespace unreal_fluid::math {
     Vector2() = default;
     ~Vector2() = default;
 
-    /// Create a vector with all components equal to a
+    /// create a vector with all components equal to a
     /// @param a - value
     Vector2(T a) : x(a),
                    y(a) {}
-    /// Create a vector with components x and y
+    /// create a vector with components x and y
     /// @param x - x component
     /// @param y - y component
     Vector2(T x, T y) : x(x),
                         y(y) {}
-    /// Create a vector from another vector with different type
+    /// create a vector from another vector with different type
     /// @tparam G - type of another vector
     /// @param v - vector
     template<typename G>

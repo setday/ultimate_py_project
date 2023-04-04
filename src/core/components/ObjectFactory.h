@@ -26,7 +26,7 @@ namespace unreal_fluid {
       StaticObject
     };
 
-    static AbstractObject *Create(Type type);
+    static AbstractObject *create(Type type);
   };
 
 } // namespace unreal_fluid

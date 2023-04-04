@@ -18,13 +18,7 @@
 
 using namespace unreal_fluid;
 
-Core::Core() : _compositor(this) {
-  _windowCompositor = new window::WindowCompositor();
-}
-
-Core::~Core() {
-  delete _windowCompositor;
-};
+Core::Core() : _windowCompositor(std::make_unique<window::WindowCompositor>()), _compositor(this) {}
 
 void Core::run() {
   init();
@@ -34,8 +28,8 @@ void Core::run() {
   }
 }
 
-window::WindowCompositor *Core::GetWindowCompositor() const {
-  return _windowCompositor;
+window::WindowCompositor *Core::getWindowCompositor() const {
+  return _windowCompositor.get();
 }
 
 void Core::init() {

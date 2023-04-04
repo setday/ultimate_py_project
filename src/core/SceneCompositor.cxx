@@ -22,22 +22,16 @@ using namespace unreal_fluid::compositor;
 SceneCompositor::SceneCompositor(Core *core) : _core(core) {
   Logger::logInfo("Creating compositor...");
 
-  _renderer = new render::Renderer();
-
   _timer.pause();
   _timer.reset();
 
   Logger::logInfo("SceneCompositor created!");
 }
 
-SceneCompositor::~SceneCompositor() {
-  delete _renderer;
-}
-
 void SceneCompositor::init() {
   Logger::logInfo("Initializing compositor...");
 
-  _renderer->Init();
+  _renderer = std::make_unique<render::Renderer>();
 
   loadScene<SceneLoader>();
 
@@ -58,12 +52,12 @@ void SceneCompositor::update() {
 void SceneCompositor::render() {
   _timer.resume();
 
-  _renderer->StartFrame();
+  _renderer->startFrame();
   for (auto scene : _scenes) {
     if (scene != nullptr)
       scene->render();
   }
-  _renderer->EndFrame();
+  _renderer->endFrame();
 
   _timer.pause();
   _timer.incrementCounter();
@@ -79,7 +73,7 @@ void SceneCompositor::destroy() {
   for (auto scene : _scenes)
     delete scene;
 
-  _renderer->Destroy();
+  _renderer.reset();
 }
 
 void SceneCompositor::unloadScene(IScene *scene) {
@@ -97,7 +91,7 @@ Core *SceneCompositor::getCore() const {
 }
 
 render::Renderer *SceneCompositor::getRenderer() const {
-  return _renderer;
+  return _renderer.get();
 }
 
 // end of SceneCompositor.cxx
