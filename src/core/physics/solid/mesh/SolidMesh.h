@@ -22,10 +22,10 @@ namespace unreal_fluid::physics::solid {
   class SolidMesh : public ISolid {
 
   private:
-    std::vector<Triangle> &triangles;
+    std::vector<Triangle> triangles;
 
   public:
-    SolidMesh(std::vector<Triangle> &triangles);
+    SolidMesh(const std::vector<Triangle> &triangles);
 
     void simulate(double dt) override;
     Type getType() override;

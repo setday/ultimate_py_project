@@ -18,7 +18,7 @@
 
 using namespace unreal_fluid::physics::solid;
 
-SolidMesh::SolidMesh(std::vector<Triangle> &triangles) : triangles(triangles) {}
+SolidMesh::SolidMesh(const std::vector<Triangle> &triangles) : triangles(triangles) {}
 
 unreal_fluid::physics::IPhysicalObject::Type SolidMesh::getType() {
   return Type::SOLID_MESH;
