@@ -23,10 +23,12 @@ class MeshScene : public Scene {
 public:
  explicit MeshScene(const compositor::Compositor *compositor) : Scene(compositor) {
    using namespace physics::solid;
+
+
    Triangle t1{{0, 0, 0}, {1, 1, 1}, {1, 2, 3}}, t2{{0, 0, 0}, {1, 1, 1}, {1, 2, 3}},
            t3{{0, 0, 0}, {1, 1, 1}, {1, 2, 3}};
-   std::vector<Triangle> triangles{t1, t2, t3};
-   auto solidMesh = new physics::solid::SolidMesh(triangles);
+   auto triangle = new std::vector<Triangle>{t1, t2, t3};
+   auto solidMesh = new SolidMesh(*triangle);
    objects.push_back(new AbstractObject(solidMesh));
    for (auto &abstractObject: objects) {
      compositor->getSimulator()->addPhysicalObject(abstractObject->getPhysicalObject());
