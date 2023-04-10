@@ -29,15 +29,17 @@ void AbstractObject::parse() {
   void *data = physicalObject->getData();
 
   if (type == physics::IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER) {
+
     auto &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(data);
 
     for (int pos = 0; pos < particles.size(); ++pos) {
+
       if (pos >= renderObjects.size()) {
+        auto radius = particles[pos]->radius;
+
         renderObjects.push_back(new render::RenderObject {
           .mesh = render::mesh::Sphere(
-                  (float) particles[pos]->radius,
-                  int(particles[pos]->radius * 500),
-                  int(particles[pos]->radius * 500)
+                  (float) radius, int(radius * 500), int(radius * 500)
           ),
           .material = render::material::MaterialFactory::createMaterial(render::material::MaterialFactory::MaterialType::GOLD),
         });
@@ -53,11 +55,12 @@ void AbstractObject::parse() {
   }
 
   if (type == physics::IPhysicalObject::Type::SOLID_SPHERE) {
+    auto radius = solidSphere.getRadius();
     auto solidSphere = *static_cast<physics::solid::SolidSphere *>(data);
 
     if (renderObjects.empty()) {
       renderObjects.push_back(new render::RenderObject {
-        .mesh = render::mesh::Sphere((float) solidSphere.getRadius(), 50, 50),
+        .mesh = render::mesh::Sphere((float)radius, 50, 50),
         .material = render::material::MaterialFactory::createMaterial(render::material::MaterialFactory::MaterialType::BRONZE),
       });
     }

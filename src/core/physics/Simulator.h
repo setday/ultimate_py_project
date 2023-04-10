@@ -23,7 +23,7 @@ namespace unreal_fluid::physics {
     class Simulator {
     private:
         std::vector<IPhysicalObject *> dynamicObjects;
-        std::vector<solid::ISolid *> solidObjects;
+        std::vector<IPhysicalObject *> solidObjects;
     public:
         Simulator() = default;
 
@@ -39,7 +39,7 @@ namespace unreal_fluid::physics {
         void simulate(double dt);
 
     private:
-        void interact(IPhysicalObject* dynamicObject, solid::ISolid* solid);
+        void interact(IPhysicalObject* dynamicObject, IPhysicalObject* solid);
     };
 } // namespace unreal_fluid::physics
 
