@@ -15,29 +15,24 @@
 
 #include <vector>
 
-
 namespace unreal_fluid::physics {
-    class Simulator;
+  class Simulator;
 
-    class IPhysicalObject {
-        friend class Simulator;
+  class IPhysicalObject {
+    friend class Simulator;
 
-    public:
-        enum class Type {
-            SIMPLE_FLUID_CONTAINER,
-            SOLID_SPHERE,
-            SOLID_MESH
-        };
-
-        virtual ~IPhysicalObject() = default;
-
-        virtual Type getType() = 0;
-
-        virtual void *getData() = 0;
-
-    private:
-        virtual void simulate(double dt) = 0;
+  public:
+    enum class Type {
+      SIMPLE_FLUID_CONTAINER,
+      SOLID_SPHERE,
+      SOLID_MESH
     };
-} // namespace unreal_fluid::physics
 
-// end of IPhysicalObject.h
+    virtual ~IPhysicalObject() = default;
+    virtual Type getType() = 0;
+    virtual void *getData() = 0;
+
+  private:
+    virtual void simulate(double dt) = 0;
+  };
+} // namespace unreal_fluid::physics

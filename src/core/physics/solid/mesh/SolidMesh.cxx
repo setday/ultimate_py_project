@@ -6,7 +6,7 @@
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
  * FILE NAME : SimpleFluidContainer.cxx
- * PURPOSE   : Simple fluid simulation class, which implements ASS collision
+ * PURPOSE   : Simple mesh plane which is static
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -14,17 +14,16 @@
 
 
 #include "SolidMesh.h"
-
 #include <utility>
 
-unreal_fluid::physics::solid::SolidMesh::SolidMesh(std::vector<Triangle> triangles) : triangles(std::move(triangles)) {}
+using namespace unreal_fluid::physics::solid;
 
-unreal_fluid::physics::IPhysicalObject::Type unreal_fluid::physics::solid::SolidMesh::getType() {
-    return Type::SOLID_MESH;
+SolidMesh::SolidMesh(std::vector<Triangle> &triangles) : triangles(triangles) {}
+
+unreal_fluid::physics::IPhysicalObject::Type SolidMesh::getType() {
+  return Type::SOLID_MESH;
 }
 
-void *unreal_fluid::physics::solid::SolidMesh::getData() {
-    return &triangles;
+void *SolidMesh::getData() {
+  return &triangles;
 }
-
-void unreal_fluid::physics::solid::SolidMesh::simulate(double dt) {}

@@ -40,8 +40,8 @@ void Compositor::init() {
   Logger::logInfo("Initializing compositor...");
 
   _renderer->Init();
-  _scenes.push_back(new GlTestScene(this));
-//  _scenes.push_back(new TestScene(this));
+//  _scenes.push_back(new GlTestScene(this));
+  _scenes.push_back(new TestScene(this));
   _scenes.push_back(new Control(this));
 
   Logger::logInfo("Compositor initialized!");

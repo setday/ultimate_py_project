@@ -16,8 +16,7 @@
 #pragma once
 #include "../IPhysicalObject.h"
 
-namespace unreal_fluid::physics::solid{
-    class ISolid : public IPhysicalObject{
-
-    };
-}
+namespace unreal_fluid::physics::solid {
+  class ISolid : public IPhysicalObject {
+  };
+} // namespace unreal_fluid::physics::solid

@@ -38,10 +38,6 @@ namespace unreal_fluid::physics {
         /// @details calls simulate() function of each IPhysicalObject in the internal buffer and solve interactions between them.
         void simulate(double dt);
 
-        /// @brief Clears the scene
-        /// @details after this function is called, the internal buffer is absolutely empty. No
-        void clearData();
-
     private:
         void interact(IPhysicalObject* dynamicObject, solid::ISolid* solid);
     };

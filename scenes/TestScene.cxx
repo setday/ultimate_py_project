@@ -24,7 +24,7 @@ public:
   utils::Timer timer;
 
   explicit TestScene(const compositor::Compositor *compositor) : Scene(compositor) {
-    auto sphere = new physics::solid::SolidSphere({0,0,0}, 0.3);
+    auto sphere = new physics::solid::SolidSphere({0, 0, 0}, 0.3);
     objects.push_back(new AbstractObject(sphere));
     auto simpleFluid = new physics::fluid::SimpleFluidContainer({});
     objects.push_back(new AbstractObject(simpleFluid));

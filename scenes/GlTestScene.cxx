@@ -70,16 +70,7 @@ public:
   }
 
   void render() override {
-    static int timer = 0;
-    timer++;
-
     compositor->getRenderer()->RenderAllObjects({cube, sphere, plane});
-
-    if (timer % 200 == 0) {
-      // compositor->GetRenderer()->GetShaderManager()->ReloadShaders();
-
-      // Logger::logInfo("All shaders have been reloaded");
-    }
   }
 
   ~GlTestScene() override = default;

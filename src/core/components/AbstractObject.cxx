@@ -12,7 +12,6 @@
  */
 
 #include "AbstractObject.h"
-#include "../physics/solid/sphere/SolidSphere.h"
 #include "../src/core/render/components/material/MaterialFactory.h"
 #include "../src/core/render/components/mesh/presets/Sphere.h"
 

@@ -18,28 +18,16 @@
 #include "Triangle.h"
 #include "vector"
 
-namespace unreal_fluid::physics{
-    class Simulator;
-}
+namespace unreal_fluid::physics::solid {
+  class SolidMesh : public ISolid {
 
-namespace unreal_fluid::physics::solid{
-    class SolidMesh : public ISolid{
-        friend class Simulator;
-    private:
-        std::vector<Triangle> triangles;
-    public:
-        explicit SolidMesh(std::vector<Triangle> triangles);
+  private:
+    std::vector<Triangle> &triangles;
 
-        ~SolidMesh() override = default;
+  public:
+    SolidMesh(std::vector<Triangle> &triangles);
 
-        Type getType() override;
-
-        void *getData() override;
-
-    private:
-        void simulate(double dt) override;
-    };
-}
-
-
-
+    Type getType() override;
+    void *getData() override;
+  };
+} // namespace unreal_fluid::physics::solid
