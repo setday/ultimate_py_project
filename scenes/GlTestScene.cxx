@@ -12,6 +12,8 @@
  */
 
 #include <cmath>
+
+#include "../src/core/components/Scene.h"
 #include "../src/core/render/components/material/MaterialFactory.h"
 #include "../src/core/render/components/mesh/presets/Cube.h"
 #include "../src/core/render/components/mesh/presets/Plane.h"
@@ -24,11 +26,10 @@ public:
   render::RenderObject *sphere;
   render::RenderObject *plane;
   render::RenderObject *cube;
-  const compositor::Compositor *compositor;
+  render::RenderObject *triangle;
   utils::Timer timer;
 
-  explicit GlTestScene(const compositor::Compositor *compositor) : Scene(compositor),
-                                                                   compositor(compositor) {
+  explicit GlTestScene(const compositor::Compositor *compositor) : Scene(compositor) {
     sphere = new render::RenderObject();
     sphere->mesh = render::mesh::Sphere(.5f, 50, 50);
     sphere->modelMatrix =
@@ -55,6 +56,18 @@ public:
     cube->material = render::material::MaterialFactory::createMaterial(
             render::material::MaterialFactory::MaterialType::RED_PLASTIC
     );
+
+    triangle = new render::RenderObject();
+    triangle->mesh = render::mesh::BasicMesh(
+            {
+              {{0, 0, 0}},
+              {{1, 1, 1}},
+              {{1, 2, 3}}
+              },
+            {0, 1, 2});
+    triangle->material = render::material::MaterialFactory::createMaterial(
+            render::material::MaterialFactory::MaterialType::RED_PLASTIC
+    );
   }
 
   void update() override {
@@ -70,7 +83,7 @@ public:
   }
 
   void render() override {
-    compositor->getRenderer()->RenderAllObjects({cube, sphere, plane});
+    compositor->getRenderer()->RenderAllObjects({cube, sphere, plane, triangle});
   }
 
   ~GlTestScene() override = default;

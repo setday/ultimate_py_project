@@ -21,7 +21,7 @@ void main()
 {
     vec3 normal = normalize(vertexNormal.xyz);
     vec3 viewDirection = normalize(camera.direction);
-    vec3 lightDirection = normalize(vec3(0.0, -1.0, 0.0));
+    vec3 lightDirection = normalize(vec3(0.0, -1.0, -1.0));
     vec3 reflectDirection = reflect(lightDirection, normal);
 
     float diffuse = max(dot(normal, -lightDirection), 0.0);
