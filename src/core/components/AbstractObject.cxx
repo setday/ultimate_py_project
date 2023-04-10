@@ -29,35 +29,53 @@ void AbstractObject::parse() {
   auto type = physicalObject->getType();
   void *data = physicalObject->getData();
   if (type == physics::IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER) {
+
     auto &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(data);
+
     for (int pos = 0; pos < particles.size(); ++pos) {
+
       if (pos >= renderObjects.size()) {
+
         auto renderObject = new render::RenderObject;
+
         renderObject->material = render::material::MaterialFactory::createMaterial(render::material::MaterialFactory::MaterialType::GOLD);
         renderObject->mesh = render::mesh::Sphere((float) particles[pos]->radius, int(particles[pos]->radius * 500), int(particles[pos]->radius * 500));
         renderObjects.push_back(renderObject);
       }
+
       auto &renderObject = renderObjects[pos];
+
       renderObject->position = particles[pos]->position;
       renderObject->modelMatrix = mat4::translation(renderObject->position);
+
     }
   } else if (type == physics::IPhysicalObject::Type::SOLID_SPHERE) {
+
     auto solidSphere = *static_cast<physics::solid::SolidSphere *>(data);
+
     if (renderObjects.empty()) {
+
       auto renderObject = new render::RenderObject;
+
       renderObject->material = render::material::MaterialFactory::createMaterial(render::material::MaterialFactory::MaterialType::BRONZE);
       renderObject->mesh = render::mesh::Sphere((float) solidSphere.getRadius(), 50, 50);
       renderObjects.push_back(renderObject);
     }
+
     auto &renderObject = renderObjects.back();
+
     renderObject->position = solidSphere.getPosition();
     renderObject->modelMatrix = mat4::translation(renderObject->position);
+
   } else if (type == physics::IPhysicalObject::Type::SOLID_MESH) {
+
     auto &triangles = *static_cast<std::vector<physics::solid::Triangle *> *>(data);
     //    std::cout << triangles.size() << "\n"; // check that it's magically empty
+
     for (int pos = renderObjects.size(); pos < triangles.size(); ++pos) {
       auto triangle = triangles[pos];
       auto renderObject = new render::RenderObject;
+
       renderObject->material = render::material::MaterialFactory::createMaterial(render::material::MaterialFactory::MaterialType::GOLD);
       renderObject->mesh = render::mesh::BasicMesh({triangle->v1, triangle->v2, triangle->v3}, {0, 1, 2});
       renderObjects.push_back(renderObject);
