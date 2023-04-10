@@ -54,6 +54,7 @@ void AbstractObject::parse() {
     renderObject->modelMatrix = mat4::translation(renderObject->position);
   } else if (type == physics::IPhysicalObject::Type::SOLID_MESH) {
     auto &triangles = *static_cast<std::vector<physics::solid::Triangle *> *>(data);
+    //    std::cout << triangles.size() << "\n"; // check that it's magically empty
     for (int pos = renderObjects.size(); pos < triangles.size(); ++pos) {
       auto triangle = triangles[pos];
       auto renderObject = new render::RenderObject;
