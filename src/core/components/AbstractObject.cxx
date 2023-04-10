@@ -55,8 +55,8 @@ void AbstractObject::parse() {
   }
 
   if (type == physics::IPhysicalObject::Type::SOLID_SPHERE) {
-    auto radius = solidSphere.getRadius();
     auto solidSphere = *static_cast<physics::solid::SolidSphere *>(data);
+    auto radius = solidSphere.getRadius();
 
     if (renderObjects.empty()) {
       renderObjects.push_back(new render::RenderObject {
