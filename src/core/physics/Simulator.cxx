@@ -35,7 +35,7 @@ void Simulator::simulate(double dt) {
   }
 }
 
-void Simulator::interact(IPhysicalObject *dynamicObject, solid::ISolid *solid) {
+void Simulator::interact(IPhysicalObject *dynamicObject, IPhysicalObject *solid) {
   if (dynamicObject->getType() == IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER) {
     auto particles = (std::vector<fluid::Particle *> *) dynamicObject->getData();
     if (solid->getType() == IPhysicalObject::Type::SOLID_SPHERE) {

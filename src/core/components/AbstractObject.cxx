@@ -39,8 +39,11 @@ void AbstractObject::parse() {
 
         auto renderObject = new render::RenderObject;
 
-        renderObject->material = render::material::MaterialFactory::createMaterial(render::material::MaterialFactory::MaterialType::GOLD);
-        renderObject->mesh = render::mesh::Sphere((float) particles[pos]->radius, int(particles[pos]->radius * 500), int(particles[pos]->radius * 500));
+        renderObject->material = render::material::MaterialFactory::createMaterial(
+                render::material::MaterialFactory::MaterialType::GOLD
+        );
+        auto r = particles[pos]->radius;
+        renderObject->mesh = render::mesh::Sphere(r, 500 * r, 500 * r);
         renderObjects.push_back(renderObject);
       }
 
@@ -48,7 +51,6 @@ void AbstractObject::parse() {
 
       renderObject->position = particles[pos]->position;
       renderObject->modelMatrix = mat4::translation(renderObject->position);
-
     }
   } else if (type == physics::IPhysicalObject::Type::SOLID_SPHERE) {
 
@@ -58,8 +60,11 @@ void AbstractObject::parse() {
 
       auto renderObject = new render::RenderObject;
 
-      renderObject->material = render::material::MaterialFactory::createMaterial(render::material::MaterialFactory::MaterialType::BRONZE);
-      renderObject->mesh = render::mesh::Sphere((float) solidSphere.getRadius(), 50, 50);
+      renderObject->material = render::material::MaterialFactory::createMaterial(
+              render::material::MaterialFactory::MaterialType::BRONZE
+      );
+      auto r = solidSphere.getRadius();
+      renderObject->mesh = render::mesh::Sphere(r, 50 * r, 50 * r);
       renderObjects.push_back(renderObject);
     }
 
@@ -77,7 +82,9 @@ void AbstractObject::parse() {
       auto triangle = triangles[pos];
       auto renderObject = new render::RenderObject;
 
-      renderObject->material = render::material::MaterialFactory::createMaterial(render::material::MaterialFactory::MaterialType::GOLD);
+      renderObject->material = render::material::MaterialFactory::createMaterial(
+              render::material::MaterialFactory::MaterialType::GOLD
+      );
       renderObject->mesh = render::mesh::BasicMesh({triangle->v1, triangle->v2, triangle->v3}, {0, 1, 2});
       renderObjects.push_back(renderObject);
     }
