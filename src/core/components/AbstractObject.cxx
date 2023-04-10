@@ -54,15 +54,12 @@ void AbstractObject::parse() {
     renderObject->modelMatrix = mat4::translation(renderObject->position);
   } else if (type == physics::IPhysicalObject::Type::SOLID_MESH) {
     auto &triangles = *static_cast<std::vector<physics::solid::Triangle *> *>(data);
-    for (int pos = 0; pos < triangles.size(); ++pos) {
+    for (int pos = renderObjects.size(); pos < triangles.size(); ++pos) {
       auto triangle = triangles[pos];
-      if (pos >= renderObjects.size()) {
-        auto renderObject = new render::RenderObject;
-        renderObject->material = render::material::MaterialFactory::createMaterial(render::material::MaterialFactory::MaterialType::GOLD);
-        std::vector<render::Vertex> vertexes{triangle->v1, triangle->v2, triangle->v3};
-        renderObject->mesh = render::mesh::BasicMesh(vertexes, {0, 1, 2});
-        renderObjects.push_back(renderObject);
-      }
+      auto renderObject = new render::RenderObject;
+      renderObject->material = render::material::MaterialFactory::createMaterial(render::material::MaterialFactory::MaterialType::GOLD);
+      renderObject->mesh = render::mesh::BasicMesh({triangle->v1, triangle->v2, triangle->v3}, {0, 1, 2});
+      renderObjects.push_back(renderObject);
     }
   }
 }

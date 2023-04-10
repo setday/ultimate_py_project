@@ -17,11 +17,10 @@
 using namespace unreal_fluid::physics;
 
 void Simulator::addPhysicalObject(IPhysicalObject *physicalObject) {
-  if (physicalObject->getType() == IPhysicalObject::Type::SOLID_SPHERE) {
-    solidObjects.push_back((solid::ISolid *) physicalObject);
-  } else {
+  if (physicalObject->getType() == IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER)
     dynamicObjects.push_back(physicalObject);
-  }
+  else
+    solidObjects.push_back((solid::ISolid *) physicalObject);
 }
 
 void Simulator::simulate(double dt) {
