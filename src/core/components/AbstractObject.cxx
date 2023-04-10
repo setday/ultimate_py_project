@@ -81,9 +81,18 @@ void AbstractObject::parse() {
       auto triangle = triangles[pos];
       auto renderObject = new render::RenderObject;
 
-      renderObject->material = render::material::MaterialFactory::createMaterial(
-              render::material::MaterialFactory::MaterialType::GOLD
-      );
+      if (pos == 0)
+        renderObject->material = render::material::MaterialFactory::createMaterial(
+                render::material::MaterialFactory::MaterialType::GOLD
+        );
+      else if (pos == 1)
+        renderObject->material = render::material::MaterialFactory::createMaterial(
+                render::material::MaterialFactory::MaterialType::RED_PLASTIC
+        );
+      else
+        renderObject->material = render::material::MaterialFactory::createMaterial(
+                render::material::MaterialFactory::MaterialType::GREEN_PLASTIC
+        ); ///
       renderObject->mesh = render::mesh::BasicMesh({triangle.v1, triangle.v2, triangle.v3}, {0, 1, 2});
       renderObjects.push_back(renderObject);
     }

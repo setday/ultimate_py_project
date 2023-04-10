@@ -13,9 +13,9 @@
  */
 
 #include "Compositor.h"
+#include "../scenes/Control.cxx"
 #include "../scenes/MeshScene.cxx"
 #include "../scenes/TestScene.cxx"
-#include "../scenes/Control.cxx"
 
 using namespace unreal_fluid::compositor;
 
@@ -40,8 +40,8 @@ void Compositor::init() {
   Logger::logInfo("Initializing compositor...");
 
   _renderer->Init();
-//  _scenes.push_back(new GlTestScene(this));
-//  _scenes.push_back(new TestScene(this));
+  //  _scenes.push_back(new GlTestScene(this));
+  //  _scenes.push_back(new TestScene(this));
   _scenes.push_back(new MeshScene(this));
   _scenes.push_back(new Control(this));
 
@@ -52,7 +52,7 @@ void Compositor::update() {
   _timer.resume();
   _simulationTimer.resume();
 
-  for (auto scene : _scenes) {
+  for (auto scene: _scenes) {
     scene->update();
   }
 
@@ -85,7 +85,7 @@ void Compositor::render() {
             "| Time to render a frame: ", _renderingTimer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms\n",
             "| Time to simulate a frame: ", _simulationTimer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms\n",
             "-------------------------------------------->"
-            );
+    );
     _timer.reset();
     _renderingTimer.reset();
     _simulationTimer.reset();
@@ -109,7 +109,7 @@ render::Renderer *Compositor::getRenderer() const {
 }
 
 physics::Simulator *Compositor::getSimulator() const {
-    return _simulator;
+  return _simulator;
 }
 
 // end of Compositor.cxx
