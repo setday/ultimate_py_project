@@ -12,7 +12,9 @@
  */
 
 #include "AbstractObject.h"
+#include "../physics/solid/mesh/SolidMesh.h"
 #include "../src/core/render/components/material/MaterialFactory.h"
+#include "../src/core/render/components/mesh/BasicMesh.h"
 #include "../src/core/render/components/mesh/presets/Sphere.h"
 
 using namespace unreal_fluid;
@@ -51,7 +53,17 @@ void AbstractObject::parse() {
     renderObject->position = solidSphere.getPosition();
     renderObject->modelMatrix = mat4::translation(renderObject->position);
   } else if (type == physics::IPhysicalObject::Type::SOLID_MESH) {
-    Logger::logInfo("Mesh");
+    auto &triangles = *static_cast<std::vector<physics::solid::Triangle *> *>(data);
+    for (int pos = 0; pos < triangles.size(); ++pos) {
+      auto triangle = triangles[pos];
+      if (pos >= renderObjects.size()) {
+        auto renderObject = new render::RenderObject;
+        renderObject->material = render::material::MaterialFactory::createMaterial(render::material::MaterialFactory::MaterialType::GOLD);
+        std::vector<render::Vertex> vertexes{triangle->v1, triangle->v2, triangle->v3};
+        renderObject->mesh = render::mesh::BasicMesh(vertexes, {0, 1, 2});
+        renderObjects.push_back(renderObject);
+      }
+    }
   }
 }
 

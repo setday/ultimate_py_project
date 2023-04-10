@@ -14,8 +14,10 @@
 
 #include "Triangle.h"
 
-unreal_fluid::physics::solid::Triangle::Triangle(const vec3 &v1, const vec3 &v2, const vec3 &v3) : v1(v1),
-                                                                                                   v2(v2),
-                                                                                                   v3(v3) {}
+using namespace unreal_fluid::physics::solid;
+
+Triangle::Triangle(const vec3f &v1, const vec3f &v2, const vec3f &v3) : v1(v1),
+                                                                        v2(v2),
+                                                                        v3(v3) {}
 
 // end of Triangle.cxx

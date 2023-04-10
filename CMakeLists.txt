@@ -87,7 +87,8 @@ add_executable(
         src/core/managers/window_manager/WindowCompositor.cxx
 
         src/core/components/Scene.cxx
-        scenes/TestScene.cxx
+        #scenes/TestScene.cxx
+        scenes/MeshScene.cxx
         #scenes/ClTestScene.cxx
         #scenes/GlTestScene.cxx
         #scenes/Control.cxx

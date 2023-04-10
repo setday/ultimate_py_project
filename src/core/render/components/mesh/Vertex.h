@@ -25,7 +25,7 @@ namespace unreal_fluid::render {
 
   public:
     Vertex() = default;
-    Vertex(vec3f position, vec3f normal, vec2f texCoord);
+    Vertex(vec3f position, vec3f normal = {}, vec2f texCoord = {});
   };
 } // render
 

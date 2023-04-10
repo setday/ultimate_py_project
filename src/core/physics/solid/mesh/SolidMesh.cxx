@@ -27,3 +27,6 @@ unreal_fluid::physics::IPhysicalObject::Type SolidMesh::getType() {
 void *SolidMesh::getData() {
   return &triangles;
 }
+
+void SolidMesh::simulate(double dt) {
+}
