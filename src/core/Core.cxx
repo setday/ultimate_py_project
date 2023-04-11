@@ -18,27 +18,21 @@
 
 using namespace unreal_fluid;
 
-Core::Core() : _compositor(this) {
-  _windowCompositor = new window::WindowCompositor();
-}
+Core::Core() : _windowCompositor(std::make_unique<window::WindowCompositor>()), _compositor(this) {}
 
-Core::~Core() {
-  delete _windowCompositor;
-};
-
-void Core::Run() {
-  Init();
+void Core::run() {
+  init();
 
   while (_isRunning) {
-    Update();
+    update();
   }
 }
 
-window::WindowCompositor *Core::GetWindowCompositor() const {
-  return _windowCompositor;
+window::WindowCompositor *Core::getWindowCompositor() const {
+  return _windowCompositor.get();
 }
 
-void Core::Init() {
+void Core::init() {
   Logger::logInfo("Initializing core...");
 
   _isRunning = true;
@@ -48,7 +42,7 @@ void Core::Init() {
   Logger::logInfo("Core initialized!");
 }
 
-void Core::Update() {
+void Core::update() {
   _compositor.update();
   _compositor.render();
   _windowCompositor->update();
@@ -58,7 +52,7 @@ void Core::Update() {
   }
 }
 
-void Core::Shutdown() {
+void Core::shutdown() {
   _compositor.destroy();
   _isRunning = false;
 }

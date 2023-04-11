@@ -106,3 +106,9 @@ void AbstractObject::parse() {
 [[nodiscard]] physics::IPhysicalObject *AbstractObject::getPhysicalObject() {
   return physicalObject;
 }
+
+render::RenderObject *AbstractObject::getRenderObject() const {
+  return _renderObject;
+}
+
+// end of AbstractObject.cxx

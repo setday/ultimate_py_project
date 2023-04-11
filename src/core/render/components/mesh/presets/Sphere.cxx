@@ -33,16 +33,13 @@ Sphere::Sphere(float radius, unsigned int rings, unsigned int sectors) {
               vec2f{(float)s / (float)sectors, (float)r / (float)rings}
               );
 
-      if (r != rings - 1 && s != sectors - 1) {
+      if (r != rings - 1) {
         indices.emplace_back(r * sectors + s);
-        indices.emplace_back(r * sectors + (s + 1));
-        indices.emplace_back((r + 1) * sectors + (s + 1));
-
-        indices.emplace_back(r * sectors + s);
-        indices.emplace_back((r + 1) * sectors + (s + 1));
         indices.emplace_back((r + 1) * sectors + s);
       }
     }
+
+    indices.emplace_back(RESET_INDEX);
   }
 
   meshType = 2;

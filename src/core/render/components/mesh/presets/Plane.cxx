@@ -28,26 +28,24 @@ Plane::Plane(float width, float height, unsigned int widthSegments, unsigned int
       float y = i * heightStep - height / 2;
 
       vec3f position = x * right + y * forward;
-      vec3f normal = up; /// FIXME: normal should be calculated
+      vec3f normal = up;
       vec2f texCoord = {(float) i / widthSegments, (float) j / heightSegments};
+
 
       vertices.emplace_back(position, normal, texCoord);
     }
   }
 
   for (unsigned int i = 0; i < heightSegments; ++i) {
-    for (unsigned int j = 0; j < widthSegments; ++j) {
+    for (unsigned int j = 0; j <= widthSegments; ++j) {
       unsigned int first = i * (widthSegments + 1) + j;
       unsigned int second = first + widthSegments + 1;
 
       indices.push_back(first);
       indices.push_back(second);
-      indices.push_back(first + 1);
-
-      indices.push_back(second);
-      indices.push_back(second + 1);
-      indices.push_back(first + 1);
     }
+
+    indices.push_back(RESET_INDEX);
   }
 
   meshType = 1;

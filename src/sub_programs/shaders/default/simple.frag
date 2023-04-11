@@ -1,6 +1,9 @@
 #version 330 core
 
-in vec4 vertexNormal;
+in vec3 vertexPosition;
+in vec3 vertexNormal;
+
+out vec4 fragmentColor;
 
 struct Camera {
     vec3 position;
@@ -15,19 +18,26 @@ uniform vec3 diffuseColor;
 uniform vec3 specularColor;
 uniform float shininess;
 
-out vec4 FragColor;
+layout(location = 0) out vec4 colorTexture;
+layout(location = 1) out vec4 positionTexture;
+layout(location = 2) out vec4 normalTexture;
 
 void main()
 {
-    vec3 normal = normalize(vertexNormal.xyz);
+    vec3 normal = normalize(vertexNormal);
     vec3 viewDirection = normalize(camera.direction);
     vec3 lightDirection = normalize(vec3(0.0, -1.0, -1.0));
     vec3 reflectDirection = reflect(lightDirection, normal);
 
+    // vec3 lightColor = vec3(1.0, 1.0, 1.0);
+    vec3 lightColor = vec3(1.0, 0.8, 0.6);
+
     float diffuse = max(dot(normal, -lightDirection), 0.0);
-    float specular = pow(max(dot(-viewDirection, reflectDirection), 0.0), shininess);
+    float specular = pow(max(dot(-viewDirection, reflectDirection), 0.01), shininess);
 
-    vec3 color = ambientColor + diffuseColor * diffuse + specularColor * specular;
+    vec3 color = ambientColor * 0.8 + (diffuseColor * diffuse + specularColor * specular) * lightColor;
 
-    FragColor = vec4(color, 1.0);
+    colorTexture = vec4(color, 1.0);
+    positionTexture = vec4(vertexPosition, 1);
+    normalTexture = vec4(vertexNormal, 1);
 }

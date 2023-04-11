@@ -28,25 +28,26 @@ namespace unreal_fluid::render {
 
     /// Attach shader
     /// @param shader Shader
-    void AttachShader(const Shader *shader);
+    void attachShader(const Shader *shader);
 
     /// Link program
     /// @return True if success
-    bool LinkProgram() const;
+    bool linkProgram() const;
 
     /// Reattach shaders
-    void ReattachShaders();
+    void reattachShaders();
 
-    /// Execute program
-    void Execute() const;
+    /// Activate this program
+    void activate() const;
 
     /// Get program ID
     /// @return Program ID
-    unsigned int GetProgramID() const;
+    [[nodiscard]]
+    unsigned int getId() const;
 
     /// Get log
     /// @param log Log
-    void GetLog(std::string &log) const;
+    void getLog(std::string &log) const;
   };
 } // namespace unreal_fluid::render
 

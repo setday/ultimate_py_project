@@ -5,55 +5,49 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Compositor.cxx
+ * FILE NAME : SceneCompositor.cxx
  * PURPOSE   : This class is responsible for rendering.
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
 
-#include "Compositor.h"
-#include "../scenes/MeshScene.cxx"
-#include "../scenes/TestScene.cxx"
-#include "../scenes/Control.cxx"
+#include "SceneCompositor.h"
+
+#include "components/scene/Scene.h"
+#include "./../scenes/SceneLoader.cxx"
 
 using namespace unreal_fluid::compositor;
 
-Compositor::Compositor(Core *core) : _core(core) {
+SceneCompositor::SceneCompositor(Core *core) : _core(core) {
   Logger::logInfo("Creating compositor...");
-  _simulator = new physics::Simulator;
-  _renderer = new render::Renderer();
 
   _timer.pause();
   _timer.reset();
   _renderingTimer.pause();
   _renderingTimer.reset();
 
-  Logger::logInfo("Compositor created!");
+  Logger::logInfo("SceneCompositor created!");
 }
 
-Compositor::~Compositor() {
-  delete _renderer;
-}
-
-void Compositor::init() {
+void SceneCompositor::init() {
   Logger::logInfo("Initializing compositor...");
 
-  _renderer->Init();
-//   _scenes.push_back(new GlTestScene(this));
-//  _scenes.push_back(new TestScene(this));
-  _scenes.push_back(new Control(this));
-  _scenes.push_back(new MeshScene(this));
+  _simulator = new physics::Simulator;
+  _renderer = std::make_unique<render::Renderer>();
 
-  Logger::logInfo("Compositor initialized!");
+  loadScene<SceneLoader>();
+
+  Logger::logInfo("SceneCompositor initialized!");
 }
 
-void Compositor::update() {
+void SceneCompositor::update() {
   _timer.resume();
   _simulationTimer.resume();
 
   for (auto scene : _scenes) {
-    scene->update();
+    if (scene != nullptr)
+      scene->update();
   }
 
   _simulationTimer.pause();
@@ -61,15 +55,16 @@ void Compositor::update() {
   _simulationTimer.incrementCounter();
 }
 
-void Compositor::render() {
+void SceneCompositor::render() {
   _timer.resume();
   _renderingTimer.resume();
 
-  _renderer->StartFrame();
-  for (auto scene: _scenes) {
-    scene->render();
+  _renderer->startFrame();
+  for (auto scene : _scenes) {
+    if (scene != nullptr)
+      scene->render();
   }
-  _renderer->EndFrame();
+  _renderer->endFrame();
 
   _renderingTimer.pause();
   _timer.pause();
@@ -92,11 +87,20 @@ void Compositor::render() {
   }
 }
 
-void Compositor::destroy() {
-  _renderer->Destroy();
-  for (auto scene: _scenes) {
-    scene->clear();
+void SceneCompositor::destroy() {
+  for (auto scene : _scenes)
     delete scene;
+
+  _renderer.reset();
+}
+
+void SceneCompositor::unloadScene(IScene *scene) {
+  for (auto it = _scenes.begin(); it != _scenes.end(); ++it) {
+    if (*it == scene) {
+      _scenes.erase(it);
+      delete scene;
+      break;
+    }
   }
 }
 
@@ -110,6 +114,10 @@ render::Renderer *Compositor::getRenderer() const {
 
 physics::Simulator *Compositor::getSimulator() const {
     return _simulator;
+}
+
+render::Renderer *SceneCompositor::getRenderer() const {
+  return _renderer.get();
 }
 
 // end of Compositor.cxx

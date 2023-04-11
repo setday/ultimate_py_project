@@ -2147,14 +2147,14 @@ private:
     static Device default_;
     static cl_int default_error_;
 
-    /*! \brief Create the default context.
+    /*! \brief create the default context.
     *
     * This sets @c default_ and @c default_error_. It does not throw
     * @c cl::Error.
     */
     static void makeDefault();
 
-    /*! \brief Create the default platform from a provided platform.
+    /*! \brief create the default platform from a provided platform.
     *
     * This sets @c default_. It does not throw
     * @c cl::Error.
@@ -2473,7 +2473,7 @@ private:
     static Platform default_;
     static cl_int default_error_;
 
-    /*! \brief Create the default context.
+    /*! \brief create the default context.
     *
     * This sets @c default_ and @c default_error_. It does not throw
     * @c cl::Error.
@@ -2516,7 +2516,7 @@ private:
 #endif
     }
 
-    /*! \brief Create the default platform from a provided platform.
+    /*! \brief create the default platform from a provided platform.
      *
      * This sets @c default_. It does not throw
      * @c cl::Error.
@@ -2856,7 +2856,7 @@ private:
     static Context default_;
     static cl_int default_error_;
 
-    /*! \brief Create the default context from the default device type in the default platform.
+    /*! \brief create the default context from the default device type in the default platform.
      *
      * This sets @c default_ and @c default_error_. It does not throw
      * @c cl::Error.
@@ -2894,7 +2894,7 @@ private:
     }
 
 
-    /*! \brief Create the default context from a provided Context.
+    /*! \brief create the default context from a provided Context.
      *
      * This sets @c default_. It does not throw
      * @c cl::Error.
@@ -5532,7 +5532,7 @@ public:
     /*! \brief Constructs a Pipe in a specified context.
      *
      * Wraps clCreatePipe().
-     * @param context Context in which to Create the pipe.
+     * @param context Context in which to create the pipe.
      * @param flags Bitfield. Only CL_MEM_READ_WRITE and CL_MEM_HOST_NO_ACCESS are valid.
      * @param packet_size Size in bytes of a single packet of the pipe.
      * @param max_packets Number of packets that may be stored in the pipe.
@@ -6369,7 +6369,7 @@ public:
     }
 
     /**
-     * Create a program from a vector of source strings and the default context.
+     * create a program from a vector of source strings and the default context.
      * Does not compile or link the program.
      */
     Program(
@@ -6404,7 +6404,7 @@ public:
     }
 
     /**
-     * Create a program from a vector of source strings and a provided context.
+     * create a program from a vector of source strings and a provided context.
      * Does not compile or link the program.
      */
     Program(
@@ -6626,7 +6626,7 @@ public:
     
 #if CL_HPP_TARGET_OPENCL_VERSION >= 120
     /**
-     * Create program using builtin kernels.
+     * create program using builtin kernels.
      * \param kernelNames Semi-colon separated list of builtin kernel names
      */
     Program(
@@ -7138,7 +7138,7 @@ private:
     static CommandQueue default_;
     static cl_int default_error_;
 
-    /*! \brief Create the default command queue returned by @ref getDefault.
+    /*! \brief create the default command queue returned by @ref getDefault.
      *
      * It sets default_error_ to indicate success or failure. It does not throw
      * @c cl::Error.
@@ -7170,7 +7170,7 @@ private:
 #endif
     }
 
-    /*! \brief Create the default command queue.
+    /*! \brief create the default command queue.
      *
      * This sets @c default_. It does not throw
      * @c cl::Error.
@@ -8418,7 +8418,7 @@ public:
      * Enqueues a barrier command which waits for either a list of events to complete, 
      * or if the list is empty it waits for all commands previously enqueued in command_queue 
      * to complete before it completes. This command blocks command execution, that is, any 
-     * following commands enqueued after it do not execute until it completes. This command 
+     * following commands enqueued after it do not activate until it completes. This command
      * returns an event which can be waited on, i.e. this event can be waited on to insure that 
      * all events either in the event_wait_list or all previously enqueued commands, queued 
      * before this command to command_queue, have completed.
@@ -8886,7 +8886,7 @@ class DeviceCommandQueue : public detail::Wrapper<cl_command_queue>
 public:
 
     /*!
-     * Trivial empty constructor to Create a null queue.
+     * Trivial empty constructor to create a null queue.
      */
     DeviceCommandQueue() { }
 
@@ -8914,7 +8914,7 @@ public:
     }
 
     /*!
-     * Create a device command queue for a specified device in the passed context.
+     * create a device command queue for a specified device in the passed context.
      */
     DeviceCommandQueue(
         const Context& context,
@@ -8938,7 +8938,7 @@ public:
     }
 
     /*!
-     * Create a device command queue for a specified device in the passed context.
+     * create a device command queue for a specified device in the passed context.
      */
     DeviceCommandQueue(
         const Context& context,
@@ -9030,7 +9030,7 @@ public:
     }
 
     /*!
-     * Create a new default device command queue for the default device,
+     * create a new default device command queue for the default device,
      * in the default context and of the default size.
      * If there is already a default queue for the specified device this
      * function will return the pre-existing queue.
@@ -9060,7 +9060,7 @@ public:
     }
 
     /*!
-     * Create a new default device command queue for the specified device
+     * create a new default device command queue for the specified device
      * and of the default size.
      * If there is already a default queue for the specified device this
      * function will return the pre-existing queue.
@@ -9088,7 +9088,7 @@ public:
     }
 
     /*!
-     * Create a new default device command queue for the specified device 
+     * create a new default device command queue for the specified device
      * and of the requested size in bytes.
      * If there is already a default queue for the specified device this
      * function will return the pre-existing queue.
