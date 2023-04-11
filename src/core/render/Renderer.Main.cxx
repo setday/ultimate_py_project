@@ -73,9 +73,6 @@ Renderer::Renderer() {
 
   changeRenderMode(RenderMode::SOLID);
 
-  _timer.pause();
-  _timer.reset();
-
   Logger::logInfo("Renderer initialized!");
 } // end of Renderer::Renderer() function
 

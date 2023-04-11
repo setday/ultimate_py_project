@@ -14,14 +14,14 @@
 
 #include "../src/core/Core.h"
 #include "../src/core/components/AbstractObject.h"
-#include "../src/core/components/Scene.h"
+#include "../src/core/components/scene/Scene.h"
 #include "../src/core/physics/solid/mesh/SolidMesh.h"
 
 using namespace unreal_fluid;
 
 class MeshScene : public Scene {
 public:
- explicit MeshScene(const compositor::Compositor *compositor) : Scene(compositor) {
+ explicit MeshScene(const compositor::SceneCompositor *compositor) : Scene(compositor) {
    using namespace physics::solid;
 
 
@@ -45,7 +45,7 @@ public:
 
  void render() override {
    for (auto &object: objects) {
-     compositor->getRenderer()->RenderAllObjects(object->getRenderObjects());
+     compositor->getRenderer()->renderObjects(object->getRenderObjects());
    }
  }
 

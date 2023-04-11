@@ -31,14 +31,14 @@ public:
 
   utils::Timer timer;
 
-  explicit GlTestScene(compositor::SceneCompositor const * compositor) : Scene(compositor) {
+  explicit GlTestScene(const compositor::SceneCompositor * compositor) : Scene(compositor) {
     sphere = std::make_unique<render::RenderObject>();
     sphere->modelMatrix =
             mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
             mat4::translation({-.75f, 0.f, -5.f});
     sphere->mesh = render::mesh::Sphere(.5f, 50, 50);
     sphere->material = render::material::Water();
-    objects.push_back(new AbstractObject{nullptr, sphere.get()});
+    objects.push_back(new AbstractObject{nullptr, {sphere.get()}});
 
     plane = std::make_unique<render::RenderObject>();
     plane->mesh = render::mesh::Plane(300, 300, 50, 50);
@@ -46,7 +46,7 @@ public:
             mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
             mat4::translation({0.f, -1.f, -5.f});
     plane->material = render::material::CyanPlastic();
-    objects.push_back(new AbstractObject{nullptr, plane.get()});
+    objects.push_back(new AbstractObject{nullptr, {plane.get()}});
 
     cube = std::make_unique<render::RenderObject>();
     cube->mesh = render::mesh::Cube(.5f);
@@ -54,7 +54,7 @@ public:
             mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
             mat4::translation({.75f, 0.f, -5.f});
     cube->material = render::material::Ruby();
-    objects.push_back(new AbstractObject{nullptr, cube.get()});
+    objects.push_back(new AbstractObject{nullptr, {cube.get()}});
 
     /*
     triangle = new render::RenderObject();
@@ -87,7 +87,7 @@ public:
               mat4::scale((rand() % 50 + 50) / 200.f) *
               mat4::translation(position);
       object->material = render::material::Ruby();
-      objects.push_back(new AbstractObject{nullptr, object});
+      objects.push_back(new AbstractObject{nullptr, {object}});
     }
 
     delete tree;
@@ -109,7 +109,7 @@ public:
               mat4::scale((rand() % 50 + 50) / 50.f) *
               mat4::translation(position);
       object->material = render::material::Emerald();
-      objects.push_back(new AbstractObject{nullptr, object});
+      objects.push_back(new AbstractObject{nullptr, {object}});
     }
 
     delete tree;

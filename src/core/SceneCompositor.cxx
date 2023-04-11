@@ -104,15 +104,11 @@ void SceneCompositor::unloadScene(IScene *scene) {
   }
 }
 
-Core *Compositor::getCore() const {
+Core *SceneCompositor::getCore() const {
   return _core;
 }
 
-render::Renderer *Compositor::getRenderer() const {
-  return _renderer;
-}
-
-physics::Simulator *Compositor::getSimulator() const {
+physics::Simulator *SceneCompositor::getSimulator() const {
     return _simulator;
 }
 

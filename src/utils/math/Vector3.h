@@ -108,14 +108,15 @@ namespace unreal_fluid::math {
     [[nodiscard]] double operator!() const { return len(); }
 
     Vector3 normalize() const {
-      assert(len2() == 0);
+      assert(len2() != 0);
       
       return *this / len();
     }
 
     void normalizeSelf() {
-      if (len() == 0) *this = {0, 0, 0};
-      else *this /= len();
+      assert(len2() != 0);
+
+      *this /= len();
     }
 
     Vector3 operator*(const Vector3 &vec) const {

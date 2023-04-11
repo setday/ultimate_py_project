@@ -59,8 +59,6 @@ add_executable(
         src/core/render/components/shaders/ShaderProgram.cxx
         src/core/managers/sub_programs_managers/shader_manager/ShaderManager.cxx
 
-        src/core/render/components/material/MaterialFactory.cxx
-
         src/core/render/components/shaders/Shader.cxx
         src/core/render/components/shaders/ShaderProgram.cxx
         src/core/managers/sub_programs_managers/shader_manager/ShaderManager.cxx

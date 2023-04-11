@@ -19,7 +19,7 @@
 #include "../Definitions.h"
 
 #include "SceneCompositor.h"
-#include "render/window_manager/WindowCompositor.h"
+#include "managers/window_manager/WindowCompositor.h"
 
 namespace unreal_fluid {
   class Core {

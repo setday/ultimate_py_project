@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "../Compositor.h"
+#include "../SceneCompositor.h"
 #include "../physics/IPhysicalObject.h"
 #include "../physics/fluid/simple_fluid/SimpleFluidContainer.h"
 #include "../render/components/RenderObject.h"
@@ -25,6 +25,7 @@ namespace unreal_fluid {
     std::vector<render::RenderObject *> renderObjects;
 
   public:
+    AbstractObject(physics::IPhysicalObject *physicalObject, const std::vector<render::RenderObject *> &renderObjects);
     AbstractObject(physics::IPhysicalObject *physObject);
     AbstractObject(physics::fluid::FluidDescriptor descriptor);
 

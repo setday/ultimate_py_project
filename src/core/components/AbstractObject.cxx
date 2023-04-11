@@ -13,17 +13,19 @@
 
 #include "AbstractObject.h"
 #include "../physics/solid/mesh/SolidMesh.h"
-#include "../src/core/render/components/material/MaterialFactory.h"
-#include "../src/core/render/components/mesh/BasicMesh.h"
+#include "../src/core/render/components/material/MaterialPresets.h"
 #include "../src/core/render/components/mesh/presets/Sphere.h"
 
 using namespace unreal_fluid;
 
-AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) : physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)) {
-}
+AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject,
+                               const std::vector<render::RenderObject *> &renderObjects) :
+  physicalObject(physicalObject), renderObjects(renderObjects) {}
 
-AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject) : physicalObject(physicalObject) {
-}
+AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) :
+  physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)) {}
+
+AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject) : physicalObject(physicalObject) {}
 
 void AbstractObject::parse() {
   auto type = physicalObject->getType();
@@ -39,18 +41,13 @@ void AbstractObject::parse() {
 
         auto renderObject = new render::RenderObject;
 
-        renderObject->material = render::material::MaterialFactory::createMaterial(
-                render::material::MaterialFactory::MaterialType::GOLD
-        );
+        renderObject->material = render::material::Gold();
         auto r = particles[pos]->radius;
         renderObject->mesh = render::mesh::Sphere(r, 500 * r, 500 * r);
         renderObjects.push_back(renderObject);
       }
 
-      auto &renderObject = renderObjects[pos];
-
-      renderObject->position = particles[pos]->position;
-      renderObject->modelMatrix = mat4::translation(renderObject->position);
+      renderObjects[pos]->modelMatrix = mat4::translation(particles[pos]->position);
     }
   } else if (type == physics::IPhysicalObject::Type::SOLID_SPHERE) {
 
@@ -60,18 +57,13 @@ void AbstractObject::parse() {
 
       auto renderObject = new render::RenderObject;
 
-      renderObject->material = render::material::MaterialFactory::createMaterial(
-              render::material::MaterialFactory::MaterialType::BRONZE
-      );
+      renderObject->material = render::material::Bronze();
       auto r = solidSphere.getRadius();
       renderObject->mesh = render::mesh::Sphere(r, 50 * r, 50 * r);
       renderObjects.push_back(renderObject);
     }
 
-    auto &renderObject = renderObjects.back();
-
-    renderObject->position = solidSphere.getPosition();
-    renderObject->modelMatrix = mat4::translation(renderObject->position);
+    renderObjects.back()->modelMatrix = mat4::translation(solidSphere.getPosition());
 
   } else if (type == physics::IPhysicalObject::Type::SOLID_MESH) {
 
@@ -82,17 +74,11 @@ void AbstractObject::parse() {
       auto renderObject = new render::RenderObject;
 
       if (pos == 0)
-        renderObject->material = render::material::MaterialFactory::createMaterial(
-                render::material::MaterialFactory::MaterialType::GOLD
-        );
+        renderObject->material = render::material::Gold();
       else if (pos == 1)
-        renderObject->material = render::material::MaterialFactory::createMaterial(
-                render::material::MaterialFactory::MaterialType::RED_PLASTIC
-        );
+        renderObject->material = render::material::RedPlastic();
       else
-        renderObject->material = render::material::MaterialFactory::createMaterial(
-                render::material::MaterialFactory::MaterialType::GREEN_PLASTIC
-        ); ///
+        renderObject->material = render::material::GreenPlastic();
       renderObject->mesh = render::mesh::BasicMesh({triangle.v1, triangle.v2, triangle.v3}, {0, 1, 2});
       renderObjects.push_back(renderObject);
     }
@@ -105,10 +91,6 @@ void AbstractObject::parse() {
 
 [[nodiscard]] physics::IPhysicalObject *AbstractObject::getPhysicalObject() {
   return physicalObject;
-}
-
-render::RenderObject *AbstractObject::getRenderObject() const {
-  return _renderObject;
 }
 
 // end of AbstractObject.cxx
