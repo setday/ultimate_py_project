@@ -148,8 +148,25 @@ namespace unreal_fluid::math {
                      std::min(std::max(z, min.z), max.z));
     }
 
+    /// Get maximum value of vector
+    /// @return maximum value
+    T max() const {
+      return std::max(std::max(x, y), z);
+    }
+
+    /// Get minimum value of vector
+    /// @return minimum value
+    T min() const {
+      return std::min(std::min(x, y), z);
+    }
+
     [[nodiscard]] std::string to_string() const {
       return std::string("{" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + "}");
+    }
+
+    friend std::istream &operator>>(std::istream &is, Vector3 &v) {
+      is >> v.x >> v.y >> v.z;
+      return is;
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Vector3 &v) {

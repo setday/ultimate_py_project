@@ -49,15 +49,11 @@ add_executable(
         ${PROJECT_NAME}
 
         src/utils/timer/Timer.cxx
-        src/utils/Logger.cxx
+        src/utils/logger/Logger.cxx
 
-        src/core/render/components/mesh/Vertex.cxx
-        src/core/render/components/mesh/BasicMesh.cxx
         src/core/render/components/mesh/presets/Plane.cxx
         src/core/render/components/mesh/presets/Sphere.cxx
         src/core/render/components/mesh/presets/Cube.cxx
-
-        src/core/render/components/material/MaterialFactory.cxx
 
         src/core/render/components/shaders/Shader.cxx
         src/core/render/components/shaders/ShaderProgram.cxx
@@ -72,16 +68,21 @@ add_executable(
 
         src/core/render/components/camera/Camera.cxx
         src/core/render/components/RenderObject.cxx
-        src/core/render/Renderer.cxx
+        src/core/render/Renderer.Main.cxx
+        src/core/render/Renderer.Render.cxx
 
         src/core/render/window_manager/WindowCompositor.cxx
 
-        src/core/components/Scene.cxx
+        src/core/components/scene/PhysicalScene.cxx
+        src/core/components/scene/RenderScene.cxx
+        src/core/components/scene/Scene.cxx
+
         scenes/ClTestScene.cxx
         scenes/GlTestScene.cxx
         scenes/Control.cxx
+        scenes/SceneLoader.cxx
 
-        src/core/Compositor.cxx
+        src/core/SceneCompositor.cxx
         src/core/Core.cxx
         src/main.cxx
 )
@@ -90,3 +91,4 @@ message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/sub_programs/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/sub_programs/)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/objects/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/objects/)

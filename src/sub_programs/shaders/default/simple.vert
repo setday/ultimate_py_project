@@ -15,7 +15,8 @@ struct Camera {
 
 uniform Camera camera;
 
-out vec4 vertexNormal;
+out vec3 vertexPosition;
+out vec3 vertexNormal;
 out vec2 screenCoords;
 
 mat4 makeViewMatrix(vec3 pos, vec3 direction, vec3 up)
@@ -39,5 +40,6 @@ void main()
   mat4 viewMatrix = makeViewMatrix(camera.position, camera.direction, camera.up);
 
   gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(aPos, 1.0);
-  vertexNormal = modelMatrix * vec4(aNorm, 0.0);
+  vertexPosition = gl_Position.xyz;
+  vertexNormal = (modelMatrix * vec4(aNorm, 0.0)).xyz;
 }

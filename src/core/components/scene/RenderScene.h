@@ -5,21 +5,23 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Vertex.cxx
- * PURPOSE   : ${PURPOSE}
+ * FILE NAME : RenderScene.h
+ * PURPOSE   : Class that realizes render of scene.
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
 
-#include "Vertex.h"
+#pragma once
 
-using namespace unreal_fluid::render;
+#include "IScene.h"
 
-Vertex::Vertex(vec3f position, vec3f normal, vec3f color) {
-  this->position = position;
-  this->normal = normal;
-  this->color = color;
-}
+namespace unreal_fluid {
+  class RenderScene : public virtual IScene {
+  public:
+    /// Render scene.
+    void render() override;
+  };
+};
 
-// end of Vertex.cxx
+// end of RenderScene.h

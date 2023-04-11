@@ -5,67 +5,59 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Compositor.cxx
+ * FILE NAME : SceneCompositor.cxx
  * PURPOSE   : This class is responsible for rendering.
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
 
-#include "Compositor.h"
+#include "SceneCompositor.h"
 
-#include "./components/Scene.h"
-
-#include "../scenes/ClTestScene.cxx"
-#include "../scenes/GlTestScene.cxx"
-#include "../scenes/Control.cxx"
+#include "components/scene/Scene.h"
+#include "./../scenes/SceneLoader.cxx"
 
 using namespace unreal_fluid::compositor;
 
-Compositor::Compositor(Core *core) : _core(core) {
+SceneCompositor::SceneCompositor(Core *core) : _core(core) {
   Logger::logInfo("Creating compositor...");
-
-  _renderer = new render::Renderer();
 
   _timer.pause();
   _timer.reset();
 
-  Logger::logInfo("Compositor created!");
+  Logger::logInfo("SceneCompositor created!");
 }
 
-Compositor::~Compositor() {
-  delete _renderer;
-}
-
-void Compositor::Init() {
+void SceneCompositor::init() {
   Logger::logInfo("Initializing compositor...");
 
-  _renderer->Init();
-  _scenes.push_back(new ClTestScene(this));
-  _scenes.push_back(new GlTestScene(this));
-  _scenes.push_back(new Control(this));
+  _renderer = std::make_unique<render::Renderer>();
 
-  Logger::logInfo("Compositor initialized!");
+  loadScene<SceneLoader>();
+
+  Logger::logInfo("SceneCompositor initialized!");
 }
 
-void Compositor::Update() {
+void SceneCompositor::update() {
   // _timer.resume();
 
   for (auto scene : _scenes) {
-    scene->Update();
+    if (scene != nullptr)
+      scene->update();
   }
 
   // _timer.pause();
 }
 
-void Compositor::Render() {
+void SceneCompositor::render() {
   _timer.resume();
 
-  _renderer->StartFrame();
+  _renderer->startFrame();
   for (auto scene : _scenes) {
-    scene->Render();
+    if (scene != nullptr)
+      scene->render();
   }
-  _renderer->EndFrame();
+  _renderer->endFrame();
 
   _timer.pause();
   _timer.incrementCounter();
@@ -77,20 +69,29 @@ void Compositor::Render() {
   }
 }
 
-void Compositor::Destroy() {
-  _renderer->Destroy();
-  for (auto scene : _scenes) {
-    scene->Clear();
+void SceneCompositor::destroy() {
+  for (auto scene : _scenes)
     delete scene;
+
+  _renderer.reset();
+}
+
+void SceneCompositor::unloadScene(IScene *scene) {
+  for (auto it = _scenes.begin(); it != _scenes.end(); ++it) {
+    if (*it == scene) {
+      _scenes.erase(it);
+      delete scene;
+      break;
+    }
   }
 }
 
-Core *Compositor::GetCore() const {
+Core *SceneCompositor::getCore() const {
   return _core;
 }
 
-render::Renderer *Compositor::GetRenderer() const {
-  return _renderer;
+render::Renderer *SceneCompositor::getRenderer() const {
+  return _renderer.get();
 }
 
-// end of Compositor.cxx
+// end of SceneCompositor.cxx

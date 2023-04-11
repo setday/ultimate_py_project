@@ -5,28 +5,21 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Vertex.h
- * PURPOSE   : ${PURPOSE}
+ * FILE NAME : RenderScene.cxx
+ * PURPOSE   : Class that realizes render of scene.
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
 
-#pragma once
+#include "RenderScene.h"
 
-#include "../../../Definitions.h"
+using namespace unreal_fluid;
 
-namespace unreal_fluid::render {
-  class Vertex {
-  public:
-    vec3f position;
-    vec3f normal;
-    vec3f color;
+void RenderScene::render() {
+  for (const AbstractObject *object : objects) {
+    compositor->getRenderer()->renderObjects({object->getRenderObject()});
+  }
+}
 
-  public:
-    Vertex() = default;
-    Vertex(vec3f position, vec3f normal, vec3f color);
-  };
-} // render
-
-// end of Vertex.h
+// end of RenderScene.cxx

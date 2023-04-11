@@ -26,15 +26,6 @@ ShaderManager::ShaderManager() {
   _programs.reserve(10);
 }
 
-ShaderManager::~ShaderManager() {
-  for (auto *shader : _shaders) {
-    delete shader;
-  }
-  for (auto *program : _programs) {
-    delete program;
-  }
-}
-
 const Shader *ShaderManager::LoadShader(std::string_view path) {
   _shaderPaths.push_back(path.data());
 
@@ -57,61 +48,57 @@ const Shader *ShaderManager::LoadShader(std::string_view path) {
   file.close();
 
   auto fileType = std::string(path.substr(path.find_last_of('.') + 1));
-  Shader *shader;
+  std::unique_ptr<Shader> shader;
 
   if (fileType == "vert") {
-    shader = new Shader(Shader::Type::VERTEX);
+    shader = std::make_unique<Shader>(Shader::Type::VERTEX);
   } else if (fileType == "frag") {
-    shader = new Shader(Shader::Type::FRAGMENT);
+    shader = std::make_unique<Shader>(Shader::Type::FRAGMENT);
   } else {
     LOG_ERROR("ShaderManager : Unknown shader type: ", path);
     return nullptr;
   }
 
-  if (!shader->LoadProgram(shaderSource)) {
+  if (!shader->build(shaderSource)) {
     std::string infoLog;
 
-    shader->GetLog(infoLog);
+    shader->getLog(infoLog);
     LOG_ERROR("ShaderManager : Shader (", path, ") compilation failed: ", infoLog);
-
-    delete shader;
 
     return nullptr;
   }
 
-  _shaders.push_back(shader);
+  _shaders.push_back(std::move(shader));
 
-  return shader;
+  return _shaders.back().get();
 }
 
 const ShaderProgram *ShaderManager::CreateProgram(const std::vector<const Shader *> &shaders) {
-  auto *program = new ShaderProgram();
-
-  _programs.push_back(program);
+  std::unique_ptr<ShaderProgram> program = std::make_unique<ShaderProgram>();
 
   for (auto *shader : shaders) {
-    program->AttachShader(shader);
+    program->attachShader(shader);
   }
 
-  if (!program->LinkProgram()) {
+  if (!program->linkProgram()) {
     std::string infoLog;
 
-    program->GetLog(infoLog);
+    program->getLog(infoLog);
     LOG_ERROR("ShaderManager : Program linking failed: ", infoLog);
-
-    delete program;
 
     return nullptr;
   }
 
-  return program;
+  _programs.push_back(std::move(program));
+
+  return _programs.back().get();
 }
 
 void ShaderManager::ReloadShader(Shader *shader) {
   int index = -1;
 
   for (int i = 0; i < _shaders.size(); ++i) {
-    if (_shaders[i] == shader) {
+    if (_shaders[i].get() == shader) {
       index = i;
       break;
     }
@@ -139,10 +126,10 @@ void ShaderManager::ReloadShader(Shader *shader) {
 
   file.close();
 
-  if (!shader->LoadProgram(shaderSource)) {
+  if (!shader->build(shaderSource)) {
     std::string infoLog;
 
-    shader->GetLog(infoLog);
+    shader->getLog(infoLog);
     LOG_ERROR("ShaderManager : Shader (", path, ") compilation failed: ", infoLog);
 
     return;
@@ -151,54 +138,74 @@ void ShaderManager::ReloadShader(Shader *shader) {
 
 void ShaderManager::ReloadShaders() {
   for (auto & _shader : _shaders) {
-    ReloadShader(_shader);
+    ReloadShader(_shader.get());
   }
 
   for (auto & _program : _programs) {
-    _program->ReattachShaders();
+    _program->reattachShaders();
   }
 }
 
 const ShaderProgram *DefaultShaderManager::_defaultProgram = nullptr;
 const ShaderProgram *DefaultShaderManager::_rtProgram = nullptr;
+const ShaderProgram *DefaultShaderManager::_postProcessingProgram = nullptr;
 DefaultShaderManager DefaultShaderManager::_instance = DefaultShaderManager();
 
 const ShaderProgram *DefaultShaderManager::GetDefaultProgram() {
-  if (_defaultProgram == nullptr) {
-    // Load default shaders
-    const Shader *vertBase = _instance.LoadShader("default/simple.vert");
-    const Shader *fragBase = _instance.LoadShader("default/simple.frag");
+  if (_defaultProgram != nullptr)
+    return _defaultProgram;
 
-    if (vertBase != nullptr && fragBase != nullptr)
-      _defaultProgram = _instance.CreateProgram({vertBase, fragBase});
+  const Shader *vertBase = _instance.LoadShader("default/simple.vert");
+  const Shader *fragBase = _instance.LoadShader("default/simple.frag");
 
-    if (_defaultProgram == nullptr)
-      Logger::logFatal("DefaultShaderManager : Default program is not loaded!",
-                       "It can cause a segmentation fault, so the program will be closed!");
+  if (vertBase != nullptr && fragBase != nullptr)
+    _defaultProgram = _instance.CreateProgram({vertBase, fragBase});
 
-    Logger::logInfo("DefaultShaderManager : Default program is loaded!");
-  }
+  if (_defaultProgram == nullptr)
+    Logger::logFatal("DefaultShaderManager : Default program is not loaded!",
+                     "It can cause a segmentation fault, so the program will be closed!");
+
+  Logger::logInfo("DefaultShaderManager : Default program is loaded!");
 
   return _defaultProgram;
 }
 
 const ShaderProgram *DefaultShaderManager::GetRayTracingProgram() {
-  if (_rtProgram == nullptr) {
-    // Load ray tracing shaders
-    const Shader *vertRT = _instance.LoadShader("rt/rt.vert");
-    const Shader *fragRT = _instance.LoadShader("rt/rt.frag");
+  if (_rtProgram != nullptr)
+    return _rtProgram;
 
-    if (fragRT != nullptr && vertRT != nullptr)
-      _rtProgram = _instance.CreateProgram({vertRT, fragRT});
+  const Shader *vertRT = _instance.LoadShader("rt/rt.vert");
+  const Shader *fragRT = _instance.LoadShader("rt/rt.frag");
 
-    if (_rtProgram == nullptr)
-      Logger::logFatal("DefaultShaderManager : Ray tracing program is not loaded!",
-                       "It can cause a segmentation fault, so the program will be closed!");
+  if (fragRT != nullptr && vertRT != nullptr)
+    _rtProgram = _instance.CreateProgram({vertRT, fragRT});
 
-    Logger::logInfo("DefaultShaderManager : Ray tracing program is loaded!");
-  }
+  if (_rtProgram == nullptr)
+    Logger::logFatal("DefaultShaderManager : Ray tracing program is not loaded!",
+                     "It can cause a segmentation fault, so the program will be closed!");
+
+  Logger::logInfo("DefaultShaderManager : Ray tracing program is loaded!");
 
   return _rtProgram;
+}
+
+const ShaderProgram *DefaultShaderManager::GetPostProcessingProgram() {
+  if (_postProcessingProgram != nullptr)
+    return _postProcessingProgram;
+
+  const Shader *vertPP = _instance.LoadShader("pp/pp.vert");
+  const Shader *fragPP = _instance.LoadShader("pp/pp.frag");
+
+  if (fragPP != nullptr && vertPP != nullptr)
+    _postProcessingProgram = _instance.CreateProgram({vertPP, fragPP});
+
+  if (_postProcessingProgram == nullptr)
+    Logger::logFatal("DefaultShaderManager : Post processing program is not loaded!",
+                     "It can cause a segmentation fault, so the program will be closed!");
+
+  Logger::logInfo("DefaultShaderManager : Post processing program is loaded!");
+
+  return _postProcessingProgram;
 }
 
 void DefaultShaderManager::ReloadShaders() {

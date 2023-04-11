@@ -40,10 +40,10 @@ namespace unreal_fluid::render {
     utils::Timer _interpolationTimer;
 
   private:
-    /// Update view matrix
+    /// update view matrix
     void updateViewMatrix();
 
-    /// Update projection matrix
+    /// update projection matrix
     void updateProjectionMatrix();
 
   public:
@@ -72,7 +72,7 @@ namespace unreal_fluid::render {
     /// @param position - position of camera
     void setPositionHard(const vec3f &position);
 
-    /// Update camera position
+    /// update camera position
     void updatePosition();
 
     /// Get direction of camera
@@ -108,6 +108,14 @@ namespace unreal_fluid::render {
     /// Get view with projection matrix
     /// @return view with projection matrix
     mat4 getFullMatrix() const;
+
+    /// Get right vector
+    /// @return right vector
+    vec3f getRight() const;
+
+    /// Get up vector
+    /// @return up vector
+    vec3f getUp() const;
   };
 } // unreal_fluid::render
 

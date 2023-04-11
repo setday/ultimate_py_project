@@ -5,29 +5,22 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Mesh.h
- * PURPOSE   : ${PURPOSE}
+ * FILE NAME : PhysicalScene.cxx
+ * PURPOSE   : Class that realizes update of physical scene.
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
 
-#pragma once
+#include "PhysicalScene.h"
 
-#include <vector>
+using namespace unreal_fluid;
 
-#include "../Vertex.h"
+void PhysicalScene::update() {
+  for (auto object : objects) {
+    // object->update();
+    /// TODO: add parser and updating order
+  }
+}
 
-namespace unreal_fluid::render::mesh {
-  class BasicMesh {
-  public:
-    std::vector<Vertex> vertices;
-    std::vector<unsigned int> indices;
-
-  public:
-    BasicMesh() = default;
-    BasicMesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &indices);
-  };
-} // unreal_fluid::render::mesh
-
-// end of Mesh.h
+// end of PhysicalScene.cxx

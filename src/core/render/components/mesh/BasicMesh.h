@@ -5,7 +5,7 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Mesh.h
+ * FILE NAME : BasicMesh.h
  * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
@@ -18,19 +18,20 @@
 
 #include "Vertex.h"
 
+#define RESET_INDEX UINT_MAX
+
 namespace unreal_fluid::render::mesh {
-  class BasicMesh {
-  public:
+  struct BasicMesh {
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
 
     std::vector<Vertex> rtVertices;
     int meshType = 0;
 
-  public:
     BasicMesh() = default;
-    BasicMesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &indices);
+    BasicMesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &indices) : vertices(vertices),
+                                                                                               indices(indices) {}
   };
 } // unreal_fluid::render::mesh
 
-// end of Mesh.h
+// end of BasicMesh.h

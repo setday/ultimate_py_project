@@ -14,7 +14,7 @@
 #pragma once
 
 #include "utils/math/MathHeaders"
-#include "utils/Logger.h"
+#include "utils/logger/Logger.h"
 #include "utils/timer/Timer.h"
 
 // end of Definitions.h

@@ -43,7 +43,7 @@ Shader::~Shader() {
   glDeleteShader(_shaderID);
 }
 
-bool Shader::LoadProgram(std::string_view source) {
+bool Shader::build(std::string_view source) {
   const char *sourcePtr = source.data();
 
   glShaderSource(_shaderID, 1, &sourcePtr, nullptr);
@@ -55,11 +55,11 @@ bool Shader::LoadProgram(std::string_view source) {
   return success;
 }
 
-GLuint Shader::GetShaderID() const {
+GLuint Shader::getShaderId() const {
   return _shaderID;
 }
 
-void Shader::GetLog(std::string &log) const {
+void Shader::getLog(std::string &log) const {
   GLint logLength;
   glGetShaderiv(_shaderID, GL_INFO_LOG_LENGTH, &logLength);
 

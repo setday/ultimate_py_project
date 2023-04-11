@@ -17,7 +17,7 @@
 #include "../BasicMesh.h"
 
 namespace unreal_fluid::render::mesh {
-  class Cube : public BasicMesh {
+  struct Cube : BasicMesh {
   public:
     Cube(float size);
   };
