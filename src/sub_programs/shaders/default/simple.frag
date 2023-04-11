@@ -26,7 +26,7 @@ void main()
 {
     vec3 normal = normalize(vertexNormal);
     vec3 viewDirection = normalize(camera.direction);
-    vec3 lightDirection = normalize(vec3(0.0, -1.0, -1.0));
+    vec3 lightDirection = normalize(vec3(0.0, -1.0, 0.0));
     vec3 reflectDirection = reflect(lightDirection, normal);
 
     // vec3 lightColor = vec3(1.0, 1.0, 1.0);
