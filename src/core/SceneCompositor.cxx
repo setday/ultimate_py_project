@@ -116,4 +116,4 @@ render::Renderer *SceneCompositor::getRenderer() const {
   return _renderer.get();
 }
 
-// end of Compositor.cxx
+// end of SceneCompositor.cxx
