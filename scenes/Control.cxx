@@ -18,7 +18,6 @@ using namespace unreal_fluid;
 
 class Control : public IScene {
 public:
-  vec3f cameraPosition = {0.f, 0.f, 0.f};
   vec3f cameraSpeed = {0.f, 0.f, 0.f};
   vec2f cameraRotation = {0.f, M_PI};
   vec2f cameraRotationSpeed = {0.f, 0.f};
@@ -94,7 +93,7 @@ public:
   }
 
   void update() override {
-    cameraPosition += cameraSpeed;
+    vec3f cameraPosition = cameraSpeed + this->compositor->getRenderer()->camera.getPosition();
     if (cameraSpeed.len2() > 0.0001f) {
       this->compositor->getRenderer()->camera.setPositionHard(cameraPosition);
     }
