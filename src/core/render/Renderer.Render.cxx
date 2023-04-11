@@ -94,24 +94,20 @@ void Renderer::drawVertexes(const std::vector<Vertex> &vertices, const std::vect
   glBindVertexArray(0);
 }
 
-void Renderer::renderObject(const render::RenderObject *object) {
+void Renderer::renderObjects(const std::vector<render::RenderObject *> &objects) {
   if (_renderMode == RenderMode::RAY_TRACING) {
-    _objectsToRender.push_back(object);
+    _objectsToRender.insert(_objectsToRender.end(), objects.begin(), objects.end());
 
     return;
   }
 
-  object->shaderProgram->activate();
-
-  bindCameraToShader(object->shaderProgram);
-  bindObjectToShader(object->shaderProgram, object);
-
-  drawVertexes(object->mesh.vertices, object->mesh.indices);
-} // end of Renderer::renderObject() function
-
-void Renderer::renderAllObjects(const std::vector<render::RenderObject *> &objects) {
   for (const render::RenderObject *object : objects) {
-    renderObject(object);
+    object->shaderProgram->activate();
+
+    bindCameraToShader(object->shaderProgram);
+    bindObjectToShader(object->shaderProgram, object);
+
+    drawVertexes(object->mesh.vertices, object->mesh.indices);
   }
 }
 
@@ -196,11 +192,11 @@ void Renderer::endFrame() {
 
   glClear(GL_COLOR_BUFFER_BIT);
 
-  /*
-  PostProcess();
+  //*
+  postProcess();
   //*/
 
-  //*
+  /*
   glBindFramebuffer(GL_READ_FRAMEBUFFER, _fbo);
   glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
   glBlitFramebuffer(0, 0, camera.getResolution().x, camera.getResolution().y, 0, 0, camera.getResolution().x, camera.getResolution().y, GL_COLOR_BUFFER_BIT, GL_NEAREST);

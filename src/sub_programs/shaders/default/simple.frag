@@ -35,7 +35,7 @@ void main()
     float diffuse = max(dot(normal, -lightDirection), 0.0);
     float specular = pow(max(dot(-viewDirection, reflectDirection), 0.01), shininess);
 
-    vec3 color = ambientColor + (diffuseColor * diffuse + specularColor * specular) * lightColor;
+    vec3 color = ambientColor * 0.8 + (diffuseColor * diffuse + specularColor * specular) * lightColor;
 
     colorTexture = vec4(color, 1.0);
     positionTexture = vec4(vertexPosition, 1);

@@ -16,6 +16,48 @@
 
 using namespace unreal_fluid::render;
 
+void GLAPIENTRY openglDebugInfo(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+{
+  Logger::logInfo("---------------------opengl-callback-start------------");
+  Logger::logInfo("message:", message);
+
+  switch (type) {
+    case GL_DEBUG_TYPE_ERROR:
+      Logger::logInfo("type: ERROR");
+      break;
+    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+      Logger::logInfo("type: DEPRECATED_BEHAVIOR");
+      break;
+    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+      Logger::logInfo("type: UNDEFINED_BEHAVIOR");
+      break;
+    case GL_DEBUG_TYPE_PORTABILITY:
+      Logger::logInfo("type: PORTABILITY");
+      break;
+    case GL_DEBUG_TYPE_PERFORMANCE:
+      Logger::logInfo("type: PERFORMANCE");
+      break;
+    case GL_DEBUG_TYPE_OTHER:
+      Logger::logInfo("type: OTHER");
+      break;
+  }
+
+  Logger::logInfo("id:", id);
+  switch (severity){
+    case GL_DEBUG_SEVERITY_LOW:
+      Logger::logInfo("severity: LOW");
+      break;
+    case GL_DEBUG_SEVERITY_MEDIUM:
+      Logger::logInfo("severity: MEDIUM");
+      break;
+    case GL_DEBUG_SEVERITY_HIGH:
+      Logger::logInfo("severity: HIGH");
+      break;
+  }
+
+  Logger::logInfo("---------------------opengl-callback-end--------------");
+}
+
 Renderer::Renderer() {
   Logger::logInfo("Initializing renderer...");
 
@@ -38,6 +80,11 @@ Renderer::Renderer() {
 } // end of Renderer::Renderer() function
 
 void Renderer::initGl() const {
+  /*
+  glEnable(GL_DEBUG_OUTPUT);
+  glDebugMessageCallback(openglDebugInfo, nullptr);
+  //*/
+
   // initialize viewport and ect
   glViewport(0, 0, 500, 500);
 
@@ -50,15 +97,15 @@ void Renderer::initGl() const {
 
   glDepthFunc(GL_LEQUAL);
   glEnable(GL_DEPTH_TEST);
-  glShadeModel(GL_SMOOTH);
+  // glShadeModel(GL_SMOOTH);
 
   // enable blending
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   // enable alpha test
-  glEnable(GL_ALPHA_TEST);
-  glAlphaFunc(GL_GREATER, 0.1f);
+  // glEnable(GL_ALPHA_TEST);
+  // glAlphaFunc(GL_GREATER, 0.1f);
 
   // enable texture 2d
   glEnable(GL_TEXTURE_2D);
@@ -86,7 +133,7 @@ void Renderer::initBuffers() {
   glBindBuffer(GL_ARRAY_BUFFER, _fvbo);
 
   glBufferData(GL_ARRAY_BUFFER, 20 * sizeof(float), frameVertices, GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), nullptr);
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *)(3 * sizeof(GLfloat)));
   glEnableVertexAttribArray(1);
@@ -103,19 +150,21 @@ void Renderer::initBuffers() {
   // FBO
   glGenTextures(6, _fbto);
 
+  // depth
+  glBindTexture(GL_TEXTURE_2D, _fbto[0]);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 500, 500, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+
   // result color
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, _fbto[0]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 500, 500, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-
-  // depth
   glBindTexture(GL_TEXTURE_2D, _fbto[1]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 500, 500, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 500, 500, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+  glGenerateMipmap(GL_TEXTURE_2D);
 
   for (int i = 2; i < 6; i++) {
     glActiveTexture(GL_TEXTURE0 + i - 1);
     glBindTexture(GL_TEXTURE_2D, _fbto[i]);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 500, 500, 0, GL_RGBA, GL_FLOAT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 500, 500, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glGenerateMipmap(GL_TEXTURE_2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -125,14 +174,20 @@ void Renderer::initBuffers() {
   glGenFramebuffers(1, &_fbo);
   glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
 
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _fbto[0], 0);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _fbto[1], 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _fbto[0], 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _fbto[1], 0);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, _fbto[2], 0);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, _fbto[3], 0);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, _fbto[4], 0);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, _fbto[5], 0);
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+  // check framebuffer status
+  GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+  if (status != GL_FRAMEBUFFER_COMPLETE) {
+    Logger::logError("Framebuffer is not complete:", status);
+  }
 }
 
 Renderer::~Renderer() {
@@ -174,18 +229,20 @@ void Renderer::changeRenderMode(RenderMode mode) {
 void Renderer::changeResolution(int width, int height) {
   camera.setResolution(width, height);
 
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, _fbto[0]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-
   // depth
+  glBindTexture(GL_TEXTURE_2D, _fbto[0]);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+
+  glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, _fbto[1]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+  glGenerateMipmap(GL_TEXTURE_2D);
 
   for (int i = 2; i < 6; i++) {
     glActiveTexture(GL_TEXTURE0 + i - 1);
     glBindTexture(GL_TEXTURE_2D, _fbto[i]);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, width, height, 0, GL_RGBA, GL_FLOAT, nullptr);
+    glGenerateMipmap(GL_TEXTURE_2D);
   }
 
   glViewport(0, 0, width, height);

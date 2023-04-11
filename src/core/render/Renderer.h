@@ -35,14 +35,14 @@ namespace unreal_fluid::render {
   private:
     std::unique_ptr<ShaderManager> _shaderManager;
     RenderMode _renderMode;
-    GLuint _fvbo;    // frame vertex buffer object
-    GLuint _fvao;    // frame vertex array object
-    GLuint _vbo;     // vertex buffer object for rendering objects
-    GLuint _vao;     // vertex array object for rendering objects
-    GLuint _ibo;     // index buffer object for rendering objects
-    GLuint _rtubo;   // ray tracing uniform buffer object
-    GLuint _fbo;     // frame buffer object
-    GLuint _fbto[6]; // frame buffer texture object: 0 - color, 1 - depth, 2 - position, 3 - normal, 4 - reserved, 5 - reserved
+    GLuint _fvbo = -1;    // frame vertex buffer object
+    GLuint _fvao = -1;    // frame vertex array object
+    GLuint _vbo = -1;     // vertex buffer object for rendering objects
+    GLuint _vao = -1;     // vertex array object for rendering objects
+    GLuint _ibo = -1;     // index buffer object for rendering objects
+    GLuint _rtubo = -1;   // ray tracing uniform buffer object
+    GLuint _fbo = -1;     // frame buffer object
+    GLuint _fbto[6];      // frame buffer texture object: 0 - color, 1 - depth, 2 - position, 3 - normal, 4 - reserved, 5 - reserved
     std::vector<const RenderObject *> _objectsToRender;
 
     utils::Timer _timer;
@@ -54,12 +54,11 @@ namespace unreal_fluid::render {
     ~Renderer();
 
     void startFrame();
-    /// render object.
-    /// @param object Object to render.
-    void renderObject(const render::RenderObject *object);
-    /// render all objects.
+    /// render objects.
     /// @param objects Objects to render.
-    void renderAllObjects(const std::vector<render::RenderObject *> &objects);
+    /// @attention If you are using ray tracing mode the objects will only be rendered after calling endFrame().
+    /// @attention So you should not change objects after calling this method.
+    void renderObjects(const std::vector<render::RenderObject *> &objects);
     /// End rendering frame.
     void endFrame();
 
