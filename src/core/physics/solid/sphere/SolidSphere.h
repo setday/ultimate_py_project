@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include "../../../../utils/math/MathHeaders"
+#include "../../../../Definitions.h"
 #include "../ISolid.h"
 
 namespace unreal_fluid::physics::solid {
@@ -29,7 +29,6 @@ namespace unreal_fluid::physics::solid {
     Type getType() override;
     void *getData() override;
 
-    vec3 position;
     double radius;
   };
 } // namespace unreal_fluid::physics::solid

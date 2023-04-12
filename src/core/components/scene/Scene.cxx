@@ -16,7 +16,7 @@
 
 using namespace unreal_fluid;
 
-Scene::Scene(compositor::SceneCompositor const *compositor) {
+Scene::Scene(const compositor::SceneCompositor *compositor) {
   this->compositor = compositor;
 }
 
