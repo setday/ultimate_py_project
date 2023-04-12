@@ -17,15 +17,31 @@
 using namespace unreal_fluid::physics;
 
 void Collision::particlesCollision(fluid::Particle *p1, fluid::Particle *p2, double k) {
-  vec3 y = p2->position - p1->position;
-  y.normalizeSelf();
-  double push = (p1->radius + p2->radius - p1->position.distanceTo(p2->position)) / 2;
-  p2->position += y * push;
-  p1->position -= y * push;
-  double s = -(1 + k) * (p1->velocity.project(y) - p2->velocity.project(y)) * p1->mass * p2->mass /
-             (p1->mass + p2->mass);
-  p1->velocity += y * (s / p1->mass);
-  p2->velocity -= y * (s / p2->mass);
+  vec3 diff = p1->position - p2->position;
+
+  if (diff.len2() == 0) return;
+
+  vec3 direction = diff.normalize();
+
+  double pushValue =
+          (p1->radius + p2->radius - diff.len()) /
+          (p1->mass + p2->mass);
+
+  if (pushValue < 0) return;
+
+  vec3 pushVector = direction * pushValue;
+
+  p1->position += pushVector * p2->mass;
+  p2->position -= pushVector * p1->mass;
+
+  double momentumValue =
+          (1 + k) *
+          (p1->velocity.dot(direction) - p2->velocity.dot(direction)) /
+          (p1->mass + p2->mass);
+  vec3 momentum = direction * momentumValue;
+
+  p1->velocity -= momentum * p2->mass;
+  p2->velocity += momentum * p1->mass;
 }
 
 void Collision::sphereCollision(fluid::Particle *p, solid::SolidSphere *s, double k) {

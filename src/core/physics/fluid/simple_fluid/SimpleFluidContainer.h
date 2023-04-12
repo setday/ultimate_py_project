@@ -34,16 +34,22 @@ namespace unreal_fluid::physics::fluid {
     void *getData() override;
 
   private:
-
     /// @brief adds particles
     /// @details adds fluid particles from external sources
     void flows();
 
-    ///
-    void collide(Particle *p1, Particle *p2) const;
+    /// @brief changes particles positions
+    /// @details for each particle chang its position regarding to its velocity
     void advect(double dt);
+
+    /// @brief change particles velocities
+    /// @details adds external forces to change each particle velocity
     void addExternalForces(double dt);
+
+    /// @brief runs through particles interaction stage
+    /// @details updates distributor, for each pair collides particles
     void interact();
+
     void addParticle(vec3 position, vec3 velocity, double radius, double mass);
   };
 } // namespace unreal_fluid::physics::fluid

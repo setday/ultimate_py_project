@@ -56,12 +56,12 @@ void SimpleFluidContainer::interact() {
     for (auto particle: particles) {
       if (particle->position != bigParticle->position &&
           (particle->position - bigParticle->position).len() <= particle->radius + bigParticle->radius)
-        collide(particle, bigParticle);
+        Collision::particlesCollision(particle, bigParticle, k);
     }
   }
 
   for (auto p = distributor.nextPair(); p != CellsDistributor::terminator; p = distributor.nextPair())
-    collide(p.first, p.second);
+    Collision::particlesCollision(p.first, p.second, k);
 }
 
 void SimpleFluidContainer::flows() {
@@ -75,35 +75,6 @@ void SimpleFluidContainer::simulate(double dt) {
   interact();
   addExternalForces(dt);
   advect(dt);
-}
-
-void SimpleFluidContainer::collide(Particle *p1, Particle *p2) const {
-  vec3 positionDiff = p1->position - p2->position;
-
-  if (positionDiff.len2() == 0) return;
-
-  double distance = positionDiff.len();
-  vec3 positionDiffDirection = positionDiff / distance;
-
-  double pushValue =
-          (p1->radius + p2->radius - distance) /
-          (p1->mass + p2->mass);
-
-  if (pushValue < 0) return;
-
-  vec3 pushVector = positionDiffDirection * pushValue;
-
-  p1->position += pushVector * p2->mass;
-  p2->position -= pushVector * p1->mass;
-
-  double momentumValue =
-          (1 + k) *
-          (p1->velocity.dot(positionDiffDirection) - p2->velocity.dot(positionDiffDirection)) /
-          (p1->mass + p2->mass);
-  vec3 momentum = positionDiffDirection * momentumValue;
-
-  p1->velocity -= momentum * p2->mass;
-  p2->velocity += momentum * p1->mass;
 }
 
 void *SimpleFluidContainer::getData() {

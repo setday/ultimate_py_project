@@ -109,13 +109,11 @@ namespace unreal_fluid::math {
 
     Vector3 normalize() const {
       assert(len2() != 0);
-      
       return *this / len();
     }
 
     void normalizeSelf() {
       assert(len2() != 0);
-
       *this /= len();
     }
 
