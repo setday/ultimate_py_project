@@ -18,9 +18,8 @@ using namespace unreal_fluid;
 
 void PhysicalScene::update() {
   compositor->getSimulator()->simulate(dt);
-  for (auto &object: objects) {
+  for (auto &object: objects)
     object->parse();
-  }
 }
 
 // end of PhysicalScene.cxx

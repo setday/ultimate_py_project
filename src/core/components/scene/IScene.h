@@ -15,9 +15,7 @@
 #pragma once
 
 #include <vector>
-
 #include "../../../Definitions.h"
-
 #include "../../SceneCompositor.h"
 #include "../AbstractObject.h"
 
@@ -25,7 +23,6 @@ namespace unreal_fluid {
   class IScene {
   protected:
     const compositor::SceneCompositor *compositor;
-
     std::vector<AbstractObject *> objects;
 
   public:
@@ -37,6 +34,6 @@ namespace unreal_fluid {
     /// Render scene.
     virtual void render() = 0;
   };
-}
+} // namespace unreal_fluid
 
 // end of IScene.h
