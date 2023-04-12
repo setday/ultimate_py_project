@@ -15,32 +15,30 @@
 
 #include <vector>
 #include "../../utils/math/MathHeaders"
-#include "solid/sphere/SolidSphere.h"
 #include "fluid/simple_fluid/SimpleFluidContainer.h"
-
+#include "solid/sphere/SolidSphere.h"
 
 namespace unreal_fluid::physics {
-    class Simulator {
-    private:
-        std::vector<IPhysicalObject *> dynamicObjects;
-        std::vector<IPhysicalObject *> solidObjects;
-    public:
-        Simulator() = default;
+  class Simulator {
+  private:
+    std::vector<IPhysicalObject *> dynamicObjects;
+    std::vector<IPhysicalObject *> solidObjects;
 
-        ~Simulator() = default;
+  public:
+    Simulator() = default;
+    ~Simulator() = default;
 
-        /// @brief Adds IPhysicalObject to scene
-        /// @details Adds IPhysicalObject into an internal buffer.
-        /// Call simulate() to simulate all of the PhysObjects in the buffer
-        void addPhysicalObject(IPhysicalObject *physicalObject);
+    /// @brief Adds IPhysicalObject to scene
+    /// @details Adds IPhysicalObject into an internal buffer according to its type.
+    void addPhysicalObject(IPhysicalObject *physicalObject);
 
-        /// @brief Simulates the scene
-        /// @details calls simulate() function of each IPhysicalObject in the internal buffer and solve interactions between them.
-        void simulate(double dt);
+    /// @brief Simulates the scene
+    /// @details calls simulate() function of each physical object in the internal buffer
+    /// and solves interaction between solids and dynamic objects.
+    void simulate(double dt);
 
-    private:
-        void interact(IPhysicalObject* dynamicObject, IPhysicalObject* solid);
-    };
+  private:
+    /// @brief used to interact a solid and a dynamic object
+    void interact(IPhysicalObject *dynamicObject, IPhysicalObject *solid);
+  };
 } // namespace unreal_fluid::physics
-
-// end of Simulator.h

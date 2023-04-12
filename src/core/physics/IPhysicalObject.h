@@ -29,7 +29,11 @@ namespace unreal_fluid::physics {
     };
 
     virtual ~IPhysicalObject() = default;
+
+    /// @brief returns type of an accessor
     virtual Type getType() = 0;
+
+    /// @brief returns data stored in a physical container
     virtual void *getData() = 0;
 
   private:

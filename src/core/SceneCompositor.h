@@ -15,9 +15,7 @@
 #pragma once
 
 #include <memory>
-
 #include "../Definitions.h"
-
 #include "./render/Renderer.h"
 #include "physics/Simulator.h"
 
@@ -65,6 +63,7 @@ namespace unreal_fluid::compositor {
       static_assert(std::is_base_of<IScene, S>::value, "Scene must be derived from Scene class");
       _scenes.emplace_back(new S(this));
     }
+
     /// Unload scene.
     /// @param scene Scene.
     void unloadScene(IScene *scene);

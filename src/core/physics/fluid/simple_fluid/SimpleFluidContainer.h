@@ -15,13 +15,9 @@
 #pragma once
 
 #include "../../PhysicsDefinitions.h"
+#include "../../Simulator.h"
 #include "../IFluidContainer.h"
 #include "CellsDistributor.h"
-#include "../../Simulator.h"
-
-namespace unreal_fluid::physics {
-    class Simulator;
-}
 
 namespace unreal_fluid::physics::fluid {
   class SimpleFluidContainer : public IFluidContainer {
@@ -38,6 +34,12 @@ namespace unreal_fluid::physics::fluid {
     void *getData() override;
 
   private:
+
+    /// @brief adds particles
+    /// @details adds fluid particles from external sources
+    void flows();
+
+    ///
     void collide(Particle *p1, Particle *p2) const;
     void advect(double dt);
     void addExternalForces(double dt);

@@ -38,6 +38,8 @@ std::pair<Particle *, Particle *> CellsDistributor::nextPair() {
 }
 
 void CellsDistributor::update(std::vector<Particle *> &particles) {
+  first = 0, second = 1;
+  cell_iterator = cells.begin();
   big_particles.clear();
 
   double averageRadius = 0;
@@ -45,7 +47,6 @@ void CellsDistributor::update(std::vector<Particle *> &particles) {
   averageRadius /= particles.size();
 
   double cellSize = 2.5 * averageRadius;
-  math::Vector3<int64_t> cellPosition;
 
   for (const auto &particle: particles) {
     if (particle->radius >= cellSize) {
@@ -58,21 +59,13 @@ void CellsDistributor::update(std::vector<Particle *> &particles) {
     for (int dx = -1; dx <= 1; ++dx) {
       for (int dy = -1; dy <= 1; ++dy) {
         for (int dz = -1; dz <= 1; ++dz) {
-          cellPosition = position + math::Vector3{dx, dy, dz};
+          math::Vector3<int64_t> cellPosition = position + math::Vector3{dx, dy, dz};
           if ((cellPosition * cellSize - particle->position).len() <= particle->radius)
             cells[getId(cellPosition)].push_back(particle);
         }
       }
     }
   }
-
-  first = 0;
-  second = 1;
-  cell_iterator = cells.begin();
-}
-
-std::vector<Particle *> &CellsDistributor::getBigParticles() {
-  return big_particles;
 }
 
 uint64_t CellsDistributor::getId(vec3 position) {

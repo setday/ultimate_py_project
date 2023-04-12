@@ -5,32 +5,25 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : IFluidContainer.h
- * PURPOSE   : abstract fluid container
+ * FILE NAME : Collision.h
+ * PURPOSE   : Implements collision between different objects
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
 
 #pragma once
+#include "fluid/Particle.h"
+#include "solid/sphere/SolidSphere.h"
 
-#include <vector>
-#include "../IPhysicalObject.h"
-#include "Particle.h"
+namespace unreal_fluid::physics {
+  class Collision {
+  public:
+    /// @brief collides two particles
+    static void particlesCollision(fluid::Particle *p1, fluid::Particle *p2, double k);
 
-namespace unreal_fluid::physics::fluid {
-
-    struct FluidDescriptor {
-        double particleRadius;
-        double particleMass;
-    };
-
-    class IFluidContainer : public IPhysicalObject {
-
-    protected:
-        std::vector<Particle *> particles;
-    };
+    /// @brief collides particle with sphere
+    static void sphereCollision(fluid::Particle *p, solid::SolidSphere *s, double k);
+  };
 
 } // namespace unreal_fluid::physics::fluid
-
-// end of FluidContainer.h

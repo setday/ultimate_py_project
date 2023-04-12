@@ -21,25 +21,26 @@
 namespace unreal_fluid::physics::fluid {
   class CellsDistributor {
   private:
-    uint64_t first;
-    uint64_t second;
+    uint64_t first = 0, second = 1;
     std::unordered_map<uint64_t, std::vector<Particle *>> cells;
     std::unordered_map<uint64_t, std::vector<Particle *>>::iterator cell_iterator;
-    std::vector<Particle *> big_particles;
 
     static uint64_t getId(vec3 position);
 
   public:
     constexpr static std::pair<Particle *, Particle *> terminator = {nullptr, nullptr};
+    std::vector<Particle *> big_particles;
 
   public:
     CellsDistributor() = default;
     ~CellsDistributor() = default;
 
+    /// @brief updates itself after simulation stage
+    /// @details calculates new cells for each particle after simulation in fluid container
     void update(std::vector<Particle *> &particles);
-    std::vector<Particle *> &getBigParticles();
+
+    /// @brief returns next pair
+    /// @details Returns next pair of particles in cell. If cell is used, goes to the next cell.
     std::pair<Particle *, Particle *> nextPair();
   };
 } // namespace unreal_fluid::physics::fluid
-
-// end of CellsDistributor.h

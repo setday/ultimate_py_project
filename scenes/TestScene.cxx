@@ -14,7 +14,7 @@
 
 #include "../src/core/Core.h"
 #include "../src/core/components/AbstractObject.h"
-#include "../src/core/components/Scene.h"
+#include "../src/core/components/scene/Scene.h"
 
 using namespace unreal_fluid;
 
@@ -23,7 +23,7 @@ public:
   double dt = 0.02;
   utils::Timer timer;
 
-  explicit TestScene(const compositor::Compositor *compositor) : Scene(compositor) {
+  explicit TestScene(const compositor::SceneCompositor *compositor) : Scene(compositor) {
     auto sphere = new physics::solid::SolidSphere({0, 0, 0}, 0.3);
     objects.push_back(new AbstractObject(sphere));
     auto simpleFluid = new physics::fluid::SimpleFluidContainer({});
@@ -45,14 +45,14 @@ public:
 
     if (timer.getCounter() == 100) {
       auto &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(((physics::fluid::SimpleFluidContainer *) objects[1]->getPhysicalObject())->getData());
-      std::cout << "Number of particles: " << particles.size() << std::endl;
+      std::cout << "Number of particles: " << particles.size() << "\n";
       timer.reset();
     }
   }
 
   void render() override {
     for (auto &object: objects) {
-      compositor->getRenderer()->RenderAllObjects(object->getRenderObjects());
+      compositor->getRenderer()->renderObjects(object->getRenderObjects());
     }
   }
 

@@ -16,7 +16,8 @@
 #include "../src/core/components/scene/IScene.h"
 
 #include "Control.cxx"
-#include "GlTestScene.cxx"
+#include "TestScene.cxx"
+#include "GLTestScene.cxx"
 #include "MeshScene.cxx"
 
 using namespace unreal_fluid;
@@ -27,7 +28,7 @@ public:
     Logger::logInfo("Loading scenes...");
 
     compositor->loadScene<Control>();
-    compositor->loadScene<MeshScene>();
+    compositor->loadScene<TestScene>();
 
     Logger::logInfo("Scenes loaded!");
 

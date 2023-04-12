@@ -5,7 +5,7 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : SimpleFluidContainer.cxx
+ * FILE NAME : SolidMesh.cxx
  * PURPOSE   : Simple mesh plane which is static
  *
  * No part of this file may be changed and used without agreement of
@@ -29,4 +29,5 @@ void *SolidMesh::getData() {
 }
 
 void SolidMesh::simulate(double dt) {
+  /// static mesh doesn't need any simulate implementation
 }

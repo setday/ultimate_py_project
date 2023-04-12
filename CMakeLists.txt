@@ -68,8 +68,8 @@ add_executable(
         src/core/physics/solid/mesh/Triangle.cxx
 
         src/core/physics/Simulator.cxx
+        src/core/physics/Collision.cxx
 
-        src/core/physics/fluid/CollisionPairs.cxx
         src/core/physics/fluid/simple_fluid/CellsDistributor.cxx
         src/core/physics/fluid/simple_fluid/SimpleFluidContainer.cxx
         src/core/components/AbstractObject.cxx
@@ -85,12 +85,11 @@ add_executable(
         src/core/components/scene/RenderScene.cxx
         src/core/components/scene/Scene.cxx
 
-        #scenes/TestScene.cxx
+        scenes/TestScene.cxx
         scenes/MeshScene.cxx
         #scenes/ClTestScene.cxx
         #scenes/GlTestScene.cxx
         #scenes/Control.cxx
-
         scenes/SceneLoader.cxx
 
         src/core/SceneCompositor.cxx

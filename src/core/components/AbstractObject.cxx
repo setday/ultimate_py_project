@@ -6,6 +6,7 @@
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
  * FILE NAME : AbstractObject.cxx
+ * PURPOSE   : Abstract object to store render and physical objects in one
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -18,12 +19,10 @@
 
 using namespace unreal_fluid;
 
-AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject,
-                               const std::vector<render::RenderObject *> &renderObjects) :
-  physicalObject(physicalObject), renderObjects(renderObjects) {}
+AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject, const std::vector<render::RenderObject *> &renderObjects) : physicalObject(physicalObject),
+                                                                                                                                     renderObjects(renderObjects) {}
 
-AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) :
-  physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)) {}
+AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) : physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)) {}
 
 AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject) : physicalObject(physicalObject) {}
 

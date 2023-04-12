@@ -5,8 +5,8 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : SolidSphere.h
- * PURPOSE   : ISolid class
+ * FILE NAME : Triangle.h
+ * PURPOSE   : triangle class used in mesh
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.

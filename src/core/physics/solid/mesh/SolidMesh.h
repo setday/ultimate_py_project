@@ -5,8 +5,8 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : SimpleFluidContainer.cxx
- * PURPOSE   : Simple fluid simulation class, which implements ASS collision
+ * FILE NAME : SolidMesh.cxx
+ * PURPOSE   : Simple static mesh
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -25,7 +25,7 @@ namespace unreal_fluid::physics::solid {
     std::vector<Triangle> triangles;
 
   public:
-    SolidMesh(const std::vector<Triangle> &triangles);
+    explicit SolidMesh(const std::vector<Triangle> &triangles);
 
     void simulate(double dt) override;
     Type getType() override;
