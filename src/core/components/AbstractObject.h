@@ -26,8 +26,8 @@ namespace unreal_fluid {
 
   public:
     AbstractObject(physics::IPhysicalObject *physicalObject, const std::vector<render::RenderObject *> &renderObjects);
-    AbstractObject(physics::IPhysicalObject *physObject);
-    AbstractObject(physics::fluid::FluidDescriptor descriptor);
+    explicit AbstractObject(physics::IPhysicalObject *physObject);
+    explicit AbstractObject(physics::fluid::FluidDescriptor descriptor);
 
     /// Get render object.
     /// @return Render object.
@@ -35,7 +35,9 @@ namespace unreal_fluid {
     /// Get physics object.
     /// @return Physics object.
     [[nodiscard]] physics::IPhysicalObject *getPhysicalObject();
-    
+
     void parse();
   }; // end of AbstractObject class
 } // namespace unreal_fluid
+
+// end of AbstractObject.h

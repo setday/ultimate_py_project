@@ -14,13 +14,14 @@
 
 #pragma once
 
+#include <cassert>
 #include <cmath>
 
 namespace unreal_fluid::math {
 
   template<typename T>
   double inverseSqrt(T x) {
-    /// TODO make pure double sqrt calculation
+    /// TODO make pure double mySqrt calculation
     assert(x > 0);
     auto temp = static_cast<float>(x);
     int i = *(int *) &temp;
@@ -31,9 +32,10 @@ namespace unreal_fluid::math {
   }
 
   template<typename T>
-  double sqrt(T x) {
-    if (x == 0) return 0;
+  double mySqrt(T x) {
+    assert(x >= 0);
+    if (x == 0 || x == 1) return x;
     return x * inverseSqrt(x);
   }
 
-} // namespace maths
+} // namespace unreal_fluid::math

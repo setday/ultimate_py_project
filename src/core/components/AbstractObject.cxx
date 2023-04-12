@@ -57,12 +57,12 @@ void AbstractObject::parse() {
       auto renderObject = new render::RenderObject;
 
       renderObject->material = render::material::Bronze();
-      auto r = solidSphere.getRadius();
+      auto r = solidSphere.radius;
       renderObject->mesh = render::mesh::Sphere(r, 50 * r, 50 * r);
       renderObjects.push_back(renderObject);
     }
 
-    renderObjects.back()->modelMatrix = mat4::translation(solidSphere.getPosition());
+    renderObjects.back()->modelMatrix = mat4::translation(solidSphere.position);
 
   } else if (type == physics::IPhysicalObject::Type::SOLID_MESH) {
 

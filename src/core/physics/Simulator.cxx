@@ -12,7 +12,7 @@
  */
 
 #include "Simulator.h"
-#include "Collision.h"
+#include "CollisionSolver.h"
 
 using namespace unreal_fluid::physics;
 
@@ -38,10 +38,8 @@ void Simulator::interact(IPhysicalObject *dynamicObject, IPhysicalObject *solid)
     auto particles = (std::vector<fluid::Particle *> *) dynamicObject->getData();
     if (solid->getType() == IPhysicalObject::Type::SOLID_SPHERE) {
       auto sphere = (solid::SolidSphere *) solid;
-      for (auto particle: *particles) {
-        if ((particle->position - sphere->position).len() <= particle->radius + sphere->radius)
-          Collision::sphereCollision(particle, sphere, 0.8);
-      }
+      for (auto particle: *particles)
+        CollisionSolver::particleWithSphereCollision(particle, sphere, 0.8);
     }
   }
 }

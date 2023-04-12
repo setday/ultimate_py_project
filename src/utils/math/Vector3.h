@@ -67,7 +67,7 @@ namespace unreal_fluid::math {
     }
 
 
-    double distanceTo(Vector3<T>& v){
+    double distanceTo(const Vector3<T>& v){
       return (v - *this).len();
     }
 
@@ -103,7 +103,7 @@ namespace unreal_fluid::math {
 
     [[nodiscard]] T len2() const { return x * x + y * y + z * z; }
 
-    [[nodiscard]] double len() const { return sqrt(len2()); }
+    [[nodiscard]] double len() const { return mySqrt(len2()); }
 
     [[nodiscard]] double operator!() const { return len(); }
 

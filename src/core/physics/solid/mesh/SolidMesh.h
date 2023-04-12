@@ -14,9 +14,10 @@
 
 
 #pragma once
+
+#include <vector>
 #include "../ISolid.h"
 #include "Triangle.h"
-#include "vector"
 
 namespace unreal_fluid::physics::solid {
   class SolidMesh : public ISolid {

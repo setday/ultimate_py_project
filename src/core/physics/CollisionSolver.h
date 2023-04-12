@@ -5,7 +5,7 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Collision.h
+ * FILE NAME : CollisionSolver.h
  * PURPOSE   : Implements collision between different objects
  *
  * No part of this file may be changed and used without agreement of
@@ -17,13 +17,15 @@
 #include "solid/sphere/SolidSphere.h"
 
 namespace unreal_fluid::physics {
-  class Collision {
+  class CollisionSolver {
   public:
     /// @brief collides two particles
-    static void particlesCollision(fluid::Particle *p1, fluid::Particle *p2, double k);
+    /// @details takes two particles p1, p2 and uses k - coefficient of restitution - to collide them
+    static void particleWithParticleCollision(fluid::Particle *p1, fluid::Particle *p2, double k);
 
     /// @brief collides particle with sphere
-    static void sphereCollision(fluid::Particle *p, solid::SolidSphere *s, double k);
+    /// @details takes particle p, static sphere s and uses k - coefficient of restitution - to collide them
+    static void particleWithSphereCollision(fluid::Particle *p, solid::SolidSphere *s, double k);
   };
 
 } // namespace unreal_fluid::physics::fluid

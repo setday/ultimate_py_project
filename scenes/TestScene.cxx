@@ -20,7 +20,6 @@ using namespace unreal_fluid;
 
 class TestScene : public Scene {
 public:
-  double dt = 0.02;
   utils::Timer timer;
 
   explicit TestScene(const compositor::SceneCompositor *compositor) : Scene(compositor) {
@@ -34,27 +33,4 @@ public:
     compositor->getRenderer()->camera.setPosition({0, 0, 2});
     compositor->getRenderer()->camera.setDirection({0, 0, -1});
   }
-
-  void update() override {
-    compositor->getSimulator()->simulate(dt);
-    for (auto &object: objects) {
-      object->parse();
-    }
-
-    timer.incrementCounter();
-
-    if (timer.getCounter() == 100) {
-      auto &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(((physics::fluid::SimpleFluidContainer *) objects[1]->getPhysicalObject())->getData());
-      std::cout << "Number of particles: " << particles.size() << "\n";
-      timer.reset();
-    }
-  }
-
-  void render() override {
-    for (auto &object: objects) {
-      compositor->getRenderer()->renderObjects(object->getRenderObjects());
-    }
-  }
-
-  ~TestScene() override = default;
 };

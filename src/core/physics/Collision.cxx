@@ -5,18 +5,18 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Collision.cxx
+ * FILE NAME : CollisionSolver.cxx
  * PURPOSE   : Implements collision between different objects
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
 
-#include "Collision.h"
+#include "CollisionSolver.h"
 
 using namespace unreal_fluid::physics;
 
-void Collision::particlesCollision(fluid::Particle *p1, fluid::Particle *p2, double k) {
+void CollisionSolver::particleWithParticleCollision(fluid::Particle *p1, fluid::Particle *p2, double k) {
   vec3 diff = p1->position - p2->position;
 
   if (diff.len2() == 0) return;
@@ -44,11 +44,17 @@ void Collision::particlesCollision(fluid::Particle *p1, fluid::Particle *p2, dou
   p2->velocity += momentum * p1->mass;
 }
 
-void Collision::sphereCollision(fluid::Particle *p, solid::SolidSphere *s, double k) {
-  vec3 y = s->getPosition() - p->position;
-  y.normalizeSelf();
-  vec3 spherePosition = s->getPosition();
-  double push = s->getRadius() + p->radius - p->position.distanceTo(spherePosition);
-  p->position -= y * push;
-  p->velocity -= y * (1 + k) * p->velocity.project(y);
+void CollisionSolver::particleWithSphereCollision(fluid::Particle *p, solid::SolidSphere *s, double k) {
+  vec3 diff = s->position - p->position;
+
+  if (diff.len2() == 0) return;
+
+  double len = diff.len();
+
+  if (len > p->radius + s->radius) return;
+
+  diff /= len;
+  double push = s->radius + p->radius - len;
+  p->position -= diff * push;
+  p->velocity -= diff * (1 + k) * p->velocity.dot(diff);
 }

@@ -21,7 +21,7 @@
 namespace unreal_fluid::physics::fluid {
   class CellsDistributor {
   private:
-    uint64_t first = 0, second = 1;
+    int first = 0, second = 1;
     std::unordered_map<uint64_t, std::vector<Particle *>> cells;
     std::unordered_map<uint64_t, std::vector<Particle *>>::iterator cell_iterator;
 

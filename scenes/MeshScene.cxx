@@ -21,33 +21,19 @@ using namespace unreal_fluid;
 
 class MeshScene : public Scene {
 public:
- explicit MeshScene(const compositor::SceneCompositor *compositor) : Scene(compositor) {
-   using namespace physics::solid;
+  explicit MeshScene(const compositor::SceneCompositor *compositor) : Scene(compositor) {
+    using namespace physics::solid;
 
 
-   Triangle t1{{0, 0, 0}, {1, 1, 1}, {1, 2, 3}}, t2{{0, 0, 0}, {1, 2, 3}, {1, 3, 3}},
-           t3{{0, 0, 0}, {1, 1, 4}, {1, 9, 3}};
-   auto triangles = new std::vector<Triangle>{t1, t2, t3};
-   auto solidMesh = new SolidMesh(*triangles);
-   objects.push_back(new AbstractObject(solidMesh));
-   for (auto &abstractObject: objects) {
-     compositor->getSimulator()->addPhysicalObject(abstractObject->getPhysicalObject());
-   }
-   compositor->getRenderer()->camera.setPosition({0, 0, 2});
-   compositor->getRenderer()->camera.setDirection({0, 0, -1});
- }
-
- void update() override {
-   for (auto &object: objects) {
-     object->parse();
-   }
- }
-
- void render() override {
-   for (auto &object: objects) {
-     compositor->getRenderer()->renderObjects(object->getRenderObjects());
-   }
- }
-
- ~MeshScene() override = default;
+    Triangle t1{{0, 0, 0}, {1, 1, 1}, {1, 2, 3}}, t2{{0, 0, 0}, {1, 2, 3}, {1, 3, 3}},
+            t3{{0, 0, 0}, {1, 1, 4}, {1, 9, 3}};
+    auto triangles = new std::vector<Triangle>{t1, t2, t3};
+    auto solidMesh = new SolidMesh(*triangles);
+    objects.push_back(new AbstractObject(solidMesh));
+    for (auto &abstractObject: objects) {
+      compositor->getSimulator()->addPhysicalObject(abstractObject->getPhysicalObject());
+    }
+    compositor->getRenderer()->camera.setPosition({0, 0, 2});
+    compositor->getRenderer()->camera.setDirection({0, 0, -1});
+  }
 };

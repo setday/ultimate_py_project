@@ -14,7 +14,7 @@
 
 #include "SimpleFluidContainer.h"
 #include <random>
-#include "../../Collision.h"
+#include "../../CollisionSolver.h"
 
 using namespace unreal_fluid::physics::fluid;
 
@@ -56,14 +56,15 @@ void SimpleFluidContainer::interact() {
     for (auto particle: particles) {
       if (particle->position != bigParticle->position &&
           (particle->position - bigParticle->position).len() <= particle->radius + bigParticle->radius)
-        Collision::particlesCollision(particle, bigParticle, k);
+        CollisionSolver::particleWithParticleCollision(particle, bigParticle, k);
     }
   }
 
   for (auto p = distributor.nextPair(); p != CellsDistributor::terminator; p = distributor.nextPair())
-    Collision::particlesCollision(p.first, p.second, k);
+    CollisionSolver::particleWithParticleCollision(p.first, p.second, k);
 }
 
+/// TODO flows and addParticle should be methods of another class
 void SimpleFluidContainer::flows() {
   for (int i = 0; i < 10; ++i) {
     addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, 0, 0}, 0.02, 1);
