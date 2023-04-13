@@ -16,7 +16,9 @@
 #include "../src/core/components/scene/IScene.h"
 
 #include "Control.cxx"
-#include "GlTestScene.cxx"
+#include "TestScene.cxx"
+#include "GLTestScene.cxx"
+#include "MeshScene.cxx"
 
 using namespace unreal_fluid;
 
@@ -33,8 +35,12 @@ public:
     compositor->unloadScene(this);
   }
 
-  void update() override {}
-  void render() override {}
+  void update() override {
+    // There is no need to update this scene because it is only for loading other scenes and then unloading itself.
+  }
+  void render() override {
+    // There is no need to render this scene because it is only for loading other scenes and then unloading itself.
+  }
 };
 
 // end of SceneLoader.cxx

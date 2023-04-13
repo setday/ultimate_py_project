@@ -17,10 +17,9 @@
 using namespace unreal_fluid;
 
 void PhysicalScene::update() {
-  for (auto object : objects) {
-    // object->update();
-    /// TODO: add parser and updating order
-  }
+  compositor->getSimulator()->simulate(dt);
+  for (auto &object: objects)
+    object->parse();
 }
 
 // end of PhysicalScene.cxx

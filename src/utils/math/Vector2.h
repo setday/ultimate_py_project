@@ -124,7 +124,7 @@ namespace unreal_fluid::math {
     [[nodiscard]] T len2() const { return x * x + y * y; }
     /// Length of this vector
     /// @return length of this vector
-    [[nodiscard]] double len() const { return sqrt(len2()); }
+    [[nodiscard]] double len() const { return mySqrt(len2()); }
     /// Alternative to len()
     /// @return length of this vector
     [[nodiscard]] double operator!() const { return len(); }

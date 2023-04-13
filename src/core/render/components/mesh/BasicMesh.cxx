@@ -5,7 +5,7 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Mesh.cxx
+ * FILE NAME : BasicMesh.cxx
  * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of

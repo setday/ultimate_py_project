@@ -19,8 +19,6 @@ using namespace unreal_fluid::render;
 void Renderer::startFrame() {
   _objectsToRender.clear();
 
-  _timer.resume();
-
   glEnable(GL_DEPTH_TEST);
 
   glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
@@ -192,25 +190,9 @@ void Renderer::endFrame() {
 
   glClear(GL_COLOR_BUFFER_BIT);
 
-  //*
   postProcess();
-  //*/
-
-  /*
-  glBindFramebuffer(GL_READ_FRAMEBUFFER, _fbo);
-  glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-  glBlitFramebuffer(0, 0, camera.getResolution().x, camera.getResolution().y, 0, 0, camera.getResolution().x, camera.getResolution().y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-   //*/
 
   glFinish();
-
-  _timer.pause();
-  _timer.incrementCounter();
-
-  if (_timer.getCounter() >= 400) {
-    Logger::logInfo("Rendering time: ", _timer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms");
-    _timer.reset();
-  }
 } // end of Renderer::endFrame() function
 
 // end of Renderer.Render.cxx

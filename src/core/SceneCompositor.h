@@ -19,6 +19,7 @@
 #include "../Definitions.h"
 
 #include "./render/Renderer.h"
+#include "physics/Simulator.h"
 
 namespace unreal_fluid {
   class Core;
@@ -32,10 +33,13 @@ namespace unreal_fluid::compositor {
   class SceneCompositor {
   private:
     std::unique_ptr<render::Renderer> _renderer;
+    physics::Simulator *_simulator;
     std::vector<IScene *> _scenes;
     Core *_core;
 
     utils::Timer _timer;
+    utils::Timer _renderingTimer;
+    utils::Timer _simulationTimer;
 
   public:
     explicit SceneCompositor(Core *core);
@@ -61,6 +65,7 @@ namespace unreal_fluid::compositor {
       static_assert(std::is_base_of<IScene, S>::value, "Scene must be derived from Scene class");
       _scenes.emplace_back(new S(this));
     }
+
     /// Unload scene.
     /// @param scene Scene.
     void unloadScene(IScene *scene);
@@ -72,6 +77,7 @@ namespace unreal_fluid::compositor {
     /// Get renderer.
     /// @return Renderer.Render.
     [[nodiscard]] render::Renderer *getRenderer() const;
+    [[nodiscard]] physics::Simulator *getSimulator() const;
   }; // compositor class
 } // namespace unreal_fluid::compositor
 

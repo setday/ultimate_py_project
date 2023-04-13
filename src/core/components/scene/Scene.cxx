@@ -16,8 +16,12 @@
 
 using namespace unreal_fluid;
 
-Scene::Scene(compositor::SceneCompositor const *compositor) {
+Scene::Scene(const compositor::SceneCompositor *compositor) {
   this->compositor = compositor;
+}
+
+Scene::~Scene() {
+  deleteObjects();
 }
 
 void Scene::update() {
@@ -34,6 +38,14 @@ void Scene::render() {
 
 [[nodiscard]] Core *Scene::getCore() const {
   return compositor->getCore();
+}
+
+void Scene::deleteObjects() {
+  for (AbstractObject *object : objects) {
+    delete object;
+  }
+
+  objects.clear();
 }
 
 // end of Scene.cxx

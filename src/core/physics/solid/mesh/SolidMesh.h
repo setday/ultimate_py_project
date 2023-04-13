@@ -5,8 +5,8 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : IFluidContainer.h
- * PURPOSE   : abstract fluid container
+ * FILE NAME : SolidMesh.cxx
+ * PURPOSE   : Simple static mesh
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -15,22 +15,23 @@
 #pragma once
 
 #include <vector>
-#include "../IPhysicalObject.h"
-#include "Particle.h"
 
-namespace unreal_fluid::physics::fluid {
+#include "../ISolid.h"
+#include "Triangle.h"
 
-    struct FluidDescriptor {
-        double particleRadius;
-        double particleMass;
-    };
+namespace unreal_fluid::physics::solid {
+  class SolidMesh : public ISolid {
 
-    class IFluidContainer : public IPhysicalObject {
+  private:
+    std::vector<Triangle> triangles;
 
-    protected:
-        std::vector<Particle *> particles;
-    };
+  public:
+    explicit SolidMesh(const std::vector<Triangle> &triangles);
 
-} // namespace unreal_fluid::physics::fluid
+    void simulate(double dt) override;
+    Type getType() override;
+    void *getData() override;
+  };
+} // namespace unreal_fluid::physics::solid
 
-// end of FluidContainer.h
+// end of SolidMesh.cxx

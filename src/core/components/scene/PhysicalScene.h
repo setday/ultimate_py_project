@@ -18,10 +18,22 @@
 
 namespace unreal_fluid {
   class PhysicalScene : public virtual IScene {
+    double dt = 0.02;
+
   public:
+<<<<<<<< HEAD:src/core/components/ObjectFactory.h
+    enum class Type {
+      FluidObject,
+      GasObject,
+      StaticObject
+    };
+
+    static AbstractObject *create(Type type);
+========
     /// Update scene.
     void update() override;
+>>>>>>>> dev:src/core/components/scene/PhysicalScene.h
   };
-};
+}; // namespace unreal_fluid
 
 // end of PhysicalScene.h

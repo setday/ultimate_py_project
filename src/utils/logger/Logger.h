@@ -24,18 +24,18 @@
 #define LOG_DEBUG(...) Logger::log(Logger::Level::DEBUG, __VA_ARGS__)
 #define LOG_INFO(...) Logger::log(Logger::Level::INFO, __VA_ARGS__)
 #define LOG_WARNING(...) Logger::log(Logger::Level::WARNING, __VA_ARGS__)
-#define LOG_ERROR(...) { Logger::log(Logger::Level::ERR, __VA_ARGS__); \
-                         Logger::logPlace(__FILE__, __LINE__); }
-#define LOG_FATAL(...) { Logger::logPlace(__FILE__, __LINE__); \
-                         Logger::log(Logger::Level::FATAL, __VA_ARGS__); }
+#define LOG_ERROR(...) do { Logger::log(Logger::Level::ERR, __VA_ARGS__); \
+                            Logger::logPlace(__FILE__, __LINE__); } while (0)
+#define LOG_FATAL(...) do { Logger::logPlace(__FILE__, __LINE__); \
+                            Logger::log(Logger::Level::FATAL, __VA_ARGS__); } while (0)
 #else
 #define LOG_DEBUG(...)
 #define LOG_INFO(...)
 #define LOG_WARNING(...)
-#define LOG_ERROR(...) { Logger::log(Logger::Level::ERR, __VA_ARGS__); \
-                         Logger::logPlace(__FILE__, __LINE__); }
-#define LOG_FATAL(...) { Logger::logPlace(__FILE__, __LINE__); \
-                         Logger::log(Logger::Level::FATAL, __VA_ARGS__); }
+#define LOG_ERROR(...) do { Logger::log(Logger::Level::ERR, __VA_ARGS__); \
+                            Logger::logPlace(__FILE__, __LINE__); } while (0)
+#define LOG_FATAL(...) do { Logger::logPlace(__FILE__, __LINE__); \
+                            Logger::log(Logger::Level::FATAL, __VA_ARGS__); } while (0)
 #endif
 
 class Logger {

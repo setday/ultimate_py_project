@@ -1,8 +1,22 @@
-.idea/
+!include
+!lib
+!CMakeLists.txt
+!.clang-format
+!.clang-tidy
+!README.md
+!scenes
+!src
+!.gitignore
+!.git
+!.github
 
-cmake-build-debug/
-cmake-build-release/
-cmake-build-debug-mingw/
-cmake-build-release-mingw/
+# insurance
+
+.idea
+cmake-build-release
+cmake-build-debug
+cmake-build-debug-mingw
+cmake-build-release-mingw
 cmake-build-debug-visual-studio
-bin/
+cmake-build-release-visual-studio
+bin
