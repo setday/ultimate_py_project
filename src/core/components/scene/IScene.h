@@ -24,8 +24,7 @@
 namespace unreal_fluid {
   class IScene {
   protected:
-    const compositor::SceneCompositor *compositor;
-
+    const compositor::SceneCompositor *compositor = nullptr;
     std::vector<AbstractObject *> objects;
 
   public:
@@ -37,6 +36,6 @@ namespace unreal_fluid {
     /// Render scene.
     virtual void render() = 0;
   };
-}
+} // namespace unreal_fluid
 
 // end of IScene.h

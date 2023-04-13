@@ -5,22 +5,26 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Cell.h
- * PURPOSE   : ${PURPOSE}
+ * FILE NAME : SimpleFluidContainer.cxx
+ * PURPOSE   : Simple fluid simulation class, which implements ASS collision
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
 
+
 #pragma once
 
-#include "../../maths/MathHeaders"
+#include "../IPhysicalObject.h"
 
-using namespace unreal_fluid::math;
+namespace unreal_fluid::physics::solid {
+  class ISolid : public IPhysicalObject {
+  public:
+    vec3 position{};
 
-class Cell {
-public:
-  Vector3<int> coords;
-};
+    ISolid() = default;
+    explicit ISolid(vec3 position) : position(position) {}
+  };
+} // namespace unreal_fluid::physics::solid
 
-// end of Cell.h
+// end of ISolid.h

@@ -65,16 +65,12 @@ Renderer::Renderer() {
 
   _shaderManager = std::make_unique<ShaderManager>();
 
-  camera = Camera(vec3f(0.0f, 0.0f, 0.0f), vec3f(0.0f, 0.0f, -1.0f),
-                  vec3f(0.0f, 1.0f, 0.0f), 1.0f, 70.0f, 0.01f, 1000.0f);
+  camera = Camera({0.0f}, {0.0f, 0.0f, -1.0f});
 
   initGl();
   initBuffers();
 
-  changeRenderMode(RenderMode::SOLID);
-
-  _timer.pause();
-  _timer.reset();
+  changeRenderMode(_renderMode);
 
   Logger::logInfo("Renderer initialized!");
 } // end of Renderer::Renderer() function

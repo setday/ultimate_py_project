@@ -5,7 +5,8 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : PhysicsObject.h
+ * FILE NAME : PhysicsDefinitions.h
+ * PURPOSE   : physical constants
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
@@ -13,8 +14,10 @@
 
 #pragma once
 
-namespace physics {
-  class PhysicsObject;
+#include "../../Definitions.h"
+
+namespace unreal_fluid::physics {
+  const vec3 G = {0.0, -9.81, 0.0};
 }
 
-// end of PhysicsObject.h
+// end of PhysicsDefinitions.h

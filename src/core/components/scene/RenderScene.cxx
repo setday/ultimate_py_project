@@ -17,8 +17,8 @@
 using namespace unreal_fluid;
 
 void RenderScene::render() {
-  for (const AbstractObject *object : objects) {
-    compositor->getRenderer()->renderObjects({object->getRenderObject()});
+  for (AbstractObject *object : objects) {
+    compositor->getRenderer()->renderObjects(object->getRenderObjects());
   }
 }
 

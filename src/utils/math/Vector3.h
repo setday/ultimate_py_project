@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <cassert>
 #include <cmath>
 #include <string>
 
@@ -38,9 +39,9 @@ namespace unreal_fluid::math {
                              z(z) {}
 
     template<typename G>
-    explicit Vector3(const Vector3<G> &v) : x(dynamic_cast<T>(v.x)),
-                                            y(dynamic_cast<T>(v.y)),
-                                            z(dynamic_cast<T>(v.z)) {
+    Vector3(const Vector3<G> &v) : x(static_cast<T>(v.x)),
+                                   y(static_cast<T>(v.y)),
+                                   z(static_cast<T>(v.z)) {
     }
 
     Vector3 operator+(const Vector3 &v) const {
@@ -63,6 +64,11 @@ namespace unreal_fluid::math {
       y -= v.y;
       z -= v.z;
       return this;
+    }
+
+
+    double distanceTo(const Vector3<T>& v){
+      return (v - *this).len();
     }
 
     template<typename R>
@@ -97,16 +103,18 @@ namespace unreal_fluid::math {
 
     [[nodiscard]] T len2() const { return x * x + y * y + z * z; }
 
-    [[nodiscard]] double len() const { return std::sqrt(len2()); }
+    [[nodiscard]] double len() const { return mySqrt(len2()); }
 
     [[nodiscard]] double operator!() const { return len(); }
 
     Vector3 normalize() const {
+      assert(len2() != 0);
       return *this / len();
     }
 
-    Vector3 *normalizeSelf() {
-      return this /= len();
+    void normalizeSelf() {
+      assert(len2() != 0);
+      *this /= len();
     }
 
     Vector3 operator*(const Vector3 &vec) const {
@@ -121,6 +129,11 @@ namespace unreal_fluid::math {
       return Vector3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
     }
 
+    T project(const Vector3 &v) {
+      if (len() == 0) return 0;
+      return this->dot(v) / v.len();
+    }
+    
     /// Linear interpolation between two vectors
     /// @param v - vector to interpolate to
     /// @param t - interpolation coefficient
@@ -174,12 +187,20 @@ namespace unreal_fluid::math {
       return os;
     }
 
-    friend Vector3<T> operator/(const Vector3 &vec, float c) {
+    friend Vector3<T> operator/(const Vector3 &vec, T c) {
       return Vector3(vec.x / c, vec.y / c, vec.z / c);
     }
 
     friend Vector3<T> operator*(float c, const Vector3<T> &vec) {
       return Vector3(vec.x * c, vec.y * c, vec.z * c);
+    }
+
+    friend bool operator==(const Vector3 &vec, const Vector3 &other) {
+      return vec.x == other.x && vec.y == other.y && vec.z == other.z;
+    }
+
+    friend bool operator!=(const Vector3 &vec, const Vector3 &other) {
+      return !(vec == other);
     }
   };
 } // namespace unreal_fluid::math

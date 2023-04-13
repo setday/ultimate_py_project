@@ -18,10 +18,12 @@
 
 namespace unreal_fluid {
   class PhysicalScene : public virtual IScene {
+    double dt = 0.02;
+
   public:
     /// Update scene.
     void update() override;
   };
-};
+}; // namespace unreal_fluid
 
 // end of PhysicalScene.h
