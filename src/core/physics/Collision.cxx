@@ -58,3 +58,5 @@ void CollisionSolver::particleWithSphereCollision(fluid::Particle *p, solid::Sol
   p->position -= diff * push;
   p->velocity -= diff * (1 + k) * p->velocity.dot(diff);
 }
+
+// end of CollisionSolver.cxx

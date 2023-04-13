@@ -16,6 +16,7 @@
 #pragma once
 
 #include <vector>
+
 #include "../ISolid.h"
 #include "Triangle.h"
 

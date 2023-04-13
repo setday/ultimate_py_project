@@ -54,6 +54,7 @@ void SceneCompositor::update() {
 
   _simulationTimer.pause();
   _timer.pause();
+  _simulationTimer.incrementCounter();
 }
 
 void SceneCompositor::render() {
@@ -69,6 +70,7 @@ void SceneCompositor::render() {
 
   _renderingTimer.pause();
   _timer.pause();
+  _renderingTimer.incrementCounter();
   _timer.incrementCounter();
 
   if (_timer.getCounter() >= 400 || _timer.getElapsedTime() >= 1.5) {

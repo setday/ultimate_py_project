@@ -12,9 +12,7 @@
  * authors of this project.
  */
 
-
 #include "SolidMesh.h"
-#include <utility>
 
 using namespace unreal_fluid::physics::solid;
 

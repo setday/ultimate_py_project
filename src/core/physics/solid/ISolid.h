@@ -15,7 +15,6 @@
 
 #pragma once
 
-#include "../../Definitions.h"
 #include "../IPhysicalObject.h"
 
 namespace unreal_fluid::physics::solid {
@@ -23,6 +22,7 @@ namespace unreal_fluid::physics::solid {
   public:
     vec3 position;
 
+    ISolid() = default;
     explicit ISolid(vec3 position) : position(position) {}
   };
 } // namespace unreal_fluid::physics::solid
