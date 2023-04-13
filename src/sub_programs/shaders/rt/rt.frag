@@ -81,7 +81,7 @@ Intersection intersectSphere(Ray ray, vec3 center, float radius) {
             1.0
         );
     } else {
-        float sqrt_discriminant = mySqrt(discriminant);
+        float sqrt_discriminant = sqrt(discriminant);
         float denom = 2.0 * a;
         float dist = (-b - sqrt_discriminant);
         int normsign = 1;
