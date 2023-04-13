@@ -15,7 +15,9 @@
 #pragma once
 
 #include <memory>
+
 #include "../Definitions.h"
+
 #include "./render/Renderer.h"
 #include "physics/Simulator.h"
 

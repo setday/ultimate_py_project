@@ -20,9 +20,11 @@
 namespace unreal_fluid::physics::solid {
   class ISolid : public IPhysicalObject {
   public:
-    vec3 position;
+    vec3 position{};
 
     ISolid() = default;
     explicit ISolid(vec3 position) : position(position) {}
   };
 } // namespace unreal_fluid::physics::solid
+
+// end of ISolid.h

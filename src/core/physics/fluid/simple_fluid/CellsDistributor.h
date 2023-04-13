@@ -16,20 +16,22 @@
 
 #include <unordered_map>
 #include <vector>
+
 #include "../Particle.h"
 
 namespace unreal_fluid::physics::fluid {
   class CellsDistributor {
+  public:
+    constexpr static std::pair<Particle *, Particle *> terminator = {nullptr, nullptr};
+    std::vector<Particle *> big_particles;
+
   private:
-    int first = 0, second = 1;
+    int first = 0;
+    int second = 1;
     std::unordered_map<uint64_t, std::vector<Particle *>> cells;
     std::unordered_map<uint64_t, std::vector<Particle *>>::iterator cell_iterator;
 
     static uint64_t getId(vec3 position);
-
-  public:
-    constexpr static std::pair<Particle *, Particle *> terminator = {nullptr, nullptr};
-    std::vector<Particle *> big_particles;
 
   public:
     CellsDistributor() = default;

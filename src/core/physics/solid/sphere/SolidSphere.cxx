@@ -26,3 +26,5 @@ unreal_fluid::physics::IPhysicalObject::Type SolidSphere::getType() {
 void *SolidSphere::getData() {
   return this;
 }
+
+// end of SolidSphere.cxx

@@ -12,7 +12,6 @@
  * authors of this project.
  */
 
-
 #pragma once
 
 #include <vector>
@@ -34,3 +33,5 @@ namespace unreal_fluid::physics::solid {
     void *getData() override;
   };
 } // namespace unreal_fluid::physics::solid
+
+// end of SolidMesh.cxx

@@ -27,7 +27,7 @@ ShaderManager::ShaderManager() {
 }
 
 const Shader *ShaderManager::LoadShader(std::string_view path) {
-  _shaderPaths.push_back(path.data());
+  _shaderPaths.emplace_back(path.data());
 
   std::string realPath = std::string(SHADERS_PATH) + path.data();
 
@@ -74,7 +74,7 @@ const Shader *ShaderManager::LoadShader(std::string_view path) {
 }
 
 const ShaderProgram *ShaderManager::CreateProgram(const std::vector<const Shader *> &shaders) {
-  std::unique_ptr<ShaderProgram> program = std::make_unique<ShaderProgram>();
+  auto program = std::make_unique<ShaderProgram>();
 
   for (auto *shader : shaders) {
     program->attachShader(shader);
@@ -137,11 +137,11 @@ void ShaderManager::ReloadShader(Shader *shader) {
 }
 
 void ShaderManager::ReloadShaders() {
-  for (auto & _shader : _shaders) {
+  for (auto const & _shader : _shaders) {
     ReloadShader(_shader.get());
   }
 
-  for (auto & _program : _programs) {
+  for (auto const & _program : _programs) {
     _program->reattachShaders();
   }
 }

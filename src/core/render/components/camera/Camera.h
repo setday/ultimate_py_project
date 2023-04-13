@@ -19,27 +19,26 @@
 namespace unreal_fluid::render {
   class Camera {
   private:
-    vec3f _position;
-    vec3f _direction;
-    vec3f _up;
-    vec3f _right;
+    vec3f _position  = {0.f, 0.f, 0.f};
+    vec3f _direction = {0.f, 0.f, -1.f};
+    vec3f _up        = {0.f, 1.f, 0.f};
+    vec3f _right     = {1.f, 0.f, 0.f};
 
-    float _fov;
-    float _aspect;
-    float _near;
-    float _far;
+    float _height = 0.f;
+    float _width  = 0.f;
+    float _aspect = 1.f;
 
-    float _height;
-    float _width;
+    float _fov    = 70.f;
+    float _near   = 0.01f;
+    float _far    = 1000.f;
 
-    mat4 _view;
-    mat4 _projection;
+    mat4 _view{};
+    mat4 _projection{};
 
-    vec3f _targetPosition;
-    float _interpolationFactor;
+    vec3f _targetPosition      = {0.f, 0.f, 0.f};
+    float _interpolationFactor = 0.f;
     utils::Timer _interpolationTimer;
 
-  private:
     /// update view matrix
     void updateViewMatrix();
 
@@ -53,16 +52,18 @@ namespace unreal_fluid::render {
     /// @param position - position of camera
     /// @param direction - direction of camera
     /// @param up - up vector of camera
-    /// @param aspect - aspect ratio
+    /// @param width - width of camera
+    /// @param height - height of camera
     /// @param fov - field of view
     /// @param near - near plane
     /// @param far - far plane
-    Camera(const vec3f &position, const vec3f &direction, const vec3f &up, float aspect, float fov = 45.f,
-           float near = 0.01f, float far = 1000.0f);
+    Camera(const vec3f &position, const vec3f &direction, const vec3f &up = {0.f, 1.f, 0.f},
+           float width = 500.f, float height = 500.f,
+           float fov = 70.f, float near = 0.01f, float far = 1000.0f);
 
     /// Get position of camera
     /// @return position of camera
-    vec3f getPosition() const;
+    [[nodiscard]] vec3f getPosition() const;
 
     /// Set position of camera with interpolation
     /// @param position - position of camera
@@ -77,7 +78,7 @@ namespace unreal_fluid::render {
 
     /// Get direction of camera
     /// @return direction of camera
-    vec3f getDirection() const;
+    [[nodiscard]] vec3f getDirection() const;
 
     /// Set direction of camera
     /// @param direction - direction of camera
@@ -90,7 +91,7 @@ namespace unreal_fluid::render {
 
     /// Get resolution of camera
     /// @return resolution of camera
-    vec2f getResolution() const;
+    [[nodiscard]] vec2f getResolution() const;
 
     /// Set camera resolution
     /// @param width - width of camera
@@ -99,23 +100,23 @@ namespace unreal_fluid::render {
 
     /// Get view matrix
     /// @return view matrix
-    mat4 getViewMatrix() const;
+    [[nodiscard]] mat4 getViewMatrix() const;
 
     /// Get projection matrix
     /// @return projection matrix
-    mat4 getProjectionMatrix() const;
+    [[nodiscard]] mat4 getProjectionMatrix() const;
 
     /// Get view with projection matrix
     /// @return view with projection matrix
-    mat4 getFullMatrix() const;
+    [[nodiscard]] mat4 getFullMatrix() const;
 
     /// Get right vector
     /// @return right vector
-    vec3f getRight() const;
+    [[nodiscard]] vec3f getRight() const;
 
     /// Get up vector
     /// @return up vector
-    vec3f getUp() const;
+    [[nodiscard]] vec3f getUp() const;
   };
 } // unreal_fluid::render
 

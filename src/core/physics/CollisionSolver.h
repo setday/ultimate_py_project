@@ -13,6 +13,7 @@
  */
 
 #pragma once
+
 #include "fluid/Particle.h"
 #include "solid/sphere/SolidSphere.h"
 
@@ -29,3 +30,5 @@ namespace unreal_fluid::physics {
   };
 
 } // namespace unreal_fluid::physics::fluid
+
+// end of CollisionSolver.h

@@ -58,7 +58,7 @@ namespace unreal_fluid::window {
 
     /// Returns if the window compositor is alive.
     /// @return True if the window compositor is alive.</returns>
-    bool isAlive() const { return _isAlive; };
+    [[nodiscard]] bool isAlive() const { return _isAlive; };
 
     /// General callback for the keyboard.
     /// @param window The window.
@@ -70,7 +70,7 @@ namespace unreal_fluid::window {
 
     /// Add keyboard callback.
     /// @param callback The callback function.
-    void addKeyboardCallback(std::function<void(int key, int action)> callback);
+    void addKeyboardCallback(const std::function<void(int key, int action)>& callback);
 
     /// General callback for the resize.
     /// @param window The window.

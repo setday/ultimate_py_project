@@ -7,6 +7,8 @@ namespace unreal_fluid {
   class Scene : public PhysicalScene, public RenderScene {
   public:
     explicit Scene(const compositor::SceneCompositor *compositor);
+    /// @attention If you deallocate all the memory for objects by yourself, you mustn't call this destructor.
+    ~Scene() override;
 
     /// Update scene.
     /// @details Update all objects in scene.
@@ -34,6 +36,10 @@ namespace unreal_fluid {
     /// Get core that owns this compositor.
     /// @return Core.
     [[nodiscard]] Core *getCore() const;
+
+    /// Delete all objects in scene.
+    /// @attention Also delete all memory allocated for objects.
+    void deleteObjects();
   };
 } // namespace unreal_fluid
 

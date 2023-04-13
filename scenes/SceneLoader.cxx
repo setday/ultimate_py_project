@@ -35,8 +35,12 @@ public:
     compositor->unloadScene(this);
   }
 
-  void update() override {}
-  void render() override {}
+  void update() override {
+    // There is no need to update this scene because it is only for loading other scenes and then unloading itself.
+  }
+  void render() override {
+    // There is no need to render this scene because it is only for loading other scenes and then unloading itself.
+  }
 };
 
 // end of SceneLoader.cxx

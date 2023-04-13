@@ -16,7 +16,6 @@
 
 #include "../../Definitions.h"
 
-
 namespace unreal_fluid::physics {
   const vec3 G = {0.0, -9.81, 0.0};
 }
