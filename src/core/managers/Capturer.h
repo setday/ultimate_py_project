@@ -18,6 +18,9 @@
 #include "../../render/Renderer.h"
 #include <GL/gl.h>
 #include <GL/glaux.h>
+#include <opencv2/opencv.hpp>
+#include <opencv/highgui.h>
+#include <Windows.h>
 #pragma once
 
 
