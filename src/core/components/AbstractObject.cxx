@@ -19,12 +19,15 @@
 
 using namespace unreal_fluid;
 
-AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject, const std::vector<render::RenderObject *> &renderObjects) : physicalObject(physicalObject),
-                                                                                                                                     renderObjects(renderObjects) {}
+AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject,
+                               const std::vector<render::RenderObject *> &renderObjects) :
+                               physicalObject(physicalObject), renderObjects(renderObjects) {}
 
-AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) : physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)) {}
+AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) :
+                               physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)) {}
 
-AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject) : physicalObject(physicalObject) {}
+AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject) :
+                               physicalObject(physicalObject) {}
 
 void AbstractObject::parse() {
   auto type = physicalObject->getType();
@@ -42,7 +45,7 @@ void AbstractObject::parse() {
 
         renderObject->material = render::material::Gold();
         auto r = particles[pos]->radius;
-        renderObject->mesh = render::mesh::Sphere(r, 500 * r, 500 * r);
+        renderObject->mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
         renderObjects.push_back(renderObject);
       }
 
@@ -58,7 +61,7 @@ void AbstractObject::parse() {
 
       renderObject->material = render::material::Bronze();
       auto r = solidSphere.radius;
-      renderObject->mesh = render::mesh::Sphere(r, 50 * r, 50 * r);
+      renderObject->mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
       renderObjects.push_back(renderObject);
     }
 
@@ -68,8 +71,8 @@ void AbstractObject::parse() {
 
     auto &triangles = *static_cast<std::vector<physics::solid::Triangle> *>(data);
 
-    for (int pos = renderObjects.size(); pos < triangles.size(); ++pos) {
-      auto triangle = triangles[pos];
+    for (size_t pos = renderObjects.size(); pos < triangles.size(); ++pos) {
+      auto const& triangle = triangles[pos];
       auto renderObject = new render::RenderObject;
 
       if (pos == 0)

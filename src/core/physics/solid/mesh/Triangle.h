@@ -13,17 +13,18 @@
  */
 #pragma once
 
-#include "../../../../utils/math/MathHeaders"
+#include "../../../../Definitions.h"
 
 namespace unreal_fluid::physics::solid {
   struct Triangle {
-    vec3f v1, v2, v3;
-
-    Triangle(vec3f v1, vec3f v2, vec3f v3) : v1(v1),
-                                             v2(v2),
-                                             v3(v3) {}
+    vec3f v1;
+    vec3f v2;
+    vec3f v3;
 
     Triangle() = default;
+    Triangle(vec3f v1, vec3f v2, vec3f v3) : v1(v1), v2(v2), v3(v3) {}
     ~Triangle() = default;
   };
 } // namespace unreal_fluid::physics::solid
+
+// end of Triangle.h

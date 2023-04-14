@@ -12,14 +12,14 @@
  */
 
 #include "../src/core/Core.h"
-#include "../src/core/components/scene/IScene.h"
+#include "../src/core/components/scene/Scene.h"
 
 using namespace unreal_fluid;
 
 class Control : public IScene {
 public:
   vec3f cameraSpeed = {0.f, 0.f, 0.f};
-  vec2f cameraRotation = {0.f, M_PI};
+  vec2f cameraRotation = {0.f, (float)math::PI};
   vec2f cameraRotationSpeed = {0.f, 0.f};
 
   explicit Control(compositor::SceneCompositor const * compositor) : IScene() {
@@ -88,7 +88,7 @@ public:
     }
   }
 
-  void resizeBindings(int width, int height) {
+  void resizeBindings(int width, int height) const {
     this->compositor->getRenderer()->changeResolution(width, height);
   }
 
@@ -107,7 +107,9 @@ public:
     cameraRotationSpeed *= 0.85f;
   }
 
-  void render() override {}
+  void render() override {
+    // The control scene doesn't render anything.
+  }
 };
 
 // end of Control.cxx

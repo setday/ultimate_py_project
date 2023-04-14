@@ -14,9 +14,10 @@
 #pragma once
 
 #include <vector>
-#include "../../utils/math/MathHeaders"
-#include "fluid/simple_fluid/SimpleFluidContainer.h"
-#include "solid/sphere/SolidSphere.h"
+
+#include "../../Definitions.h"
+
+#include "IPhysicalObject.h"
 
 namespace unreal_fluid::physics {
   class Simulator {
@@ -42,3 +43,5 @@ namespace unreal_fluid::physics {
     void interact(IPhysicalObject *dynamicObject, IPhysicalObject *solid);
   };
 } // namespace unreal_fluid::physics
+
+// end of Simulator.h

@@ -25,10 +25,13 @@ void Camera::updateProjectionMatrix() {
   _projection = mat4::perspective(_fov, _aspect, _near, _far);
 }
 
-Camera::Camera(const vec3f &position, const vec3f &direction, const vec3f &up, float aspect, float fov, float near,
-               float far) : _position(position), _direction(direction.normalize()), _up(up.normalize()),
-               _right(direction.cross(up).normalize()), _fov(fov), _near(near), _far(far), _aspect(aspect),
-               _height(500.f), _width(500.f), _view(), _projection() {
+Camera::Camera(const vec3f &position, const vec3f &direction, const vec3f &up,
+               float width, float height,
+               float fov, float near, float far) :
+               _position(position), _direction(direction.normalize()), _up(up.normalize()),
+               _right(direction.cross(up).normalize()),
+               _height(height), _width(width), _aspect(width / height),
+               _fov(fov), _near(near), _far(far) {
   updateViewMatrix();
   updateProjectionMatrix();
 }

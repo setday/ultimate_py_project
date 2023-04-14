@@ -67,7 +67,7 @@ add_executable(
         src/core/physics/solid/mesh/SolidMesh.cxx
 
         src/core/physics/Simulator.cxx
-        src/core/physics/Collision.cxx
+        src/core/physics/CollisionSolver.cxx
 
         src/core/physics/fluid/simple_fluid/CellsDistributor.cxx
         src/core/physics/fluid/simple_fluid/SimpleFluidContainer.cxx

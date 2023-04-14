@@ -12,10 +12,10 @@
  * authors of this project.
  */
 
-
 #pragma once
 
 #include <vector>
+
 #include "../ISolid.h"
 #include "Triangle.h"
 
@@ -33,3 +33,5 @@ namespace unreal_fluid::physics::solid {
     void *getData() override;
   };
 } // namespace unreal_fluid::physics::solid
+
+// end of SolidMesh.cxx

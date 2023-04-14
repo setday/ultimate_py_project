@@ -15,6 +15,8 @@
 
 #include <vector>
 
+#include "../../Definitions.h"
+
 namespace unreal_fluid::physics {
   class Simulator;
 

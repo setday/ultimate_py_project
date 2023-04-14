@@ -92,17 +92,17 @@ void WindowCompositor::destroy() {
 }
 
 void WindowCompositor::keyboardCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-  for (auto& callback : _keyboardCallbacks) {
+  for (auto const& callback : _keyboardCallbacks) {
     callback(key, action);
   }
 }
 
-void WindowCompositor::addKeyboardCallback(std::function<void(int key, int action)> callback) {
+void WindowCompositor::addKeyboardCallback(const std::function<void(int key, int action)>& callback) {
   _keyboardCallbacks.emplace_back(callback);
 }
 
 void WindowCompositor::resizeCallback(GLFWwindow *window, int width, int height) {
-  for (auto& callback : _resizeCallbacks) {
+  for (auto const& callback : _resizeCallbacks) {
     callback(width, height);
   }
 }

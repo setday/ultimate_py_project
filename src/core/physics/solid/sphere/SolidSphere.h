@@ -14,22 +14,28 @@
 
 #pragma once
 
-#include "../../../../Definitions.h"
 #include "../ISolid.h"
 
 namespace unreal_fluid::physics::solid {
   class SolidSphere : public ISolid {
 
   private:
-    void simulate(double dt) override{};
+    void simulate(double dt) override{
+      // Static object, no simulation needed
+    };
 
   public:
+    double radius;
+
     SolidSphere(vec3 position, double radius);
 
+    /// Get type of object
+    /// @return type of object
     Type getType() override;
+    /// Get data stored in a physical container
+    /// @return data stored in a physical container
     void *getData() override;
-
-    vec3 position;
-    double radius;
   };
 } // namespace unreal_fluid::physics::solid
+
+// end of SolidSphere.h

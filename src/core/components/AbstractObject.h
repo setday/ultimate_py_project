@@ -15,9 +15,9 @@
 #pragma once
 
 #include "../SceneCompositor.h"
-#include "../physics/IPhysicalObject.h"
-#include "../physics/fluid/simple_fluid/SimpleFluidContainer.h"
 #include "../render/components/RenderObject.h"
+#include "../physics/fluid/simple_fluid/SimpleFluidContainer.h"
+#include "../physics/solid/sphere/SolidSphere.h"
 
 namespace unreal_fluid {
   class AbstractObject {

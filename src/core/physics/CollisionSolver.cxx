@@ -21,10 +21,11 @@ void CollisionSolver::particleWithParticleCollision(fluid::Particle *p1, fluid::
 
   if (diff.len2() == 0) return;
 
-  vec3 direction = diff.normalize();
+  double diffLen = diff.len();
+  vec3 direction = diff / diffLen;
 
   double pushValue =
-          (p1->radius + p2->radius - diff.len()) /
+          (p1->radius + p2->radius - diffLen) /
           (p1->mass + p2->mass);
 
   if (pushValue < 0) return;
@@ -49,12 +50,16 @@ void CollisionSolver::particleWithSphereCollision(fluid::Particle *p, solid::Sol
 
   if (diff.len2() == 0) return;
 
-  double len = diff.len();
+  double diffLen = diff.len();
 
-  if (len > p->radius + s->radius) return;
+  if (diffLen > p->radius + s->radius) return;
 
-  diff /= len;
-  double push = s->radius + p->radius - len;
-  p->position -= diff * push;
+  diff /= diffLen;
+
+  double pushValue = s->radius + p->radius - diffLen;
+
+  p->position -= diff * pushValue;
   p->velocity -= diff * (1 + k) * p->velocity.dot(diff);
 }
+
+// end of CollisionSolver.cxx

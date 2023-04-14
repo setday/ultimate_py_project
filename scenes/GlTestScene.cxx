@@ -27,8 +27,6 @@ public:
   std::unique_ptr<render::RenderObject> cube;
   std::unique_ptr<render::RenderObject> triangle;
 
-  AbstractObject *object;
-
   utils::Timer timer;
 
   explicit GlTestScene(const compositor::SceneCompositor * compositor) : Scene(compositor) {
@@ -69,7 +67,7 @@ public:
             render::material::MaterialFactory::MaterialType::RED_PLASTIC
     );
     //*/
-    render::RenderObject *tree = new render::RenderObject();
+    auto *tree = new render::RenderObject();
     tree->loadFromFile("Lowpoly_tree_sample.obj");
 
     for (int i = 0; i < 250; i++) {
@@ -80,7 +78,7 @@ public:
         continue;
       }
 
-      render::RenderObject *object = new render::RenderObject();
+      auto *object = new render::RenderObject();
       object->mesh = tree->mesh;
       object->modelMatrix =
               mat4::rotation(rand() % 360, {0.f, 1.f, 0.f}) *
@@ -102,7 +100,7 @@ public:
         continue;
       }
 
-      render::RenderObject *object = new render::RenderObject();
+      auto *object = new render::RenderObject();
       object->mesh = tree->mesh;
       object->modelMatrix =
               mat4::rotation(rand() % 360, {0.f, 1.f, 0.f}) *
@@ -119,11 +117,11 @@ public:
     auto time = utils::Timer::getCurrentTimeAsDouble();
 
     sphere->modelMatrix =
-            mat4::rotationY(std::sin(time / 10) * 100) *
+            mat4::rotationY((float)std::sin(time / 10) * 100) *
             mat4::translation({-.75f, 0.f, -5.f});
 
     cube->modelMatrix =
-            mat4::rotationY(-std::sin(time / 10) * 100) *
+            mat4::rotationY((float)-std::sin(time / 10) * 100) *
             mat4::translation({.75f, 0.f, -5.f});
   }
 

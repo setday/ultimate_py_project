@@ -12,9 +12,7 @@
  * authors of this project.
  */
 
-
 #include "SolidMesh.h"
-#include <utility>
 
 using namespace unreal_fluid::physics::solid;
 
@@ -31,3 +29,5 @@ void *SolidMesh::getData() {
 void SolidMesh::simulate(double dt) {
   /// static mesh doesn't need any simulate implementation
 }
+
+// end of SolidMesh.cxx
