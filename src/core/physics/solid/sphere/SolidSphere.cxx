@@ -16,7 +16,7 @@
 
 using namespace unreal_fluid::physics::solid;
 
-SolidSphere::SolidSphere(vec3 position, double radius) : ISolid(position),
+SolidSphere::SolidSphere(vec3 position, double radius) : position(position),
                                                          radius(radius) {}
 
 unreal_fluid::physics::IPhysicalObject::Type SolidSphere::getType() {

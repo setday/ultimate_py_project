@@ -29,6 +29,7 @@ namespace unreal_fluid::physics::solid {
     Type getType() override;
     void *getData() override;
 
+    vec3 position;
     double radius;
   };
 } // namespace unreal_fluid::physics::solid

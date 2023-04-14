@@ -20,8 +20,6 @@ using namespace unreal_fluid;
 
 class TestScene : public Scene {
 public:
-  utils::Timer timer;
-
   explicit TestScene(const compositor::SceneCompositor *compositor) : Scene(compositor) {
     auto sphere = new physics::solid::SolidSphere({0, 0, 0}, 0.3);
     objects.push_back(new AbstractObject(sphere));
