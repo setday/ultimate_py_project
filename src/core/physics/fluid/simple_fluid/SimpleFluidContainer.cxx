@@ -20,6 +20,11 @@ using namespace unreal_fluid::physics::fluid;
 
 SimpleFluidContainer::SimpleFluidContainer(FluidDescriptor descriptor) : distributor(CellsDistributor()) {
   k = 0.1;
+  for (int j = 0; j < 100; ++j) {
+    for (int i = 0; i < 100; ++i) {
+      addParticle({double(rand() % 100) / 10000, 1 + j*0.06, double(rand() % 100) / 10000}, {0, -1, 0}, 0.01, 2);
+    }
+  }
   /// TODO : write constructor implementation
 }
 
@@ -66,9 +71,9 @@ void SimpleFluidContainer::interact() {
 
 /// TODO flows and addParticle should be methods of another class
 void SimpleFluidContainer::flows() {
-  for (int i = 0; i < 100; ++i) {
-    addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, 0, 0}, 0.01, 2);
-  }
+  /*for (int i = 0; i < 100; ++i) {
+    addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, -1, 0}, 0.01, 2);
+  }*/
 }
 
 void SimpleFluidContainer::simulate(double dt) {

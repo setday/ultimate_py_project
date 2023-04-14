@@ -43,7 +43,7 @@ void AbstractObject::parse() {
         auto renderObject = new render::RenderObject;
 
         renderObject->material = render::material::Water();
-        auto r = particles[pos]->radius;
+        auto r = 2*particles[pos]->radius;
         renderObject->mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
         renderObjects.push_back(renderObject);
       }

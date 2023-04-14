@@ -28,7 +28,7 @@ public:
     auto sphere1 = new physics::solid::SolidSphere({0, 0, 0}, 0.3);
     objects.push_back(new AbstractObject(sphere1));
 
-    auto sphere2 = new physics::solid::SolidSphere({0.5, -0.5, 0}, 0.3);
+    auto sphere2 = new physics::solid::SolidSphere({0.3, -0.5, 0.3}, 0.3);
     objects.push_back(new AbstractObject(sphere2));
 
     auto simpleFluid = new physics::fluid::SimpleFluidContainer({});
@@ -37,6 +37,7 @@ public:
     auto plane = new render::RenderObject;
     plane->mesh = render::mesh::Plane(500, 500);
     plane->material = render::material::Ruby();
+    plane->material.diffuseColor = {0.08627f, 0.819607f, 0.20392f};
     plane->modelMatrix = mat4::translation({0, -1, 0});
 
 //    auto plane2 = new render::RenderObject;
@@ -56,7 +57,9 @@ public:
 
     objects.push_back(new AbstractObject(nullptr, {plane})); //, plane3}));
 
-    compositor->getRenderer()->camera.setPositionHard({0, 1, 2});
+    compositor->getRenderer()->camera.setPositionHard({0, 0, 3});
     compositor->getRenderer()->camera.setDirection({0, 0, -1});
+    //compositor->getRenderer()->camera.setPositionHard({0, 1, 2});
+    //compositor->getRenderer()->camera.setDirection({0, 0, -1});
   }
 };
