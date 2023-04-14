@@ -15,51 +15,38 @@
  * authors of this project.
  */
 
+
+#ifndef CAPTURER_H
+#define CAPTURER_H
+#include <windows.h>
+#include <opencv2/opencv.hpp>
+void Capturer(int num_frames);
+#endif // CAPTURER_H
 #include "Capturer.h"
-using namespace std;
-int main (){
-//// создание буфера кадра
-//glGenFramebuffers(1, &framebuffer);
-//glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-//
-//// создание текстуры для буфера кадра
-//glGenTextures(1, &texture);
-//glBindTexture(GL_TEXTURE_2D, texture);
-//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-// получение дескриптора контекста устройства
-HDC hdcScreen = GetDC(NULL);
-int width,  height;
 
-glfwGetFramebufferSize(window, &width, &height);
-// создание битмапа для сохранения кадра
-HBITMAP hBitmap = CreateCompatibleBitmap(hdcScreen, width, height);
-HDC hdcBitmap = CreateCompatibleDC(hdcScreen);
-SelectObject(hdcBitmap, hBitmap);
+void Capturer(int num_frames) {
+  HDC hdcScreen = GetDC(NULL);
+  int screen_width = GetSystemMetrics(SM_CXSCREEN);
+  int screen_height = GetSystemMetrics(SM_CYSCREEN);
 
-// копирование содержимого экрана в битмап
-BitBlt(hdcBitmap, 0, 0, width, height, hdcScreen, 0, 0, SRCCOPY);
+  cv::VideoWriter writer("output.avi", cv::VideoWriter::fourcc('M', 'J', 'P', 'G'), 30, cv::Size(screen_width, screen_height));
 
-// получение указателя на буфер памяти с содержимым битмапа
-BITMAPINFO bmpInfo = {0};
-bmpInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-bmpInfo.bmiHeader.biWidth = width;
-bmpInfo.bmiHeader.biHeight = -height;
-bmpInfo.bmiHeader.biPlanes = 1;
-bmpInfo.bmiHeader.biBitCount = 32;
-bmpInfo.bmiHeader.biCompression = BI_RGB;
+  if (!writer.isOpened()) {
+    std::cerr << "Error opening video file" << std::endl;
+    return;
+  }
 
-unsigned char* buffer = new unsigned char[width * height * 4];
-GetDIBits(hdcBitmap, hBitmap, 0, height, buffer, &bmpInfo, DIB_RGB_COLORS);
-
-// сохранение буфера памяти в файл и освобождение ресурсов
-/*saveImageToFile(buffer, width, height, "image.png");
-DeleteDC(hdcBitmap);
-DeleteObject(hBitmap);
-ReleaseDC(NULL, hdcScreen);
-delete[] buffer;
-return  0;
- */
+  for (int i = 0; i < num_frames; i++) {
+    cv::Mat frame(screen_height, screen_width, CV_8UC4);
+    if (!BitBlt(frame.data, 0, 0, screen_width, screen_height, hdcScreen, 0, 0, SRCCOPY)) {
+      std::cerr << "Error copying screen content to Mat" << std::endl;
+      writer.release();
+      ReleaseDC(NULL, hdcScreen);
+      return;
+    }
+    cv::cvtColor(frame, frame, cv::COLOR_BGRA2RGB);
+    writer.write(frame);
+  }
+  writer.release();
+  ReleaseDC(NULL, hdcScreen);
 }
