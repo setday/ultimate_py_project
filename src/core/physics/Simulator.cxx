@@ -17,6 +17,7 @@
 using namespace unreal_fluid::physics;
 
 void Simulator::addPhysicalObject(IPhysicalObject *physicalObject) {
+  if (physicalObject == nullptr) return;
   if (physicalObject->getType() == IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER)
     dynamicObjects.push_back(physicalObject);
   else
@@ -39,7 +40,7 @@ void Simulator::interact(IPhysicalObject *dynamicObject, IPhysicalObject *solid)
     if (solid->getType() == IPhysicalObject::Type::SOLID_SPHERE) {
       auto sphere = (solid::SolidSphere *) solid;
       for (auto particle: *particles)
-        CollisionSolver::particleWithSphereCollision(particle, sphere, 0.8);
+        CollisionSolver::particleWithSphereCollision(particle, sphere, 0.02);
     }
   }
 }

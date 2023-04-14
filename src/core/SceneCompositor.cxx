@@ -13,9 +13,8 @@
  */
 
 #include "SceneCompositor.h"
-
-#include "components/scene/Scene.h"
 #include "./../scenes/SceneLoader.cxx"
+#include "components/scene/Scene.h"
 
 using namespace unreal_fluid::compositor;
 
@@ -47,7 +46,7 @@ void SceneCompositor::update() {
   _timer.resume();
   _simulationTimer.resume();
 
-  for (auto scene : _scenes) {
+  for (auto scene: _scenes) {
     if (scene != nullptr)
       scene->update();
   }
@@ -62,7 +61,7 @@ void SceneCompositor::render() {
   _renderingTimer.resume();
 
   _renderer->startFrame();
-  for (auto scene : _scenes) {
+  for (auto scene: _scenes) {
     if (scene != nullptr)
       scene->render();
   }
@@ -82,7 +81,7 @@ void SceneCompositor::render() {
             "| Time to render a frame: ", _renderingTimer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms\n",
             "| Time to simulate a frame: ", _simulationTimer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms\n",
             "-------------------------------------------->"
-            );
+    );
     _timer.reset();
     _renderingTimer.reset();
     _simulationTimer.reset();
@@ -90,7 +89,7 @@ void SceneCompositor::render() {
 }
 
 void SceneCompositor::destroy() {
-  for (auto scene : _scenes)
+  for (auto scene: _scenes)
     delete scene;
 
   _renderer.reset();
@@ -111,7 +110,7 @@ Core *SceneCompositor::getCore() const {
 }
 
 physics::Simulator *SceneCompositor::getSimulator() const {
-    return _simulator;
+  return _simulator;
 }
 
 render::Renderer *SceneCompositor::getRenderer() const {

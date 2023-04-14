@@ -84,7 +84,7 @@ void Renderer::initGl() const {
   // initialize viewport and ect
   glViewport(0, 0, 500, 500);
 
-  glClearColor(0.05f, 0.05f, 0.1f, 0.0f);
+  glClearColor(0.2f, 0.6f, 0.8f, 0.0f);
   glClearDepth(1.0f);
 
 

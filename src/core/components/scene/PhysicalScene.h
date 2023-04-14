@@ -18,7 +18,7 @@
 
 namespace unreal_fluid {
   class PhysicalScene : public virtual IScene {
-    double dt = 0.02;
+    double dt = 0.01;
 
   public:
     /// Update scene.

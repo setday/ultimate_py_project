@@ -66,8 +66,8 @@ void SimpleFluidContainer::interact() {
 
 /// TODO flows and addParticle should be methods of another class
 void SimpleFluidContainer::flows() {
-  for (int i = 0; i < 10; ++i) {
-    addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, 0, 0}, 0.02, 1);
+  for (int i = 0; i < 100; ++i) {
+    addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, 0, 0}, 0.01, 2);
   }
 }
 

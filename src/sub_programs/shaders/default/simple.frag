@@ -26,18 +26,28 @@ void main()
 {
     vec3 normal = normalize(vertexNormal);
     vec3 viewDirection = normalize(camera.direction);
-    vec3 lightDirection = normalize(vec3(0.0, -1.0, 0.0));
+    vec3 lightDirection = normalize(vec3(-1.0, -1.0, -1.0));
     vec3 reflectDirection = reflect(lightDirection, normal);
 
+    vec3 color = vec3(0);
+
     // vec3 lightColor = vec3(1.0, 1.0, 1.0);
-    vec3 lightColor = vec3(1.0, 0.8, 0.6);
+    vec3 lightColor = vec3(1.0, 1.0, 1.0);
 
     float diffuse = max(dot(normal, -lightDirection), 0.0);
     float specular = pow(max(dot(-viewDirection, reflectDirection), 0.01), shininess);
 
-    vec3 color = ambientColor * 0.8 + (diffuseColor * diffuse + specularColor * specular) * lightColor;
+    color += ambientColor * 0.8 + (diffuseColor * diffuse + specularColor * specular) * lightColor;
 
-    colorTexture = vec4(color, 1.0);
+    lightDirection = normalize(vec3(1.0, -1.0, 1.0));
+    reflectDirection = reflect(lightDirection, normal);
+
+    diffuse = max(dot(normal, -lightDirection), 0.0);
+    specular = pow(max(dot(-viewDirection, reflectDirection), 0.01), shininess);
+
+    color += ambientColor * 0.8 + (diffuseColor * diffuse + specularColor * specular) * lightColor;
+
+    colorTexture = vec4(color / 2, 1.0);
     positionTexture = vec4(vertexPosition, 1);
     normalTexture = vec4(vertexNormal, 1);
 }

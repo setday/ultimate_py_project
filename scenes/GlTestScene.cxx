@@ -29,7 +29,7 @@ public:
 
   utils::Timer timer;
 
-  explicit GlTestScene(const compositor::SceneCompositor * compositor) : Scene(compositor) {
+  explicit GlTestScene(const compositor::SceneCompositor *compositor) : Scene(compositor) {
     sphere = std::make_unique<render::RenderObject>();
     sphere->modelMatrix =
             mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
@@ -117,11 +117,11 @@ public:
     auto time = utils::Timer::getCurrentTimeAsDouble();
 
     sphere->modelMatrix =
-            mat4::rotationY((float)std::sin(time / 10) * 100) *
+            mat4::rotationY((float) std::sin(time / 10) * 100) *
             mat4::translation({-.75f, 0.f, -5.f});
 
     cube->modelMatrix =
-            mat4::rotationY((float)-std::sin(time / 10) * 100) *
+            mat4::rotationY((float) -std::sin(time / 10) * 100) *
             mat4::translation({.75f, 0.f, -5.f});
   }
 

@@ -19,17 +19,16 @@
 
 using namespace unreal_fluid;
 
-AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject,
-                               const std::vector<render::RenderObject *> &renderObjects) :
-                               physicalObject(physicalObject), renderObjects(renderObjects) {}
+AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject, const std::vector<render::RenderObject *> &renderObjects) : physicalObject(physicalObject),
+                                                                                                                                     renderObjects(renderObjects) {}
 
-AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) :
-                               physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)) {}
+AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) : physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)) {}
 
-AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject) :
-                               physicalObject(physicalObject) {}
+AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject) : physicalObject(physicalObject) {}
 
 void AbstractObject::parse() {
+  if (physicalObject == nullptr) return;
+
   auto type = physicalObject->getType();
   void *data = physicalObject->getData();
 
@@ -43,7 +42,7 @@ void AbstractObject::parse() {
 
         auto renderObject = new render::RenderObject;
 
-        renderObject->material = render::material::Gold();
+        renderObject->material = render::material::Water();
         auto r = particles[pos]->radius;
         renderObject->mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
         renderObjects.push_back(renderObject);
@@ -72,16 +71,11 @@ void AbstractObject::parse() {
     auto &triangles = *static_cast<std::vector<physics::solid::Triangle> *>(data);
 
     for (size_t pos = renderObjects.size(); pos < triangles.size(); ++pos) {
-      auto const& triangle = triangles[pos];
-      auto renderObject = new render::RenderObject;
-
-      if (pos == 0)
-        renderObject->material = render::material::Gold();
-      else if (pos == 1)
-        renderObject->material = render::material::RedPlastic();
-      else
-        renderObject->material = render::material::GreenPlastic();
-      renderObject->mesh = render::mesh::BasicMesh({triangle.v1, triangle.v2, triangle.v3}, {0, 1, 2});
+      const auto &triangle = triangles[pos];
+      auto renderObject = new render::RenderObject{
+              .mesh = render::mesh::BasicMesh({triangle.v1, triangle.v2, triangle.v3}, {0, 1, 2}),
+              .material = render::material::GreenPlastic(),
+      };
       renderObjects.push_back(renderObject);
     }
   }

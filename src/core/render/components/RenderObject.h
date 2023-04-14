@@ -15,10 +15,9 @@
 #pragma once
 
 #include <vector>
-
-#include "mesh/BasicMesh.h"
-#include "material/BasicMaterial.h"
 #include "../../managers/sub_programs_managers/shader_manager/ShaderManager.h"
+#include "material/BasicMaterial.h"
+#include "mesh/BasicMesh.h"
 
 namespace unreal_fluid::render {
   class RenderObject {
