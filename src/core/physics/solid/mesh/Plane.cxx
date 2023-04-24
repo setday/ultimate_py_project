@@ -16,8 +16,8 @@
 
 using namespace unreal_fluid::physics::solid;
 
-Plane::Plane(double length, double widht, vec3 position, vec3 normal) : ISolid(position),
-                                                                        width(widht),
+Plane::Plane(double length, double width, vec3 position, vec3 normal) : ISolid(position),
+                                                                        width(width),
                                                                         length(length),
                                                                         normal(normal) {
 }

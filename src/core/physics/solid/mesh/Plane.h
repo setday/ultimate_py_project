@@ -20,7 +20,7 @@ namespace unreal_fluid::physics::solid {
     double length, width;
     vec3 normal;
 
-    Plane(double length, double widht, vec3 position, vec3 normal);
+    Plane(double length, double width, vec3 position, vec3 normal);
   };
 } // namespace unreal_fluid::physics::solid
 
