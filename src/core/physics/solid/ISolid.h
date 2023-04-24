@@ -23,6 +23,7 @@ namespace unreal_fluid::physics::solid {
     vec3 position{};
 
     ISolid() = default;
+
     explicit ISolid(vec3 position) : position(position) {}
   };
 } // namespace unreal_fluid::physics::solid

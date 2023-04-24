@@ -15,9 +15,13 @@
 #pragma once
 #include "../ISolid.h"
 
-namespace  unreal_fluid::physics::solid {
+namespace unreal_fluid::physics::solid {
   class Plane : ISolid {
+    double length, width;
+    vec3 normal;
 
+    Plane(double length, double widht, vec3 position, vec3 normal);
   };
-}
+} // namespace unreal_fluid::physics::solid
+
 // end of Plane.h

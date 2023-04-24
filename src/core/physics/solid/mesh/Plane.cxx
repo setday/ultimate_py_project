@@ -13,3 +13,11 @@
  */
 
 #include "Plane.h"
+
+using namespace unreal_fluid::physics::solid;
+
+Plane::Plane(double length, double widht, vec3 position, vec3 normal) : ISolid(position),
+                                                                        width(widht),
+                                                                        length(length),
+                                                                        normal(normal) {
+}
