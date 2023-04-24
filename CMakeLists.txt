@@ -65,10 +65,12 @@ add_executable(
 
         src/core/physics/solid/sphere/SolidSphere.cxx
         src/core/physics/solid/mesh/SolidMesh.cxx
+        src/core/physics/solid/mesh/Plane.cxx
 
         src/core/physics/Simulator.cxx
         src/core/physics/CollisionSolver.cxx
 
+        src/core/physics/fluid/diff_fluid/AdvancedFluidContainer.cxx
         src/core/physics/fluid/simple_fluid/CellsDistributor.cxx
         src/core/physics/fluid/simple_fluid/SimpleFluidContainer.cxx
         src/core/components/AbstractObject.cxx
