@@ -38,24 +38,14 @@ void SimpleFluidContainer::addExternalForces(double dt) {
 void SimpleFluidContainer::advect(double dt) {
   for (auto particle: particles)
     particle->position += particle->velocity * dt;
-
-  /// TODO this is the temporary measure to prevent particles from falling down. Solids should be used
-  for (auto p: particles) {
-    double push = -1 - p->position.y + p->radius;
-    if (push > 0) {
-      p->position.y += push;
-      p->velocity.y = -k * p->velocity.y;
-    }
-  }
 }
 
 void SimpleFluidContainer::interact() {
   distributor.update(particles);
 
-  for (auto bigParticle: distributor.big_particles) {
-    for (auto particle: particles) {
-      if (particle->position != bigParticle->position &&
-          (particle->position - bigParticle->position).len() <= particle->radius + bigParticle->radius)
+  for (auto &bigParticle: distributor.big_particles) {
+    for (auto &particle: particles) {
+      if ((particle->position - bigParticle->position).len() <= particle->radius + bigParticle->radius)
         CollisionSolver::particleWithParticleCollision(particle, bigParticle, k);
     }
   }
@@ -66,7 +56,7 @@ void SimpleFluidContainer::interact() {
 
 /// TODO flows and addParticle should be methods of another class
 void SimpleFluidContainer::flows() {
-  for (int i = 0; i < 100; ++i) {
+  for (int i = 0; i < 10; ++i) {
     addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, 0, 0}, 0.01, 2);
   }
 }

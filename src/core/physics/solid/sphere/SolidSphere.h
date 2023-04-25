@@ -20,9 +20,7 @@ namespace unreal_fluid::physics::solid {
   class SolidSphere : public ISolid {
 
   private:
-    void simulate(double dt) override{
-      // Static object, no simulation needed
-    };
+    void simulate(double dt) override{};
 
   public:
     double radius;

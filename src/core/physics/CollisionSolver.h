@@ -15,6 +15,7 @@
 #pragma once
 
 #include "fluid/Particle.h"
+#include "solid/mesh/Plane.h"
 #include "solid/sphere/SolidSphere.h"
 
 namespace unreal_fluid::physics {
@@ -27,6 +28,8 @@ namespace unreal_fluid::physics {
     /// @brief collides particle with sphere
     /// @details takes particle p, static sphere s and uses k - coefficient of restitution - to collide them
     static void particleWithSphereCollision(fluid::Particle *p, solid::SolidSphere *s, double k);
+
+    static void particleWithPlaneCollision(fluid::Particle *p, solid::Plane *plane, double k);
   };
 
 } // namespace unreal_fluid::physics::fluid

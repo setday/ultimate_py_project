@@ -16,11 +16,16 @@
 #include "../ISolid.h"
 
 namespace unreal_fluid::physics::solid {
-  class Plane : ISolid {
+  class Plane : public ISolid {
     double length, width;
     vec3 normal;
 
+    void simulate(double dt) override{};
+
+  public:
     Plane(double length, double width, vec3 position, vec3 normal);
+    IPhysicalObject::Type getType() override;
+    void *getData() override;
   };
 } // namespace unreal_fluid::physics::solid
 

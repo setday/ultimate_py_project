@@ -16,7 +16,7 @@
 
 #include "../SceneCompositor.h"
 #include "../physics/fluid/simple_fluid/SimpleFluidContainer.h"
-#include "../physics/solid/sphere/SolidSphere.h"
+
 #include "../render/components/RenderObject.h"
 
 namespace unreal_fluid {

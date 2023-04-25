@@ -21,3 +21,11 @@ Plane::Plane(double length, double width, vec3 position, vec3 normal) : ISolid(p
                                                                         length(length),
                                                                         normal(normal) {
 }
+
+unreal_fluid::physics::IPhysicalObject::Type Plane::getType() {
+  return IPhysicalObject::Type::PLANE;
+}
+
+void *Plane::getData() {
+  return this;
+}

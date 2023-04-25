@@ -16,6 +16,9 @@
 #include "../physics/solid/mesh/SolidMesh.h"
 #include "../src/core/render/components/material/MaterialPresets.h"
 #include "../src/core/render/components/mesh/presets/Sphere.h"
+#include "../src/core/render/components/mesh/presets/Plane.h"
+#include "../physics/solid/sphere/SolidSphere.h"
+#include "../physics/solid/mesh//Plane.h"
 
 using namespace unreal_fluid;
 
@@ -78,6 +81,19 @@ void AbstractObject::parse() {
       };
       renderObjects.push_back(renderObject);
     }
+  } else if (type == physics::IPhysicalObject::Type::PLANE) {
+
+    auto plane = *static_cast<physics::solid::Plane *>(data);
+
+    if (renderObjects.empty()) {
+      auto renderObject = new render::RenderObject;
+      renderObject->material = render::material::Ruby();
+      renderObject->material.diffuseColor = {0.08627f, 0.819607f, 0.20392f};
+      renderObject->mesh = render::mesh::Plane(500, 500);
+      renderObjects.push_back(renderObject);
+    }
+
+    renderObjects.back()->modelMatrix = mat4::translation({0, -1, 0});
   }
 }
 
