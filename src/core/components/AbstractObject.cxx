@@ -29,13 +29,15 @@ AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) : phy
 
 AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject) : physicalObject(physicalObject) {}
 
+
+
 void AbstractObject::parse() {
   if (physicalObject == nullptr) return;
 
   auto type = physicalObject->getType();
   void *data = physicalObject->getData();
 
-  if (type == physics::IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER) {
+  if (type == physics::IPhysicalObject::Type::FLUID_CONTAINER_SIMPLE) {
 
     auto &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(data);
 
@@ -47,7 +49,7 @@ void AbstractObject::parse() {
 
         renderObject->material = render::material::Water();
         auto r = particles[pos]->radius;
-        renderObject->mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
+        renderObject->mesh = render::mesh::Sphere(float(r), 10, 10);
         renderObjects.push_back(renderObject);
       }
 
@@ -81,7 +83,7 @@ void AbstractObject::parse() {
       };
       renderObjects.push_back(renderObject);
     }
-  } else if (type == physics::IPhysicalObject::Type::PLANE) {
+  } else if (type == physics::IPhysicalObject::Type::SOLID_PLANE) {
 
     auto plane = *static_cast<physics::solid::Plane *>(data);
 
@@ -89,11 +91,11 @@ void AbstractObject::parse() {
       auto renderObject = new render::RenderObject;
       renderObject->material = render::material::Ruby();
       renderObject->material.diffuseColor = {0.08627f, 0.819607f, 0.20392f};
-      renderObject->mesh = render::mesh::Plane(500, 500);
+      renderObject->mesh = render::mesh::Plane(plane.width, plane.height);
       renderObjects.push_back(renderObject);
     }
 
-    renderObjects.back()->modelMatrix = mat4::translation({0, -1, 0});
+    renderObjects.back()->modelMatrix = mat4::translation(plane.position);
   }
 }
 

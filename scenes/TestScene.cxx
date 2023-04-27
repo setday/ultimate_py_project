@@ -33,11 +33,11 @@ public:
     auto simpleFluid = new physics::fluid::SimpleFluidContainer({});
     objects.push_back(new AbstractObject(simpleFluid));
 
-    auto plane = new physics::solid::Plane(500, 500, 0, {0, 1, 0});
+    auto plane = new physics::solid::Plane(2, 2, {0, -1, 0}, {0, 1, 0});
     objects.push_back(new AbstractObject(plane));
 
     for (auto &abstractObject: objects) {
-      if (abstractObject->getPhysicalObject() != nullptr)
+      if (abstractObject->getPhysicalObject())
         compositor->getSimulator()->addPhysicalObject(abstractObject->getPhysicalObject());
     }
 

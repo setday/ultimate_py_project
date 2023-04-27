@@ -14,21 +14,19 @@
 #pragma once
 
 #include <vector>
-
 #include "../../Definitions.h"
 
 namespace unreal_fluid::physics {
-  class Simulator;
 
   class IPhysicalObject {
-    friend class Simulator;
 
   public:
     enum class Type {
-      SIMPLE_FLUID_CONTAINER,
-      SOLID_SPHERE,
+      FLUID_CONTAINER_SIMPLE,
+
       SOLID_MESH,
-      PLANE
+      SOLID_SPHERE,
+      SOLID_PLANE,
     };
 
     virtual ~IPhysicalObject() = default;
@@ -39,7 +37,6 @@ namespace unreal_fluid::physics {
     /// @brief returns data stored in a physical container
     virtual void *getData() = 0;
 
-  private:
     virtual void simulate(double dt) = 0;
   };
 } // namespace unreal_fluid::physics

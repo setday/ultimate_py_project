@@ -36,7 +36,7 @@ void CollisionSolver::particleWithParticleCollision(fluid::Particle *p1, fluid::
   p2->position -= pushVector * p1->mass;
 
   double momentumValue =
-          (1 + k) *
+          (1 - k) *
           (p1->velocity.dot(direction) - p2->velocity.dot(direction)) /
           (p1->mass + p2->mass);
   vec3 momentum = direction * momentumValue;
@@ -59,14 +59,31 @@ void CollisionSolver::particleWithSphereCollision(fluid::Particle *p, solid::Sol
   double pushValue = s->radius + p->radius - diffLen;
 
   p->position -= diff * pushValue;
-  p->velocity -= diff * (1 + k) * p->velocity.dot(diff);
+  p->velocity -= diff * (1 - k) * p->velocity.dot(diff);
 }
 
-void CollisionSolver::particleWithPlaneCollision(fluid::Particle *p, solid::Plane *plane, double k) {
-  double push = -1 - p->position.y + p->radius;
-  if (push < 0) return;
-  p->position.y += push;
-  p->velocity.y = -k * p->velocity.y;
+void CollisionSolver::particleWithPlaneCollision(fluid::Particle *particle, solid::Plane *plane, double k) {
+  vec3 diff = particle->position - plane->position;
+  double newYPos = diff.dot(plane->normal);
+  double newXPos = diff.dot(plane->right);
+  double newZPos = diff.dot(plane->front);
+  double pushNormal = newYPos - particle->radius;
+
+  if (abs(newYPos) >= particle->radius + 0.02 || abs(newXPos) > plane->width / 2 || abs(newZPos) > plane->height / 2) return;
+
+  double normalVelocityValue = particle->velocity.dot(plane->normal);
+  if (normalVelocityValue == 0) return;
+
+  double pushCoefficient = pushNormal / normalVelocityValue + 0.0002;
+
+  particle->position -= pushCoefficient * particle->velocity;
+
+  vec3 normalVelocity = normalVelocityValue * plane->normal;
+
+  particle->velocity -= 2 * normalVelocity;
+  particle->velocity *= (1 - k);
 }
+
+
 
 // end of CollisionSolver.cxx

@@ -20,14 +20,16 @@
 #include "IPhysicalObject.h"
 
 namespace unreal_fluid::physics {
-  class Simulator {
+  class PhysicsSimulator {
   private:
     std::vector<IPhysicalObject *> dynamicObjects;
     std::vector<IPhysicalObject *> solidObjects;
 
   public:
-    Simulator() = default;
-    ~Simulator() = default;
+    PhysicsSimulator() = default;
+    ~PhysicsSimulator() = default;
+
+    utils::Timer timer;
 
     /// @brief Adds IPhysicalObject to scene
     /// @details Adds IPhysicalObject into an internal buffer according to its type.

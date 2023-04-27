@@ -16,14 +16,17 @@
 
 using namespace unreal_fluid::physics::solid;
 
-Plane::Plane(double length, double width, vec3 position, vec3 normal) : ISolid(position),
-                                                                        width(width),
-                                                                        length(length),
-                                                                        normal(normal) {
+Plane::Plane(double height, double width, vec3 position, vec3 normal, vec3 right) : ISolid(position),
+                                                                                    width(width),
+                                                                                    height(height) {
+  this->normal = normal.normalize();
+  front = normal.cross(right);
+  front.normalizeSelf();
+  this->right = normal.cross(front);
 }
 
 unreal_fluid::physics::IPhysicalObject::Type Plane::getType() {
-  return IPhysicalObject::Type::PLANE;
+  return IPhysicalObject::Type::SOLID_PLANE;
 }
 
 void *Plane::getData() {

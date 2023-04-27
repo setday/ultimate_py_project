@@ -34,7 +34,7 @@ SceneCompositor::SceneCompositor(Core *core) : _core(core) {
 void SceneCompositor::init() {
   Logger::logInfo("Initializing compositor...");
 
-  _simulator = new physics::Simulator;
+  _simulator = new physics::PhysicsSimulator;
   _renderer = std::make_unique<render::Renderer>();
 
   loadScene<SceneLoader>();
@@ -109,7 +109,7 @@ Core *SceneCompositor::getCore() const {
   return _core;
 }
 
-physics::Simulator *SceneCompositor::getSimulator() const {
+physics::PhysicsSimulator *SceneCompositor::getSimulator() const {
   return _simulator;
 }
 

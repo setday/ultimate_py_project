@@ -15,11 +15,9 @@
 #pragma once
 
 #include <memory>
-
 #include "../Definitions.h"
-
 #include "./render/Renderer.h"
-#include "physics/Simulator.h"
+#include "physics/PhysicsSimulator.h"
 
 namespace unreal_fluid {
   class Core;
@@ -33,7 +31,7 @@ namespace unreal_fluid::compositor {
   class SceneCompositor {
   private:
     std::unique_ptr<render::Renderer> _renderer;
-    physics::Simulator *_simulator;
+    physics::PhysicsSimulator *_simulator;
     std::vector<IScene *> _scenes;
     Core *_core;
 
@@ -77,7 +75,7 @@ namespace unreal_fluid::compositor {
     /// Get renderer.
     /// @return Renderer.Render.
     [[nodiscard]] render::Renderer *getRenderer() const;
-    [[nodiscard]] physics::Simulator *getSimulator() const;
+    [[nodiscard]] physics::PhysicsSimulator *getSimulator() const;
   }; // compositor class
 } // namespace unreal_fluid::compositor
 

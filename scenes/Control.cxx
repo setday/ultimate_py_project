@@ -86,6 +86,13 @@ public:
 
       Logger::logInfo("All shaders reloaded!");
     }
+
+    if (key == GLFW_KEY_P && action == GLFW_PRESS) {
+      if (compositor->getSimulator()->timer.getStatus() == utils::Timer::State::RUNNING)
+        compositor->getSimulator()->timer.pause();
+      else
+        compositor->getSimulator()->timer.resume();
+    }
   }
 
   void resizeBindings(int width, int height) const {

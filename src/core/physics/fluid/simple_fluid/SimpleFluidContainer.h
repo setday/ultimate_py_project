@@ -15,7 +15,7 @@
 #pragma once
 
 #include "../../PhysicsDefinitions.h"
-#include "../../Simulator.h"
+#include "../../PhysicsSimulator.h"
 #include "../IFluidContainer.h"
 #include "CellsDistributor.h"
 

@@ -37,6 +37,7 @@ namespace unreal_fluid {
     [[nodiscard]] physics::IPhysicalObject *getPhysicalObject();
 
     void parse();
+    
   }; // end of AbstractObject class
 } // namespace unreal_fluid
 

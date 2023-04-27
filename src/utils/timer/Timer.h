@@ -131,6 +131,12 @@ namespace unreal_fluid::utils {
     [[nodiscard]] double getAverageTime() const {
       return getElapsedTime<timeType>() / _counter;
     }
+
+    /// @brief Get status of the timer
+    ///
+    [[nodiscard]] State getStatus() {
+      return _localState;
+    }
   };
 }
 

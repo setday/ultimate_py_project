@@ -73,7 +73,7 @@ void *SimpleFluidContainer::getData() {
 }
 
 unreal_fluid::physics::IPhysicalObject::Type SimpleFluidContainer::getType() {
-  return Type::SIMPLE_FLUID_CONTAINER;
+  return Type::FLUID_CONTAINER_SIMPLE;
 }
 
 void SimpleFluidContainer::addParticle(vec3 position, vec3 velocity, double radius, double mass) {

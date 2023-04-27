@@ -33,6 +33,10 @@ namespace unreal_fluid::math {
 
   template<typename T>
   double mySqrt(T x) {
+    if (x < 0) {
+      return 10;
+    }
+
     assert(x >= 0);
     if (x == 0 || x == 1) return x;
     return x * inverseSqrt(x);

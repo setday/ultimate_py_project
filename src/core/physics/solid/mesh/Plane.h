@@ -17,13 +17,14 @@
 
 namespace unreal_fluid::physics::solid {
   class Plane : public ISolid {
-    double length, width;
-    vec3 normal;
-
     void simulate(double dt) override{};
 
   public:
-    Plane(double length, double width, vec3 position, vec3 normal);
+    double height, width;
+    vec3 normal, front, right;
+
+    /// TODO get position in front
+    Plane(double height, double width, vec3 position, vec3 normal = {0, 1, 0}, vec3 right = {0, 0, 1});
     IPhysicalObject::Type getType() override;
     void *getData() override;
   };

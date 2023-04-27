@@ -29,7 +29,7 @@ namespace unreal_fluid::physics {
     /// @details takes particle p, static sphere s and uses k - coefficient of restitution - to collide them
     static void particleWithSphereCollision(fluid::Particle *p, solid::SolidSphere *s, double k);
 
-    static void particleWithPlaneCollision(fluid::Particle *p, solid::Plane *plane, double k);
+    static void particleWithPlaneCollision(fluid::Particle *particle, solid::Plane *plane, double k);
   };
 
 } // namespace unreal_fluid::physics::fluid
