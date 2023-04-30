@@ -5,9 +5,9 @@
  ***************************************************************/
 
 /* PROJECT                 : UnrealFluid Flag Addon
- * AUTHORS OF THIS PROJECT : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
+ * AUTHORS OF THIS PROJECT : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev.
  * FILE NAME               : FlagParser.h
- * AUTHOR OF THIS FILE     : Serkov Alexander
+ * FILE AUTHORS            : Serkov Alexander.
  *
  * No part of this file may be changed and used without
  * agreement of authors of this project.

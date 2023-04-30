@@ -29,8 +29,8 @@ public:
     Logger::logInfo("Loading scenes...");
 
     compositor->loadScene<Control>();
-    compositor->loadScene<GlTestScene>();
-    // compositor->loadScene<SceneGLAdvanced>();
+//    compositor->loadScene<GlTestScene>();
+    compositor->loadScene<SceneGLAdvanced>();
 
     Logger::logInfo("Scenes loaded!");
 
