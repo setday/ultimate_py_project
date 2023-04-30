@@ -30,6 +30,10 @@ AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject) :
                                physicalObject(physicalObject) {}
 
 void AbstractObject::parse() {
+  if (physicalObject == nullptr) {
+    return;
+  }
+
   auto type = physicalObject->getType();
   void *data = physicalObject->getData();
 
@@ -40,13 +44,13 @@ void AbstractObject::parse() {
     for (int pos = 0; pos < particles.size(); ++pos) {
 
       if (pos >= renderObjects.size()) {
-
-        auto renderObject = new render::RenderObject;
-
-        renderObject->material = render::material::Gold();
         auto r = particles[pos]->radius;
-        renderObject->mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
-        renderObjects.push_back(renderObject);
+        render::mesh::Sphere sphere(float(r), unsigned(500 * r), unsigned(500 * r));
+
+        renderObjects.push_back(new render::RenderObject {
+          .bakedMesh = std::make_unique<render::mesh::BakedMesh>(&sphere),
+          .material = render::material::Gold(),
+        });
       }
 
       renderObjects[pos]->modelMatrix = mat4::translation(particles[pos]->position);
@@ -56,13 +60,13 @@ void AbstractObject::parse() {
     auto solidSphere = *static_cast<physics::solid::SolidSphere *>(data);
 
     if (renderObjects.empty()) {
-
-      auto renderObject = new render::RenderObject;
-
-      renderObject->material = render::material::Bronze();
       auto r = solidSphere.radius;
-      renderObject->mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
-      renderObjects.push_back(renderObject);
+      render::mesh::Sphere sphere(float(r), unsigned(500 * r), unsigned(500 * r));
+
+      renderObjects.push_back(new render::RenderObject {
+        .bakedMesh = std::make_unique<render::mesh::BakedMesh>(&sphere),
+        .material = render::material::Bronze(),
+      });
     }
 
     renderObjects.back()->modelMatrix = mat4::translation(solidSphere.position);
@@ -73,16 +77,17 @@ void AbstractObject::parse() {
 
     for (size_t pos = renderObjects.size(); pos < triangles.size(); ++pos) {
       auto const& triangle = triangles[pos];
-      auto renderObject = new render::RenderObject;
+      render::mesh::BasicMesh mesh({triangle.v1, triangle.v2, triangle.v3}, {0, 1, 2});
+
+      renderObjects.push_back(new render::RenderObject {
+        .bakedMesh = std::make_unique<render::mesh::BakedMesh>(&mesh),
+        .material = render::material::GreenPlastic(),
+      });
 
       if (pos == 0)
-        renderObject->material = render::material::Gold();
+        renderObjects.back()->material = render::material::Gold();
       else if (pos == 1)
-        renderObject->material = render::material::RedPlastic();
-      else
-        renderObject->material = render::material::GreenPlastic();
-      renderObject->mesh = render::mesh::BasicMesh({triangle.v1, triangle.v2, triangle.v3}, {0, 1, 2});
-      renderObjects.push_back(renderObject);
+        renderObjects.back()->material = render::material::RedPlastic();
     }
   }
 }

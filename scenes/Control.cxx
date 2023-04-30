@@ -19,7 +19,6 @@ using namespace unreal_fluid;
 class Control : public IScene {
 public:
   vec3f cameraSpeed = {0.f, 0.f, 0.f};
-  vec2f cameraRotation = {0.f, (float)math::PI};
   vec2f cameraRotationSpeed = {0.f, 0.f};
 
   explicit Control(compositor::SceneCompositor const * compositor) : IScene() {
@@ -34,6 +33,25 @@ public:
   }
 
   void keyboardBindings(int key, int action) {
+    handleSpecialKeys(key, action);
+    handleMoveKeys(key);
+    handleRotationKeys(key);
+    handleRenderingKeys(key, action);
+  }
+
+  void handleSpecialKeys(int key, int action) const {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+      this->compositor->getCore()->shutdown();
+
+    if (key == GLFW_KEY_F11 && action == GLFW_PRESS) {
+      this->compositor->getRenderer()->getShaderManager()->ReloadShaders();
+      render::DefaultShaderManager::ReloadShaders();
+
+      Logger::logInfo("All shaders reloaded!");
+    }
+  }
+
+  void handleMoveKeys(int key) {
     if (key == GLFW_KEY_W)
       cameraSpeed += this->compositor->getRenderer()->camera.getDirection() / 15;
     if (key == GLFW_KEY_S)
@@ -49,7 +67,9 @@ public:
       cameraSpeed -= vec3f(0.f, 1.f, 0.f) / 15;
 
     cameraSpeed /= fmax(cameraSpeed.max(), 1.0f);
+  }
 
+  void handleRotationKeys(int key) {
     if (key == GLFW_KEY_UP)
       cameraRotationSpeed.x += 0.02f;
     if (key == GLFW_KEY_DOWN)
@@ -60,10 +80,9 @@ public:
       cameraRotationSpeed.y -= 0.02f;
 
     cameraRotationSpeed /= fmax(cameraRotationSpeed.max(), 1.0f);
+  }
 
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-      this->compositor->getCore()->shutdown();
-
+  void handleRenderingKeys(int key, int action) const {
     if (key == GLFW_KEY_F2 && action == GLFW_PRESS) {
       this->compositor->getRenderer()->changeRenderMode(render::Renderer::RenderMode::WIREFRAME);
 
@@ -79,13 +98,6 @@ public:
 
       Logger::logInfo("Ray tracing mode enabled");
     }
-
-    if (key == GLFW_KEY_F11 && action == GLFW_PRESS) {
-      this->compositor->getRenderer()->getShaderManager()->ReloadShaders();
-      render::DefaultShaderManager::ReloadShaders();
-
-      Logger::logInfo("All shaders reloaded!");
-    }
   }
 
   void resizeBindings(int width, int height) const {
@@ -93,16 +105,16 @@ public:
   }
 
   void update() override {
-    vec3f cameraPosition = cameraSpeed + this->compositor->getRenderer()->camera.getPosition();
+    vec3f cameraPosition = this->compositor->getRenderer()->camera.getPosition() + cameraSpeed;
     if (cameraSpeed.len2() > 0.0001f) {
       this->compositor->getRenderer()->camera.setPositionHard(cameraPosition);
     }
     cameraSpeed *= 0.9f;
 
-    cameraRotation += cameraRotationSpeed;
+    vec2f cameraRotation = this->compositor->getRenderer()->camera.getAngles() + cameraRotationSpeed;
     cameraRotation.x = std::min(std::max(cameraRotation.x, -1.57f), 1.57f);
     if (cameraRotationSpeed.len2() > 0.000001f) {
-      this->compositor->getRenderer()->camera.setDirection(cameraRotation.y, cameraRotation.x);
+      this->compositor->getRenderer()->camera.setDirection(cameraRotation);
     }
     cameraRotationSpeed *= 0.85f;
   }

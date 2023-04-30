@@ -22,37 +22,44 @@ using namespace unreal_fluid;
 
 class GlTestScene : public Scene {
 public:
-  std::unique_ptr<render::RenderObject> sphere;
-  std::unique_ptr<render::RenderObject> plane;
-  std::unique_ptr<render::RenderObject> cube;
-  std::unique_ptr<render::RenderObject> triangle;
+  render::RenderObject *sphere;
+  render::RenderObject *plane;
+  render::RenderObject *cube;
+  render::RenderObject *triangle;
 
   utils::Timer timer;
 
   explicit GlTestScene(const compositor::SceneCompositor * compositor) : Scene(compositor) {
-    sphere = std::make_unique<render::RenderObject>();
-    sphere->modelMatrix =
-            mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
-            mat4::translation({-.75f, 0.f, -5.f});
-    sphere->mesh = render::mesh::Sphere(.5f, 50, 50);
-    sphere->material = render::material::Water();
-    objects.push_back(new AbstractObject{nullptr, {sphere.get()}});
+    render::mesh::Sphere sphereMesh(.5f, 50, 50);
+    sphere = new render::RenderObject {
+      .modelMatrix = mat4::rotation(0.f, {0.f, 0.f, 1.f}).
+                     withTranslation({-.75f, 0.f, -5.f}),
 
-    plane = std::make_unique<render::RenderObject>();
-    plane->mesh = render::mesh::Plane(300, 300, 50, 50);
-    plane->modelMatrix =
-            mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
-            mat4::translation({0.f, -1.f, -5.f});
-    plane->material = render::material::CyanPlastic();
-    objects.push_back(new AbstractObject{nullptr, {plane.get()}});
+      .bakedMesh = std::make_unique<render::mesh::BakedMesh>(&sphereMesh),
+      .material = render::material::Water(),
+    };
+    objects.push_back(new AbstractObject{nullptr, {sphere}});
 
-    cube = std::make_unique<render::RenderObject>();
-    cube->mesh = render::mesh::Cube(.5f);
-    cube->modelMatrix =
-            mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
-            mat4::translation({.75f, 0.f, -5.f});
+    render::mesh::Plane planeMesh(300, 300, 50, 50);
+    plane = new render::RenderObject {
+      .modelMatrix = mat4::rotation(0.f, {0.f, 0.f, 1.f}).
+                     withTranslation({0.f, -1.f, -5.f}),
+
+      .bakedMesh = std::make_unique<render::mesh::BakedMesh>(&planeMesh),
+      .material = render::material::CyanPlastic(),
+    };
+    objects.push_back(new AbstractObject{nullptr, {plane}});
+
+    render::mesh::Cube cubeMesh(.5f);
+    cube = new render::RenderObject {
+      .modelMatrix = mat4::rotation(0.f, {0.f, 0.f, 1.f}).
+                     withTranslation({.75f, 0.f, -5.f}),
+
+      .bakedMesh = std::make_unique<render::mesh::BakedMesh>(&cubeMesh),
+      .material = render::material::Ruby(),
+    };
     cube->material = render::material::Ruby();
-    objects.push_back(new AbstractObject{nullptr, {cube.get()}});
+    objects.push_back(new AbstractObject{nullptr, {cube}});
 
     render::RenderObject *tree = new render::RenderObject();
     tree->loadFromFile("Lowpoly_tree_sample.obj");
@@ -65,13 +72,15 @@ public:
         continue;
       }
 
-      render::RenderObject *object = new render::RenderObject();
-      object->mesh = tree->mesh;
-      object->modelMatrix =
-              mat4::rotation(rand() % 360, {0.f, 1.f, 0.f}) *
-              mat4::scale((rand() % 50 + 50) / 200.f) *
-              mat4::translation(position);
-      object->material = render::material::Ruby();
+      auto *object = new render::RenderObject{
+        .modelMatrix = mat4::rotation(rand() % 360, {0.f, 1.f, 0.f}).
+                       withScale((rand() % 50 + 50) / 200.f).
+                       withTranslation(position),
+
+        .bakedMesh = tree->bakedMesh,
+        .material = render::material::Ruby()
+      };
+
       objects.push_back(new AbstractObject{nullptr, {object}});
     }
 
@@ -87,13 +96,15 @@ public:
         continue;
       }
 
-      render::RenderObject *object = new render::RenderObject();
-      object->mesh = tree->mesh;
-      object->modelMatrix =
-              mat4::rotation(rand() % 360, {0.f, 1.f, 0.f}) *
-              mat4::scale((rand() % 50 + 50) / 50.f) *
-              mat4::translation(position);
-      object->material = render::material::Emerald();
+      auto *object = new render::RenderObject{
+        .modelMatrix = mat4::rotation(rand() % 360, {0.f, 1.f, 0.f}).
+                       withScale((rand() % 50 + 50) / 50.f).
+                       withTranslation(position),
+
+        .bakedMesh = tree->bakedMesh,
+        .material = render::material::Emerald(),
+      };
+
       objects.push_back(new AbstractObject{nullptr, {object}});
     }
 
@@ -104,12 +115,12 @@ public:
     auto time = utils::Timer::getCurrentTimeAsDouble();
 
     sphere->modelMatrix =
-            mat4::rotationY((float)std::sin(time / 10) * 100) *
-            mat4::translation({-.75f, 0.f, -5.f});
+            mat4::rotationY((float)std::sin(time / 10) * 100).
+            withTranslation({-.75f, 0.f, -5.f});
 
     cube->modelMatrix =
-            mat4::rotationY((float)-std::sin(time / 10) * 100) *
-            mat4::translation({.75f, 0.f, -5.f});
+            mat4::rotationY((float)-std::sin(time / 10) * 100).
+            withTranslation({.75f, 0.f, -5.f});
   }
 
   ~GlTestScene() override = default;
