@@ -43,7 +43,20 @@ void RenderObject::loadFromFile(std::string_view path) {
   }
 }
 
+void RenderObject::bindParametersToShader(const ShaderProgram *shader) const {
+  /* Bind model matrix */
+  shader->bindUniformAttribute("modelMatrix", modelMatrix);
+
+  /* Bind material data */
+  shader->bindUniformAttribute("ambientColor", material.ambientColor);
+  shader->bindUniformAttribute("diffuseColor", material.diffuseColor);
+  shader->bindUniformAttribute("specularColor", material.specularColor);
+  shader->bindUniformAttribute("shininess", material.shininess);
+}
+
 bool RenderObject::loadFromObjFile(std::ifstream &file) {
+  mesh::BasicMesh mesh;
+
   std::vector<vec3f> positions;
   std::vector<vec3f> normals;
   std::vector<vec2f> texCoords;
@@ -115,6 +128,8 @@ bool RenderObject::loadFromObjFile(std::ifstream &file) {
   }
 
   file.close();
+
+  bakedMesh = std::make_unique<mesh::BakedMesh>(&mesh);
 
   return true;
 }

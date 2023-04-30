@@ -16,7 +16,7 @@
 
 #include <vector>
 
-#include "mesh/BasicMesh.h"
+#include "baked_mesh/BakedMesh.h"
 #include "material/BasicMaterial.h"
 #include "../../managers/sub_programs_managers/shader_manager/ShaderManager.h"
 
@@ -25,9 +25,11 @@ namespace unreal_fluid::render {
   public:
     mat4 modelMatrix = mat4();
 
-    mesh::BasicMesh mesh;
+    std::shared_ptr<mesh::BakedMesh> bakedMesh;
     material::BasicMaterial material;
     const ShaderProgram *shaderProgram = render::DefaultShaderManager::GetDefaultProgram();
+
+    int isEmitter = 0; /// TODO: remove this field
 
     RenderObject() = default;
     ~RenderObject() = default;
@@ -36,6 +38,10 @@ namespace unreal_fluid::render {
     /// @param path Path to file.
     /// @attention Only .obj files are supported.
     void loadFromFile(std::string_view path);
+
+    /// Bind parameters to shader program.
+    /// @param shader Shader program.
+    void bindParametersToShader(const ShaderProgram *shader) const;
 
   private:
     /// Load render object from .obj file.

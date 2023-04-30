@@ -48,6 +48,32 @@ namespace unreal_fluid::render {
     /// Get log
     /// @param log Log
     void getLog(std::string &log) const;
+
+    /// Bind uniform attribute
+    /// @param attribute Attribute
+    /// @param name Name
+    void bindUniformAttribute(std::string_view name, int attribute) const;
+
+    /// Bind uniform attribute
+    /// @param attribute Attribute
+    /// @param name Name
+    void bindUniformAttribute(std::string_view name, float attribute) const;
+
+    /// Bind uniform attribute
+    /// @param attribute Attribute
+    /// @param name Name
+    void bindUniformAttribute(std::string_view name, const vec2f &attribute) const;
+
+    /// Bind uniform attribute
+    /// @param attribute Attribute
+    /// @param name Name
+    void bindUniformAttribute(std::string_view name, const vec3f &attribute) const;
+
+    /// Bind uniform attribute
+    /// @param attribute Attribute
+    /// @param name Name
+    /// @param inverseView Defines what part of matrix should be used. Inverse if true, normal if false.
+    void bindUniformAttribute(std::string_view name, const mat4 &attribute, bool inverseView = false) const;
   };
 } // namespace unreal_fluid::render
 

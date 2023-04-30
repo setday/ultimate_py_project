@@ -83,4 +83,44 @@ void ShaderProgram::getLog(std::string &log) const {
   }
 }
 
+void ShaderProgram::bindUniformAttribute(std::string_view name, int attribute) const {
+  GLint location = glGetUniformLocation(_programID, name.data());
+  if (location == -1)
+    return;
+  glUniform1i(location, attribute);
+}
+
+void ShaderProgram::bindUniformAttribute(std::string_view name, float attribute) const {
+  GLint location = glGetUniformLocation(_programID, name.data());
+  if (location == -1)
+    return;
+  glUniform1f(location, attribute);
+}
+
+void ShaderProgram::bindUniformAttribute(std::string_view name, const vec2f &attribute) const {
+  GLint location = glGetUniformLocation(_programID, name.data());
+  if (location == -1)
+    return;
+  glUniform2f(location, attribute.x, attribute.y);
+}
+
+void ShaderProgram::bindUniformAttribute(std::string_view name, const vec3f &attribute) const {
+  GLint location = glGetUniformLocation(_programID, name.data());
+  if (location == -1)
+    return;
+  glUniform3f(location, attribute.x, attribute.y, attribute.z);
+}
+
+void ShaderProgram::bindUniformAttribute(std::string_view name, const mat4 &attribute, bool inverseView) const {
+  GLint location = glGetUniformLocation(_programID, name.data());
+  if (location == -1)
+    return;
+  if (inverseView) {
+    Logger::logError("Inverse view is not supported yet");
+    // glUniformMatrix4fv(location, 1, GL_FALSE, attribute.inverse_data()); /// TODO: made inverse view
+  } else {
+    glUniformMatrix4fv(location, 1, GL_FALSE, attribute.data());
+  }
+}
+
 // end of ShaderProgram.cxx

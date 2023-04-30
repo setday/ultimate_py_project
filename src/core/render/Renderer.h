@@ -42,8 +42,10 @@ namespace unreal_fluid::render {
     GLuint _ibo = -1;     // index buffer object for rendering objects
     GLuint _rtubo = -1;   // ray tracing uniform buffer object
     GLuint _fbo = -1;     // frame buffer object
-    GLuint _fbto[6]{};    // frame buffer texture object: 0 - color, 1 - depth, 2 - position, 3 - normal, 4 - reserved, 5 - reserved
+    GLuint _fbto[6]{};    // frame buffer texture object: 0 - depth, 1 - color, 2 - position, 3 - normal, 4 - reserved, 5 - reserved
     std::vector<const RenderObject *> _objectsToRender;
+
+    utils::Timer _timer{};
 
   public:
     Camera camera;
@@ -81,15 +83,14 @@ namespace unreal_fluid::render {
     /// Bind camera to shader.
     /// @param shader Shader to bind camera to.
     void bindCameraToShader(const ShaderProgram *shader) const;
-    /// Bind object parameters to shader.
-    /// @param shader Shader to bind object to.
-    /// @param object Object to bind.
-    void bindObjectToShader(const ShaderProgram *shader, const RenderObject *object) const;
 
     /// Draw vertex array.
     /// @param vertices Vertex array.
     /// @param indices Index array.
     void drawVertexes(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &indices = {});
+
+    /// Draw screen quad.
+    void drawScreenQuad() const;
 
     /// Render all objects in Ray Tracing mode.
     void drawRT();

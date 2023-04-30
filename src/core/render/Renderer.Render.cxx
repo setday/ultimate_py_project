@@ -27,46 +27,17 @@ void Renderer::startFrame() {
 } // end of Renderer::startFrame() function
 
 void Renderer::bindCameraToShader(const ShaderProgram *shader) const {
-  GLuint programID = shader->getId();
-
   /* Bind projection matrix */
-  GLint projectionMatrixID = glGetUniformLocation(programID, "projectionMatrix");
-  glUniformMatrix4fv(projectionMatrixID, 1, GL_FALSE, camera.getProjectionMatrix().data());
+  shader->bindUniformAttribute("projectionMatrix", camera.getProjectionMatrix());
 
   /* Bind camera data */
-  GLint cameraID;
-  cameraID = glGetUniformLocation(programID, "camera.position");
-  glUniform3f(cameraID, camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
-  cameraID = glGetUniformLocation(programID, "camera.direction");
-  glUniform3f(cameraID, camera.getDirection().x, camera.getDirection().y, camera.getDirection().z);
-  cameraID = glGetUniformLocation(programID, "camera.up");
-  glUniform3f(cameraID, 0.f, 1.f, 0.f);
-}
-
-void Renderer::bindObjectToShader(const ShaderProgram *shader, const RenderObject *object) const {
-  GLuint programID = shader->getId();
-
-  /* Bind model matrix */
-  GLint modelMatrixID = glGetUniformLocation(programID, "modelMatrix");
-  glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, object->modelMatrix.data());
-
-  /* Bind material data */
-  GLint materialAmbientID = glGetUniformLocation(programID, "ambientColor");
-  glUniform3f(materialAmbientID, object->material.ambientColor.x, object->material.ambientColor.y, object->material.ambientColor.z);
-  GLint materialDiffuseID = glGetUniformLocation(programID, "diffuseColor");
-  glUniform3f(materialDiffuseID, object->material.diffuseColor.x, object->material.diffuseColor.y, object->material.diffuseColor.z);
-  GLint materialSpecularID = glGetUniformLocation(programID, "specularColor");
-  glUniform3f(materialSpecularID, object->material.specularColor.x, object->material.specularColor.y, object->material.specularColor.z);
-  GLint materialShininessID = glGetUniformLocation(programID, "shininess");
-  glUniform1f(materialShininessID, object->material.shininess);
-
+  shader->bindUniformAttribute("camera.position", camera.getPosition());
+  shader->bindUniformAttribute("camera.direction", camera.getDirection());
+  shader->bindUniformAttribute("camera.up", camera.getUp());
 
   /* Bind frame information */
-  GLint frameID;
-  frameID = glGetUniformLocation(programID, "frame.width");
-  glUniform1i(frameID, camera.getResolution().x);
-  frameID = glGetUniformLocation(programID, "frame.height");
-  glUniform1i(frameID, camera.getResolution().y);
+  shader->bindUniformAttribute("frame.width", int(camera.getResolution().x));
+  shader->bindUniformAttribute("frame.height", int(camera.getResolution().y));
 }
 
 void Renderer::drawVertexes(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &indices) {
@@ -103,10 +74,26 @@ void Renderer::renderObjects(const std::vector<render::RenderObject *> &objects)
     object->shaderProgram->activate();
 
     bindCameraToShader(object->shaderProgram);
-    bindObjectToShader(object->shaderProgram, object);
+    object->bindParametersToShader(object->shaderProgram);
 
-    drawVertexes(object->mesh.vertices, object->mesh.indices);
+    object->shaderProgram->bindUniformAttribute("time", float(_timer.getElapsedTime()));
+
+    object->shaderProgram->bindUniformAttribute("isEmitter", object->isEmitter);
+
+    glBindVertexArray(object->bakedMesh.get()->getVAO());
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, object->bakedMesh.get()->getIBO());
+    glDrawElements(GL_TRIANGLE_STRIP, object->bakedMesh.get()->getIndicesCount(), GL_UNSIGNED_INT, 0);
   }
+}
+
+void Renderer::drawScreenQuad() const {
+  glBindVertexArray(_fvao);
+  glBindBuffer(GL_ARRAY_BUFFER, _fvbo);
+
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
 }
 
 void Renderer::drawRT() {
@@ -120,6 +107,7 @@ void Renderer::drawRT() {
     int meshType;
   };
 
+  /*
   std::vector<RayTracingVertex> rtVertices;
   for (auto object : _objectsToRender) {
     for (int i = 0; i < object->mesh.indices.size(); i++) {
@@ -133,18 +121,19 @@ void Renderer::drawRT() {
       break;
     }
   }
+   */
 
   bindCameraToShader(DefaultShaderManager::GetRayTracingProgram());
 
   GLint objectsCountID;
   objectsCountID = glGetUniformLocation(programID, "objectCount");
-  glUniform1i(objectsCountID, (int)(rtVertices.size()));
+  // glUniform1i(objectsCountID, (int)(rtVertices.size()));
 
   glBindBuffer(GL_UNIFORM_BUFFER, _rtubo);
   glBindVertexArray(_fvao);
   glBindBuffer(GL_ARRAY_BUFFER, _fvbo);
 
-  glBufferData(GL_UNIFORM_BUFFER, sizeof(RayTracingVertex) * rtVertices.size(), rtVertices.data(), GL_DYNAMIC_DRAW);
+  // glBufferData(GL_UNIFORM_BUFFER, sizeof(RayTracingVertex) * rtVertices.size(), rtVertices.data(), GL_DYNAMIC_DRAW);
   glUniformBlockBinding(programID, glGetUniformBlockIndex(programID, "ObjectDataBuffer"), 0);
   glBindBufferBase(GL_UNIFORM_BUFFER, 0, _rtubo);
 
@@ -160,6 +149,13 @@ void Renderer::postProcess() {
 
   GLuint programID = DefaultShaderManager::GetPostProcessingProgram()->getId();
 
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, _fbto[1]);
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, _fbto[2]);
+  glActiveTexture(GL_TEXTURE2);
+  glBindTexture(GL_TEXTURE_2D, _fbto[3]);
+
   GLint textureID;
   textureID = glGetUniformLocation(programID, "colorTexture");
   glUniform1i(textureID, 0);
@@ -170,13 +166,7 @@ void Renderer::postProcess() {
 
   bindCameraToShader(DefaultShaderManager::GetPostProcessingProgram());
 
-  glBindVertexArray(_fvao);
-  glBindBuffer(GL_ARRAY_BUFFER, _fvbo);
-
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
+  drawScreenQuad();
 }
 
 void Renderer::endFrame() {

@@ -84,9 +84,8 @@ void Renderer::initGl() const {
   // initialize viewport and ect
   glViewport(0, 0, 500, 500);
 
-  glClearColor(0.05f, 0.05f, 0.1f, 0.0f);
+  glClearColor(0.00f, 0.00f, 0.00f, 0.0f);
   glClearDepth(1.0f);
-
 
   glEnable(GL_PRIMITIVE_RESTART);
   glPrimitiveRestartIndex(RESET_INDEX);
@@ -110,8 +109,10 @@ void Renderer::initGl() const {
   glCullFace(GL_BACK);
 
   // enable point smoothing
-  glEnable(GL_POINT_SMOOTH);
-  glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+  // glEnable(GL_POINT_SMOOTH);
+  // glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+
+  glEnable(GL_MULTISAMPLE);
 } // end of Renderer::initGL() function
 
 void Renderer::initBuffers() {
@@ -176,6 +177,15 @@ void Renderer::initBuffers() {
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, _fbto[3], 0);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, _fbto[4], 0);
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, _fbto[5], 0);
+
+  std::vector<unsigned int> attachments = {
+          GL_COLOR_ATTACHMENT0,
+          GL_COLOR_ATTACHMENT1,
+          GL_COLOR_ATTACHMENT2,
+          GL_COLOR_ATTACHMENT3,
+          GL_COLOR_ATTACHMENT4,
+  };
+  glDrawBuffers(attachments.size(), attachments.data());
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

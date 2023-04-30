@@ -80,7 +80,7 @@ namespace unreal_fluid::window {
 
     /// Add resize callback.
     /// @param callback The callback function.
-    void addResizeCallback(std::function<void(int width, int height)> callback);
+    void addResizeCallback(const std::function<void(int width, int height)> &callback);
 
     /// Get size of the window.
     /// @param width The width of the window.
