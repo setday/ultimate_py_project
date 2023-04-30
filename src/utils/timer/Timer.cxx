@@ -1,15 +1,16 @@
 /***************************************************************
  * Copyright (C) 2023
+ *    UnrealFluid Team (https://github.com/setday/unreal_fluid) and
  *    HSE SPb (Higher school of economics in Saint-Petersburg).
  ***************************************************************/
 
-/* PROJECT   : ultimate_py_project
- * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Timer.cxx
- * PURPOSE   : To measure time.
+/* PROJECT                 : UnrealFluid
+ * AUTHORS OF THIS PROJECT : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
+ * FILE NAME               : Timer.cxx
+ * AUTHOR OF THIS FILE     : Serkov Alexander
  *
- * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * No part of this file may be changed and used without
+ * agreement of authors of this project.
  */
 
 #include "Timer.h"

@@ -564,6 +564,27 @@ namespace unreal_fluid::render::material {
       name = "Water";
     }
   };
+
+  struct Lambertian : BasicMaterial {
+    Lambertian() : BasicMaterial() {
+      ambientColor = vec3f(0.0f, 0.0f, 0.0f);
+      diffuseColor = vec3f(0.55f, 0.55f, 0.55f);
+      specularColor = vec3f(0.7f, 0.7f, 0.7f);
+
+      specularStrength = 0.25f;
+
+      shininess = 32.0f;
+
+      reflectionStrength = 0.0f;
+      refractionStrength = 0.0f;
+      refractionIndex = 1.0f;
+
+      opacity = 0.0f;
+      isTransparent = false;
+
+      name = "Lamberian";
+    }
+  };
 } // unreal_fluid::render::material
 
 // end of MaterialPresets.h

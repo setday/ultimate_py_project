@@ -2,13 +2,11 @@
 
 out vec4 fragColor;
 
-struct Camera {
+uniform struct Camera {
     vec3 position;
     vec3 direction;
     vec3 up;
-};
-
-uniform Camera camera;
+} camera;
 
 uniform vec3 ambientColor;
 uniform vec3 diffuseColor;
@@ -39,8 +37,7 @@ void main()
     // grayscale
     // fragColor = vec4(vec3(dot(color, vec3(0.299, 0.587, 0.114))), 1.0);
     // color
-    fragColor = vec4(color, 1.0);
-    return;
+    // fragColor = vec4(color, 1.0);
 
     // Kernel effects
     const float offset = 1.0 / 300.0;
@@ -56,7 +53,7 @@ void main()
         vec2( offset, -offset)  // bottom-right
     );
 
-    /* // Blur
+    //* // Blur
     float kernel[9] = float[](
         -1.0 / 16, -2.0 / 16, -1.0 / 16,
         -2.0 / 16, 4.0 / 16, -2.0 / 16,
@@ -72,7 +69,7 @@ void main()
     );
     // */
 
-    //* // Sharpen
+    /* // Sharpen
     float kernel[9] = float[](
         -1.0, -1.0, -1.0,
         -1.0, 9.0, -1.0,
@@ -105,13 +102,20 @@ void main()
     // */
 
     vec3 sampleTex[9];
+    float count = 0.0;
     for(int i = 0; i < 9; i++)
     {
         sampleTex[i] = vec3(texture(colorTexture, texCoord.st + offsets[i]));
     }
     vec3 col = vec3(0.0);
-    for(int i = 0; i < 9; i++)
-    col += sampleTex[i] * kernel[i];
+    for(int i = 0; i < 9; i++) {
+        if (sampleTex[i].x + sampleTex[i].y + sampleTex[i].z > 1.0) {
+            count += 1.0;
+            col += sampleTex[i] * kernel[i];
+        }
+    }
+    col /= count;
+    col = clamp(col, 0.0, 1.0);
 
-    fragColor = vec4(col, 1.0);
+    fragColor = vec4(col + color, 1.0);
 }

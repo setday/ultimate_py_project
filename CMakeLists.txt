@@ -8,7 +8,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../bin)
 message(STATUS "Current source dir: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 find_package(OpenGL REQUIRED)
-include_directories(${OpenGL_INCLUDE_DIRS} include)
+
+include_directories(
+        ${OpenGL_INCLUDE_DIRS}
+        include
+)
 
 if (WIN32)
     link_directories(
@@ -48,20 +52,35 @@ set(LIBS
 add_executable(
         ${PROJECT_NAME}
 
+        # Utils
+
         src/utils/timer/Timer.cxx
         src/utils/logger/Logger.cxx
+
+        # Render meshes
 
         src/core/render/components/mesh/presets/Plane.cxx
         src/core/render/components/mesh/presets/Sphere.cxx
         src/core/render/components/mesh/presets/Cube.cxx
 
-        src/core/render/components/shaders/Shader.cxx
-        src/core/render/components/shaders/ShaderProgram.cxx
-        src/core/managers/sub_programs_managers/shader_manager/ShaderManager.cxx
+        # Shaders
 
         src/core/render/components/shaders/Shader.cxx
         src/core/render/components/shaders/ShaderProgram.cxx
         src/core/managers/sub_programs_managers/shader_manager/ShaderManager.cxx
+
+        # Render
+
+        src/core/render/components/camera/Camera.cxx
+        src/core/render/components/RenderObject.cxx
+        src/core/render/Renderer.Main.cxx
+        src/core/render/Renderer.Render.cxx
+
+        # Managers
+
+        src/core/managers/window_manager/WindowCompositor.cxx
+
+        # Physics
 
         src/core/physics/solid/sphere/SolidSphere.cxx
         src/core/physics/solid/mesh/SolidMesh.cxx
@@ -73,16 +92,13 @@ add_executable(
         src/core/physics/fluid/simple_fluid/SimpleFluidContainer.cxx
         src/core/components/AbstractObject.cxx
 
-        src/core/render/components/camera/Camera.cxx
-        src/core/render/components/RenderObject.cxx
-        src/core/render/Renderer.Main.cxx
-        src/core/render/Renderer.Render.cxx
-
-        src/core/managers/window_manager/WindowCompositor.cxx
+        # IScene
 
         src/core/components/scene/PhysicalScene.cxx
         src/core/components/scene/RenderScene.cxx
         src/core/components/scene/Scene.cxx
+
+        # Scenes
 
         scenes/TestScene.cxx
         scenes/MeshScene.cxx
@@ -91,9 +107,18 @@ add_executable(
         scenes/Control.cxx
         scenes/SceneLoader.cxx
 
+        # Core
+
         src/core/SceneCompositor.cxx
         src/core/Core.cxx
         src/main.cxx
+        src/core/render/components/baked_mesh/BakedMesh.cxx
+
+        # Addons
+
+        addons/flag_addon/physics_body/PhysicsBody.cxx
+        addons/flag_addon/spring_constraint/SpringConstraint.cxx
+        addons/flag_addon/flag/Flag.cxx
 )
 
 message(${OPENGL_LIBRARIES})

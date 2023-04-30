@@ -10,13 +10,11 @@ uniform ObjectData {
 
 uniform int objectCount;
 
-struct Camera {
+uniform struct Camera {
     vec3 position;
     vec3 direction;
     vec3 up;
-};
-
-uniform Camera camera;
+} camera;
 
 struct Frame {
     int width;
