@@ -38,7 +38,8 @@ void PhysicsSimulator::simulate(double dt) {
 }
 
 void PhysicsSimulator::interact(IPhysicalObject *dynamicObject, IPhysicalObject *solid) {
-  if (dynamicObject->getType() == IPhysicalObject::Type::FLUID_CONTAINER_SIMPLE) {
+  if (dynamicObject->getType() == IPhysicalObject::Type::FLUID_CONTAINER_SIMPLE
+  || dynamicObject->getType() == IPhysicalObject::Type::FLUID_CONTAINER_ADVANCED) {
     auto particles = (std::vector<fluid::Particle *> *) dynamicObject->getData();
     if (solid->getType() == IPhysicalObject::Type::SOLID_SPHERE) {
       auto sphere = (solid::SolidSphere *) solid;
@@ -49,6 +50,7 @@ void PhysicsSimulator::interact(IPhysicalObject *dynamicObject, IPhysicalObject 
       for (auto &particle: *particles)
         CollisionSolver::particleWithPlaneCollision(particle, plane, 0.75);
     }
+    //TODO for mesh
   }
 }
 

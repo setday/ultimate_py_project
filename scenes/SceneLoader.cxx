@@ -28,7 +28,7 @@ public:
     Logger::logInfo("Loading scenes...");
 
     compositor->loadScene<Control>();
-    compositor->loadScene<TestScene>();
+    compositor->loadScene<MeshScene>();
 
     Logger::logInfo("Scenes loaded!");
 

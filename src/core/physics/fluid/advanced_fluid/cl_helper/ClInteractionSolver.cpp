@@ -5,22 +5,26 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : AdvancedFluidContainer.h
+ * FILE NAME : ClInteractionSolver.cxx
  * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
 
-#pragma once
-#include "../IFluidContainer.h"
+#include "ClInteractionSolver.h"
 
-namespace unreal_fluid::physics::fluid {
-  class AdvancedFluidContainer : public IFluidContainer {
-    void advect(double dt);
-    void addExternalForces(double dt);
-    void interact();
-  };
-} // namespace unreal_fluid::physics::fluid
+using namespace unreal_fluid::physics::fluid::helper;
 
-// end of AdvancedFluidContainer.h
+ClInteractionSolver::ClInteractionSolver(std::vector<Particle*>& particles) {
+    this->particles = particles;
+    ///TODO init CL resources
+}
+
+void ClInteractionSolver::interact() {
+    ///TODO interact on GPU
+}
+
+ClInteractionSolver::~ClInteractionSolver() {
+    ///TODO free CL resources
+}

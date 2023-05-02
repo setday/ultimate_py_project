@@ -16,6 +16,7 @@
 
 #include "fluid/Particle.h"
 #include "solid/mesh/Plane.h"
+#include "solid/mesh/Triangle.h"
 #include "solid/sphere/SolidSphere.h"
 
 namespace unreal_fluid::physics {
@@ -30,6 +31,7 @@ namespace unreal_fluid::physics {
     static void particleWithSphereCollision(fluid::Particle *p, solid::SolidSphere *s, double k);
 
     static void particleWithPlaneCollision(fluid::Particle *particle, solid::Plane *plane, double k);
+    static void particleWithTriangleCollision(fluid::Particle *particle, solid::Triangle* triangle, double k);
   };
 
 } // namespace unreal_fluid::physics::fluid

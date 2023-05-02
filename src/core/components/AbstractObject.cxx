@@ -37,7 +37,8 @@ void AbstractObject::parse() {
   auto type = physicalObject->getType();
   void *data = physicalObject->getData();
 
-  if (type == physics::IPhysicalObject::Type::FLUID_CONTAINER_SIMPLE) {
+  if (type == physics::IPhysicalObject::Type::FLUID_CONTAINER_SIMPLE ||
+  type == physics::IPhysicalObject::Type::FLUID_CONTAINER_ADVANCED) {
 
     auto &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(data);
 

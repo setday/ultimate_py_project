@@ -23,7 +23,7 @@ namespace unreal_fluid::physics {
   public:
     enum class Type {
       FLUID_CONTAINER_SIMPLE,
-
+      FLUID_CONTAINER_ADVANCED,
       SOLID_MESH,
       SOLID_SPHERE,
       SOLID_PLANE,

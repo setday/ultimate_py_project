@@ -70,9 +70,12 @@ add_executable(
         src/core/physics/PhysicsSimulator.cxx
         src/core/physics/CollisionSolver.cxx
 
-        src/core/physics/fluid/diff_fluid/AdvancedFluidContainer.cxx
+        src/core/physics/fluid/advanced_fluid/cl_helper/ClInteractionSolver.cpp
+        src/core/physics/fluid/advanced_fluid/AdvancedFluidContainer.cxx
+
         src/core/physics/fluid/simple_fluid/CellsDistributor.cxx
         src/core/physics/fluid/simple_fluid/SimpleFluidContainer.cxx
+
         src/core/components/AbstractObject.cxx
 
         src/core/render/components/camera/Camera.cxx
@@ -96,7 +99,7 @@ add_executable(
         src/core/SceneCompositor.cxx
         src/core/Core.cxx
         src/main.cxx
-)
+        )
 
 message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})

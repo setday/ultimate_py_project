@@ -84,6 +84,10 @@ void CollisionSolver::particleWithPlaneCollision(fluid::Particle *particle, soli
   particle->velocity *= (1 - k);
 }
 
+void CollisionSolver::particleWithTriangleCollision(fluid::Particle *particle, solid::Triangle *triangle, double k) {
+    //TODO collision
+}
+
 
 
 // end of CollisionSolver.cxx

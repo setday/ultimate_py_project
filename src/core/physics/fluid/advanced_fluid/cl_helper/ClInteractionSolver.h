@@ -5,11 +5,29 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : AdvancedFluidContainer.cxx
+ * FILE NAME : ClInteractionSolver.h
  * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
 
-#include "AdvancedFluidContainer.h"
+#pragma once
+
+#include "../AdvancedFluidContainer.h"
+
+namespace unreal_fluid::physics::fluid::helper {
+        class ClInteractionSolver {
+        private:
+            std::vector<Particle *> particles;
+        public:
+            explicit ClInteractionSolver(std::vector<Particle *> &particles);
+
+            void interact();
+
+            ~ClInteractionSolver();
+        };
+    }
+
+
+
