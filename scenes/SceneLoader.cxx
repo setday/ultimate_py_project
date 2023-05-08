@@ -19,6 +19,7 @@
 #include "TestScene.cxx"
 #include "GLTestScene.cxx"
 #include "MeshScene.cxx"
+#include "ClTestScene.cxx"
 
 using namespace unreal_fluid;
 
@@ -28,7 +29,7 @@ public:
     Logger::logInfo("Loading scenes...");
 
     compositor->loadScene<Control>();
-    compositor->loadScene<MeshScene>();
+    compositor->loadScene<ClTestScene>();
 
     Logger::logInfo("Scenes loaded!");
 
