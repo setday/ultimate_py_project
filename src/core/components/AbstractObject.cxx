@@ -19,15 +19,12 @@
 
 using namespace unreal_fluid;
 
-AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject,
-                               const std::vector<render::RenderObject *> &renderObjects) :
-                               physicalObject(physicalObject), renderObjects(renderObjects) {}
+AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject, const std::vector<render::RenderObject *> &renderObjects) : physicalObject(physicalObject),
+                                                                                                                                     renderObjects(renderObjects) {}
 
-AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) :
-                               physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)) {}
+AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) : physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)) {}
 
-AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject) :
-                               physicalObject(physicalObject) {}
+AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject) : physicalObject(physicalObject) {}
 
 void AbstractObject::parse() {
   auto type = physicalObject->getType();
@@ -37,7 +34,7 @@ void AbstractObject::parse() {
 
     auto &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(data);
 
-    for (int pos = 0; pos < particles.size(); ++pos) {
+    for (size_t pos = 0; pos < particles.size(); ++pos) {
 
       if (pos >= renderObjects.size()) {
 
@@ -72,7 +69,7 @@ void AbstractObject::parse() {
     auto &triangles = *static_cast<std::vector<physics::solid::Triangle> *>(data);
 
     for (size_t pos = renderObjects.size(); pos < triangles.size(); ++pos) {
-      auto const& triangle = triangles[pos];
+      const auto &triangle = triangles[pos];
       auto renderObject = new render::RenderObject;
 
       if (pos == 0)
