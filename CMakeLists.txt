@@ -66,6 +66,9 @@ add_executable(
         src/core/physics/solid/sphere/SolidSphere.cxx
         src/core/physics/solid/mesh/SolidMesh.cxx
 
+
+        src/core/physics/gas/GasContainer.cxx
+
         src/core/physics/Simulator.cxx
         src/core/physics/CollisionSolver.cxx
 
