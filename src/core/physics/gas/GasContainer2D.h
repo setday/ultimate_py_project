@@ -43,6 +43,8 @@ namespace unreal_fluid::physics::gas {
 
     void simulationStage();
 
+    void parse();
+
   };
 
 } // namespace unreal_fluid::physics::gas

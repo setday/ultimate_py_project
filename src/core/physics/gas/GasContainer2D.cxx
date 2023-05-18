@@ -61,3 +61,11 @@ void GasContainer2d::add(GasCell cell, int pressure) {
   cell.color *= percentage;
   cell.pressure += pressure;
 }
+
+void GasContainer2d::parse() {
+  for (int pos = 0; pos < storage.size(); ++pos) {
+    for (int posy = 0; posy < storage[pos].size(); ++posy) {
+      /// TODO parse cells to render them. I'm not sure how, why and when.
+    }
+  }
+}
