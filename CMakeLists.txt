@@ -65,6 +65,7 @@ add_executable(
 
         src/core/physics/solid/sphere/SolidSphere.cxx
         src/core/physics/solid/mesh/SolidMesh.cxx
+        src/core/physics/solid/mesh/SolidСube.cxx
 
         src/core/physics/gas/GasContainer2D.cxx
 
@@ -88,6 +89,7 @@ add_executable(
 
         scenes/TestScene.cxx
         scenes/MeshScene.cxx
+        scenes/GasScene2D.cxx
         #scenes/ClTestScene.cxx
         #scenes/GlTestScene.cxx
         #scenes/Control.cxx

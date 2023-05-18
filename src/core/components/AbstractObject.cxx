@@ -30,56 +30,64 @@ void AbstractObject::parse() {
   auto type = physicalObject->getType();
   void *data = physicalObject->getData();
 
-  if (type == physics::IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER) {
+  switch (type) {
 
-    auto &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(data);
+    case (physics::IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER): {
+      auto &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(data);
 
-    for (size_t pos = 0; pos < particles.size(); ++pos) {
+      for (size_t pos = 0; pos < particles.size(); ++pos) {
 
-      if (pos >= renderObjects.size()) {
+        if (pos >= renderObjects.size()) {
+
+          auto renderObject = new render::RenderObject;
+
+          renderObject->material = render::material::Gold();
+          auto r = particles[pos]->radius;
+          renderObject->mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
+          renderObjects.push_back(renderObject);
+        }
+
+        renderObjects[pos]
+                ->modelMatrix = mat4::translation(particles[pos]->position);
+      }
+      break;
+    }
+    case (physics::IPhysicalObject::Type::SOLID_SPHERE): {
+      auto solidSphere = *static_cast<physics::solid::SolidSphere *>(data);
+
+      if (renderObjects.empty()) {
 
         auto renderObject = new render::RenderObject;
 
-        renderObject->material = render::material::Gold();
-        auto r = particles[pos]->radius;
+        renderObject->material = render::material::Bronze();
+        auto r = solidSphere.radius;
         renderObject->mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
         renderObjects.push_back(renderObject);
       }
 
-      renderObjects[pos]->modelMatrix = mat4::translation(particles[pos]->position);
+      renderObjects.back()
+              ->modelMatrix = mat4::translation(solidSphere.position);
     }
-  } else if (type == physics::IPhysicalObject::Type::SOLID_SPHERE) {
+    case (physics::IPhysicalObject::Type::SOLID_MESH): {
 
-    auto solidSphere = *static_cast<physics::solid::SolidSphere *>(data);
+      auto &triangles = *static_cast<std::vector<physics::solid::Triangle> *>(data);
 
-    if (renderObjects.empty()) {
+      for (size_t pos = renderObjects.size(); pos < triangles.size(); ++pos) {
+        const auto &triangle = triangles[pos];
+        auto renderObject = new render::RenderObject;
 
-      auto renderObject = new render::RenderObject;
-
-      renderObject->material = render::material::Bronze();
-      auto r = solidSphere.radius;
-      renderObject->mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
-      renderObjects.push_back(renderObject);
+        if (pos == 0)
+          renderObject->material = render::material::Gold();
+        else if (pos == 1)
+          renderObject->material = render::material::RedPlastic();
+        else
+          renderObject->material = render::material::GreenPlastic();
+        renderObject->mesh = render::mesh::BasicMesh({triangle.v1, triangle.v2, triangle.v3}, {0, 1, 2});
+        renderObjects.push_back(renderObject);
+      }
     }
+    case (physics::IPhysicalObject::Type::SOLID_QUBE): {
 
-    renderObjects.back()->modelMatrix = mat4::translation(solidSphere.position);
-
-  } else if (type == physics::IPhysicalObject::Type::SOLID_MESH) {
-
-    auto &triangles = *static_cast<std::vector<physics::solid::Triangle> *>(data);
-
-    for (size_t pos = renderObjects.size(); pos < triangles.size(); ++pos) {
-      const auto &triangle = triangles[pos];
-      auto renderObject = new render::RenderObject;
-
-      if (pos == 0)
-        renderObject->material = render::material::Gold();
-      else if (pos == 1)
-        renderObject->material = render::material::RedPlastic();
-      else
-        renderObject->material = render::material::GreenPlastic();
-      renderObject->mesh = render::mesh::BasicMesh({triangle.v1, triangle.v2, triangle.v3}, {0, 1, 2});
-      renderObjects.push_back(renderObject);
     }
   }
 }
