@@ -29,8 +29,6 @@ AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) : phy
 
 AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject) : physicalObject(physicalObject) {}
 
-
-
 void AbstractObject::parse() {
   if (physicalObject == nullptr) return;
 

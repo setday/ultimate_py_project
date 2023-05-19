@@ -99,7 +99,7 @@ add_executable(
         src/core/SceneCompositor.cxx
         src/core/Core.cxx
         src/main.cxx
-        scenes/ClPhysicsScene.cxx scenes/ClPhysicsScene.h)
+        scenes/ClPhysicsScene.cxx)
 
 message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})

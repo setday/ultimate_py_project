@@ -24,15 +24,11 @@ public:
   explicit MeshScene(const compositor::SceneCompositor *compositor) : Scene(compositor) {
     using namespace physics::solid;
 
-
     auto simpleFluid = new physics::fluid::SimpleFluidContainer({});
     objects.push_back(new AbstractObject(simpleFluid));
 
     Triangle t1{{0.5, 0, 0}, {-0.5, 0, -0.5}, {-0.5, 0, 0.5}};
-    //Triangle t2{{0, 0, 0}, {1, 2, 3}, {1, 3, 3}};
-    //Triangle t3{{0, 0, 0}, {1, 1, 4}, {1, 9, 3}};
 
-    //auto triangles = new std::vector<Triangle>{t1, t2, t3};
     auto triangles = new std::vector<Triangle>{t1};
     auto solidMesh = new SolidMesh(*triangles);
 

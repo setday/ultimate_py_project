@@ -84,10 +84,21 @@ void CollisionSolver::particleWithPlaneCollision(fluid::Particle *particle, soli
   particle->velocity *= (1 - k);
 }
 
-void CollisionSolver::particleWithTriangleCollision(fluid::Particle *particle, solid::Triangle *triangle, double k) {
-    //TODO collision
+void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::Triangle *triangle, double k) {
+  if (!basicTriangleCheck(p, triangle)) return ;
+  if (internalCheck(p, triangle)) return ;
 }
 
+bool CollisionSolver::basicTriangleCheck(fluid::Particle *p, solid::Triangle *triangle) {
+  return false;
+}
 
+bool CollisionSolver::internalCheck(fluid::Particle *p, solid::Triangle *triangle) {
+  return false;
+}
+
+bool CollisionSolver::segmentCheck(solid::Triangle triangle, CollisionSolver::Segment segment) {
+  return false;
+}
 
 // end of CollisionSolver.cxx

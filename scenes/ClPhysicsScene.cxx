@@ -11,6 +11,3 @@
 * No part of this file may be changed and used without agreement of
 * authors of this project.
 */
-
-
-#include "ClPhysicsScene.h"

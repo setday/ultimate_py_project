@@ -22,11 +22,6 @@
 using namespace unreal_fluid;
 using namespace std;
 
-#include "chrono"
-
-long long currentTimeMicros();
-
-
 class ClTestScene : public IScene {
   public:
     explicit ClTestScene(compositor::SceneCompositor const * compositor) : IScene() {
