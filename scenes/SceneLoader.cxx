@@ -29,7 +29,7 @@ public:
     Logger::logInfo("Loading scenes...");
 
     compositor->loadScene<Control>();
-    compositor->loadScene<ClTestScene>();
+    compositor->loadScene<MeshScene>();
 
     Logger::logInfo("Scenes loaded!");
 
