@@ -43,11 +43,13 @@ void parseGasContainer2d(physics::IPhysicalObject *container2D, std::vector<rend
       if (renderObjectPointer >= renderObjects.size()) {
         auto renderObject = new render::RenderObject;
         renderObject->material = render::material::Debug();
+        renderObject->material.diffuseColor = cell.color;
         renderObject->mesh = render::mesh::Cube(cubeSize);
-        renderObject->modelMatrix = mat4::translation(vec3{float(col), float(row), 0} * cubeSize * 2.2);
+        renderObject->modelMatrix = mat4::translation(vec3{float(col), float(row), 0} * cubeSize);
         renderObjects.push_back(renderObject);
       }
 
+      renderObjects[renderObjectPointer]->material.diffuseColor = cell.color;
       renderObjects[renderObjectPointer++]->material.ambientColor = cell.pressure / 100.0;
     }
   }
@@ -58,9 +60,9 @@ void AbstractObject::parse() {
   void *data = physicalObject->getData();
 
   switch (type) {
-
-    case (physics::IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER): {
-      auto &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(data);
+    using namespace physics;
+    case IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER: {
+      auto &particles = *static_cast<std::vector<fluid::Particle *> *>(data);
 
       for (size_t pos = 0; pos < particles.size(); ++pos) {
 
@@ -79,8 +81,8 @@ void AbstractObject::parse() {
       }
       break;
     }
-    case (physics::IPhysicalObject::Type::SOLID_SPHERE): {
-      auto solidSphere = *static_cast<physics::solid::SolidSphere *>(data);
+    case IPhysicalObject::Type::SOLID_SPHERE: {
+      auto solidSphere = *static_cast<solid::SolidSphere *>(data);
 
       if (renderObjects.empty()) {
 
@@ -96,9 +98,9 @@ void AbstractObject::parse() {
               ->modelMatrix = mat4::translation(solidSphere.position);
       break;
     }
-    case (physics::IPhysicalObject::Type::SOLID_MESH): {
+    case IPhysicalObject::Type::SOLID_MESH: {
 
-      auto &triangles = *static_cast<std::vector<physics::solid::Triangle> *>(data);
+      auto &triangles = *static_cast<std::vector<solid::Triangle> *>(data);
 
       for (size_t pos = renderObjects.size(); pos < triangles.size(); ++pos) {
         const auto &triangle = triangles[pos];
@@ -115,11 +117,14 @@ void AbstractObject::parse() {
       }
       break;
     }
-    case (physics::IPhysicalObject::Type::SOLID_QUBE): {
-      break ;
+    case IPhysicalObject::Type::SOLID_QUBE: {
+      break;
     }
-    case (physics::IPhysicalObject::Type::GAS_CONTAINER_2D): {
+    case IPhysicalObject::Type::GAS_CONTAINER_2D: {
       parseGasContainer2d(physicalObject, renderObjects);
+      break;
+    }
+    case IPhysicalObject::Type::DEFAULT: {
       break;
     }
   }

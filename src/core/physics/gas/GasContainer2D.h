@@ -20,11 +20,11 @@ namespace unreal_fluid::physics::gas {
 
   class GasCell {
   public:
-    double pressure;
-    double color = 1; // color is a quantity to define gas
-    GasCell() = default;
+    double pressure = 1;
+    vec3f color = {1, 1, 1}; // color is a quantity to define gas
 
-    GasCell(int pressure, int color);
+    GasCell() = default;
+    explicit GasCell(double pressure, vec3f color = {1, 1, 1});
   };
 
   class GasContainer2d : public IPhysicalObject {
@@ -35,15 +35,13 @@ namespace unreal_fluid::physics::gas {
   public:
     GasContainer2d(int height, int width, int particle_number);
 
-    void simulate(GasCell &cell1, GasCell &cell2, double dt);
+    void simulate(GasCell &cell, GasCell &cell1, GasCell &cell2, GasCell &cell3, GasCell &cell4, double dt);
 
     void slice(GasCell &cell, double pressure);
 
     void add(GasCell &cell, double pressure);
 
     void simulationStage(double dt);
-
-    void parse();
 
     /* abstract class implementation */
 
