@@ -16,6 +16,7 @@
 #include "../src/core/components/AbstractObject.h"
 #include "../src/core/components/scene/Scene.h"
 #include "../src/core/physics/gas/GasContainer2D.h"
+#include "../src/core/render/components/mesh/presets/Cube.h"
 
 using namespace unreal_fluid;
 
@@ -23,17 +24,15 @@ class GasScene2D : public Scene {
 public:
 
   explicit GasScene2D(const compositor::SceneCompositor *compositor) : Scene(compositor) {
-    auto sphere = new physics::solid::SolidSphere({0, 0, 0}, 0.3);
-    objects.push_back(new AbstractObject(sphere));
+    auto simpleGas = new physics::gas::GasContainer2d(10, 10, 10);
+    objects.push_back(new AbstractObject(simpleGas));
+    compositor->getSimulator()->addPhysicalObject(simpleGas);
 
-    auto simpleFluid = new physics::fluid::SimpleFluidContainer({});
-    objects.push_back(new AbstractObject(simpleFluid));
+    // auto cube = new render::RenderObject();
+    // cube->mesh = render::mesh::Cube(0.1);
+    // objects.push_back(new AbstractObject{nullptr, {cube}});
 
-    for (auto &abstractObject: objects) {
-      compositor->getSimulator()->addPhysicalObject(abstractObject->getPhysicalObject());
-    }
-
-    compositor->getRenderer()->camera.setPosition({0, 0, 2});
+    compositor->getRenderer()->camera.setPositionHard({0, 0, 2});
     compositor->getRenderer()->camera.setDirection({0, 0, -1});
   }
 };

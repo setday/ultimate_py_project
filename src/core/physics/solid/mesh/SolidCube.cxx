@@ -12,7 +12,7 @@
  * authors of this project.
  */
 
-#include "SolidСube.h"
+#include "SolidCube.h"
 
 using namespace unreal_fluid::physics::solid;
 

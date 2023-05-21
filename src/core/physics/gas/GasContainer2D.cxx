@@ -30,17 +30,19 @@ GasContainer2d::GasContainer2d(int height, int width, int particle_number) : hei
   }
 }
 
-void GasContainer2d::simulationStage() {
-  for (int pos = 0; pos < storage.size() - 1; ++pos) {
-    for (int posy = 0; posy < storage[pos].size() - 1; ++posy) {
-      simulate(storage[pos][posy], storage[pos + 1][posy]);
-      simulate(storage[pos][posy], storage[pos][posy + 1]);
+void GasContainer2d::simulationStage(double dt) {
+  for (size_t row = 0; row < height; ++row) {
+    for (size_t column = 0; column < width; ++column) {
+      if (row != height - 1)
+        simulate(storage[row][column], storage[row + 1][column], dt);
+      if (column != width - 1)
+        simulate(storage[row][column], storage[row][column + 1], dt);
     }
   }
 }
 
-void GasContainer2d::simulate(GasCell cell1, GasCell cell2) {
-  int pressureDiff = (cell1.pressure - cell2.pressure) / 100;
+void GasContainer2d::simulate(GasCell &cell1, GasCell &cell2, double dt) {
+  double pressureDiff = (cell1.pressure - cell2.pressure) / 100;
   if (pressureDiff > 0) { // давление в первой клетке больше, чем во второй
     slice(cell1, pressureDiff);
     add(cell2, pressureDiff);
@@ -50,13 +52,13 @@ void GasContainer2d::simulate(GasCell cell1, GasCell cell2) {
   }
 }
 
-void GasContainer2d::slice(GasCell cell, int pressure) {
+void GasContainer2d::slice(GasCell &cell, double pressure) {
   double percentage = pressure / cell.pressure;
   cell.color /= percentage;
   cell.pressure -= pressure;
 }
 
-void GasContainer2d::add(GasCell cell, int pressure) {
+void GasContainer2d::add(GasCell &cell, double pressure) {
   double percentage = pressure / cell.pressure;
   cell.color *= percentage;
   cell.pressure += pressure;
@@ -68,4 +70,16 @@ void GasContainer2d::parse() {
       /// TODO parse cells to render them. I'm not sure how, why and when.
     }
   }
+}
+
+unreal_fluid::physics::IPhysicalObject::Type GasContainer2d::getType() {
+  return Type::GAS_CONTAINER_2D;
+}
+
+void *GasContainer2d::getData() {
+  return &storage;
+}
+
+void GasContainer2d::simulate(double dt) {
+  simulationStage(dt);
 }

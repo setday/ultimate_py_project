@@ -11,6 +11,9 @@
  * authors of this project.
  */
 
+#include "../src/core/Core.h"
+#include "../src/core/components/scene/IScene.h"
+
 using namespace unreal_fluid;
 
 class Control : public IScene {

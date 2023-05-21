@@ -59,13 +59,9 @@ add_executable(
         src/core/render/components/shaders/ShaderProgram.cxx
         src/core/managers/sub_programs_managers/shader_manager/ShaderManager.cxx
 
-        src/core/render/components/shaders/Shader.cxx
-        src/core/render/components/shaders/ShaderProgram.cxx
-        src/core/managers/sub_programs_managers/shader_manager/ShaderManager.cxx
-
         src/core/physics/solid/sphere/SolidSphere.cxx
         src/core/physics/solid/mesh/SolidMesh.cxx
-        src/core/physics/solid/mesh/SolidСube.cxx
+        src/core/physics/solid/mesh/SolidCube.cxx
 
         src/core/physics/gas/GasContainer2D.cxx
 
@@ -87,12 +83,12 @@ add_executable(
         src/core/components/scene/RenderScene.cxx
         src/core/components/scene/Scene.cxx
 
-        scenes/TestScene.cxx
-        scenes/MeshScene.cxx
+        #scenes/TestScene.cxx
+        #scenes/MeshScene.cxx
         scenes/GasScene2D.cxx
         #scenes/ClTestScene.cxx
         #scenes/GlTestScene.cxx
-        #scenes/Control.cxx
+        scenes/Control.cxx
         scenes/SceneLoader.cxx
 
         src/core/SceneCompositor.cxx

@@ -67,6 +67,7 @@ namespace unreal_fluid::render {
 
     /// Set position of camera with interpolation
     /// @param position - position of camera
+    /// @attention - interpolation is not working. You should use setPositionHard.
     void setPosition(const vec3f &position);
 
     /// Set position of camera without interpolation
