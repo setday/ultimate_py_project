@@ -26,7 +26,7 @@ public:
     objects.push_back(new AbstractObject(simpleGas));
     compositor->getSimulator()->addPhysicalObject(simpleGas);
 
-    compositor->getRenderer()->camera.setPositionHard({0, 0, 2});
+    compositor->getRenderer()->camera.setPositionHard({0, 0, 2.2});
     compositor->getRenderer()->camera.setDirection({0, 0, -1});
   }
 };

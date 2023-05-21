@@ -35,22 +35,24 @@ void parseGasContainer2d(physics::IPhysicalObject *container2D, std::vector<rend
   size_t renderObjectPointer = 0;
   const float cubeSize = 0.03;
 
-  for (size_t row = 0; row < cells.size(); ++row) {
+  int rows = cells.size();
+  int columns = cells[0].size();
+
+  for (size_t row = 0; row < rows; ++row) {
     const auto &cellRow = cells[row];
-    for (size_t col = 0; col < cellRow.size(); ++col) {
+    for (size_t col = 0; col < columns; ++col) {
       const auto &cell = cellRow[col];
 
       if (renderObjectPointer >= renderObjects.size()) {
         auto renderObject = new render::RenderObject;
         renderObject->material = render::material::Debug();
-        renderObject->material.diffuseColor = cell.color;
         renderObject->mesh = render::mesh::Cube(cubeSize);
-        renderObject->modelMatrix = mat4::translation(vec3{float(col), float(row), 0} * cubeSize);
+        renderObject->modelMatrix = mat4::translation(vec3{col - columns * 0.5f, row - rows * 0.5f, 0} * cubeSize * 2);
         renderObjects.push_back(renderObject);
       }
 
-      renderObjects[renderObjectPointer]->material.diffuseColor = cell.color;
-      renderObjects[renderObjectPointer++]->material.ambientColor = cell.pressure / 100.0;
+      // renderObjects[renderObjectPointer]->material.diffuseColor = cell.color;
+      renderObjects[renderObjectPointer++]->material.ambientColor = cell.color * cell.amountOfGas / 100.0;
     }
   }
 }

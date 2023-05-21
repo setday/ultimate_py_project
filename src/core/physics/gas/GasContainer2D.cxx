@@ -16,8 +16,14 @@
 
 using namespace unreal_fluid::physics::gas;
 
-GasCell::GasCell(double pressure, vec3f color) : pressure(pressure),
-                                                 color(color) {}
+GasCell::GasCell(double amountOfGas, vec3f color) : amountOfGas(amountOfGas),
+                                                    color(color) {}
+
+double GasCell::getPressure() const {
+  const double gasConstant = 0.003;// real = 8.3144598
+
+  return amountOfGas * gasConstant * temperature / volume;
+}
 
 GasContainer2d::GasContainer2d(int height, int width, int particle_number) : height(height),
                                                                              width(width),
@@ -26,7 +32,7 @@ GasContainer2d::GasContainer2d(int height, int width, int particle_number) : hei
 
   for (int counter = 0; counter < particle_number; ++counter) {
     int x = rand() % (height / 3 + 1), y = rand() % (width / 3 + 1);
-    storage[x][y] = GasCell(rand() % 5 + 2);
+    storage[x][y] = GasCell(rand() % 20 + 2,vec3(rand() % 2, rand() % 2, rand() % 2));
   }
 }
 
@@ -39,31 +45,33 @@ void GasContainer2d::simulationStage(double dt) {
 }
 
 void GasContainer2d::simulate(GasCell &cell, GasCell &cell1, GasCell &cell2, GasCell &cell3, GasCell &cell4, double dt) {
-  double meanPressure = (cell1.pressure + cell2.pressure + cell3.pressure + cell4.pressure) / 4;
-  double pressureDiff = (cell.pressure - meanPressure) / 20;
+  double meanPressure = (cell1.getPressure() + cell2.getPressure() + cell3.getPressure() + cell4.getPressure()) / 4;
+  double pressureDiff = (cell.getPressure() - meanPressure) / 3;
   if (pressureDiff > 0) { // давление в клетке больше, чем в соседях
-    slice(cell, pressureDiff);
-    add(cell1, pressureDiff);
-    add(cell2, pressureDiff);
-    add(cell3, pressureDiff);
-    add(cell4, pressureDiff);
+    cell1.add(cell.slice(pressureDiff));
+    cell2.add(cell.slice(pressureDiff));
+    cell3.add(cell.slice(pressureDiff));
+    cell4.add(cell.slice(pressureDiff));
   } else {
-    add(cell, pressureDiff);
-    slice(cell1, pressureDiff);
-    slice(cell2, pressureDiff);
-    slice(cell3, pressureDiff);
-    slice(cell4, pressureDiff);
+    cell.add(cell1.slice(-pressureDiff));
+    cell.add(cell2.slice(-pressureDiff));
+    cell.add(cell3.slice(-pressureDiff));
+    cell.add(cell4.slice(-pressureDiff));
   }
 }
 
-void GasContainer2d::slice(GasCell &cell, double pressure) {
-  cell.color *= cell.pressure / pressure;
-  cell.pressure -= pressure;
+GasCell GasCell::slice(double amountOfGas) {
+  double realSlice = std::min(amountOfGas, this->amountOfGas);
+  GasCell newCell(realSlice, color);
+  newCell.temperature = temperature;
+  this->amountOfGas -= realSlice;
+  return newCell;
 }
 
-void GasContainer2d::add(GasCell &cell, double pressure) {
-  cell.color *= pressure / cell.pressure;
-  cell.pressure += pressure;
+void GasCell::add(GasCell cell) {
+  this->color = (this->color * this->amountOfGas + cell.color * cell.amountOfGas) / (this->amountOfGas + cell.amountOfGas);
+  this->temperature = (this->temperature * this->amountOfGas + cell.temperature * cell.amountOfGas) / (this->amountOfGas + cell.amountOfGas);
+  this->amountOfGas += cell.amountOfGas;
 }
 
 unreal_fluid::physics::IPhysicalObject::Type GasContainer2d::getType() {

@@ -20,11 +20,23 @@ namespace unreal_fluid::physics::gas {
 
   class GasCell {
   public:
-    double pressure = 1;
+    double amountOfGas = 1;            // = mass / molarMass
+    double volume = 1;                 // volume of cell (now 1x1x1)
+    double temperature = 300;          // temperature of gas
     vec3f color = {1, 1, 1}; // color is a quantity to define gas
 
     GasCell() = default;
     explicit GasCell(double pressure, vec3f color = {1, 1, 1});
+
+    double getPressure() const;
+
+    /// @brief slice gas cell
+    /// @param amountOfGas amount of gas to slice
+    /// @return new gas cell with sliced gas
+    GasCell slice(double amountOfGas);
+    /// @brief add gas cell to current
+    /// @param cell gas cell to add
+    void add(GasCell cell);
   };
 
   class GasContainer2d : public IPhysicalObject {
@@ -36,10 +48,6 @@ namespace unreal_fluid::physics::gas {
     GasContainer2d(int height, int width, int particle_number);
 
     void simulate(GasCell &cell, GasCell &cell1, GasCell &cell2, GasCell &cell3, GasCell &cell4, double dt);
-
-    void slice(GasCell &cell, double pressure);
-
-    void add(GasCell &cell, double pressure);
 
     void simulationStage(double dt);
 
