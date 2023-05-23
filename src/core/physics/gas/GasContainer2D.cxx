@@ -6,7 +6,7 @@
 /* PROJECT   : ultimate_py_project
 * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
 * FILE NAME : GasContainer2D.cxx
-* PURPOSE   : ${PURPOSE}
+* PURPOSE   : gas container implementation
 *
 * No part of this file may be changed and used without agreement of
 * authors of this project.
@@ -16,7 +16,8 @@
 
 using namespace unreal_fluid::physics::gas;
 
-GasCell::GasCell(int particleCount) : particleCount(particleCount) {}
+GasCell::GasCell(int particleCount, double temperature) : particleCount(particleCount),
+                                                          temperature(temperature) {}
 
 double GasCell::getPressure() const { return particleCount * temperature / volume; }
 
@@ -24,17 +25,10 @@ GasContainer2d::GasContainer2d(int height, int width, int particle_number) : hei
                                                                              width(width),
                                                                              storage(height) {
   for (auto &row: storage) row.resize(width);
+
   for (int counter = 0; counter < particle_number; ++counter) {
     int x = rand() % height, y = rand() % width;
-    storage[x][y] = GasCell(rand() % 10 + 1);
-  }
-}
-
-void GasContainer2d::simulationStage(double dt) {
-  for (size_t row = 1; row < height - 1; ++row) {
-    for (size_t column = 1; column < width - 1; ++column) {
-      simulate(storage[row][column], storage[row + 1][column], storage[row - 1][column], storage[row][column - 1], storage[row][column + 1], dt);
-    }
+    storage[x][y] = GasCell(rand() % 10 + 1, rand() % 10 + 1);
   }
 }
 
@@ -67,14 +61,20 @@ void GasContainer2d::add(GasCell &cell, double pressure) {
   cell.particleCount *= (1 + pressure / cellPressure);
 }
 
-unreal_fluid::physics::IPhysicalObject::Type GasContainer2d::getType() {
-  return Type::GAS_CONTAINER_2D;
-}
+unreal_fluid::physics::IPhysicalObject::Type GasContainer2d::getType() { return Type::GAS_CONTAINER_2D; }
 
-void *GasContainer2d::getData() {
-  return &storage;
-}
+void *GasContainer2d::getData() { return &storage; }
 
 void GasContainer2d::simulate(double dt) {
-  simulationStage(dt);
+  for (size_t row = 1; row < height - 1; ++row) {
+    for (size_t column = 1; column < width - 1; ++column) {
+//      diffuse(storage[row][column]);
+      simulate(storage[row][column], storage[row + 1][column], storage[row - 1][column], storage[row][column - 1], storage[row][column + 1], dt);
+    }
+  }
+}
+
+void GasContainer2d::diffuse(GasCell &cell) {
+  if (cell.particleCount < 0.01) cell.particleCount = 1;
+  if (cell.particleCount > 100) cell.particleCount /= 2;
 }

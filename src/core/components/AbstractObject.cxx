@@ -22,121 +22,126 @@
 using namespace unreal_fluid;
 
 AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject, const std::vector<render::RenderObject *> &renderObjects) : physicalObject(physicalObject),
-                                                                                                                                    renderObjects(renderObjects) {}
+                                                                                                                                     renderObjects(renderObjects) {}
 
 AbstractObject::AbstractObject(physics::fluid::FluidDescriptor descriptor) : physicalObject(new physics::fluid::SimpleFluidContainer(descriptor)) {}
 
 AbstractObject::AbstractObject(physics::IPhysicalObject *physicalObject) : physicalObject(physicalObject) {}
 
 void parseGasContainer2d(physics::IPhysicalObject *container2D, std::vector<render::RenderObject *> &renderObjects) {
- void *data = container2D->getData();
- auto &cells = *static_cast<std::vector<std::vector<physics::gas::GasCell>> *>(data);
+  void *data = container2D->getData();
+  auto &cells = *static_cast<std::vector<std::vector<physics::gas::GasCell>> *>(data);
 
- size_t renderObjectPointer = 0;
- const float cubeSize = 0.03;
+  size_t renderObjectPointer = 0;
+  const float cubeSize = 0.03;
 
- int rows = cells.size();
- int columns = cells[0].size();
+  if (cells.empty()) return;
 
- for (size_t row = 0; row < rows; ++row) {
-   const auto &cellRow = cells[row];
-   for (size_t col = 0; col < columns; ++col) {
-     const auto &cell = cellRow[col];
+  int rows = cells.size(), columns = cells[0].size();
 
-     if (renderObjectPointer >= renderObjects.size()) {
-       auto renderObject = new render::RenderObject;
-       renderObject->material = render::material::Debug();
-       renderObject->material.diffuseColor = cell.color;
-       renderObject->mesh = render::mesh::Cube(cubeSize);
-       renderObject->modelMatrix = mat4::translation(vec3{col - columns * 0.5f, row - rows * 0.5f, 0} * cubeSize * 2);
-       renderObjects.push_back(renderObject);
-     }
+  for (size_t row = 0; row < rows; ++row) {
+    const auto &cellRow = cells[row];
+    for (size_t col = 0; col < columns; ++col) {
+      const auto &cell = cellRow[col];
 
-     renderObjects[renderObjectPointer++]->material.ambientColor = cell.color * cell.particleCount / 10;
-   }
- }
+      if (renderObjectPointer >= renderObjects.size()) {
+        auto renderObject = new render::RenderObject;
+        renderObject->material = render::material::Debug();
+        renderObject->material.diffuseColor = cell.color;
+        renderObject->mesh = render::mesh::Cube(cubeSize);
+        renderObject->modelMatrix = mat4::translation(vec3{col - columns * 0.5f, row - rows * 0.5f, 0} * cubeSize * 2);
+        renderObjects.push_back(renderObject);
+      }
+
+      if (cell.temperature > 1) {
+        renderObjects[renderObjectPointer++]->material.ambientColor = vec3f{1, 0.3, 0.1} * cell.particleCount / 10;
+      } else {
+        renderObjects[renderObjectPointer++]->material.ambientColor = cell.color * cell.particleCount / 10;
+      }
+    }
+  }
 }
 
 void AbstractObject::parse() {
- auto type = physicalObject->getType();
- void *data = physicalObject->getData();
+  auto type = physicalObject->getType();
+  void *data = physicalObject->getData();
 
- switch (type) {
-   using namespace physics;
-   case IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER: {
-     auto &particles = *static_cast<std::vector<fluid::Particle *> *>(data);
+  switch (type) {
+    using namespace physics;
+    case IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER: {
+      auto &particles = *static_cast<std::vector<fluid::Particle *> *>(data);
 
-     for (size_t pos = 0; pos < particles.size(); ++pos) {
+      for (size_t pos = 0; pos < particles.size(); ++pos) {
 
-       if (pos >= renderObjects.size()) {
+        if (pos >= renderObjects.size()) {
 
-         auto renderObject = new render::RenderObject;
+          auto renderObject = new render::RenderObject;
 
-         renderObject->material = render::material::Gold();
-         auto r = particles[pos]->radius;
-         renderObject->mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
-         renderObjects.push_back(renderObject);
-       }
+          renderObject->material = render::material::Gold();
+          auto r = particles[pos]->radius;
+          renderObject->mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
+          renderObjects.push_back(renderObject);
+        }
 
-       renderObjects[pos]->modelMatrix = mat4::translation(particles[pos]->position);
-     }
-     break;
-   }
-   case IPhysicalObject::Type::SOLID_SPHERE: {
-     auto solidSphere = *static_cast<solid::SolidSphere *>(data);
+        renderObjects[pos]->modelMatrix = mat4::translation(particles[pos]->position);
+      }
+      break;
+    }
+    case IPhysicalObject::Type::SOLID_SPHERE: {
+      auto solidSphere = *static_cast<solid::SolidSphere *>(data);
 
-     if (renderObjects.empty()) {
+      if (renderObjects.empty()) {
 
-       auto renderObject = new render::RenderObject;
+        auto renderObject = new render::RenderObject;
 
-       renderObject->material = render::material::Bronze();
-       auto r = solidSphere.radius;
-       renderObject->mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
-       renderObjects.push_back(renderObject);
-     }
+        renderObject->material = render::material::Bronze();
+        auto r = solidSphere.radius;
+        renderObject->mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
+        renderObjects.push_back(renderObject);
+      }
 
-     renderObjects.back()
-             ->modelMatrix = mat4::translation(solidSphere.position);
-     break;
-   }
-   case IPhysicalObject::Type::SOLID_MESH: {
+      renderObjects.back()
+              ->modelMatrix = mat4::translation(solidSphere.position);
+      break;
+    }
+    case IPhysicalObject::Type::SOLID_MESH: {
 
-     auto &triangles = *static_cast<std::vector<solid::Triangle> *>(data);
+      auto &triangles = *static_cast<std::vector<solid::Triangle> *>(data);
 
-     for (size_t pos = renderObjects.size(); pos < triangles.size(); ++pos) {
-       const auto &triangle = triangles[pos];
-       auto renderObject = new render::RenderObject;
+      for (size_t pos = renderObjects.size(); pos < triangles.size(); ++pos) {
+        const auto &triangle = triangles[pos];
+        auto renderObject = new render::RenderObject;
 
-       if (pos == 0)
-         renderObject->material = render::material::Gold();
-       else if (pos == 1)
-         renderObject->material = render::material::RedPlastic();
-       else
-         renderObject->material = render::material::GreenPlastic();
-       renderObject->mesh = render::mesh::BasicMesh({triangle.v1, triangle.v2, triangle.v3}, {0, 1, 2});
-       renderObjects.push_back(renderObject);
-     }
-     break;
-   }
-   case IPhysicalObject::Type::SOLID_QUBE: {
-     break;
-   }
-   case IPhysicalObject::Type::GAS_CONTAINER_2D: {
-     parseGasContainer2d(physicalObject, renderObjects);
-     break;
-   }
-   case IPhysicalObject::Type::DEFAULT: {
-     break;
-   }
- }
+        if (pos == 0)
+          renderObject->material = render::material::Gold();
+        else if (pos == 1)
+          renderObject->material = render::material::RedPlastic();
+        else
+          renderObject->material = render::material::GreenPlastic();
+        renderObject->mesh = render::mesh::BasicMesh({triangle.v1, triangle.v2, triangle.v3}, {0, 1, 2});
+        renderObjects.push_back(renderObject);
+      }
+      break;
+    }
+    case IPhysicalObject::Type::SOLID_QUBE: {
+      break;
+    }
+    case IPhysicalObject::Type::GAS_CONTAINER_2D: {
+      parseGasContainer2d(physicalObject, renderObjects);
+      break;
+    }
+    case IPhysicalObject::Type::DEFAULT: {
+      break;
+    }
+  }
 }
 
 [[nodiscard]] std::vector<render::RenderObject *> &AbstractObject::getRenderObjects() {
- return renderObjects;
+  return renderObjects;
 }
 
 [[nodiscard]] physics::IPhysicalObject *AbstractObject::getPhysicalObject() {
- return physicalObject;
+  return physicalObject;
 }
 
 // end of AbstractObject.cxx

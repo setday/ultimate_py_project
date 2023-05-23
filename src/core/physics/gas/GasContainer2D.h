@@ -22,11 +22,11 @@ namespace unreal_fluid::physics::gas {
   public:
     double particleCount = 1;
     int volume = 1;
-    double temperature = 100;
+    double temperature = 1;
     vec3f color = {1, 1, 1}; // color is a quantity to define gas
 
     GasCell() = default;
-    explicit GasCell(int particleCount);
+    GasCell(int particleCount, double temperature);
 
     double getPressure() const;
   };
@@ -38,15 +38,14 @@ namespace unreal_fluid::physics::gas {
 
   public:
     GasContainer2d(int height, int width, int particle_number);
-    //    void simulate(GasCell &cell1, GasCell &cell2, double dt);
+
+    void diffuse(GasCell &cell);
 
     void simulate(GasCell &cell, GasCell &cell1, GasCell &cell2, GasCell &cell3, GasCell &cell4, double dt);
 
     static void slice(GasCell &cell, double pressure);
 
     static void add(GasCell &cell, double pressure);
-
-    void simulationStage(double dt);
 
     /* abstract class implementation */
 
