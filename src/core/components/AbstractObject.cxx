@@ -52,7 +52,7 @@ void parseGasContainer2d(physics::IPhysicalObject *container2D, std::vector<rend
        renderObjects.push_back(renderObject);
      }
 
-     renderObjects[renderObjectPointer++]->material.ambientColor = cell.color * cell.particleCount;
+     renderObjects[renderObjectPointer++]->material.ambientColor = cell.color * cell.particleCount / 10;
    }
  }
 }
@@ -78,8 +78,7 @@ void AbstractObject::parse() {
          renderObjects.push_back(renderObject);
        }
 
-       renderObjects[pos]
-               ->modelMatrix = mat4::translation(particles[pos]->position);
+       renderObjects[pos]->modelMatrix = mat4::translation(particles[pos]->position);
      }
      break;
    }

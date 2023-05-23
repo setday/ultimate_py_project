@@ -22,7 +22,7 @@ namespace unreal_fluid::physics::gas {
   public:
     double particleCount = 1;
     int volume = 1;
-    double temperature = 1;
+    double temperature = 100;
     vec3f color = {1, 1, 1}; // color is a quantity to define gas
 
     GasCell() = default;
@@ -42,9 +42,9 @@ namespace unreal_fluid::physics::gas {
 
     void simulate(GasCell &cell, GasCell &cell1, GasCell &cell2, GasCell &cell3, GasCell &cell4, double dt);
 
-    void slice(GasCell &cell, double pressure);
+    static void slice(GasCell &cell, double pressure);
 
-    void add(GasCell &cell, double pressure);
+    static void add(GasCell &cell, double pressure);
 
     void simulationStage(double dt);
 

@@ -58,11 +58,13 @@ void GasContainer2d::simulate(GasCell &cell, GasCell &cell1, GasCell &cell2, Gas
 }
 
 void GasContainer2d::slice(GasCell &cell, double pressure) {
-  cell.particleCount = cell.getPressure() / pressure;
+  auto cellPressure = cell.getPressure();
+  cell.particleCount *= (1 - pressure / cellPressure);
 }
 
 void GasContainer2d::add(GasCell &cell, double pressure) {
-  cell.particleCount *= pressure / cell.getPressure();
+  auto cellPressure = cell.getPressure();
+  cell.particleCount *= (1 + pressure / cellPressure);
 }
 
 unreal_fluid::physics::IPhysicalObject::Type GasContainer2d::getType() {
