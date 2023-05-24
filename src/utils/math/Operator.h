@@ -38,4 +38,21 @@ namespace unreal_fluid::math {
     return x * inverseSqrt(x);
   }
 
+  /// Clamping x to nearest value between mi (minimum) and ma (maximum) parameters
+  /// @param x - value to clamp
+  /// @param mi - minimum
+  /// @param ma - maximum
+  template<typename T>
+  T clamp(T x, T mi, T ma) {
+    return std::max(std::min(x, ma), mi);
+  }
+
+  /// Linear interpolation
+  /// @param a - first value
+  /// @param b - second value
+  /// @param t - time
+  template<typename V, typename U>
+  V lerp(V a, V b, U t) {
+    return a + (b - a) * t;
+  }
 } // namespace unreal_fluid::math

@@ -1,16 +1,16 @@
 /***************************************************************
-* Copyright (C) 2023
-*    HSE SPb (Higher school of economics in Saint-Petersburg).
-***************************************************************/
+ * Copyright (C) 2023
+ *    HSE SPb (Higher school of economics in Saint-Petersburg).
+ ***************************************************************/
 
 /* PROJECT   : ultimate_py_project
-* AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
-* FILE NAME : AbstractObject.cxx
-* PURPOSE   : Abstract object to store render and physical objects in one
-*
-* No part of this file may be changed and used without agreement of
-* authors of this project.
-*/
+ * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
+ * FILE NAME : AbstractObject.cxx
+ * PURPOSE   : Abstract object to store render and physical objects in one
+ *
+ * No part of this file may be changed and used without agreement of
+ * authors of this project.
+ */
 
 #include "AbstractObject.h"
 #include "../physics/gas/GasContainer2D.h"
@@ -32,12 +32,11 @@ void parseGasContainer2d(physics::IPhysicalObject *container2D, std::vector<rend
   void *data = container2D->getData();
   auto &cells = *static_cast<std::vector<std::vector<physics::gas::GasCell>> *>(data);
 
-  size_t renderObjectPointer = 0;
+  int renderObjectPointer = 0;
   const float cubeSize = 0.03;
 
-  if (cells.empty()) return;
-
-  int rows = cells.size(), columns = cells[0].size();
+  int rows = cells.size();
+  int columns = cells[0].size();
 
   for (size_t row = 0; row < rows; ++row) {
     const auto &cellRow = cells[row];
@@ -47,17 +46,13 @@ void parseGasContainer2d(physics::IPhysicalObject *container2D, std::vector<rend
       if (renderObjectPointer >= renderObjects.size()) {
         auto renderObject = new render::RenderObject;
         renderObject->material = render::material::Debug();
-        renderObject->material.diffuseColor = cell.color;
         renderObject->mesh = render::mesh::Cube(cubeSize);
         renderObject->modelMatrix = mat4::translation(vec3{col - columns * 0.5f, row - rows * 0.5f, 0} * cubeSize * 2);
         renderObjects.push_back(renderObject);
       }
 
-      if (cell.temperature > 1) {
-        renderObjects[renderObjectPointer++]->material.ambientColor = vec3f{1, 0.3, 0.1} * cell.particleCount / 10;
-      } else {
-        renderObjects[renderObjectPointer++]->material.ambientColor = cell.color * cell.particleCount / 10;
-      }
+        renderObjects[renderObjectPointer++]->material.ambientColor =
+                math::lerp(0.0, 1.0, math::clamp(1.0 - cell.amountOfGas / 100.0, 0.0, 1.0));
     }
   }
 }
@@ -83,7 +78,8 @@ void AbstractObject::parse() {
           renderObjects.push_back(renderObject);
         }
 
-        renderObjects[pos]->modelMatrix = mat4::translation(particles[pos]->position);
+        renderObjects[pos]
+                ->modelMatrix = mat4::translation(particles[pos]->position);
       }
       break;
     }
