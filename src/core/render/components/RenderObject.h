@@ -20,6 +20,7 @@
 
 #include "baked_mesh/BakedMesh.h"
 #include "material/BasicMaterial.h"
+#include "texture/Texture.h"
 #include "../../managers/sub_programs_managers/shader_manager/ShaderManager.h"
 
 namespace unreal_fluid::render {

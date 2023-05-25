@@ -43,7 +43,8 @@ namespace unreal_fluid::render {
     GLuint _ibo = -1;     // index buffer object for rendering objects
     GLuint _rtubo = -1;   // ray tracing uniform buffer object
     GLuint _fbo = -1;     // frame buffer object
-    GLuint _fbto[6]{};    // frame buffer texture object: 0 - depth, 1 - color, 2 - position, 3 - normal, 4 - reserved, 5 - reserved
+    GLuint _fbt[6]{};     // frame buffer texture object: 0 - depth, 1 - color
+    Texture _fbto[4];     // 1 - position, 2 - normal, 3 - reserved, 4 - reserved
     std::vector<const RenderObject *> _objectsToRender;
 
     utils::Timer _timer{};

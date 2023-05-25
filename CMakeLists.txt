@@ -69,6 +69,10 @@ add_executable(
         src/core/render/components/shaders/ShaderProgram.cxx
         src/core/managers/sub_programs_managers/shader_manager/ShaderManager.cxx
 
+        # Texture
+
+        src/core/render/components/texture/Texture.cxx
+
         # Render
 
         src/core/render/components/camera/Camera.cxx
