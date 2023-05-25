@@ -19,6 +19,7 @@
 unreal_fluid::physics::fluid::AdvancedFluidContainer::AdvancedFluidContainer(
         unreal_fluid::physics::fluid::FluidDescriptor descriptor) {
     interactionSolver = new helper::ClInteractionSolver(particles);
+    addParticle({0, 0.5, 0}, {0,0,0}, 0.25, 1);
 }
 
 unreal_fluid::physics::fluid::AdvancedFluidContainer::~AdvancedFluidContainer() {
@@ -37,7 +38,7 @@ void *unreal_fluid::physics::fluid::AdvancedFluidContainer::getData() {
 }
 
 void unreal_fluid::physics::fluid::AdvancedFluidContainer::simulate(double dt) {
-    flows();
+    //flows();
     interact();
     addExternalForces(dt);
     advect(dt);

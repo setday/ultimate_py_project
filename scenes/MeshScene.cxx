@@ -16,7 +16,7 @@
 #include "../src/core/components/AbstractObject.h"
 #include "../src/core/components/scene/Scene.h"
 #include "../src/core/physics/solid/mesh/SolidMesh.h"
-
+#include "../src/core/physics/fluid/advanced_fluid/AdvancedFluidContainer.h"
 using namespace unreal_fluid;
 
 class MeshScene : public Scene {
@@ -24,7 +24,7 @@ public:
   explicit MeshScene(const compositor::SceneCompositor *compositor) : Scene(compositor) {
     using namespace physics::solid;
 
-    auto simpleFluid = new physics::fluid::SimpleFluidContainer({});
+    auto simpleFluid = new physics::fluid::AdvancedFluidContainer({});
     objects.push_back(new AbstractObject(simpleFluid));
 
     Triangle t1{{0.5, 0, 0}, {-0.5, 0, -0.5}, {-0.5, 0, 0.5}};

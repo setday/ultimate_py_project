@@ -27,6 +27,7 @@ void PhysicsSimulator::addPhysicalObject(IPhysicalObject *physicalObject) {
 }
 
 void PhysicsSimulator::simulate(double dt) {
+  dt = 0.001;
   if (timer.getStatus() == utils::Timer::State::PAUSED)
     return;
 

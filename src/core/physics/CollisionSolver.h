@@ -18,18 +18,16 @@
 #include "solid/mesh/Plane.h"
 #include "solid/mesh/Triangle.h"
 #include "solid/sphere/SolidSphere.h"
+#include "../../utils/math/Line2D.h"
 
 namespace unreal_fluid::physics {
 
   class CollisionSolver {
   private:
-    struct Segment {
-      vec3f p1, p2;
-    };
 
-    static bool basicTriangleCheck(fluid::Particle *p, solid::Triangle *triangle);
+    static bool distanceCheck(fluid::Particle *p, solid::Triangle *triangle);
     static bool internalCheck(fluid::Particle *p, solid::Triangle *triangle);
-    static bool segmentCheck(solid::Triangle triangle, Segment segment);
+    static bool edgeCheck(fluid::Particle *p, math::Line2D segment);
 
   public:
     /// @brief collides two particles
