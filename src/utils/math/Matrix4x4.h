@@ -62,6 +62,13 @@ template<typename T>
       return matrix;
     }
 
+    const T *inverse_data() {
+      if (!has_inverse)
+        calculateInverse();
+
+      return inverse_matrix;
+    }
+
     Matrix4x4 operator*(const Matrix4x4 &m) const {
       Matrix4x4 result;
 
@@ -117,7 +124,7 @@ template<typename T>
     }
 
     Matrix4x4 withTranslation(const Vector3<T> &v) const {
-      return this * translation(v);
+      return *this * translation(v);
     }
 
     static Matrix4x4 scale(const Vector3<T> &v) {
@@ -128,7 +135,7 @@ template<typename T>
     }
 
     Matrix4x4 withScale(const Vector3<T> &v) const {
-      return this * scale(v);
+      return *this * scale(v);
     }
 
     static Matrix4x4 rotation(T angle, const Vector3<T> &v) {
@@ -143,7 +150,7 @@ template<typename T>
     }
 
     Matrix4x4 withRotation(const Vector3<T> &v, T angle) const {
-      return this * rotation(v, angle);
+      return *this * rotation(v, angle);
     }
 
     static Matrix4x4 rotationX(T angle) {
@@ -154,7 +161,7 @@ template<typename T>
     }
 
     Matrix4x4 withRotationX(T angle) const {
-      return this * rotationX(angle);
+      return *this * rotationX(angle);
     }
 
     static Matrix4x4 rotationY(T angle) {
@@ -172,7 +179,7 @@ template<typename T>
     }
 
     Matrix4x4 withRotationZ(T angle) const {
-      return this * rotationZ(angle);
+      return *this * rotationZ(angle);
     }
 
     static Matrix4x4 perspective(T fov, T aspect, T near, T far) {
@@ -185,8 +192,8 @@ template<typename T>
     }
 
     static Matrix4x4 lookAt(const Vector3<T> &eye, const Vector3<T> &center, const Vector3<T> &up) {
-      Vector3<T> f = (eye - center).normalize();
-      Vector3<T> s = up.cross(f).normalize();
+      Vector3<T> f = (eye - center).normalized();
+      Vector3<T> s = up.cross(f).normalized();
       Vector3<T> u = f.cross(s);
 
       return Matrix4x4(s.x, u.x, f.x, 0,

@@ -1,22 +1,24 @@
 /***************************************************************
  * Copyright (C) 2023
+ *    UnrealFluid Team (https://github.com/setday/unreal_fluid) and
  *    HSE SPb (Higher school of economics in Saint-Petersburg).
  ***************************************************************/
 
-/* PROJECT   : ultimate_py_project
- * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : renderObject.cxx
- * PURPOSE   : Class that realizes render object.
+/* PROJECT                 : UnrealFluid
+ * AUTHORS OF THIS PROJECT : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev.
+ * FILE NAME               : RenderObject.cxx
+ * FILE AUTHORS            : Serkov Alexander.
+ * PURPOSE                 : Class that realizes render object.
  *
- * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * No part of this file may be changed and used without
+ * agreement of authors of this project.
  */
 
 #include <sstream>
 
 #include "RenderObject.h"
 
-#define OBJECTS_PATH "../objects/"
+#define OBJECTS_PATH "../assets/objects/"
 
 using namespace unreal_fluid::render;
 
@@ -34,16 +36,35 @@ void RenderObject::loadFromFile(std::string_view path) {
   extension = extension.substr(extension.find_last_of('.') + 1);
 
   if (extension != "obj") {
-    Logger::logError("Can't load file", path, "with extension:", extension);
+    Logger::logError("Can't loadFromFile file", path, "with extension:", extension);
 
     return;
   } else {
     if (!loadFromObjFile(file))
-      Logger::logError("Can't load file", path, "with extension:", extension);
+      Logger::logError("Can't loadFromFile file", path, "with extension:", extension);
   }
 }
 
+void RenderObject::bindParametersToShader(ShaderProgram *shader) const {
+  /* Bind model matrix */
+  shader->bindUniformAttribute("modelMatrix", modelMatrix);
+
+  /* Bind material data */
+  shader->bindUniformAttribute("ambientColor", material.ambientColor);
+  shader->bindUniformAttribute("diffuseColor", material.diffuseColor);
+  shader->bindUniformAttribute("specularColor", material.specularColor);
+  shader->bindUniformAttribute("shininess", material.shininess);
+
+  /* Bind textures */
+  shader->bindUniformAttribute("tex0", textures[0]);
+  shader->bindUniformAttribute("tex1", textures[1]);
+  shader->bindUniformAttribute("tex2", textures[2]);
+  shader->bindUniformAttribute("tex3", textures[3]);
+}
+
 bool RenderObject::loadFromObjFile(std::ifstream &file) {
+  mesh::BasicMesh mesh;
+
   std::vector<vec3f> positions;
   std::vector<vec3f> normals;
   std::vector<vec2f> texCoords;
@@ -116,7 +137,13 @@ bool RenderObject::loadFromObjFile(std::ifstream &file) {
 
   file.close();
 
+  bakedMesh = std::make_unique<mesh::BakedMesh>(&mesh);
+
   return true;
+}
+
+RenderObject::RenderObject(std::string_view path) {
+  loadFromFile(path);
 }
 
 // end of renderObject.cxx

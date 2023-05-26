@@ -19,7 +19,10 @@
 namespace unreal_fluid::render::mesh {
   struct Cube : BasicMesh {
   public:
-    Cube(float size);
+    /// Creates cube with specified size.
+    /// @param size Size of cube in each dimension.
+    /// @param position Position of cube.
+    Cube(vec3f size, vec3f position = {0, 0, 0});
   };
 } // unreal_fluid::render::mesh
 

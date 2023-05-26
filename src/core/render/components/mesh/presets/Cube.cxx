@@ -16,38 +16,55 @@
 
 using namespace unreal_fluid::render::mesh;
 
-Cube::Cube(float size) {
+Cube::Cube(vec3f size, vec3f position) {
+  size /= 2.0f;
+
+  float x = size.x;
+  float y = size.y;
+  float z = size.z;
+
+  float dx = position.x;
+  float dy = position.y;
+  float dz = position.z;
+
+  float left =   -x + dx;
+  float right =   x + dx;
+  float bottom = -y + dy;
+  float top =     y + dy;
+  float back =   -z + dz;
+  float front =   z + dz;
+
   vertices = {
       // front
-      {{ size,  size,  size}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
-      {{-size,  size,  size}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
-      {{ size, -size,  size}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}},
-      {{-size, -size,  size}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
+      {{right,    top, front}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
+      {{ left,    top, front}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
+      {{right, bottom, front}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}},
+      {{ left, bottom, front}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}},
       // back
-      {{ size,  size, -size}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}},
-      {{ size, -size, -size}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}},
-      {{-size,  size, -size}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}},
-      {{-size, -size, -size}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}},
+      {{right,    top,  back}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}},
+      {{right, bottom,  back}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}},
+      {{ left,    top,  back}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}},
+      {{ left, bottom,  back}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}},
       // left
-      {{-size,  size,  size}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
-      {{-size,  size, -size}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}},
-      {{-size, -size,  size}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
-      {{-size, -size, -size}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+      {{ left,    top, front}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
+      {{ left,    top,  back}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}},
+      {{ left, bottom, front}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
+      {{ left, bottom,  back}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
       // right
-      {{ size,  size,  size}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}},
-      {{ size, -size,  size}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-      {{ size,  size, -size}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
-      {{ size, -size, -size}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
+      {{right,    top, front}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}},
+      {{right, bottom, front}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+      {{right,    top,  back}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
+      {{right, bottom,  back}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
       // top
-      {{ size,  size,  size}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
-      {{ size,  size, -size}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}},
-      {{-size,  size,  size}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
-      {{-size,  size, -size}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}},
+      {{right,    top, front}, {0.0f, 1.0f, 0.0f}, {1.0f, 0.0f}},
+      {{right,    top,  back}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f}},
+      {{ left,    top, front}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
+      {{ left,    top,  back}, {0.0f, 1.0f, 0.0f}, {0.0f, 1.0f}},
       // bottom
-      {{ size, -size,  size}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f}},
-      {{-size, -size,  size}, {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}},
-      {{ size, -size, -size}, {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}},
-      {{-size, -size, -size}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}},
+      {{right, bottom, front}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f}},
+      {{ left, bottom, front}, {0.0f, -1.0f, 0.0f}, {0.0f, 1.0f}},
+      {{right, bottom,  back}, {0.0f, -1.0f, 0.0f}, {1.0f, 0.0f}},
+      {{ left, bottom,  back}, {0.0f, -1.0f, 0.0f}, {0.0f, 0.0f}},
   };
 
   indices = {

@@ -73,8 +73,8 @@ const Shader *ShaderManager::LoadShader(std::string_view path) {
   return _shaders.back().get();
 }
 
-const ShaderProgram *ShaderManager::CreateProgram(const std::vector<const Shader *> &shaders) {
-  auto program = std::make_unique<ShaderProgram>();
+ShaderProgram *ShaderManager::CreateProgram(const std::vector<const Shader *> &shaders) {
+  std::unique_ptr<ShaderProgram> program = std::make_unique<ShaderProgram>();
 
   for (auto *shader : shaders) {
     program->attachShader(shader);
@@ -146,12 +146,12 @@ void ShaderManager::ReloadShaders() {
   }
 }
 
-const ShaderProgram *DefaultShaderManager::_defaultProgram = nullptr;
-const ShaderProgram *DefaultShaderManager::_rtProgram = nullptr;
-const ShaderProgram *DefaultShaderManager::_postProcessingProgram = nullptr;
+ShaderProgram *DefaultShaderManager::_defaultProgram = nullptr;
+ShaderProgram *DefaultShaderManager::_rtProgram = nullptr;
+ShaderProgram *DefaultShaderManager::_postProcessingProgram = nullptr;
 DefaultShaderManager DefaultShaderManager::_instance = DefaultShaderManager();
 
-const ShaderProgram *DefaultShaderManager::GetDefaultProgram() {
+ShaderProgram *DefaultShaderManager::GetDefaultProgram() {
   if (_defaultProgram != nullptr)
     return _defaultProgram;
 
@@ -170,7 +170,7 @@ const ShaderProgram *DefaultShaderManager::GetDefaultProgram() {
   return _defaultProgram;
 }
 
-const ShaderProgram *DefaultShaderManager::GetRayTracingProgram() {
+ShaderProgram *DefaultShaderManager::GetRayTracingProgram() {
   if (_rtProgram != nullptr)
     return _rtProgram;
 
@@ -189,7 +189,7 @@ const ShaderProgram *DefaultShaderManager::GetRayTracingProgram() {
   return _rtProgram;
 }
 
-const ShaderProgram *DefaultShaderManager::GetPostProcessingProgram() {
+ShaderProgram *DefaultShaderManager::GetPostProcessingProgram() {
   if (_postProcessingProgram != nullptr)
     return _postProcessingProgram;
 
