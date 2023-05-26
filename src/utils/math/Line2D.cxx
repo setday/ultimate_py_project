@@ -23,9 +23,10 @@ Line2D::Line2D(vec2 p1, vec2 p2) {
   a = p2.y - p1.y;
   b = p1.x - p2.x;
   c = p2.x * p1.y - p1.x * p2.y;
+  length = math::mySqrt(a * a + b * b);
   if (b == 0) {
-    //TODO process this case
-    LOG_WARNING("b = 0 from Line2D");
+    k = 100'000;
+    m = p1.y - k * p1.x;
   } else {
     k = -a / b;
     m = -c / b;
@@ -36,21 +37,21 @@ vec3f Line2D::intersectLineWithLine(Line2D l) {
   //TODO bug hazard
   if (k != l.k) {
     float px = (l.m - m) / (k - l.k);
-    float py = (k * px + m) / (k - l.k);
+    float py = k * px + m;
     return {px, py, 0};
   }
+
   if (m == l.m)
     return LINE2D_NULL_POINT;
+
   return p1;
 }
 
 vec3f Line2D::intersectSegmentWithSegment(Line2D l) {
   auto pIntersect1 = intersectSegmentWithLine(l);
+  if (pIntersect1 == LINE2D_NULL_POINT) return LINE2D_NULL_POINT;
   auto pIntersect2 = l.intersectSegmentWithLine(*this);
-  if (pIntersect1 == LINE2D_NULL_POINT || pIntersect2 == LINE2D_NULL_POINT) {
-    return LINE2D_NULL_POINT;
-  }
-  assert(pIntersect1 == pIntersect2);
+  if (pIntersect2 == LINE2D_NULL_POINT) return LINE2D_NULL_POINT;
   return pIntersect1;
 }
 
@@ -61,9 +62,9 @@ vec3f Line2D::intersectSegmentWithLine(Line2D l) {
   return LINE2D_NULL_POINT;
 }
 
-float Line2D::distanceLineToPoint(vec3f p) {
+float Line2D::distanceLineToPoint(vec3f p) const {
   //TODO bug hazard
-  float d = std::abs((a * p.x + b * p.y + c) / std::sqrt(a * a + b * b));
+  float d = std::abs(a * p.x + b * p.y + c) / length;
   if (d < ACCURACY) return 0;
   return d;
 }

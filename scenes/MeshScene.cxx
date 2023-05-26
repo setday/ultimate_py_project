@@ -15,22 +15,22 @@
 #include "../src/core/Core.h"
 #include "../src/core/components/AbstractObject.h"
 #include "../src/core/components/scene/Scene.h"
-#include "../src/core/physics/solid/mesh/SolidMesh.h"
 #include "../src/core/physics/fluid/advanced_fluid/AdvancedFluidContainer.h"
+#include "../src/core/physics/solid/mesh/SolidMesh.h"
 using namespace unreal_fluid;
 
 class MeshScene : public Scene {
 public:
   explicit MeshScene(const compositor::SceneCompositor *compositor) : Scene(compositor) {
-    using namespace physics::solid;
+    using namespace physics;
 
-    auto simpleFluid = new physics::fluid::AdvancedFluidContainer({});
+    auto simpleFluid = new fluid::AdvancedFluidContainer({});
     objects.push_back(new AbstractObject(simpleFluid));
 
-    Triangle t1{{0.5, 0, 0}, {-0.5, 0, -0.5}, {-0.5, 0, 0.5}};
+    solid::Triangle t1{{0.5, 0, 0}, {-0.5, 0, -0.5}, {-0.1, 0, 0.5}};
 
-    auto triangles = new std::vector<Triangle>{t1};
-    auto solidMesh = new SolidMesh(*triangles);
+    auto triangles = new std::vector<solid::Triangle>{t1};
+    auto solidMesh = new solid::SolidMesh(*triangles);
 
     objects.push_back(new AbstractObject(solidMesh));
 
@@ -38,7 +38,7 @@ public:
       compositor->getSimulator()->addPhysicalObject(abstractObject->getPhysicalObject());
     }
 
-    compositor->getRenderer()->camera.setPosition({0, 0, 2});
+    compositor->getRenderer()->camera.setPosition({0, 1, 0});
     compositor->getRenderer()->camera.setDirection({0, 0, -1});
   }
 };

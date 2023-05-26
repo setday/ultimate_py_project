@@ -86,18 +86,20 @@ void CollisionSolver::particleWithPlaneCollision(fluid::Particle *particle, soli
 
 void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::Triangle *triangle, double k) {
   //TODO rotate triangle to OX OZ
-  if (!distanceCheck(p, triangle)) {
-  } else {
+  double dist = p->position.y - triangle->v1.y;
+  if (abs(dist) < p->radius) {
     math::Line2D s1 = {{triangle->v1.x, triangle->v1.z}, {triangle->v2.x, triangle->v2.z}};
-    math::Line2D s2 = {{triangle->v1.x, triangle->v1.z}, {triangle->v3.x, triangle->v3.z}}; //
-    math::Line2D s3 = {{triangle->v3.x, triangle->v3.z}, {triangle->v2.x, triangle->v2.z}}; //
+    math::Line2D s2 = {{triangle->v1.x, triangle->v1.z}, {triangle->v3.x, triangle->v3.z}};
+    math::Line2D s3 = {{triangle->v3.x, triangle->v3.z}, {triangle->v2.x, triangle->v2.z}};
+    math::Line2D scanBeam({p->position.x, p->position.z}, {100'000, 100'000});
     int countIntersections = 0;
-    math::Line2D scanBeam({p->position.x, p->position.z}, {100'000, 100'00});
     countIntersections += (s1.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
     countIntersections += (s2.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
     countIntersections += (s3.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
     if (countIntersections % 2 != 0) {
-      //TODO push particle out of the triangle
+      double push = p->radius - abs(dist);
+      if (dist < 0) push = -push;
+      p->position.y += push;
       p->velocity.y *= -k;
     } else {
       if (edgeCheck(p, s1)) {
@@ -107,11 +109,6 @@ void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::T
     }
   }
   /// TODO rotate back
-}
-
-bool CollisionSolver::distanceCheck(fluid::Particle *p, solid::Triangle *triangle) {
-  if (abs(p->position.y - triangle->v1.y) > p->radius) return false;
-  return true;
 }
 
 bool CollisionSolver::internalCheck(fluid::Particle *p, solid::Triangle *triangle) {

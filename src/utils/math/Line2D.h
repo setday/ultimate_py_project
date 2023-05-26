@@ -24,7 +24,7 @@ namespace unreal_fluid::math {
   private:
     constexpr static const float ACCURACY = 1e-6;
     float k, m;
-    float a, b, c;
+    float a, b, c, length;
     vec3 p1, p2;
 
   public:
@@ -33,7 +33,7 @@ namespace unreal_fluid::math {
     vec3f intersectSegmentWithSegment(Line2D l);
     vec3f intersectLineWithLine(Line2D l);
     vec3f intersectSegmentWithLine(Line2D l);
-    float distanceLineToPoint(vec3f p);
+    float distanceLineToPoint(vec3f p) const;
     float distanceSegmentToPoint(vec3f p);
   };
 } // namespace unreal_fluid::math

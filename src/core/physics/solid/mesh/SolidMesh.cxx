@@ -23,7 +23,6 @@ unreal_fluid::physics::IPhysicalObject::Type SolidMesh::getType() {
 }
 
 void *SolidMesh::getData() {
-  Logger::logInfo("from mesh", triangles.size());
   return &triangles;
 }
 
