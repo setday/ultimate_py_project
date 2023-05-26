@@ -27,7 +27,7 @@ namespace unreal_fluid::physics {
 
     static bool distanceCheck(fluid::Particle *p, solid::Triangle *triangle);
     static bool internalCheck(fluid::Particle *p, solid::Triangle *triangle);
-    static bool edgeCheck(fluid::Particle *p, math::Line2D segment);
+    static bool edgeCollide(fluid::Particle *p, vec3f p1, vec3f p2, double k);
 
   public:
     /// @brief collides two particles

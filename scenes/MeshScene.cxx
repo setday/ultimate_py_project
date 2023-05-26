@@ -24,7 +24,9 @@ public:
   explicit MeshScene(const compositor::SceneCompositor *compositor) : Scene(compositor) {
     using namespace physics;
 
-    auto simpleFluid = new fluid::AdvancedFluidContainer({});
+    dt = 0.003;
+
+    auto simpleFluid = new fluid::SimpleFluidContainer({});
     objects.push_back(new AbstractObject(simpleFluid));
 
     solid::Triangle t1{{0.5, 0, 0}, {-0.5, 0, -0.5}, {-0.1, 0, 0.5}};

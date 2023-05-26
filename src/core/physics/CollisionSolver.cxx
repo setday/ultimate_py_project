@@ -102,22 +102,39 @@ void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::T
       p->position.y += push;
       p->velocity.y *= -k;
     } else {
-      if (edgeCheck(p, s1)) {
-      } else if (edgeCheck(p, s2)) {
-      } else if (edgeCheck(p, s3)) {
-      }
+      if (edgeCollide(p, triangle->v1, triangle->v2, k)) {
+      } else if (edgeCollide(p, triangle->v2, triangle->v3, k)) {
+      } else
+        edgeCollide(p, triangle->v1, triangle->v3, k);
     }
   }
   /// TODO rotate back
 }
 
-bool CollisionSolver::internalCheck(fluid::Particle *p, solid::Triangle *triangle) {
+bool CollisionSolver::edgeCollide(fluid::Particle *p, vec3f p1, vec3f p2, double k) {
+  auto paral = p2 - p1;
+  paral.normalizeSelf();
 
-  return false;
-}
+  /// TODO : add not on segment projection check
+  vec3f pProj = (p->position - p1).project(paral) * paral + p1; //nearest point from p.position to segment
 
-bool CollisionSolver::edgeCheck(fluid::Particle *p, math::Line2D segment) {
-  return false;
+  double d = (p->position - pProj).len();
+
+  if (d == 0) {
+    LOG_INFO("CollisionSolver::edgeCollide p,position on segment");
+    return false;
+  }
+
+  if (d > p->radius) return false;
+
+  vec3f n = p->position - pProj;
+  n.normalizeSelf();
+  p->position += (p->radius - d) * n;
+  vec3f vN = n * p->velocity.project(n);
+  p->velocity -= vN;
+  vN *= -k;
+  p->velocity += vN;
+  return true;
 }
 
 // end of CollisionSolver.cxx

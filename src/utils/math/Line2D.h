@@ -25,6 +25,7 @@ namespace unreal_fluid::math {
     constexpr static const float ACCURACY = 1e-6;
     float k, m;
     float a, b, c, length;
+  public:
     vec3 p1, p2;
 
   public:
