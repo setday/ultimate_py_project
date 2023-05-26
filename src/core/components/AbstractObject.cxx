@@ -47,10 +47,10 @@ void AbstractObject::parse() {
         auto r = particles[pos]->radius;
         render::mesh::Sphere sphere(float(r), unsigned(500 * r), unsigned(500 * r));
 
-        renderObjects.push_back(new render::RenderObject {
-          .bakedMesh = std::make_unique<render::mesh::BakedMesh>(&sphere),
-          .material = render::material::Gold(),
-        });
+        auto *renderObject = new render::RenderObject();
+        renderObject->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&sphere);
+        renderObject->material = render::material::Gold();
+        renderObjects.push_back(renderObject);
       }
 
       renderObjects[pos]->modelMatrix = mat4::translation(particles[pos]->position);
@@ -63,10 +63,10 @@ void AbstractObject::parse() {
       auto r = solidSphere.radius;
       render::mesh::Sphere sphere(float(r), unsigned(500 * r), unsigned(500 * r));
 
-      renderObjects.push_back(new render::RenderObject {
-        .bakedMesh = std::make_unique<render::mesh::BakedMesh>(&sphere),
-        .material = render::material::Bronze(),
-      });
+      auto *renderObject = new render::RenderObject();
+      renderObject->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&sphere);
+      renderObject->material = render::material::Bronze();
+      renderObjects.push_back(renderObject);
     }
 
     renderObjects.back()->modelMatrix = mat4::translation(solidSphere.position);
@@ -79,10 +79,10 @@ void AbstractObject::parse() {
       auto const& triangle = triangles[pos];
       render::mesh::BasicMesh mesh({triangle.v1, triangle.v2, triangle.v3}, {0, 1, 2});
 
-      renderObjects.push_back(new render::RenderObject {
-        .bakedMesh = std::make_unique<render::mesh::BakedMesh>(&mesh),
-        .material = render::material::GreenPlastic(),
-      });
+      auto *renderObject = new render::RenderObject();
+      renderObject->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&mesh);
+      renderObject->material = render::material::GreenPlastic();
+      renderObjects.push_back(renderObject);
 
       if (pos == 0)
         renderObjects.back()->material = render::material::Gold();

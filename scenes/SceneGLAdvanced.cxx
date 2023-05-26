@@ -24,17 +24,26 @@ class SceneGLAdvanced : public Scene {
 public:
   std::vector<render::RenderObject *> objs;
   std::vector<vec3f> positions;
+  render::RenderObject *cube;
 
   utils::Timer timer;
 
   explicit SceneGLAdvanced(const compositor::SceneCompositor *compositor) : Scene(compositor) {
+    render::mesh::Cube cubeMesh(1.f);
+
+    cube = new render::RenderObject();
+    cube->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&cubeMesh);
+    cube->material = render::material::Lambertian();
+    cube->textures[0] = new render::Texture("dubai_2023.jpg");
+    objects.push_back(new AbstractObject(nullptr, {cube}));
+
     for (int i = -20; i <= 20; i++) {
       for (int j = -50; j <= 0; j++) {
-        render::mesh::Cube cubeMesh(0.5f);
-        objs.push_back(new render::RenderObject{
-          .bakedMesh = std::make_unique<render::mesh::BakedMesh>(&cubeMesh),
-          .material = render::material::Lambertian(),
-        });
+        auto *object = new render::RenderObject();
+        object->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&cubeMesh);
+        object->material = render::material::Lambertian();
+        objs.push_back(object);
+
         positions.emplace_back(i * 1.1f, -1.7f + (rand() % 10) / 15.f, j * 1.1f);
         if (rand() % 40 == 0) {
           objs.back()->isEmitter = true;
@@ -50,11 +59,11 @@ public:
 
     for (int i = -20; i <= 20; i++) {
       for (int j = -50; j <= 0; j++) {
-        render::mesh::Cube cubeMesh(0.5f);
-        objs.push_back(new render::RenderObject{
-          .bakedMesh = std::make_unique<render::mesh::BakedMesh>(&cubeMesh),
-          .material = render::material::Lambertian(),
-        });
+        auto *object = new render::RenderObject();
+        object->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&cubeMesh);
+        object->material = render::material::Lambertian();
+        objs.push_back(object);
+
         positions.emplace_back(i * 1.1f, 1.7f + (rand() % 10) / 15.f, j * 1.1f);
         objects.push_back(new AbstractObject(nullptr, {objs.back()}));
       }
@@ -67,6 +76,8 @@ public:
       1,
       0
     });
+
+    cube->modelMatrix = mat4::rotationY(timer.getElapsedTime() / 2) * mat4::translation({0, 0, -6.f});
 
     for (int i = 0; i < objs.size(); i++) {
       positions[i].z += 0.1f;

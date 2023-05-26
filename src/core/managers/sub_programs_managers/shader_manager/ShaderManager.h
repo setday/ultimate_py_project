@@ -41,7 +41,7 @@ namespace unreal_fluid::render {
     /// create program from shaders
     /// @param shaders Shaders to create program from
     /// @return Program
-    const ShaderProgram * CreateProgram(const std::vector<const Shader *> &shaders);
+    ShaderProgram * CreateProgram(const std::vector<const Shader *> &shaders);
 
     /// Reload shader
     /// @param shader Shader to reload
@@ -53,24 +53,24 @@ namespace unreal_fluid::render {
 
   class DefaultShaderManager : private ShaderManager {
   private:
-    static const ShaderProgram *_defaultProgram;
-    static const ShaderProgram *_rtProgram;
-    static const ShaderProgram *_postProcessingProgram;
+    static ShaderProgram *_defaultProgram;
+    static ShaderProgram *_rtProgram;
+    static ShaderProgram *_postProcessingProgram;
 
     static DefaultShaderManager _instance;
 
   public:
     /// Get default program
     /// @return Default program
-    static const ShaderProgram * GetDefaultProgram();
+    static ShaderProgram * GetDefaultProgram();
 
     /// Get default ray tracing program
     /// @return Default ray tracing program
-    static const ShaderProgram * GetRayTracingProgram();
+    static ShaderProgram * GetRayTracingProgram();
 
     /// Get default post processing program
     /// @return Default post processing program
-    static const ShaderProgram * GetPostProcessingProgram();
+    static ShaderProgram * GetPostProcessingProgram();
 
     /// Reload all shaders
     static void ReloadShaders();

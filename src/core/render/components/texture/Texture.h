@@ -28,25 +28,70 @@ namespace unreal_fluid::render {
   private:
     int _width = -1;
     int _height = -1;
+    int _depth = -1;
+
+    GLenum _internalFormat = GL_RGBA;
+    GLenum _format = GL_RGBA;
+    GLenum _type = GL_UNSIGNED_BYTE;
+
+    GLenum _dimensions = 0;
 
     GLuint _textureID = -1;
 
+  private:
+    void _generateTexture();
+
+    void _initTexture(int width, int height, int depth, std::size_t components, std::size_t componentType);
+
   public:
+    /// Create empty texture
+    /// @param components - number of components in the texture (1, 2, 3, 4 by default, 5 for depth component)
+    /// @param componentType - type of the texture (unsigned byte (unsigned char) by default, float, etc.)
+    Texture(std::size_t components = 4, std::size_t componentType = sizeof(unsigned char));
+    /// Create empty texture 2D
     /// @param width - width of the texture
     /// @param height - height of the texture
-    Texture(int width, int height);
+    /// @param components - number of components in the texture (1, 2, 3, 4 by default, 5 for depth component)
+    /// @param componentType - type of the texture (unsigned byte (unsigned char) by default, float, etc.)
+    explicit Texture(int width, int height, std::size_t components = 4, std::size_t componentType = sizeof(unsigned char));
+    /// Create empty texture 3D
+    /// @param width - width of the texture
+    /// @param height - height of the texture
+    /// @param depth - depth of the texture
+    /// @param components - number of components in the texture (1, 2, 3, 4 by default, 5 for depth component)
+    /// @param componentType - type of the texture (unsigned byte (unsigned char) by default, float, etc.)
+    explicit Texture(int width, int height, int depth, std::size_t components = 4, std::size_t componentType = sizeof(unsigned char));
+    /// Load texture from file
+    /// @param path - path to the file
+    /// @return true if texture was loaded, false otherwise
+    Texture(std::string_view path);
     ~Texture();
+
+    /// Load texture from file
+    /// @param path - path to the file
+    /// @return true if texture was loaded, false otherwise
+    bool loadFromFile(std::string_view path);
 
     /// Resize this texture
     /// @param width - width of the texture
     /// @param height - height of the texture
-    void resize(int width, int height);
+    /// @param depth - depth of the texture (if 0, then texture is 2D)
+    /// @attention The dimension of the texture can't be changed.
+    /// @attention If you create 2D texture, than depth must be 0.
+    void resize(int width, int height, int depth = 0);
+
+    /// Write data to this texture
+    /// @param data - data to write
+    /// @attention The size of the data must be equal to the size of the texture.
+    /// @attention The data must be in the format of the texture (GL_RGBA32F).
+    void write(const void* data);
 
     /// Bind this texture
-    void bind();
+    /// @return true if texture was bound, false otherwise
+    bool bind() const;
 
     /// Get id
-    GLuint getID();
+    GLuint getID() const;
   };
 }
 

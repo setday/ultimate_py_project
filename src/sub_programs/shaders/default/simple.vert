@@ -16,7 +16,7 @@ uniform struct Camera {
 out vec3 vertexPosition;
 out vec3 realVertexPosition;
 out vec3 vertexNormal;
-out vec2 screenCoords;
+out vec2 texCoords;
 
 out vec3 lightPos;
 
@@ -44,4 +44,5 @@ void main()
   vertexPosition = gl_Position.xyz;
   realVertexPosition = (modelMatrix * vec4(aPos, 1.0)).xyz;
   vertexNormal = (modelMatrix * vec4(aNorm, 0.0)).xyz;
+  texCoords = texCoord;
 }

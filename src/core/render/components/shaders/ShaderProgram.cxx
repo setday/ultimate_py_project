@@ -54,14 +54,17 @@ bool ShaderProgram::linkProgram() const {
   return success;
 }
 
-void ShaderProgram::activate() const {
-  GLint success;
-  glGetProgramiv(_programID, GL_LINK_STATUS, &success);
-  if (!success) {
-    return;
-  }
+void ShaderProgram::activate() {
+  // GLint success;
+  // glGetProgramiv(_programID, GL_LINK_STATUS, &success);
+  // if (!success) {
+  //   return;
+  // }
 
-  glValidateProgram(_programID);
+  // glValidateProgram(_programID);
+
+  _currentTextureId = 0;
+
   glUseProgram(_programID);
 }
 
@@ -122,6 +125,25 @@ void ShaderProgram::bindUniformAttribute(std::string_view name, const mat4 &attr
   } else {
     glUniformMatrix4fv(location, 1, GL_FALSE, attribute.data());
   }
+}
+
+void ShaderProgram::bindUniformAttribute(std::string_view name, const Texture *attribute) {
+  if (attribute == nullptr)
+    return;
+
+  GLint location = glGetUniformLocation(_programID, name.data());
+  if (location == -1)
+    return;
+
+  glActiveTexture(GL_TEXTURE0 + _currentTextureId);
+  attribute->bind();
+  glUniform1i(location, _currentTextureId);
+
+  _currentTextureId++;
+}
+
+void ShaderProgram::bindTexturesNumber() const {
+  bindUniformAttribute("texturesCount", _currentTextureId);
 }
 
 // end of ShaderProgram.cxx

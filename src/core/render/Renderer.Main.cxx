@@ -117,7 +117,7 @@ void Renderer::initGl() const {
 } // end of Renderer::initGL() function
 
 void Renderer::initBuffers() {
-  float frameVertices[] = {
+  static float frameVertices[] = {
           -1.0f, -1.0f, 0.0f,0.0f, 0.0f,
           1.0f,  -1.0f, 0.0f,1.0f, 0.0f,
           -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
@@ -145,33 +145,22 @@ void Renderer::initBuffers() {
 
   glGenBuffers(1, &_rtubo);
 
-  // FBO
-  glGenTextures(2, _fbt);
-
   // depth
-  glBindTexture(GL_TEXTURE_2D, _fbt[0]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 500, 500, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+  _fbdt = std::make_unique<Texture>(500, 500, (std::size_t)5, sizeof(float));
 
-  // result color
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, _fbt[1]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 500, 500, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-  glGenerateMipmap(GL_TEXTURE_2D);
-
-  for (int i = 2; i < 6; i++) {
-    glActiveTexture(GL_TEXTURE0 + i - 1);
-    _fbto[i - 2] = Texture(500, 500);
+  for (int i = 0; i < 5; i++) {
+    glActiveTexture(GL_TEXTURE0 + i);
+    _fbto[i] = std::make_unique<Texture>(500, 500);
   }
 
   glGenFramebuffers(1, &_fbo);
   glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
 
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _fbt[0], 0);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _fbt[1], 0);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, _fbto[0].getID(), 0);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, _fbto[1].getID(), 0);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, _fbto[2].getID(), 0);
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D, _fbto[3].getID(), 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _fbdt->getID(), 0);
+
+  for (int i = 0; i < 5; i++) {
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, _fbto[i]->getID(), 0);
+  }
 
   std::vector<unsigned int> attachments = {
           GL_COLOR_ATTACHMENT0,
@@ -180,7 +169,7 @@ void Renderer::initBuffers() {
           GL_COLOR_ATTACHMENT3,
           GL_COLOR_ATTACHMENT4,
   };
-  glDrawBuffers(attachments.size(), attachments.data());
+  glDrawBuffers((int)attachments.size(), attachments.data());
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -204,8 +193,6 @@ Renderer::~Renderer() {
   glDeleteBuffers(1, &_rtubo);
 
   glDeleteFramebuffers(1, &_fbo);
-
-  glDeleteTextures(2, _fbt);
 } // end of Renderer::destroy() function
 
 ShaderManager *Renderer::getShaderManager() const {
@@ -231,16 +218,10 @@ void Renderer::changeResolution(int width, int height) {
   camera.setResolution(width, height);
 
   // depth
-  glBindTexture(GL_TEXTURE_2D, _fbt[0]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+  _fbdt->resize(width, height);
 
-  glBindTexture(GL_TEXTURE_2D, _fbt[1]);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-  glGenerateMipmap(GL_TEXTURE_2D);
-
-  for (int i = 2; i < 6; i++) {
-    _fbto[i - 2].resize(width, height);
-  }
+  for (const auto & i : _fbto)
+    i->resize(width, height);
 
   glViewport(0, 0, width, height);
 }

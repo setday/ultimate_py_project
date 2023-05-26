@@ -30,11 +30,17 @@ namespace unreal_fluid::render {
 
     std::shared_ptr<mesh::BakedMesh> bakedMesh;
     material::BasicMaterial material;
-    const ShaderProgram *shaderProgram = render::DefaultShaderManager::GetDefaultProgram();
+    Texture *textures[4];
+    ShaderProgram *shaderProgram = render::DefaultShaderManager::GetDefaultProgram();
 
     int isEmitter = 0; /// TODO: remove this field
 
+    /// Default constructor.
     RenderObject() = default;
+    /// Load render object from file.
+    /// @param path Path to file.
+    /// @attention Only .obj files are supported.
+    RenderObject(std::string_view path);
     ~RenderObject() = default;
 
     /// Load render object from file.
@@ -44,11 +50,11 @@ namespace unreal_fluid::render {
 
     /// Bind parameters to shader program.
     /// @param shader Shader program.
-    void bindParametersToShader(const ShaderProgram *shader) const;
+    void bindParametersToShader(ShaderProgram *shader) const;
 
   private:
     /// Load render object from .obj file.
-    /// @param file File to load.
+    /// @param file File to loadFromFile.
     /// @return True if success, false otherwise.
     bool loadFromObjFile(std::ifstream &file);
   };

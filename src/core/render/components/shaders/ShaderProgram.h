@@ -16,10 +16,12 @@
 #pragma once
 
 #include "Shader.h"
+#include "../texture/Texture.h" // For Texture binding
 
 namespace unreal_fluid::render {
   class ShaderProgram {
   private:
+    int _currentTextureId = 0;
     unsigned int _programID;
     std::vector<const Shader *> _attachedShaders;
 
@@ -39,7 +41,7 @@ namespace unreal_fluid::render {
     void reattachShaders();
 
     /// Activate this program
-    void activate() const;
+    void activate();
 
     /// Get program ID
     /// @return Program ID
@@ -75,6 +77,15 @@ namespace unreal_fluid::render {
     /// @param name Name
     /// @param inverseView Defines what part of matrix should be used. Inverse if true, normal if false.
     void bindUniformAttribute(std::string_view name, const mat4 &attribute, bool inverseView = false) const;
+
+    /// Bind uniform attribute
+    /// @param attribute Attribute
+    /// @param name Name.
+    void bindUniformAttribute(std::string_view name, const Texture *attribute);
+
+    /// Bind textures number
+    /// @attention Should be called exactly before drawing all vertices
+    void bindTexturesNumber() const;
   };
 } // namespace unreal_fluid::render
 

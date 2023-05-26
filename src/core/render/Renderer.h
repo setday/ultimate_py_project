@@ -36,15 +36,15 @@ namespace unreal_fluid::render {
   private:
     std::unique_ptr<ShaderManager> _shaderManager;
     RenderMode _renderMode = RenderMode::SOLID;
-    GLuint _fvbo = -1;    // frame vertex buffer object
-    GLuint _fvao = -1;    // frame vertex array object
-    GLuint _vbo = -1;     // vertex buffer object for rendering objects
-    GLuint _vao = -1;     // vertex array object for rendering objects
-    GLuint _ibo = -1;     // index buffer object for rendering objects
-    GLuint _rtubo = -1;   // ray tracing uniform buffer object
-    GLuint _fbo = -1;     // frame buffer object
-    GLuint _fbt[6]{};     // frame buffer texture object: 0 - depth, 1 - color
-    Texture _fbto[4];     // 1 - position, 2 - normal, 3 - reserved, 4 - reserved
+    GLuint _fvbo = -1;                  // frame vertex buffer object
+    GLuint _fvao = -1;                  // frame vertex array object
+    GLuint _vbo = -1;                   // vertex buffer object for rendering objects
+    GLuint _vao = -1;                   // vertex array object for rendering objects
+    GLuint _ibo = -1;                   // index buffer object for rendering objects
+    GLuint _rtubo = -1;                 // ray tracing uniform buffer object
+    GLuint _fbo = -1;                   // frame buffer object
+    std::unique_ptr<Texture> _fbdt;     // frame buffer depth texture
+    std::unique_ptr<Texture> _fbto[5];  // 0 - color, 1 - position, 2 - normal, 3 - reserved, 4 - reserved
     std::vector<const RenderObject *> _objectsToRender;
 
     utils::Timer _timer{};

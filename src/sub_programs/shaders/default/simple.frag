@@ -3,8 +3,7 @@
 in vec3 vertexPosition;
 in vec3 realVertexPosition;
 in vec3 vertexNormal;
-
-out vec4 fragmentColor;
+in vec2 texCoords;
 
 uniform float time;
 
@@ -20,6 +19,10 @@ uniform vec3 ambientColor;
 uniform vec3 diffuseColor;
 uniform vec3 specularColor;
 uniform float shininess;
+
+uniform sampler2D tex0;
+
+uniform int texturesCount;
 
 layout(location = 0) out vec4 colorTexture;
 layout(location = 1) out vec4 positionTexture;
@@ -86,7 +89,12 @@ void main()
         color = diffuseColor;
     }
 
-    colorTexture = vec4(color, 1.0);
+    if (texturesCount > 0) {
+        colorTexture = vec4(texture(tex0, texCoords).rgb, 1.0);
+    } else {
+        colorTexture = vec4(color, 1.0);
+    }
+
     positionTexture = vec4(vertexPosition, 1);
     normalTexture = vec4(vertexNormal, 1);
 }

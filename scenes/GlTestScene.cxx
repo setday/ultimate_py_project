@@ -31,38 +31,31 @@ public:
 
   explicit GlTestScene(const compositor::SceneCompositor * compositor) : Scene(compositor) {
     render::mesh::Sphere sphereMesh(.5f, 50, 50);
-    sphere = new render::RenderObject {
-      .modelMatrix = mat4::rotation(0.f, {0.f, 0.f, 1.f}).
-                     withTranslation({-.75f, 0.f, -5.f}),
 
-      .bakedMesh = std::make_unique<render::mesh::BakedMesh>(&sphereMesh),
-      .material = render::material::Water(),
-    };
+    sphere = new render::RenderObject();
+    sphere->modelMatrix = mat4::rotation(0.f, {0.f, 0.f, 1.f}).
+                          withTranslation({-.75f, 0.f, -5.f});
+    sphere->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&sphereMesh);
+    sphere->material = render::material::Water();
     objects.push_back(new AbstractObject{nullptr, {sphere}});
 
     render::mesh::Plane planeMesh(300, 300, 50, 50);
-    plane = new render::RenderObject {
-      .modelMatrix = mat4::rotation(0.f, {0.f, 0.f, 1.f}).
-                     withTranslation({0.f, -1.f, -5.f}),
-
-      .bakedMesh = std::make_unique<render::mesh::BakedMesh>(&planeMesh),
-      .material = render::material::CyanPlastic(),
-    };
+    plane = new render::RenderObject();
+    plane->modelMatrix = mat4::rotation(0.f, {0.f, 0.f, 1.f}).
+                         withTranslation({0.f, -1.f, -5.f});
+    plane->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&planeMesh);
+    plane->material = render::material::CyanPlastic();
     objects.push_back(new AbstractObject{nullptr, {plane}});
 
-    render::mesh::Cube cubeMesh(.5f);
-    cube = new render::RenderObject {
-      .modelMatrix = mat4::rotation(0.f, {0.f, 0.f, 1.f}).
-                     withTranslation({.75f, 0.f, -5.f}),
-
-      .bakedMesh = std::make_unique<render::mesh::BakedMesh>(&cubeMesh),
-      .material = render::material::Ruby(),
-    };
+    render::mesh::Cube cubeMesh(1.f);
+    cube = new render::RenderObject();
+    cube->modelMatrix = mat4::rotation(0.f, {0.f, 0.f, 1.f}).
+                        withTranslation({.75f, 0.f, -5.f});
+    cube->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&cubeMesh);
     cube->material = render::material::Ruby();
     objects.push_back(new AbstractObject{nullptr, {cube}});
 
-    render::RenderObject *tree = new render::RenderObject();
-    tree->loadFromFile("Lowpoly_tree_sample.obj");
+    render::RenderObject *tree = new render::RenderObject("Lowpoly_tree_sample.obj");
 
     for (int i = 0; i < 250; i++) {
       vec3f position = {(rand() % 300 - 150) / 3.0f, -1, -5.f + (rand() % 300 - 150) / 3.0f};
@@ -72,21 +65,18 @@ public:
         continue;
       }
 
-      auto *object = new render::RenderObject{
-        .modelMatrix = mat4::rotation(rand() % 360, {0.f, 1.f, 0.f}).
-                       withScale((rand() % 50 + 50) / 200.f).
-                       withTranslation(position),
-
-        .bakedMesh = tree->bakedMesh,
-        .material = render::material::Ruby()
-      };
+      auto *object = new render::RenderObject();
+      object->modelMatrix = mat4::rotation(rand() % 360, {0.f, 1.f, 0.f}).
+                            withScale((rand() % 50 + 50) / 200.f).
+                            withTranslation(position);
+      object->bakedMesh = tree->bakedMesh;
+      object->material = render::material::Ruby();
 
       objects.push_back(new AbstractObject{nullptr, {object}});
     }
 
     delete tree;
-    tree = new render::RenderObject();
-    tree->loadFromFile("lowpolytree.obj");
+    tree = new render::RenderObject("lowpolytree.obj");
 
     for (int i = 0; i < 250; i++) {
       vec3f position = {(rand() % 300 - 150) / 3.0f, 1, -5.f + (rand() % 300 - 150) / 3.0f};
@@ -96,15 +86,13 @@ public:
         continue;
       }
 
-      auto *object = new render::RenderObject{
-        .modelMatrix = mat4::rotation(rand() % 360, {0.f, 1.f, 0.f}).
-                       withScale((rand() % 50 + 50) / 50.f).
-                       withTranslation(position),
 
-        .bakedMesh = tree->bakedMesh,
-        .material = render::material::Emerald(),
-      };
-
+      auto *object = new render::RenderObject();
+      object->modelMatrix = mat4::rotation(rand() % 360, {0.f, 1.f, 0.f}).
+                            withScale((rand() % 50 + 50) / 50.f).
+                            withTranslation(position);
+      object->bakedMesh = tree->bakedMesh;
+      object->material = render::material::Emerald();
       objects.push_back(new AbstractObject{nullptr, {object}});
     }
 

@@ -72,18 +72,24 @@ void Renderer::renderObjects(const std::vector<render::RenderObject *> &objects)
   }
 
   for (const render::RenderObject *object : objects) {
-    object->shaderProgram->activate();
+    ShaderProgram *program = object->shaderProgram;
 
-    bindCameraToShader(object->shaderProgram);
-    object->bindParametersToShader(object->shaderProgram);
+    program->activate();
 
-    object->shaderProgram->bindUniformAttribute("time", float(_timer.getElapsedTime()));
+    bindCameraToShader(program);
 
-    object->shaderProgram->bindUniformAttribute("isEmitter", object->isEmitter);
+    object->bindParametersToShader(program);
 
-    glBindVertexArray(object->bakedMesh.get()->getVAO());
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, object->bakedMesh.get()->getIBO());
-    glDrawElements(GL_TRIANGLE_STRIP, object->bakedMesh.get()->getIndicesCount(), GL_UNSIGNED_INT, 0);
+    program->bindUniformAttribute("time", float(_timer.getElapsedTime()));
+    program->bindUniformAttribute("isEmitter", object->isEmitter);
+
+    program->bindTexturesNumber();
+
+    const mesh::BakedMesh *mesh = object->bakedMesh.get();
+
+    glBindVertexArray(mesh->getVAO());
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->getIBO());
+    glDrawElements(GL_TRIANGLE_STRIP, mesh->getIndicesCount(), GL_UNSIGNED_INT, 0);
   }
 }
 
@@ -146,26 +152,14 @@ void Renderer::drawRT() {
 }
 
 void Renderer::postProcess() {
-  DefaultShaderManager::GetPostProcessingProgram()->activate();
+  ShaderProgram *program = DefaultShaderManager::GetPostProcessingProgram();
+  program->activate();
 
-  GLuint programID = DefaultShaderManager::GetPostProcessingProgram()->getId();
+  program->bindUniformAttribute("colorTexture", _fbto[0].get());
+  program->bindUniformAttribute("positionTexture", _fbto[1].get());
+  program->bindUniformAttribute("normalTexture", _fbto[2].get());
 
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, _fbto[1]);
-  glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, _fbto[2]);
-  glActiveTexture(GL_TEXTURE2);
-  glBindTexture(GL_TEXTURE_2D, _fbto[3]);
-
-  GLint textureID;
-  textureID = glGetUniformLocation(programID, "colorTexture");
-  glUniform1i(textureID, 0);
-  textureID = glGetUniformLocation(programID, "positionTexture");
-  glUniform1i(textureID, 1);
-  textureID = glGetUniformLocation(programID, "normalTexture");
-  glUniform1i(textureID, 2);
-
-  bindCameraToShader(DefaultShaderManager::GetPostProcessingProgram());
+  bindCameraToShader(program);
 
   drawScreenQuad();
 }
