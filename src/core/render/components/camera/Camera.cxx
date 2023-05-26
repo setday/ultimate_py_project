@@ -1,16 +1,19 @@
 /***************************************************************
  * Copyright (C) 2023
+ *    UnrealFluid Team (https://github.com/setday/unreal_fluid) and
  *    HSE SPb (Higher school of economics in Saint-Petersburg).
  ***************************************************************/
 
-/* PROJECT   : ultimate_py_project
- * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Camera.cxx
- * PURPOSE   : ${PURPOSE}
+/* PROJECT                 : UnrealFluid
+ * AUTHORS OF THIS PROJECT : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev.
+ * FILE NAME               : Camera.cxx
+ * FILE AUTHORS            : Serkov Alexander.
  *
- * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * No part of this file may be changed and used without
+ * agreement of authors of this project.
  */
+
+#include <cmath>
 
 #include "Camera.h"
 
@@ -28,10 +31,12 @@ void Camera::updateProjectionMatrix() {
 Camera::Camera(const vec3f &position, const vec3f &direction, const vec3f &up,
                float width, float height,
                float fov, float near, float far) :
-               _position(position), _direction(direction.normalize()), _up(up.normalize()),
-               _right(direction.cross(up).normalize()),
-               _height(height), _width(width), _aspect(width / height),
-               _fov(fov), _near(near), _far(far) {
+        _position(position), _direction(direction.normalized()), _up(up.normalized()),
+        _right(direction.cross(up).normalized()),
+        _height(height), _width(width), _aspect(width / height),
+        _fov(fov), _near(near), _far(far) {
+  setDirection(direction);
+
   updateViewMatrix();
   updateProjectionMatrix();
 }
@@ -66,29 +71,41 @@ vec3f Camera::getDirection() const {
   return _direction;
 }
 
-void Camera::setDirection(const vec3f &direction) {
-  _direction = direction.normalize();
+vec2f Camera::getAngles() const {
+  return {_pitch, _yaw};
+}
 
-  _right = _direction.cross(_up).normalize();
+void Camera::setDirection(const vec3f &direction) {
+  _direction = direction.normalized();
+
+  _right = _direction.cross(_up).normalized();
+
+  _pitch = float(asin(_direction.y));
+  _yaw = float(atan2(_direction.x, _direction.z));
 
   updateViewMatrix();
 }
 
-void Camera::setDirection(float yaw, float pitch) {
-  _direction.z = cos(yaw) * cos(pitch);
-  _direction.y = sin(pitch);
-  _direction.x = sin(yaw) * cos(pitch);
+void Camera::setDirection(const vec2f &angles) {
+  _pitch = angles.x;
+  _yaw = angles.y;
 
-  setDirection(_direction);
+  _direction.z = std::cos(_yaw) * std::cos(_pitch);
+  _direction.y = std::sin(_pitch);
+  _direction.x = std::sin(_yaw) * std::cos(_pitch);
+
+  _right = _direction.cross(_up).normalized();
+
+  updateViewMatrix();
 }
 
 vec2f Camera::getResolution() const {
-  return vec2f(_width, _height);
+  return {_width, _height};
 }
 
 void Camera::setResolution(int width, int height) {
-  _width = width;
-  _height = height;
+  _width = float(width);
+  _height = float(height);
   _aspect = _width / _height;
   updateProjectionMatrix();
 }
@@ -111,6 +128,14 @@ vec3f Camera::getRight() const {
 
 vec3f Camera::getUp() const {
   return _up;
+}
+
+void Camera::setUp(const vec3f &up) {
+  _up = up.normalized();
+
+  _right = _direction.cross(_up).normalized();
+
+  updateViewMatrix();
 }
 
 // end of Camera.cxx
