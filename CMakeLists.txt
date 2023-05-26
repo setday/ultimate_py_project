@@ -63,6 +63,8 @@ add_executable(
         src/core/render/components/mesh/presets/Sphere.cxx
         src/core/render/components/mesh/presets/Cube.cxx
 
+        src/core/render/components/baked_mesh/BakedMesh.cxx
+
         # Shaders
 
         src/core/render/components/shaders/Shader.cxx
@@ -96,6 +98,8 @@ add_executable(
         src/core/physics/fluid/simple_fluid/SimpleFluidContainer.cxx
         src/core/components/AbstractObject.cxx
 
+        src/core/physics/gas/GasContainer2D.cxx
+
         # IScene
 
         src/core/components/scene/PhysicalScene.cxx
@@ -117,13 +121,12 @@ add_executable(
         src/core/SceneCompositor.cxx
         src/core/Core.cxx
         src/main.cxx
-        src/core/render/components/baked_mesh/BakedMesh.cxx
 
         # Addons
 
-        addons/flag_addon/physics_body/PhysicsBody.cxx
-        addons/flag_addon/spring_constraint/SpringConstraint.cxx
-        addons/flag_addon/flag/Flag.cxx
+        #addons/flag_addon/physics_body/PhysicsBody.cxx
+        #addons/flag_addon/spring_constraint/SpringConstraint.cxx
+        #ddons/flag_addon/flag/Flag.cxx
 )
 
 message(${OPENGL_LIBRARIES})
