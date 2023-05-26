@@ -1,15 +1,17 @@
 /***************************************************************
- * Copyright (C) 2023
- *    HSE SPb (Higher school of economics in Saint-Petersburg).
- ***************************************************************/
+* Copyright (C) 2023
+*    UnrealFluid Team (https://github.com/setday/unreal_fluid) and
+*    HSE SPb (Higher school of economics in Saint-Petersburg).
+***************************************************************/
 
-/* PROJECT   : ultimate_py_project
- * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : WindowCompositor.h
- * PURPOSE   : This is wrapper class for the glfw.
+/* PROJECT                 : UnrealFluid
+ * AUTHORS OF THIS PROJECT : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev.
+ * FILE NAME               : WindowCompositor.h
+ * FILE AUTHORS            : Serkov Alexander.
+ * PURPOSE                 : This is wrapper class for the glfw.
  *
- * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * No part of this file may be changed and used without
+ * agreement of authors of this project.
  */
 
 #pragma once
@@ -80,7 +82,7 @@ namespace unreal_fluid::window {
 
     /// Add resize callback.
     /// @param callback The callback function.
-    void addResizeCallback(std::function<void(int width, int height)> callback);
+    void addResizeCallback(const std::function<void(int width, int height)> &callback);
 
     /// Get size of the window.
     /// @param width The width of the window.

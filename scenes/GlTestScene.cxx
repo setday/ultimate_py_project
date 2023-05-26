@@ -1,14 +1,17 @@
 /***************************************************************
- * Copyright (C) 2023
- *    HSE SPb (Higher school of economics in Saint-Petersburg).
- ***************************************************************/
+* Copyright (C) 2023
+*    UnrealFluid Team (https://github.com/setday/unreal_fluid) and
+*    HSE SPb (Higher school of economics in Saint-Petersburg).
+***************************************************************/
 
-/* PROJECT   : ultimate_py_project
- * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : GLTestScene.cxx
+/* PROJECT                 : UnrealFluid
+ * AUTHORS OF THIS PROJECT : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev.
+ * FILE NAME               : GLTestScene.cxx
+ * FILE AUTHORS            : Serkov Alexander.
+ * PURPOSE                 : Class that realizes render of scene.
  *
- * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * No part of this file may be changed and used without
+ * agreement of authors of this project.
  */
 
 #include "../src/core/Core.h"
@@ -22,53 +25,40 @@ using namespace unreal_fluid;
 
 class GlTestScene : public Scene {
 public:
-  std::unique_ptr<render::RenderObject> sphere;
-  std::unique_ptr<render::RenderObject> plane;
-  std::unique_ptr<render::RenderObject> cube;
-  std::unique_ptr<render::RenderObject> triangle;
+  render::RenderObject *sphere;
+  render::RenderObject *plane;
+  render::RenderObject *cube;
+  render::RenderObject *triangle;
 
   utils::Timer timer;
 
   explicit GlTestScene(const compositor::SceneCompositor * compositor) : Scene(compositor) {
-    sphere = std::make_unique<render::RenderObject>();
-    sphere->modelMatrix =
-            mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
-            mat4::translation({-.75f, 0.f, -5.f});
-    sphere->mesh = render::mesh::Sphere(.5f, 50, 50);
+    render::mesh::Sphere sphereMesh(.5f, 50, 50);
+
+    sphere = new render::RenderObject();
+    sphere->modelMatrix = mat4::rotation(0.f, {0.f, 0.f, 1.f}).
+                          withTranslation({-.75f, 0.f, -5.f});
+    sphere->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&sphereMesh);
     sphere->material = render::material::Water();
-    objects.push_back(new AbstractObject{nullptr, {sphere.get()}});
+    objects.push_back(new AbstractObject{nullptr, {sphere}});
 
-    plane = std::make_unique<render::RenderObject>();
-    plane->mesh = render::mesh::Plane(300, 300, 50, 50);
-    plane->modelMatrix =
-            mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
-            mat4::translation({0.f, -1.f, -5.f});
+    render::mesh::Plane planeMesh(300, 300, 50, 50);
+    plane = new render::RenderObject();
+    plane->modelMatrix = mat4::rotation(0.f, {0.f, 0.f, 1.f}).
+                         withTranslation({0.f, -1.f, -5.f});
+    plane->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&planeMesh);
     plane->material = render::material::CyanPlastic();
-    objects.push_back(new AbstractObject{nullptr, {plane.get()}});
+    objects.push_back(new AbstractObject{nullptr, {plane}});
 
-    cube = std::make_unique<render::RenderObject>();
-    cube->mesh = render::mesh::Cube(.5f);
-    cube->modelMatrix =
-            mat4::rotation(0.f, {0.f, 0.f, 1.f}) *
-            mat4::translation({.75f, 0.f, -5.f});
+    render::mesh::Cube cubeMesh(1.f);
+    cube = new render::RenderObject();
+    cube->modelMatrix = mat4::rotation(0.f, {0.f, 0.f, 1.f}).
+                        withTranslation({.75f, 0.f, -5.f});
+    cube->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&cubeMesh);
     cube->material = render::material::Ruby();
-    objects.push_back(new AbstractObject{nullptr, {cube.get()}});
+    objects.push_back(new AbstractObject{nullptr, {cube}});
 
-    /*
-    triangle = new render::RenderObject();
-    triangle->mesh = render::mesh::BasicMesh(
-            {
-              {{0, 0, 0}},
-              {{1, 1, 1}},
-              {{1, 2, 3}}
-              },
-            {0, 1, 2});
-    triangle->material = render::material::MaterialFactory::createMaterial(
-            render::material::MaterialFactory::MaterialType::RED_PLASTIC
-    );
-    //*/
-    auto *tree = new render::RenderObject();
-    tree->loadFromFile("Lowpoly_tree_sample.obj");
+    render::RenderObject *tree = new render::RenderObject("Lowpoly_tree_sample.obj");
 
     for (int i = 0; i < 250; i++) {
       vec3f position = {(rand() % 300 - 150) / 3.0f, -1, -5.f + (rand() % 300 - 150) / 3.0f};
@@ -79,18 +69,17 @@ public:
       }
 
       auto *object = new render::RenderObject();
-      object->mesh = tree->mesh;
-      object->modelMatrix =
-              mat4::rotation(rand() % 360, {0.f, 1.f, 0.f}) *
-              mat4::scale((rand() % 50 + 50) / 200.f) *
-              mat4::translation(position);
+      object->modelMatrix = mat4::rotation(rand() % 360, {0.f, 1.f, 0.f}).
+                            withScale((rand() % 50 + 50) / 200.f).
+                            withTranslation(position);
+      object->bakedMesh = tree->bakedMesh;
       object->material = render::material::Ruby();
+
       objects.push_back(new AbstractObject{nullptr, {object}});
     }
 
     delete tree;
-    tree = new render::RenderObject();
-    tree->loadFromFile("lowpolytree.obj");
+    tree = new render::RenderObject("lowpolytree.obj");
 
     for (int i = 0; i < 250; i++) {
       vec3f position = {(rand() % 300 - 150) / 3.0f, 1, -5.f + (rand() % 300 - 150) / 3.0f};
@@ -100,12 +89,12 @@ public:
         continue;
       }
 
+
       auto *object = new render::RenderObject();
-      object->mesh = tree->mesh;
-      object->modelMatrix =
-              mat4::rotation(rand() % 360, {0.f, 1.f, 0.f}) *
-              mat4::scale((rand() % 50 + 50) / 50.f) *
-              mat4::translation(position);
+      object->modelMatrix = mat4::rotation(rand() % 360, {0.f, 1.f, 0.f}).
+                            withScale((rand() % 50 + 50) / 50.f).
+                            withTranslation(position);
+      object->bakedMesh = tree->bakedMesh;
       object->material = render::material::Emerald();
       objects.push_back(new AbstractObject{nullptr, {object}});
     }
@@ -117,12 +106,12 @@ public:
     auto time = utils::Timer::getCurrentTimeAsDouble();
 
     sphere->modelMatrix =
-            mat4::rotationY((float)std::sin(time / 10) * 100) *
-            mat4::translation({-.75f, 0.f, -5.f});
+            mat4::rotationY((float)std::sin(time / 10) * 100).
+            withTranslation({-.75f, 0.f, -5.f});
 
     cube->modelMatrix =
-            mat4::rotationY((float)-std::sin(time / 10) * 100) *
-            mat4::translation({.75f, 0.f, -5.f});
+            mat4::rotationY((float)-std::sin(time / 10) * 100).
+            withTranslation({.75f, 0.f, -5.f});
   }
 
   ~GlTestScene() override = default;
