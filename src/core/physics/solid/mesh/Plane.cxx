@@ -19,7 +19,7 @@ using namespace unreal_fluid::physics::solid;
 Plane::Plane(double height, double width, vec3 position, vec3 normal, vec3 right) : ISolid(position),
                                                                                     width(width),
                                                                                     height(height) {
-  this->normal = normal.normalize();
+  this->normal = normal.normalized();
   front = normal.cross(right);
   front.normalizeSelf();
   this->right = normal.cross(front);

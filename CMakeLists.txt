@@ -132,7 +132,8 @@ add_executable(
         # addons/flag_addon/spring_constraint/SpringConstraint.cxx
         # addons/flag_addon/flag/Flag.cxx
 
-        # Not sorted. Yet.....
+        # Not sorted.
+        # TODO: Sort me, plz :3
 
         src/utils/math/Line2D.cxx
 )
@@ -141,4 +142,4 @@ message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/sub_programs/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/sub_programs/)
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/objects/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/objects/)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets/)

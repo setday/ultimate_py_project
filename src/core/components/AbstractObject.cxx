@@ -48,7 +48,8 @@ void AbstractObject::parse() {
 
         renderObject->material = render::material::Water();
         auto r = particles[pos]->radius;
-        renderObject->mesh = render::mesh::Sphere(float(r), 10, 10);
+        auto mesh = render::mesh::Sphere(float(r), 10, 10);
+        renderObject->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&mesh);
         renderObjects.push_back(renderObject);
       }
 
@@ -64,7 +65,8 @@ void AbstractObject::parse() {
 
       renderObject->material = render::material::Bronze();
       auto r = solidSphere.radius;
-      renderObject->mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
+      auto mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
+      renderObject->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&mesh);
       renderObjects.push_back(renderObject);
     }
 
@@ -76,10 +78,10 @@ void AbstractObject::parse() {
 
     for (size_t pos = renderObjects.size(); pos < triangles.size(); ++pos) {
       const auto &triangle = triangles[pos];
-      auto renderObject = new render::RenderObject{
-              .mesh = render::mesh::BasicMesh({triangle.v1, triangle.v2, triangle.v3}, {0, 1, 2}),
-              .material = render::material::GreenPlastic(),
-      };
+      auto renderObject = new render::RenderObject();
+      auto mesh = render::mesh::BasicMesh({triangle.v1, triangle.v2, triangle.v3}, {0, 1, 2});
+      renderObject->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&mesh);
+      renderObject->material = render::material::GreenPlastic();
       renderObjects.push_back(renderObject);
     }
   } else if (type == physics::IPhysicalObject::Type::SOLID_PLANE) {
@@ -90,7 +92,8 @@ void AbstractObject::parse() {
       auto renderObject = new render::RenderObject;
       renderObject->material = render::material::Ruby();
       renderObject->material.diffuseColor = {0.08627f, 0.819607f, 0.20392f};
-      renderObject->mesh = render::mesh::Plane(plane.width, plane.height);
+      auto mesh = render::mesh::Plane(plane.width, plane.height);
+      renderObject->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&mesh);
       renderObjects.push_back(renderObject);
     }
 
