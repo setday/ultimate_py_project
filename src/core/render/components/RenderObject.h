@@ -30,7 +30,7 @@ namespace unreal_fluid::render {
 
     std::shared_ptr<mesh::BakedMesh> bakedMesh;
     material::BasicMaterial material;
-    Texture *textures[4];
+    Texture *textures[4] = {nullptr, nullptr, nullptr, nullptr};
     ShaderProgram *shaderProgram = render::DefaultShaderManager::GetDefaultProgram();
 
     int isEmitter = 0; /// TODO: remove this field
