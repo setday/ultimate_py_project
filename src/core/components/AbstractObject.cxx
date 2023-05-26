@@ -33,7 +33,7 @@ void parseGasContainer2d(physics::IPhysicalObject *container2D, std::vector<rend
   auto &cells = *static_cast<std::vector<std::vector<physics::gas::GasCell>> *>(data);
 
   int renderObjectPointer = 0;
-  const float cubeSize = 0.03;
+  const float cubeSize = 0.06;
 
   int rows = cells.size();
   int columns = cells[0].size();
@@ -44,12 +44,11 @@ void parseGasContainer2d(physics::IPhysicalObject *container2D, std::vector<rend
       const auto &cell = cellRow[col];
 
       if (renderObjectPointer >= renderObjects.size()) {
-        auto cube = render::mesh::Cube(cubeSize);
+        auto cube = render::mesh::Cube(cubeSize, vec3{col - columns * 0.5f, row - rows * 0.5f, 0} * cubeSize);
 
         auto renderObject = new render::RenderObject;
         renderObject->material = render::material::Debug();
         renderObject->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&cube);
-        renderObject->modelMatrix = mat4::translation(vec3{col - columns * 0.5f, row - rows * 0.5f, 0} * cubeSize * 2);
         renderObjects.push_back(renderObject);
       }
 
