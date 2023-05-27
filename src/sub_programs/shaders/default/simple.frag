@@ -44,7 +44,7 @@ void main()
 
     color += ambientColor * 0.8 + (diffuseColor * diffuse + specularColor * specular) * lightColor;
 
-    lightDirection = normalize(vec3(1.0, -1.0, 1.0));
+    lightDirection = normalize(vec3(0.0, 0.0, 1.0));
     reflectDirection = reflect(lightDirection, normal);
 
     diffuse = max(dot(normal, -lightDirection), 0.0);

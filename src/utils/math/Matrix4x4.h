@@ -171,6 +171,10 @@ template<typename T>
                        0, 0, 0, 1);
     }
 
+    Matrix4x4 withRotationY(T angle) const {
+      return *this * rotationY(angle);
+    }
+
     static Matrix4x4 rotationZ(T angle) {
       return Matrix4x4(cos(angle), sin(angle), 0, 0,
                        -sin(angle), cos(angle), 0, 0,

@@ -121,14 +121,17 @@ namespace unreal_fluid::math {
       return Vector3(x * vec.x, y * vec.y, z * vec.z);
     }
 
+    [[deprecated("Use static dot function instead")]]
     T dot(const Vector3 &v) const {
       return x * v.x + y * v.y + z * v.z;
     }
 
+    [[deprecated("Use static cross function instead")]]
     Vector3 cross(const Vector3 &v) const {
       return Vector3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
     }
 
+    [[deprecated("Use static project function instead")]]
     T project(const Vector3 &v) {
       if (len() == 0) return 0;
       return this->dot(v) / v.len();
@@ -226,7 +229,7 @@ namespace unreal_fluid::math {
     /// @return cosine of angle between two vectors
     /// @attention cos(angle) = (first * second) / (|first| * |second|)
     static double cos(const Vector3 &first, const Vector3 &second) {
-      assert(!isZero(first) && !isZero(second));
+      assert(!first.isZero() && !second.isZero());
 
       return dot(first, second) / (first.len() * second.len());
     }
@@ -237,7 +240,7 @@ namespace unreal_fluid::math {
     /// @return projection of vector to another vector
     /// @attention projection = (from * to) / (|to| * |to|) * to
     static Vector3 project(const Vector3 &from, const Vector3 &to) {
-      assert(!isZero(to));
+      assert(!to.isZero());
 
       return to * (dot(from, to) / to.len2());
     }
@@ -261,7 +264,7 @@ namespace unreal_fluid::math {
     static Vector3 normalizedCross(const Vector3 &forward, const Vector3 &left) {
       Vector3 result = cross(forward, left);
 
-      assert(!isZero(result));
+      assert(!result.isZero());
 
       return result.normalizeSelf();
     }

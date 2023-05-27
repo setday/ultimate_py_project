@@ -117,7 +117,8 @@ add_executable(
         #scenes/GlTestScene.cxx
         #scenes/Control.cxx
         scenes/ClPhysicsScene.cxx
-
+        scenes/d5a9fde3c505f2c80d6d548c3c9a93c5.cxx
+        
         scenes/SceneLoader.cxx
 
         # Core
