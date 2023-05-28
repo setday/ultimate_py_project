@@ -16,16 +16,14 @@
 
 #include "../../PhysicsDefinitions.h"
 #include "../IFluidContainer.h"
-#include "cl_helper/ClInteractionSolver.h"
-
+#include "../CellsDistributor.h"
+#include "InteractionSolver.h"
 
 namespace unreal_fluid::physics::fluid {
-    namespace helper{
-        class ClInteractionSolver;
-    }
     class AdvancedFluidContainer : public IFluidContainer {
     private:
-        helper::ClInteractionSolver* interactionSolver;
+      double k;
+      InteractionSolver interactionSolver;
     public:
         explicit AdvancedFluidContainer(FluidDescriptor descriptor);
         ~AdvancedFluidContainer() override;

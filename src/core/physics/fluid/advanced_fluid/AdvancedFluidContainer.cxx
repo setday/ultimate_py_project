@@ -19,12 +19,10 @@
 unreal_fluid::physics::fluid::AdvancedFluidContainer::AdvancedFluidContainer(
         unreal_fluid::physics::fluid::FluidDescriptor descriptor
 ) {
-  interactionSolver = new helper::ClInteractionSolver(particles);
-  //addParticle({-0.5, 1, -0.2}, {0, 0, 0}, 0.25, 1);
+  k = 0.7;
 }
 
 unreal_fluid::physics::fluid::AdvancedFluidContainer::~AdvancedFluidContainer() {
-  delete interactionSolver;
   for (auto &particle: particles) {
     delete particle;
   }
@@ -61,7 +59,7 @@ void unreal_fluid::physics::fluid::AdvancedFluidContainer::flows() {
 }
 
 void unreal_fluid::physics::fluid::AdvancedFluidContainer::interact() {
-  interactionSolver->interact();
+  interactionSolver.interact(particles, k);
 }
 
 void unreal_fluid::physics::fluid::AdvancedFluidContainer::addExternalForces(double dt) {

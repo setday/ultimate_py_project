@@ -45,14 +45,16 @@ void AbstractObject::parse() {
       if (pos >= renderObjects.size()) {
 
         auto renderObject = new render::RenderObject;
-
         renderObject->material = render::material::Water();
+        if (type == physics::IPhysicalObject::Type::FLUID_CONTAINER_SIMPLE){
+          renderObject->material.ambientColor.x = 0.2f;
+          renderObject->material.diffuseColor.x = 0.2f;
+        }
         auto r = particles[pos]->radius;
         auto mesh = render::mesh::Sphere(float(r), 10, 10);
         renderObject->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&mesh);
         renderObjects.push_back(renderObject);
       }
-
       renderObjects[pos]->modelMatrix = mat4::translation(particles[pos]->position);
     }
   } else if (type == physics::IPhysicalObject::Type::SOLID_SPHERE) {

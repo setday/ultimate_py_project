@@ -26,7 +26,7 @@ public:
 
     dt = 0.003;
 
-    auto simpleFluid = new fluid::SimpleFluidContainer({});
+    auto simpleFluid = new fluid::AdvancedFluidContainer({});
     objects.push_back(new AbstractObject(simpleFluid));
 
     solid::Triangle t1{{0.5, 0, 0}, {-0.5, 0, -0.5}, {-0.1, 0, 0.5}};

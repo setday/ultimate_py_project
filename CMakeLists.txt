@@ -94,11 +94,10 @@ add_executable(
 
         src/core/physics/PhysicsSimulator.cxx
         src/core/physics/CollisionSolver.cxx
-
-        src/core/physics/fluid/advanced_fluid/cl_helper/ClInteractionSolver.cpp
+        
         src/core/physics/fluid/advanced_fluid/AdvancedFluidContainer.cxx
 
-        src/core/physics/fluid/simple_fluid/CellsDistributor.cxx
+        src/core/physics/fluid/CellsDistributor.cxx
         src/core/physics/fluid/simple_fluid/SimpleFluidContainer.cxx
 
         src/core/components/AbstractObject.cxx
@@ -137,7 +136,7 @@ add_executable(
         # TODO: Sort me, plz :3
 
         src/utils/math/Line2D.cxx
-)
+        src/core/physics/fluid/advanced_fluid/InteractionSolver.cxx src/core/physics/fluid/advanced_fluid/InteractionSolver.h)
 
 message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})

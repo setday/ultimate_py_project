@@ -16,13 +16,13 @@
 
 #include "../../PhysicsDefinitions.h"
 #include "../../PhysicsSimulator.h"
+#include "../CellsDistributor.h"
 #include "../IFluidContainer.h"
-#include "CellsDistributor.h"
 
 namespace unreal_fluid::physics::fluid {
   class SimpleFluidContainer : public IFluidContainer {
   private:
-    double k = 0.02;
+    double k;
     CellsDistributor distributor;
 
   public:
