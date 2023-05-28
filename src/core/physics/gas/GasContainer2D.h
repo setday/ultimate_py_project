@@ -16,8 +16,8 @@
 
 #pragma once
 
-#include "GasCell.h"
 #include "../Simulator.h"
+#include "GasCell.h"
 
 namespace unreal_fluid::physics::gas {
   class GasContainer2d : public IPhysicalObject {
@@ -37,8 +37,7 @@ namespace unreal_fluid::physics::gas {
     /// @brief Calculate flow between two cells.
     /// @param cell1 first cell (potential source)
     /// @param cell2 second cell (potential target)
-    [[nodiscard]]
-    double calculateFlow(const GasCell &cell1, const GasCell &cell2) const;
+    [[nodiscard]] double calculateFlow(const GasCell &cell1, const GasCell &cell2) const;
     /// @brief Calculate flow between two cells and save it in cells.
     /// @param cell1 first cell
     /// @param cell2 second cell
@@ -58,9 +57,9 @@ namespace unreal_fluid::physics::gas {
     /// @brief Diffuse gas between two cells.
     /// @param cell1 first cell
     /// @param cell2 second cell
-    void diffuseTwoCells(GasCell &cell1, GasCell &cell2);
+    void diffuseTwoCells(GasCell &cell1, GasCell &cell2, double dt);
     /// @brief Diffuse gas in container.
-    void diffuseCells();
+    void diffuseCells(double dt);
 
   public:
     /* abstract class implementation */

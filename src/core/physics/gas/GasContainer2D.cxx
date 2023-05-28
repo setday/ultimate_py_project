@@ -50,7 +50,7 @@ void GasContainer2d::calculateFlows(double dt) {
       auto &cell = _storage[row][column];
       if (row < _height - 1) calculateAndSaveFlow(cell, _storage[row + 1][column]);
       if (column < _width - 1) calculateAndSaveFlow(cell, _storage[row][column + 1]);
-      cell.particlesFlow = std::min(cell.targetFlow, cell.amountOfGas);
+      cell.particlesFlow = dt * std::min(cell.targetFlow, cell.amountOfGas);
       _temporaryStorage[row][column] = cell;
     }
   }
@@ -100,21 +100,21 @@ void *GasContainer2d::getData() {
 void GasContainer2d::simulate(double dt) {
   calculateFlows(dt);
   applyFlows(dt);
-  diffuseCells();
+  diffuseCells(dt);
 }
 
-void GasContainer2d::diffuseTwoCells(GasCell &cell1, GasCell &cell2) {
-  double slicingPart = std::min(cell1.amountOfGas, cell2.amountOfGas) / 10;
+void GasContainer2d::diffuseTwoCells(GasCell &cell1, GasCell &cell2, double dt) {
+  double slicingPart = dt * std::min(cell1.amountOfGas, cell2.amountOfGas);
   auto cell_1 = cell1.slice(slicingPart), cell_2 = cell2.slice(slicingPart);
   cell1.add(cell_2), cell2.add(cell_1);
 }
 
-void GasContainer2d::diffuseCells() {
+void GasContainer2d::diffuseCells(double dt) {
   for (size_t row = 0; row < _height; ++row) {
     for (size_t column = 0; column < _width; ++column) {
       auto &cell = _storage[row][column];
-      if (row < _height - 1) diffuseTwoCells(cell, _storage[row + 1][column]);
-      if (column < _width - 1) diffuseTwoCells(cell, _storage[row][column + 1]);
+      if (row < _height - 1) diffuseTwoCells(cell, _storage[row + 1][column], dt);
+      if (column < _width - 1) diffuseTwoCells(cell, _storage[row][column + 1], dt);
     }
   }
 }
