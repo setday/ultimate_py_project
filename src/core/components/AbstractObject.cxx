@@ -13,12 +13,12 @@
  */
 
 #include "AbstractObject.h"
-#include "../physics/solid/mesh/SolidMesh.h"
-#include "../src/core/render/components/material/MaterialPresets.h"
-#include "../src/core/render/components/mesh/presets/Sphere.h"
-#include "../src/core/render/components/mesh/presets/Plane.h"
-#include "../physics/solid/sphere/SolidSphere.h"
 #include "../physics/solid/mesh//Plane.h"
+#include "../physics/solid/mesh/SolidMesh.h"
+#include "../physics/solid/sphere/SolidSphere.h"
+#include "../src/core/render/components/material/MaterialPresets.h"
+#include "../src/core/render/components/mesh/presets/Plane.h"
+#include "../src/core/render/components/mesh/presets/Sphere.h"
 
 using namespace unreal_fluid;
 
@@ -36,7 +36,7 @@ void AbstractObject::parse() {
   void *data = physicalObject->getData();
 
   if (type == physics::IPhysicalObject::Type::FLUID_CONTAINER_SIMPLE ||
-  type == physics::IPhysicalObject::Type::FLUID_CONTAINER_ADVANCED) {
+      type == physics::IPhysicalObject::Type::FLUID_CONTAINER_ADVANCED) {
 
     auto &particles = *static_cast<std::vector<physics::fluid::Particle *> *>(data);
 
@@ -46,7 +46,7 @@ void AbstractObject::parse() {
 
         auto renderObject = new render::RenderObject;
         renderObject->material = render::material::Water();
-        if (type == physics::IPhysicalObject::Type::FLUID_CONTAINER_SIMPLE){
+        if (type == physics::IPhysicalObject::Type::FLUID_CONTAINER_SIMPLE) {
           renderObject->material.ambientColor.x = 0.2f;
           renderObject->material.diffuseColor.x = 0.2f;
         }

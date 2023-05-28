@@ -116,8 +116,7 @@ add_executable(
         #scenes/GlTestScene.cxx
         #scenes/Control.cxx
         scenes/ClPhysicsScene.cxx
-        scenes/d5a9fde3c505f2c80d6d548c3c9a93c5.cxx
-        
+
         scenes/SceneLoader.cxx
 
         # Core
@@ -136,7 +135,9 @@ add_executable(
         # TODO: Sort me, plz :3
 
         src/utils/math/Line2D.cxx
-        src/core/physics/fluid/advanced_fluid/InteractionSolver.cxx src/core/physics/fluid/advanced_fluid/InteractionSolver.h)
+        src/core/physics/fluid/advanced_fluid/InteractionSolver.cxx
+        src/core/components/Parser.cxx
+)
 
 message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})

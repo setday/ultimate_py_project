@@ -139,7 +139,7 @@ bool CollisionSolver::edgeCollide(fluid::Particle *p, vec3f p1, vec3f p2, double
   vec3f n = p->position - pProj;
   n.normalizeSelf();
   p->position += (p->radius - d) * n;
-  vec3f vN = n * p->velocity.project(n);
+  vec3f vN = n * math::Vector3<float>::project(p->velocity, n);
   p->velocity -= vN;
   vN *= -k;
   p->velocity += vN;
