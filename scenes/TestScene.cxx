@@ -12,10 +12,6 @@
 * authors of this project.
 */
 
-#include "../src/core/Core.h"
-#include "../src/core/components/AbstractObject.h"
-#include "../src/core/components/scene/Scene.h"
-
 using namespace unreal_fluid;
 
 class TestScene : public Scene {

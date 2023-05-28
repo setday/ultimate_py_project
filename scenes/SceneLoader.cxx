@@ -16,18 +16,17 @@
 
 #include "../src/core/Core.h"
 #include "../src/core/components/scene/IScene.h"
-
 #include "Control.cxx"
-#include "TestScene.cxx"
 #include "GLTestScene.cxx"
-#include "MeshScene.cxx"
 #include "GasScene2D.cxx"
+#include "MeshScene.cxx"
+#include "TestScene.cxx"
 
 using namespace unreal_fluid;
 
 class SceneLoader : public IScene {
 public:
-  explicit SceneLoader(compositor::SceneCompositor * compositor) {
+  explicit SceneLoader(compositor::SceneCompositor *compositor) {
     Logger::logInfo("Loading scenes...");
 
     compositor->loadScene<Control>();
@@ -41,6 +40,7 @@ public:
   void update() override {
     // There is no need to update this scene because it is only for loading other scenes and then unloading itself.
   }
+
   void render() override {
     // There is no need to render this scene because it is only for loading other scenes and then unloading itself.
   }
