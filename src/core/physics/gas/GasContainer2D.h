@@ -55,6 +55,10 @@ namespace unreal_fluid::physics::gas {
 
     void recalc(double dt);
 
+    void diffuse();
+
+    void diffuse(GasCell &cell1, GasCell &cell2);
+
     void moveFlow(double dt);
 
     /* abstract class implementation */

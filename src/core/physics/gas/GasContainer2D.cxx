@@ -118,4 +118,21 @@ void *GasContainer2d::getData() {
 void GasContainer2d::simulate(double dt) {
   recalc(dt);
   moveFlow(dt);
+  diffuse();
+}
+
+void GasContainer2d::diffuse(GasCell &cell1, GasCell &cell2) {
+  double slicingPart = std::min(cell1.amountOfGas, cell2.amountOfGas) / 4;
+  auto cell_1 = cell1.slice(slicingPart), cell_2 = cell2.slice(slicingPart);
+  cell1.add(cell_2), cell2.add(cell_1);
+}
+
+void GasContainer2d::diffuse() {
+  for (size_t row = 0; row < height; ++row) {
+    for (size_t column = 0; column < width; ++column) {
+      auto &cell = storage[row][column];
+      if (row < height - 1) diffuse(cell, storage[row + 1][column]);
+      if (column < width - 1) diffuse(cell, storage[row][column + 1]);
+    }
+  }
 }
