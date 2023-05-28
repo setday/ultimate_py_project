@@ -1,15 +1,16 @@
 /***************************************************************
  * Copyright (C) 2023
+ *    UnrealFluid Team (https://github.com/setday/unreal_fluid) and
  *    HSE SPb (Higher school of economics in Saint-Petersburg).
  ***************************************************************/
 
-/* PROJECT   : ultimate_py_project
- * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Renderer.h
- * PURPOSE   : ${PURPOSE}
+/* PROJECT                 : UnrealFluid
+ * AUTHORS OF THIS PROJECT : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev.
+ * FILE NAME               : Renderer.h
+ * FILE AUTHORS            : Serkov Alexander.
  *
- * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * No part of this file may be changed and used without
+ * agreement of authors of this project.
  */
 
 #pragma once
@@ -35,15 +36,18 @@ namespace unreal_fluid::render {
   private:
     std::unique_ptr<ShaderManager> _shaderManager;
     RenderMode _renderMode = RenderMode::SOLID;
-    GLuint _fvbo = -1;    // frame vertex buffer object
-    GLuint _fvao = -1;    // frame vertex array object
-    GLuint _vbo = -1;     // vertex buffer object for rendering objects
-    GLuint _vao = -1;     // vertex array object for rendering objects
-    GLuint _ibo = -1;     // index buffer object for rendering objects
-    GLuint _rtubo = -1;   // ray tracing uniform buffer object
-    GLuint _fbo = -1;     // frame buffer object
-    GLuint _fbto[6]{};    // frame buffer texture object: 0 - color, 1 - depth, 2 - position, 3 - normal, 4 - reserved, 5 - reserved
+    GLuint _fvbo = -1;                  // frame vertex buffer object
+    GLuint _fvao = -1;                  // frame vertex array object
+    GLuint _vbo = -1;                   // vertex buffer object for rendering objects
+    GLuint _vao = -1;                   // vertex array object for rendering objects
+    GLuint _ibo = -1;                   // index buffer object for rendering objects
+    GLuint _rtubo = -1;                 // ray tracing uniform buffer object
+    GLuint _fbo = -1;                   // frame buffer object
+    std::unique_ptr<Texture> _fbdt;     // frame buffer depth texture
+    std::unique_ptr<Texture> _fbto[5];  // 0 - color, 1 - position, 2 - normal, 3 - reserved, 4 - reserved
     std::vector<const RenderObject *> _objectsToRender;
+
+    utils::Timer _timer{};
 
   public:
     Camera camera;
@@ -81,15 +85,14 @@ namespace unreal_fluid::render {
     /// Bind camera to shader.
     /// @param shader Shader to bind camera to.
     void bindCameraToShader(const ShaderProgram *shader) const;
-    /// Bind object parameters to shader.
-    /// @param shader Shader to bind object to.
-    /// @param object Object to bind.
-    void bindObjectToShader(const ShaderProgram *shader, const RenderObject *object) const;
 
     /// Draw vertex array.
     /// @param vertices Vertex array.
     /// @param indices Index array.
     void drawVertexes(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &indices = {});
+
+    /// Draw screen quad.
+    void drawScreenQuad() const;
 
     /// Render all objects in Ray Tracing mode.
     void drawRT();

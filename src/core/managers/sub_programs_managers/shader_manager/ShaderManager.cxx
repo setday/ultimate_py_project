@@ -1,15 +1,17 @@
 /***************************************************************
- * Copyright (C) 2023
- *    HSE SPb (Higher school of economics in Saint-Petersburg).
- ***************************************************************/
+* Copyright (C) 2023
+*    UnrealFluid Team (https://github.com/setday/unreal_fluid) and
+*    HSE SPb (Higher school of economics in Saint-Petersburg).
+***************************************************************/
 
-/* PROJECT   : ultimate_py_project
- * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : ShaderManager.cxx
- * PURPOSE   : Compile and store shaders
+/* PROJECT                 : UnrealFluid
+ * AUTHORS OF THIS PROJECT : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev.
+ * FILE NAME               : ShaderManager.cxx
+ * FILE AUTHORS            : Serkov Alexander.
+ * PURPOSE                 : Compile and store shaders
  *
- * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * No part of this file may be changed and used without
+ * agreement of authors of this project.
  */
 
 #include <fstream>
@@ -73,8 +75,8 @@ const Shader *ShaderManager::LoadShader(std::string_view path) {
   return _shaders.back().get();
 }
 
-const ShaderProgram *ShaderManager::CreateProgram(const std::vector<const Shader *> &shaders) {
-  auto program = std::make_unique<ShaderProgram>();
+ShaderProgram *ShaderManager::CreateProgram(const std::vector<const Shader *> &shaders) {
+  std::unique_ptr<ShaderProgram> program = std::make_unique<ShaderProgram>();
 
   for (auto *shader : shaders) {
     program->attachShader(shader);
@@ -146,12 +148,12 @@ void ShaderManager::ReloadShaders() {
   }
 }
 
-const ShaderProgram *DefaultShaderManager::_defaultProgram = nullptr;
-const ShaderProgram *DefaultShaderManager::_rtProgram = nullptr;
-const ShaderProgram *DefaultShaderManager::_postProcessingProgram = nullptr;
+ShaderProgram *DefaultShaderManager::_defaultProgram = nullptr;
+ShaderProgram *DefaultShaderManager::_rtProgram = nullptr;
+ShaderProgram *DefaultShaderManager::_postProcessingProgram = nullptr;
 DefaultShaderManager DefaultShaderManager::_instance = DefaultShaderManager();
 
-const ShaderProgram *DefaultShaderManager::GetDefaultProgram() {
+ShaderProgram *DefaultShaderManager::GetDefaultProgram() {
   if (_defaultProgram != nullptr)
     return _defaultProgram;
 
@@ -170,7 +172,7 @@ const ShaderProgram *DefaultShaderManager::GetDefaultProgram() {
   return _defaultProgram;
 }
 
-const ShaderProgram *DefaultShaderManager::GetRayTracingProgram() {
+ShaderProgram *DefaultShaderManager::GetRayTracingProgram() {
   if (_rtProgram != nullptr)
     return _rtProgram;
 
@@ -189,7 +191,7 @@ const ShaderProgram *DefaultShaderManager::GetRayTracingProgram() {
   return _rtProgram;
 }
 
-const ShaderProgram *DefaultShaderManager::GetPostProcessingProgram() {
+ShaderProgram *DefaultShaderManager::GetPostProcessingProgram() {
   if (_postProcessingProgram != nullptr)
     return _postProcessingProgram;
 

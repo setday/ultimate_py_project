@@ -1,15 +1,16 @@
 /***************************************************************
  * Copyright (C) 2023
+ *    UnrealFluid Team (https://github.com/setday/unreal_fluid) and
  *    HSE SPb (Higher school of economics in Saint-Petersburg).
  ***************************************************************/
 
-/* PROJECT   : ultimate_py_project
- * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Camera.h
- * PURPOSE   : ${PURPOSE}
+/* PROJECT                 : UnrealFluid
+ * AUTHORS OF THIS PROJECT : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev.
+ * FILE NAME               : Camera.h
+ * FILE AUTHORS            : Serkov Alexander.
  *
- * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * No part of this file may be changed and used without
+ * agreement of authors of this project.
  */
 
 #pragma once
@@ -31,6 +32,9 @@ namespace unreal_fluid::render {
     float _fov    = 70.f;
     float _near   = 0.01f;
     float _far    = 1000.f;
+
+    float _yaw   = float(math::PI);
+    float _pitch = 0.f;
 
     mat4 _view{};
     mat4 _projection{};
@@ -67,7 +71,6 @@ namespace unreal_fluid::render {
 
     /// Set position of camera with interpolation
     /// @param position - position of camera
-    /// @attention - interpolation is not working. You should use setPositionHard.
     void setPosition(const vec3f &position);
 
     /// Set position of camera without interpolation
@@ -81,14 +84,17 @@ namespace unreal_fluid::render {
     /// @return direction of camera
     [[nodiscard]] vec3f getDirection() const;
 
+    /// Get angles of camera
+    /// @return angles of camera. pitch - x. yaw - y
+    [[nodiscard]] vec2f getAngles() const;
+
     /// Set direction of camera
     /// @param direction - direction of camera
     void setDirection(const vec3f &direction);
 
-    // Set direction of camera
-    /// @param yaw - yaw angle
-    /// @param pitch - pitch angle
-    void setDirection(float yaw, float pitch);
+    /// Set direction of camera
+    /// @param angles - angles of camera. pitch - x. yaw - y
+    void setDirection(const vec2f &angles);
 
     /// Get resolution of camera
     /// @return resolution of camera
@@ -118,6 +124,10 @@ namespace unreal_fluid::render {
     /// Get up vector
     /// @return up vector
     [[nodiscard]] vec3f getUp() const;
+
+    /// Set up vector
+    /// @param up - up vector
+    void setUp(const vec3f &up);
   };
 } // unreal_fluid::render
 

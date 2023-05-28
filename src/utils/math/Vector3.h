@@ -107,7 +107,7 @@ namespace unreal_fluid::math {
 
     [[nodiscard]] double operator!() const { return len(); }
 
-    Vector3 normalize() const {
+    Vector3 normalized() const {
       assert(len2() != 0);
       return *this / len();
     }
@@ -201,6 +201,148 @@ namespace unreal_fluid::math {
 
     friend bool operator!=(const Vector3 &vec, const Vector3 &other) {
       return !(vec == other);
+    }
+
+    /* static functions */
+
+    /// @brief Get vector with all components set to 0
+    static Vector3 zero() {
+      return Vector3(0, 0, 0);
+    }
+
+    /// @brief Get vector with all components set to 1
+    static Vector3 one() {
+      return Vector3(1, 1, 1);
+    }
+
+    /// Check if vector is zero
+    /// @return true if vector is zero, false otherwise
+    bool isZero() const {
+      return x == 0 && y == 0 && z == 0;
+    }
+
+    /// @brief Dot product of two vectors
+    /// @param first - first vector
+    /// @param second - second vector
+    /// @return dot product of two vectors
+    /// @attention (first * second)
+    static T dot(const Vector3 &first, const Vector3 &second) {
+      return first.x * second.x + first.y * second.y + first.z * second.z;
+    }
+
+    /// @brief Cosine of angle between two vectors
+    /// @param first - first vector
+    /// @param second - second vector
+    /// @return cosine of angle between two vectors
+    /// @attention cos(angle) = (first * second) / (|first| * |second|)
+    static double cos(const Vector3 &first, const Vector3 &second) {
+      assert(!isZero(first) && !isZero(second));
+
+      return dot(first, second) / (first.len() * second.len());
+    }
+
+    /// @brief Project vector to another vector
+    /// @param from - vector to project
+    /// @param to - vector to project to
+    /// @return projection of vector to another vector
+    /// @attention projection = (from * to) / (|to| * |to|) * to
+    static Vector3 project(const Vector3 &from, const Vector3 &to) {
+      assert(!isZero(to));
+
+      return to * (dot(from, to) / to.len2());
+    }
+
+    /// @brief Cross product of two vectors
+    /// @param forward - first vector
+    /// @param left - second vector
+    /// @return cross product of two vectors
+    /// @attention (forward x left = up)
+    static Vector3 cross(const Vector3 &forward, const Vector3 &left) {
+      return Vector3(forward.y * left.z - forward.z * left.y,
+                     forward.z * left.x - forward.x * left.z,
+                     forward.x * left.y - forward.y * left.x);
+    }
+
+    /// @brief Normalized cross product of two vectors
+    /// @param forward - first vector
+    /// @param left - second vector
+    /// @return normalized cross product of two vectors
+    /// @attention normalized(forward x left = up)
+    static Vector3 normalizedCross(const Vector3 &forward, const Vector3 &left) {
+      Vector3 result = cross(forward, left);
+
+      assert(!isZero(result));
+
+      return result.normalizeSelf();
+    }
+
+    /// @brief Linear interpolation between two vectors
+    /// @param from - vector to interpolate from
+    /// @param to - vector to interpolate to
+    /// @param t - interpolation coefficient
+    /// @return interpolated vector
+    /// @attention (1 - t) * from + t * to
+    static Vector3 lerp(const Vector3 &from, const Vector3 &to, float t) {
+      return from * (1 - t) + to * t;
+    }
+
+    /// @brief Clamp vector to the given range
+    /// @param vec - vector to clamp
+    /// @param min - minimum value
+    /// @param max - maximum value
+    /// @return clamped vector
+    static Vector3 clamp(const Vector3 &vec, const Vector3 &min, const Vector3 &max) {
+      return Vector3(std::min(std::max(vec.x, min.x), max.x),
+                     std::min(std::max(vec.y, min.y), max.y),
+                     std::min(std::max(vec.z, min.z), max.z));
+    }
+
+    /// @brief Get maximum value of vector
+    /// @param vec - vector to get maximum value from
+    /// @return maximum value
+    static T max(const Vector3 &vec) {
+      return std::max(std::max(vec.x, vec.y), vec.z);
+    }
+
+    /// @brief Get minimum value of vector
+    /// @param vec - vector to get minimum value from
+    /// @return minimum value
+    static T min(const Vector3 &vec) {
+      return std::min(std::min(vec.x, vec.y), vec.z);
+    }
+
+    /// @brief Get vector with maximum values from two vectors
+    /// @param first - first vector
+    /// @param second - second vector
+    /// @return vector with maximum values from two vectors
+    static Vector3 max(const Vector3 &first, const Vector3 &second) {
+      return Vector3(std::max(first.x, second.x),
+                     std::max(first.y, second.y),
+                     std::max(first.z, second.z));
+    }
+
+    /// @brief Get vector with minimum values from two vectors
+    /// @param first - first vector
+    /// @param second - second vector
+    /// @return vector with minimum values from two vectors
+    static Vector3 min(const Vector3 &first, const Vector3 &second) {
+      return Vector3(std::min(first.x, second.x),
+                     std::min(first.y, second.y),
+                     std::min(first.z, second.z));
+    }
+
+    /// @brief Get vector with absolute values
+    /// @param vec - vector to get absolute values from
+    /// @return vector with absolute values
+    static Vector3 abs(const Vector3 &vec) {
+      return Vector3(std::abs(vec.x), std::abs(vec.y), std::abs(vec.z));
+    }
+
+    /// @brief Get vector with sign values
+    /// @param vec - vector to get sign values from
+    /// @return vector with sign values
+    static Vector3 sign(const Vector3 &vec) {
+      return Vector3(std::signbit(vec.x), std::signbit(vec.y), std::signbit(vec.z));
     }
   };
 } // namespace unreal_fluid::math

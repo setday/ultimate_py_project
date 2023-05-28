@@ -10,13 +10,11 @@ uniform ObjectData {
 
 uniform int objectCount;
 
-struct Camera {
+uniform struct Camera {
     vec3 position;
     vec3 direction;
     vec3 up;
-};
-
-uniform Camera camera;
+} camera;
 
 struct Frame {
     int width;
@@ -81,7 +79,7 @@ Intersection intersectSphere(Ray ray, vec3 center, float radius) {
             1.0
         );
     } else {
-        float sqrt_discriminant = mySqrt(discriminant);
+        float sqrt_discriminant = sqrt(discriminant);
         float denom = 2.0 * a;
         float dist = (-b - sqrt_discriminant);
         int normsign = 1;
