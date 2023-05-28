@@ -115,8 +115,17 @@ bool CollisionSolver::edgeCollide(fluid::Particle *p, vec3f p1, vec3f p2, double
   auto paral = p2 - p1;
   paral.normalizeSelf();
 
-  /// TODO : add not on segment projection check
-  vec3f pProj = (p->position - p1).project(paral) * paral + p1; //nearest point from p.position to segment
+  /// TODO bug hazard
+  vec3f pProj = (p->position - p1).project(paral) * paral + p1;
+  double subSeg1 = (pProj - p1).len();
+  double subSeg2 = (pProj - p2).len();
+  if (subSeg1 + subSeg2 > (p2 - p1).len()){
+    if (subSeg1 < subSeg2){
+      pProj = p1;
+    }else{
+      pProj = p2;
+    }
+  }
 
   double d = (p->position - pProj).len();
 
