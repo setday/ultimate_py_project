@@ -27,7 +27,7 @@ GasContainer2d::GasContainer2d(int height, int width, int particle_number) : hei
 
   for (int counter = 0; counter < particle_number; ++counter) {
     int x = rand() % height, y = rand() % width;
-    storage[x][y] = GasCell(rand() % 100, vec3f(rand() % 2, rand() % 2, rand() % 2));
+    storage[x][y] = GasCell(rand() % 100, vec3f(rand() % 100, rand() % 100, rand() % 100));
   }
 }
 
