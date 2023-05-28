@@ -6,7 +6,7 @@
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
  * FILE NAME : GasScene2D.cxx
- * PURPOSE   : scene for basic 2d simulation and render
+ * PURPOSE   : scene for basic 2d gas simulation and render
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.

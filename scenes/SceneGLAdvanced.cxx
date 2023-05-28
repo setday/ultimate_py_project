@@ -18,9 +18,6 @@
 #include "../src/core/components/scene/Scene.h"
 #include "../src/core/render/components/material/MaterialPresets.h"
 #include "../src/core/render/components/mesh/presets/Cube.h"
-#include "../src/core/render/components/mesh/presets/Plane.h"
-#include "../src/core/render/components/mesh/presets/Sphere.h"
-
 using namespace unreal_fluid;
 
 class SceneGLAdvanced : public Scene {

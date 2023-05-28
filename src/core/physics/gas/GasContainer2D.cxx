@@ -25,7 +25,8 @@ GasContainer2d::GasContainer2d(int height, int width, int particle_number) : _he
 
   for (int counter = 0; counter < particle_number; ++counter) {
     int x = rand() % height, y = rand() % width;
-    _storage[x][y] = GasCell(rand() % 100, vec3f(rand() % 2, rand() % 2, rand() % 2));
+
+    _storage[x][y] = GasCell(rand() % 100, vec3f(rand() % 100, rand() % 100, rand() % 100));
   }
 }
 
@@ -103,7 +104,7 @@ void GasContainer2d::simulate(double dt) {
 }
 
 void GasContainer2d::diffuseTwoCells(GasCell &cell1, GasCell &cell2) {
-  double slicingPart = std::min(cell1.amountOfGas, cell2.amountOfGas) / 4;
+  double slicingPart = std::min(cell1.amountOfGas, cell2.amountOfGas) / 10;
   auto cell_1 = cell1.slice(slicingPart), cell_2 = cell2.slice(slicingPart);
   cell1.add(cell_2), cell2.add(cell_1);
 }

@@ -236,7 +236,7 @@ namespace unreal_fluid::math {
     /// @return cosine of angle between two vectors
     /// @attention cos(angle) = (first * second) / (|first| * |second|)
     static double cos(const Vector3 &first, const Vector3 &second) {
-      assert(!isZero(first) && !isZero(second));
+      assert(!isZero(first) && !isZero(second)); /// TODO call to non-static without object argument error
 
       return dot(first, second) / (first.len() * second.len());
     }

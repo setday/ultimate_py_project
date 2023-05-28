@@ -36,7 +36,8 @@ void parseGasContainer2d(physics::IPhysicalObject *container2D, std::vector<rend
   const float cubeSize = 0.06;
 
   int rows = cells.size();
-  int columns = cells[0].size();
+  if (rows == 0) return;
+  int columns = cells.front().size();
 
   for (size_t row = 0; row < rows; ++row) {
     const auto &cellRow = cells[row];
@@ -52,8 +53,8 @@ void parseGasContainer2d(physics::IPhysicalObject *container2D, std::vector<rend
         renderObjects.push_back(renderObject);
       }
 
-      renderObjects[renderObjectPointer++]->material.ambientColor =
-              math::lerp(0.0, 1.0, math::clamp(1.0 - cell.amountOfGas / 100.0, 0.0, 1.0));
+      renderObjects[renderObjectPointer++]->material.ambientColor = cell.color / 100;
+      //              math::lerp(0.0, 1.0, math::clamp(1.0 - cell.amountOfGas / 100.0, 0.0, 1.0));
     }
   }
 }
