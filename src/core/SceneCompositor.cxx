@@ -80,7 +80,7 @@ void SceneCompositor::render() {
             "| FPS: ", 1 / _timer.getAverageTime(), "\n",
             "-------------------------------------------->\n",
             "| Time to render a frame: ", _renderingTimer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms\n",
-            "| Time to simulate a frame: ", _simulationTimer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms\n",
+            "| Time to applyFlow a frame: ", _simulationTimer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms\n",
             "-------------------------------------------->"
             );
     _timer.reset();
