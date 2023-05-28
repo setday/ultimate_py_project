@@ -27,7 +27,9 @@ namespace unreal_fluid::physics::solid {
   public:
     explicit SolidMesh(const std::vector<Triangle> &triangles);
 
-    void simulate(double dt) override{}; // static class
+    void simulate(double dt) override {
+            // There is no need to simulate static objects
+    }; // static class
     Type getType() override;
     void *getData() override;
   };

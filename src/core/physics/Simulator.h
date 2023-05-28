@@ -34,7 +34,7 @@ namespace unreal_fluid::physics {
     void addPhysicalObject(IPhysicalObject *physicalObject);
 
     /// @brief Simulates the scene
-    /// @details calls applyFlow() function of each physical object in the internal buffer
+    /// @details calls simulate() function of each physical object in the internal buffer
     /// and solves interaction between solids and dynamic objects.
     void simulate(double dt);
 

@@ -217,8 +217,8 @@ namespace unreal_fluid::math {
 
     /// Check if vector is zero
     /// @return true if vector is zero, false otherwise
-    bool isZero() const {
-      return x == 0 && y == 0 && z == 0;
+    static bool isZero(const Vector3 &vec) {
+      return vec.x == 0 && vec.y == 0 && vec.z == 0;
     }
 
     /// @brief Dot product of two vectors
@@ -236,7 +236,7 @@ namespace unreal_fluid::math {
     /// @return cosine of angle between two vectors
     /// @attention cos(angle) = (first * second) / (|first| * |second|)
     static double cos(const Vector3 &first, const Vector3 &second) {
-      assert(!isZero(first) && !isZero(second)); /// TODO call to non-static without object argument error
+      assert(!isZero(first) && !isZero(second));
 
       return dot(first, second) / (first.len() * second.len());
     }
