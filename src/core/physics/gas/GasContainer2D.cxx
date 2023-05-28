@@ -122,7 +122,7 @@ void GasContainer2d::simulate(double dt) {
 }
 
 void GasContainer2d::diffuse(GasCell &cell1, GasCell &cell2) {
-  double slicingPart = std::min(cell1.amountOfGas, cell2.amountOfGas) / 4;
+  double slicingPart = std::min(cell1.amountOfGas, cell2.amountOfGas) / 10;
   auto cell_1 = cell1.slice(slicingPart), cell_2 = cell2.slice(slicingPart);
   cell1.add(cell_2), cell2.add(cell_1);
 }
