@@ -98,6 +98,7 @@ add_executable(
         src/core/physics/fluid/simple_fluid/SimpleFluidContainer.cxx
         src/core/components/AbstractObject.cxx
 
+        src/core/physics/gas/GasCell.cxx
         src/core/physics/gas/GasContainer2D.cxx
 
         # IScene
