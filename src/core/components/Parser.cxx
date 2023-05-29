@@ -88,10 +88,9 @@ void Parser::parseContainer(IPhysicalObject &object, std::vector<render::RenderO
 
 std::vector<solid::Triangle> Parser::parseRenderMesh(const render::mesh::BasicMesh &mesh) {
   std::vector<solid::Triangle> triangles;
-  triangles.reserve(mesh.vertices.size());
-  for (auto vertex: mesh.vertices) {
-    triangles.emplace_back(vertex.position, vertex.position, vertex.position);
-    /// TODO : convert position to tree points
+  triangles.reserve(mesh.indices.size());
+  for (int pos = 0; pos + 2 < mesh.indices.size(); pos += 3) {
+    triangles.emplace_back(mesh.indices[pos], mesh.indices[pos + 1], mesh.indices[pos + 2]);
   }
   return triangles;
 }

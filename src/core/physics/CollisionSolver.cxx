@@ -102,9 +102,8 @@ void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::T
       p->position.y += push;
       p->velocity.y *= -k;
     } else {
-      if (edgeCollide(p, triangle->v1, triangle->v2, k)) {
-      } else if (edgeCollide(p, triangle->v2, triangle->v3, k)) {
-      } else
+      if (!edgeCollide(p, triangle->v1, triangle->v2, k) ||
+          !edgeCollide(p, triangle->v2, triangle->v3, k))
         edgeCollide(p, triangle->v1, triangle->v3, k);
     }
   }
