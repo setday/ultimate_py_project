@@ -85,3 +85,13 @@ void Parser::parseContainer(IPhysicalObject &object, std::vector<render::RenderO
     renderObjects[pos]->modelMatrix = mat4::translation(particles[pos]->position);
   }
 }
+
+std::vector<solid::Triangle> Parser::parseRenderMesh(const render::mesh::BasicMesh &mesh) {
+  std::vector<solid::Triangle> triangles;
+  triangles.reserve(mesh.vertices.size());
+  for (auto vertex: mesh.vertices) {
+    triangles.emplace_back(vertex.position, vertex.position, vertex.position);
+    /// TODO : convert position to tree points
+  }
+  return triangles;
+}

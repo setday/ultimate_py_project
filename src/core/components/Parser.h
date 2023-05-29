@@ -15,6 +15,8 @@
 #pragma once
 
 #include "../physics/IPhysicalObject.h"
+#include "../physics/solid/mesh/Triangle.h"
+#include "../render/components/mesh/BasicMesh.h"
 #include "../render/components/RenderObject.h"
 
 namespace unreal_fluid::physics {
@@ -25,6 +27,7 @@ namespace unreal_fluid::physics {
     static void parseSphere(IPhysicalObject &object, std::vector<render::RenderObject *> &renderObjects);
     static void parseMesh(IPhysicalObject &object, std::vector<render::RenderObject *> &renderObjects);
     static void parseContainer(IPhysicalObject &object, std::vector<render::RenderObject *> &renderObjects);
+    static std::vector<solid::Triangle> parseRenderMesh(const render::mesh::BasicMesh& mesh);
   };
 
 } // namespace unreal_fluid::physics

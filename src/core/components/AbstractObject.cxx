@@ -33,8 +33,6 @@ void AbstractObject::parse() {
   switch (type) {
     using namespace physics;
     case IPhysicalObject::Type::FLUID_CONTAINER_SIMPLE:
-      Parser::parseContainer(*physicalObject, renderObjects);
-      break;
     case IPhysicalObject::Type::FLUID_CONTAINER_ADVANCED:
       Parser::parseContainer(*physicalObject, renderObjects);
       break;
