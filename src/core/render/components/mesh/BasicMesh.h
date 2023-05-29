@@ -16,7 +16,6 @@
 #pragma once
 
 #include <vector>
-
 #include "Vertex.h"
 
 #define RESET_INDEX UINT_MAX
@@ -30,9 +29,10 @@ namespace unreal_fluid::render::mesh {
     int meshType = 0;
 
     BasicMesh() = default;
+
     BasicMesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &indices) : vertices(vertices),
                                                                                                indices(indices) {}
   };
-} // unreal_fluid::render::mesh
+} // namespace unreal_fluid::render::mesh
 
 // end of BasicMesh.h
