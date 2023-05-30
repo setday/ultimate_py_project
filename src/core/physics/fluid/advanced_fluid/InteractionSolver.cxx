@@ -62,15 +62,20 @@ void InteractionSolver::interact(std::vector<Particle *> &particles, double k) {
       *threadsFinished[pos] = false;
     }
 
-    size_t beginIndex, endIndex = 0;
-
-    for (int i = 0; i < coreNumber; ++i) {
-      beginIndex = endIndex;
-      endIndex = (i + 1) * particles.size() / coreNumber;
-      endIndex = std::min(endIndex, particles.size());
-      for (size_t j = beginIndex; j < endIndex; ++j)
-        subParticles[i].push_back(particles[j]);
+    for (auto &particle : particles) {
+      int id = int(particle->position.x * particle->velocity.y) * 239 % coreNumber;
+      subParticles[id].push_back(particle);
     }
+
+    //    size_t beginIndex, endIndex = 0;
+    //
+    //    for (int i = 0; i < coreNumber; ++i) {
+    //      beginIndex = endIndex;
+    //      endIndex = (i + 1) * particles.size() / coreNumber;
+    //      endIndex = std::min(endIndex, particles.size());
+    //      for (size_t j = beginIndex; j < endIndex; ++j)
+    //        subParticles[i].push_back(particles[j]);
+    //    }
 
     //LOG_INFO("Detaching");
     for (int i = 0; i < coreNumber; ++i) {
