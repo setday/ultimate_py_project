@@ -26,8 +26,4 @@ void *SolidMesh::getData() {
   return &triangles;
 }
 
-void SolidMesh::simulate(double dt) {
-  /// static mesh doesn't need any simulate implementation
-}
-
 // end of SolidMesh.cxx

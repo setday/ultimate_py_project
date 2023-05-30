@@ -112,16 +112,15 @@ void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::T
 
 bool CollisionSolver::edgeCollide(fluid::Particle *p, vec3f p1, vec3f p2, double k) {
   auto directionVector = (p2 - p1).normalized();
-  vec3f partileProjection = math::Vector3<float>::project(p->position - p1, directionVector) * directionVector + p1;
-  double segmentLen1 = (partileProjection - p1).len(), segmentLen2 = (partileProjection - p2).len();
+  vec3f particleProjection = math::Vector3<float>::project(p->position - p1, directionVector) * directionVector + p1;
+  double segmentLen1 = (particleProjection - p1).len(), segmentLen2 = (particleProjection - p2).len();
   if (segmentLen1 + segmentLen2 > (p2 - p1).len()) {
-    if (segmentLen1 < segmentLen2) partileProjection = p1;
+    if (segmentLen1 < segmentLen2) particleProjection = p1;
     else
-      partileProjection = p2;
+      particleProjection = p2;
   }
 
-
-  vec3f dist = (p->position - partileProjection);
+  vec3f dist = (p->position - particleProjection);
   double length = dist.len();
 
   if (length == 0) {
@@ -131,7 +130,7 @@ bool CollisionSolver::edgeCollide(fluid::Particle *p, vec3f p1, vec3f p2, double
 
   if (length > p->radius) return false;
 
-  dist.normalizeSelf();
+  dist /= length;
 
   p->position += (p->radius - length) * dist;
   vec3f velocityProjection = dist * math::Vector3<float>::project(p->velocity, dist);

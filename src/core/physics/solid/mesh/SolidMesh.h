@@ -15,7 +15,6 @@
 #pragma once
 
 #include <vector>
-
 #include "../ISolid.h"
 #include "Triangle.h"
 
@@ -28,7 +27,7 @@ namespace unreal_fluid::physics::solid {
   public:
     explicit SolidMesh(const std::vector<Triangle> &triangles);
 
-    void simulate(double dt) override;
+    void simulate(double dt) override{};
     Type getType() override;
     void *getData() override;
   };

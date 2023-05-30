@@ -33,10 +33,9 @@ void PhysicsSimulator::simulate(double dt) {
   for (auto &physObject: dynamicObjects)
     physObject->simulate(dt);
 
-  for (auto &physObject: dynamicObjects) {
+  for (auto &physObject: dynamicObjects)
     for (auto &solidObject: solidObjects)
       interact(physObject, solidObject);
-  }
 }
 
 void PhysicsSimulator::interact(IPhysicalObject *dynamicObject, IPhysicalObject *solid) {
@@ -68,6 +67,9 @@ void PhysicsSimulator::interact(IPhysicalObject *dynamicObject, IPhysicalObject 
           CollisionSolver::particleWithPlaneCollision(particle, plane, 0.75);
         break;
       }
+      case IPhysicalObject::Type::FLUID_CONTAINER_SIMPLE:
+      case IPhysicalObject::Type::FLUID_CONTAINER_ADVANCED:
+        break;
     }
   }
 }

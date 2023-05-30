@@ -115,7 +115,6 @@ add_executable(
         scenes/ClTestScene.cxx
         #scenes/GlTestScene.cxx
         #scenes/Control.cxx
-        scenes/ClPhysicsScene.cxx
 
         scenes/SceneLoader.cxx
 
