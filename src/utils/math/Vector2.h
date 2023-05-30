@@ -130,7 +130,7 @@ namespace unreal_fluid::math {
     [[nodiscard]] double operator!() const { return len(); }
 
     /// Normalize this vector
-    /// @return normalized vector
+    /// @return normalize vector
     /// @attention this vector is not changed
     Vector2 normalize() const {
       return this / len();

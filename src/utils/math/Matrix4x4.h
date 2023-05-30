@@ -14,14 +14,13 @@
 
 #pragma once
 
-#include <vector>
 #include <string>
-
+#include <vector>
 #include "Vector3.h"
 
 namespace unreal_fluid::math {
 
-template<typename T>
+  template<typename T>
   class Matrix4x4 {
   public:
     T matrix[16];
@@ -49,13 +48,10 @@ template<typename T>
                                               matrix[12], matrix[13], matrix[14], matrix[15]} {
     }
 
-    Matrix4x4(T m00, T m01, T m02, T m03,
-              T m10, T m11, T m12, T m13,
-              T m20, T m21, T m22, T m23,
-              T m30, T m31, T m32, T m33) : matrix{m00, m01, m02, m03,
-                                                   m10, m11, m12, m13,
-                                                   m20, m21, m22, m23,
-                                                   m30, m31, m32, m33} {
+    Matrix4x4(T m00, T m01, T m02, T m03, T m10, T m11, T m12, T m13, T m20, T m21, T m22, T m23, T m30, T m31, T m32, T m33) : matrix{m00, m01, m02, m03,
+                                                                                                                                       m10, m11, m12, m13,
+                                                                                                                                       m20, m21, m22, m23,
+                                                                                                                                       m30, m31, m32, m33} {
     }
 
     const T *data() const {
@@ -110,17 +106,11 @@ template<typename T>
     }
 
     static Matrix4x4 identity() {
-      return Matrix4x4(1, 0, 0, 0,
-                       0, 1, 0, 0,
-                       0, 0, 1, 0,
-                       0, 0, 0, 1);
+      return Matrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
     }
 
     static Matrix4x4 translation(const Vector3<T> &v) {
-      return Matrix4x4(1,     0,   0, 0,
-                       0,     1,   0, 0,
-                       0,     0,   1, 0,
-                       v.x, v.y, v.z, 1);
+      return Matrix4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, v.x, v.y, v.z, 1);
     }
 
     Matrix4x4 withTranslation(const Vector3<T> &v) const {
@@ -128,10 +118,7 @@ template<typename T>
     }
 
     static Matrix4x4 scale(const Vector3<T> &v) {
-      return Matrix4x4(v.x, 0,   0, 0,
-                       0, v.y,   0, 0,
-                       0,   0, v.z, 0,
-                       0,   0,   0, 1);
+      return Matrix4x4(v.x, 0, 0, 0, 0, v.y, 0, 0, 0, 0, v.z, 0, 0, 0, 0, 1);
     }
 
     Matrix4x4 withScale(const Vector3<T> &v) const {
@@ -143,10 +130,7 @@ template<typename T>
       T s = sin(angle);
       T t = 1 - c;
 
-      return Matrix4x4(t * v.x * v.x + c, t * v.x * v.y + s * v.z, t * v.x * v.z - s * v.y, 0,
-                       t * v.x * v.y - s * v.z, t * v.y * v.y + c, t * v.y * v.z + s * v.x, 0,
-                       t * v.x * v.z + s * v.y, t * v.y * v.z - s * v.x, t * v.z * v.z + c, 0,
-                       0, 0, 0, 1);
+      return Matrix4x4(t * v.x * v.x + c, t * v.x * v.y + s * v.z, t * v.x * v.z - s * v.y, 0, t * v.x * v.y - s * v.z, t * v.y * v.y + c, t * v.y * v.z + s * v.x, 0, t * v.x * v.z + s * v.y, t * v.y * v.z - s * v.x, t * v.z * v.z + c, 0, 0, 0, 0, 1);
     }
 
     Matrix4x4 withRotation(const Vector3<T> &v, T angle) const {
@@ -154,10 +138,7 @@ template<typename T>
     }
 
     static Matrix4x4 rotationX(T angle) {
-      return Matrix4x4(1, 0, 0, 0,
-                       0, cos(angle), sin(angle), 0,
-                       0, -sin(angle), cos(angle), 0,
-                       0, 0, 0, 1);
+      return Matrix4x4(1, 0, 0, 0, 0, cos(angle), sin(angle), 0, 0, -sin(angle), cos(angle), 0, 0, 0, 0, 1);
     }
 
     Matrix4x4 withRotationX(T angle) const {
@@ -165,10 +146,7 @@ template<typename T>
     }
 
     static Matrix4x4 rotationY(T angle) {
-      return Matrix4x4(cos(angle), 0, sin(angle), 0,
-                       0, 1, 0, 0,
-                       -sin(angle), 0, cos(angle), 0,
-                       0, 0, 0, 1);
+      return Matrix4x4(cos(angle), 0, sin(angle), 0, 0, 1, 0, 0, -sin(angle), 0, cos(angle), 0, 0, 0, 0, 1);
     }
 
     Matrix4x4 withRotationY(T angle) const {
@@ -176,10 +154,7 @@ template<typename T>
     }
 
     static Matrix4x4 rotationZ(T angle) {
-      return Matrix4x4(cos(angle), sin(angle), 0, 0,
-                       -sin(angle), cos(angle), 0, 0,
-                       0, 0, 1, 0,
-                       0, 0, 0, 1);
+      return Matrix4x4(cos(angle), sin(angle), 0, 0, -sin(angle), cos(angle), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
     }
 
     Matrix4x4 withRotationZ(T angle) const {
@@ -189,35 +164,23 @@ template<typename T>
     static Matrix4x4 perspective(T fov, T aspect, T near, T far) {
       T f = 1 / tan(fov / 180.f * M_PI / 2);
 
-      return Matrix4x4(f / aspect, 0, 0, 0,
-                       0, f, 0, 0,
-                       0, 0, (far + near) / (near - far), -1,
-                       0, 0, (2 * far * near) / (near - far), 0);
+      return Matrix4x4(f / aspect, 0, 0, 0, 0, f, 0, 0, 0, 0, (far + near) / (near - far), -1, 0, 0, (2 * far * near) / (near - far), 0);
     }
 
     static Matrix4x4 lookAt(const Vector3<T> &eye, const Vector3<T> &center, const Vector3<T> &up) {
-      Vector3<T> f = (eye - center).normalized();
-      Vector3<T> s = up.cross(f).normalized();
+      Vector3<T> f = (eye - center).normalize();
+      Vector3<T> s = up.cross(f).normalize();
       Vector3<T> u = f.cross(s);
 
-      return Matrix4x4(s.x, u.x, f.x, 0,
-                       s.y, u.y, f.y, 0,
-                       s.z, u.z, f.z, 0,
-                       -s.dot(eye), -u.dot(eye), -f.dot(eye), 1);
+      return Matrix4x4(s.x, u.x, f.x, 0, s.y, u.y, f.y, 0, s.z, u.z, f.z, 0, -s.dot(eye), -u.dot(eye), -f.dot(eye), 1);
     }
 
     static Matrix4x4 ortho(T left, T right, T bottom, T top, T near, T far) {
-      return Matrix4x4(2 / (right - left), 0, 0, 0,
-                       0, 2 / (top - bottom), 0, 0,
-                       0, 0, -2 / (far - near), 0,
-                       -(right + left) / (right - left), -(top + bottom) / (top - bottom), -(far + near) / (far - near), 1);
+      return Matrix4x4(2 / (right - left), 0, 0, 0, 0, 2 / (top - bottom), 0, 0, 0, 0, -2 / (far - near), 0, -(right + left) / (right - left), -(top + bottom) / (top - bottom), -(far + near) / (far - near), 1);
     }
 
     static Matrix4x4 transpose(const Matrix4x4 &m) {
-      return Matrix4x4(m.matrix[0], m.matrix[4], m.matrix[8], m.matrix[12],
-                       m.matrix[1], m.matrix[5], m.matrix[9], m.matrix[13],
-                       m.matrix[2], m.matrix[6], m.matrix[10], m.matrix[14],
-                       m.matrix[3], m.matrix[7], m.matrix[11], m.matrix[15]);
+      return Matrix4x4(m.matrix[0], m.matrix[4], m.matrix[8], m.matrix[12], m.matrix[1], m.matrix[5], m.matrix[9], m.matrix[13], m.matrix[2], m.matrix[6], m.matrix[10], m.matrix[14], m.matrix[3], m.matrix[7], m.matrix[11], m.matrix[15]);
     }
 
     Matrix4x4 withTranspose() const {
@@ -351,9 +314,8 @@ template<typename T>
 
       det = 1.0 / det;
 
-      for (int i = 0; i < 16; i++) {
-        inverse_matrix[i] = inverse_matrix[i] * det;
-      }
+      for (auto &el: inverse_matrix)
+        el *= det;
 
       has_inverse = true;
     }

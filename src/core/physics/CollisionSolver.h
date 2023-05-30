@@ -14,17 +14,19 @@
 
 #pragma once
 
+#include "../../utils/math/Line2D.h"
 #include "fluid/Particle.h"
 #include "solid/mesh/Plane.h"
 #include "solid/mesh/Triangle.h"
 #include "solid/sphere/SolidSphere.h"
-#include "../../utils/math/Line2D.h"
 
 namespace unreal_fluid::physics {
 
   class CollisionSolver {
   private:
     static bool edgeCollide(fluid::Particle *p, vec3f p1, vec3f p2, double k);
+    static double rotate(double phiY, fluid::Particle *p, solid::Triangle *triangle);
+    static void rotateBack(double phiY, double phiZ, fluid::Particle *p, solid::Triangle *triangle);
 
   public:
     /// @brief collides two particles

@@ -23,16 +23,11 @@ namespace unreal_fluid::physics::fluid{
   private:
     int coreNumber;
     std::vector<CellsDistributor> distributors;
-    CellsDistributor distributor;
     std::vector<std::thread> interactionTasks;
   public:
     InteractionSolver();
     ~InteractionSolver() = default;
     void interact(std::vector<Particle *> &particles, double k);
-  private:
-    void init();
-
-    void clear();
   };
 }
 

@@ -12,13 +12,13 @@
  * authors of this project.
  */
 
-#include <iostream>
-
 #include "Core.h"
+#include <iostream>
 
 using namespace unreal_fluid;
 
-Core::Core() : _windowCompositor(std::make_unique<window::WindowCompositor>()), _compositor(this) {}
+Core::Core() : _windowCompositor(std::make_unique<window::WindowCompositor>()),
+               _compositor(this) {}
 
 void Core::run() {
   init();

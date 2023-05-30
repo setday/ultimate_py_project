@@ -71,7 +71,7 @@ float Line2D::distanceLineToPoint(vec3f p) const {
 
 float Line2D::distanceSegmentToPoint(vec3f p) {
   //TODO bug hazard
-  vec3f paral = (p2 - p1).normalized();
+  vec3f paral = (p2 - p1).normalize();
   float pProj = p.project(paral);
   float p1Proj = p1.project(paral);
   float p2Proj = p2.project(paral);

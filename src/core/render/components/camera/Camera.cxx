@@ -31,8 +31,8 @@ void Camera::updateProjectionMatrix() {
 Camera::Camera(const vec3f &position, const vec3f &direction, const vec3f &up,
                float width, float height,
                float fov, float near, float far) :
-        _position(position), _direction(direction.normalized()), _up(up.normalized()),
-        _right(direction.cross(up).normalized()),
+        _position(position), _direction(direction.normalize()), _up(up.normalize()),
+        _right(direction.cross(up).normalize()),
         _height(height), _width(width), _aspect(width / height),
         _fov(fov), _near(near), _far(far) {
   setDirection(direction);
@@ -76,9 +76,9 @@ vec2f Camera::getAngles() const {
 }
 
 void Camera::setDirection(const vec3f &direction) {
-  _direction = direction.normalized();
+  _direction = direction.normalize();
 
-  _right = _direction.cross(_up).normalized();
+  _right = _direction.cross(_up).normalize();
 
   _pitch = float(asin(_direction.y));
   _yaw = float(atan2(_direction.x, _direction.z));
@@ -94,7 +94,7 @@ void Camera::setDirection(const vec2f &angles) {
   _direction.y = std::sin(_pitch);
   _direction.x = std::sin(_yaw) * std::cos(_pitch);
 
-  _right = _direction.cross(_up).normalized();
+  _right = _direction.cross(_up).normalize();
 
   updateViewMatrix();
 }
@@ -131,9 +131,9 @@ vec3f Camera::getUp() const {
 }
 
 void Camera::setUp(const vec3f &up) {
-  _up = up.normalized();
+  _up = up.normalize();
 
-  _right = _direction.cross(_up).normalized();
+  _right = _direction.cross(_up).normalize();
 
   updateViewMatrix();
 }

@@ -66,8 +66,7 @@ namespace unreal_fluid::math {
       return this;
     }
 
-
-    double distanceTo(const Vector3<T>& v){
+    double distanceTo(const Vector3<T> &v) {
       return (v - *this).len();
     }
 
@@ -107,7 +106,7 @@ namespace unreal_fluid::math {
 
     [[nodiscard]] double operator!() const { return len(); }
 
-    Vector3 normalized() const {
+    Vector3 normalize() const {
       assert(len2() != 0);
       return *this / len();
     }
@@ -117,26 +116,62 @@ namespace unreal_fluid::math {
       *this /= len();
     }
 
+    void rotateXSelf(double phi) {
+      double cosPhi = std::cos(phi), sinPhi = std::sin(phi), newy, newz;
+      newy = cosPhi * y - sinPhi * z;
+      newz = sinPhi * y + cosPhi * z;
+      y = newy, z = newz;
+    }
+
+    Vector3 rotateX(double phi) const {
+      Vector3 newVec = this;
+      newVec.rotateXSelf(phi);
+      return newVec;
+    }
+
+    void rotateYSelf(double phi) {
+      double cosPhi = std::cos(phi), sinPhi = std::sin(phi), newx, newz;
+      newx = cosPhi * x + sinPhi * z;
+      newz = -sinPhi * x + cosPhi * z;
+      x = newx, z = newz;
+    }
+
+    Vector3 rotateY(double phi) const {
+      Vector3 newVec = this;
+      newVec.rotateYSelf(phi);
+      return newVec;
+    }
+
+    void rotateZSelf(double phi) {
+      double cosPhi = std::cos(phi), sinPhi = std::sin(phi), newx, newy;
+      newx = cosPhi * x - sinPhi * y;
+      newy = sinPhi * x + cosPhi * y;
+      x = newx, y = newy;
+    }
+
+    Vector3 rotateZ(double phi) const {
+      Vector3 newVec = this;
+      newVec.rotateZSelf(phi);
+      return newVec;
+    }
+
     Vector3 operator*(const Vector3 &vec) const {
       return Vector3(x * vec.x, y * vec.y, z * vec.z);
     }
 
-    [[deprecated("Use static dot function instead")]]
     T dot(const Vector3 &v) const {
       return x * v.x + y * v.y + z * v.z;
     }
 
-    [[deprecated("Use static cross function instead")]]
     Vector3 cross(const Vector3 &v) const {
       return Vector3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
     }
 
-    [[deprecated("Use static project function instead")]]
     T project(const Vector3 &v) {
       if (len() == 0) return 0;
       return this->dot(v) / v.len();
     }
-    
+
     /// Linear interpolation between two vectors
     /// @param v - vector to interpolate to
     /// @param t - interpolation coefficient
@@ -149,9 +184,7 @@ namespace unreal_fluid::math {
     /// @param min - minimum value
     /// @param max - maximum value
     Vector3 clamp(const Vector3 &min, const Vector3 &max) const {
-      return Vector3(std::min(std::max(x, min.x), max.x),
-                     std::min(std::max(y, min.y), max.y),
-                     std::min(std::max(z, min.z), max.z));
+      return Vector3(std::min(std::max(x, min.x), max.x), std::min(std::max(y, min.y), max.y), std::min(std::max(z, min.z), max.z));
     }
 
     /// Get maximum value of vector
@@ -251,16 +284,14 @@ namespace unreal_fluid::math {
     /// @return cross product of two vectors
     /// @attention (forward x left = up)
     static Vector3 cross(const Vector3 &forward, const Vector3 &left) {
-      return Vector3(forward.y * left.z - forward.z * left.y,
-                     forward.z * left.x - forward.x * left.z,
-                     forward.x * left.y - forward.y * left.x);
+      return Vector3(forward.y * left.z - forward.z * left.y, forward.z * left.x - forward.x * left.z, forward.x * left.y - forward.y * left.x);
     }
 
     /// @brief Normalized cross product of two vectors
     /// @param forward - first vector
     /// @param left - second vector
-    /// @return normalized cross product of two vectors
-    /// @attention normalized(forward x left = up)
+    /// @return normalize cross product of two vectors
+    /// @attention normalize(forward x left = up)
     static Vector3 normalizedCross(const Vector3 &forward, const Vector3 &left) {
       Vector3 result = cross(forward, left);
 
@@ -285,9 +316,7 @@ namespace unreal_fluid::math {
     /// @param max - maximum value
     /// @return clamped vector
     static Vector3 clamp(const Vector3 &vec, const Vector3 &min, const Vector3 &max) {
-      return Vector3(std::min(std::max(vec.x, min.x), max.x),
-                     std::min(std::max(vec.y, min.y), max.y),
-                     std::min(std::max(vec.z, min.z), max.z));
+      return Vector3(std::min(std::max(vec.x, min.x), max.x), std::min(std::max(vec.y, min.y), max.y), std::min(std::max(vec.z, min.z), max.z));
     }
 
     /// @brief Get maximum value of vector
@@ -309,9 +338,7 @@ namespace unreal_fluid::math {
     /// @param second - second vector
     /// @return vector with maximum values from two vectors
     static Vector3 max(const Vector3 &first, const Vector3 &second) {
-      return Vector3(std::max(first.x, second.x),
-                     std::max(first.y, second.y),
-                     std::max(first.z, second.z));
+      return Vector3(std::max(first.x, second.x), std::max(first.y, second.y), std::max(first.z, second.z));
     }
 
     /// @brief Get vector with minimum values from two vectors
@@ -319,9 +346,7 @@ namespace unreal_fluid::math {
     /// @param second - second vector
     /// @return vector with minimum values from two vectors
     static Vector3 min(const Vector3 &first, const Vector3 &second) {
-      return Vector3(std::min(first.x, second.x),
-                     std::min(first.y, second.y),
-                     std::min(first.z, second.z));
+      return Vector3(std::min(first.x, second.x), std::min(first.y, second.y), std::min(first.z, second.z));
     }
 
     /// @brief Get vector with absolute values
@@ -338,4 +363,5 @@ namespace unreal_fluid::math {
       return Vector3(std::signbit(vec.x), std::signbit(vec.y), std::signbit(vec.z));
     }
   };
+
 } // namespace unreal_fluid::math

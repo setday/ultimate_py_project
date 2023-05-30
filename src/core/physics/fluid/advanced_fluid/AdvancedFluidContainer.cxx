@@ -20,6 +20,7 @@ unreal_fluid::physics::fluid::AdvancedFluidContainer::AdvancedFluidContainer(
         unreal_fluid::physics::fluid::FluidDescriptor descriptor
 ) {
   k = 0.7;
+  addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, 0, 0}, 0.05, 2);
 }
 
 unreal_fluid::physics::fluid::AdvancedFluidContainer::~AdvancedFluidContainer() {
@@ -37,7 +38,7 @@ void *unreal_fluid::physics::fluid::AdvancedFluidContainer::getData() {
 }
 
 void unreal_fluid::physics::fluid::AdvancedFluidContainer::simulate(double dt) {
-  flows();
+  //  flows();
   interact();
   addExternalForces(dt);
   advect(dt);
@@ -53,9 +54,7 @@ void unreal_fluid::physics::fluid::AdvancedFluidContainer::addParticle(vec3 posi
 }
 
 void unreal_fluid::physics::fluid::AdvancedFluidContainer::flows() {
-  for (int i = 0; i < 1; ++i) {
-    addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, 0, 0}, 0.05, 2);
-  }
+  addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, 0, 0}, 0.05, 2);
 }
 
 void unreal_fluid::physics::fluid::AdvancedFluidContainer::interact() {

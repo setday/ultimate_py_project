@@ -17,12 +17,17 @@
 
 namespace unreal_fluid::physics::solid {
   struct Triangle {
-    vec3f v1;
-    vec3f v2;
-    vec3f v3;
+    vec3f v1, v2, v3;
+    vec3f norm;
 
     Triangle() = default;
-    Triangle(vec3f v1, vec3f v2, vec3f v3) : v1(v1), v2(v2), v3(v3) {}
+
+    Triangle(vec3f v1, vec3f v2, vec3f v3) : v1(v1),
+                                             v2(v2),
+                                             v3(v3) {
+      norm = ((v2 - v1).cross(v3 - v1)).normalize();
+    }
+
     ~Triangle() = default;
   };
 } // namespace unreal_fluid::physics::solid

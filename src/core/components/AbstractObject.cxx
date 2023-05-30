@@ -12,8 +12,6 @@
  * authors of this project.
  */
 
-#pragma once
-
 #include "AbstractObject.h"
 #include "Parser.h"
 
