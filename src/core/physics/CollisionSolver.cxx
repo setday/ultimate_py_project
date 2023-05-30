@@ -120,15 +120,13 @@ void CollisionSolver::rotateBack(double phiY, double phiZ, fluid::Particle *p, s
 }
 
 void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::Triangle *triangle, double k) {
-//  Logger::logDebug(triangle->norm);
   vec3f norm = triangle->norm;
-  double phiY;
-  if (norm.x == 0 && norm.z == 0) phiY = 0;
-  else
+  double phiY, phiZ;
+  if (!(norm.x == 0 && norm.z == 0)) {
     phiY = std::acos(norm.x / sqrt(norm.x * norm.x + norm.z * norm.z));
-  if (norm.z < 0) phiY = -phiY;
-//  double phiZ = rotate(phiY, p, triangle);
-//  Logger::logDebug(triangle->norm);
+    if (norm.z < 0) phiY = -phiY;
+    phiZ = rotate(phiY, p, triangle);
+  }
   double dist = p->position.y - triangle->v1.y;
   if (abs(dist) < p->radius) {
     math::Line2D s1 = {{triangle->v1.x, triangle->v1.z}, {triangle->v2.x, triangle->v2.z}};
@@ -147,8 +145,8 @@ void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::T
     } else if (edgeCollide(p, triangle->v1, triangle->v2, k) || edgeCollide(p, triangle->v2, triangle->v3, k) || edgeCollide(p, triangle->v1, triangle->v3, k)) {
     };
   }
-//  rotateBack(-phiY, -phiZ, p, triangle);
-  //  Logger::logDebug(triangle->norm);
+  if (!(norm.x == 0 && norm.z == 0))
+    rotateBack(-phiY, -phiZ, p, triangle);
 }
 
 bool CollisionSolver::edgeCollide(fluid::Particle *p, vec3f p1, vec3f p2, double k) {

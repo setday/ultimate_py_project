@@ -66,9 +66,6 @@ void CellsDistributor::update(std::vector<Particle *> &particles) {
       }
     }
   }
-
-  Logger::logDebug(big_particles.size());
-  Logger::logDebug(cells.size());
 }
 
 uint64_t CellsDistributor::getId(vec3 position) {
