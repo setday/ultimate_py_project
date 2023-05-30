@@ -84,39 +84,39 @@ void CollisionSolver::particleWithPlaneCollision(fluid::Particle *particle, soli
   particle->velocity *= (1 - k);
 }
 
-double CollisionSolver::rotate(double phiY, fluid::Particle *p, solid::Triangle *triangle) {
-  p->position.rotateYSelf(phiY);
-  p->velocity.rotateYSelf(phiY);
-  triangle->v1.rotateYSelf(phiY);
-  triangle->v2.rotateYSelf(phiY);
-  triangle->v3.rotateYSelf(phiY);
-  triangle->norm.rotateYSelf(phiY);
-  vec3f norm = triangle->norm;
-  //  assert(norm.z < 1e-6);
+double CollisionSolver::rotate(double phiY, fluid::Particle &p, solid::Triangle &triangle) {
+  p.position.rotateYSelf(phiY);
+  p.velocity.rotateYSelf(phiY);
+  triangle.v1.rotateYSelf(phiY);
+  triangle.v2.rotateYSelf(phiY);
+  triangle.v3.rotateYSelf(phiY);
+  triangle.norm.rotateYSelf(phiY);
+  vec3f norm = triangle.norm;
+  assert(norm.z < 1e-6);
   double phiZ = std::acos(norm.y / std::sqrt(norm.x * norm.x + norm.y * norm.y));
   if (norm.y < 0) phiZ = -phiZ;
-  p->position.rotateYSelf(phiZ);
-  p->velocity.rotateYSelf(phiZ);
-  triangle->v1.rotateYSelf(phiZ);
-  triangle->v2.rotateYSelf(phiZ);
-  triangle->v3.rotateYSelf(phiZ);
-  triangle->norm.rotateYSelf(phiZ);
+  p.position.rotateYSelf(phiZ);
+  p.velocity.rotateYSelf(phiZ);
+  triangle.v1.rotateYSelf(phiZ);
+  triangle.v2.rotateYSelf(phiZ);
+  triangle.v3.rotateYSelf(phiZ);
+  triangle.norm.rotateYSelf(phiZ);
   return phiZ;
 }
 
-void CollisionSolver::rotateBack(double phiY, double phiZ, fluid::Particle *p, solid::Triangle *triangle) {
-  p->position.rotateYSelf(phiY);
-  p->velocity.rotateYSelf(phiY);
-  triangle->v1.rotateYSelf(phiY);
-  triangle->v2.rotateYSelf(phiY);
-  triangle->v3.rotateYSelf(phiY);
-  triangle->norm.rotateYSelf(phiY);
-  p->position.rotateYSelf(phiZ);
-  p->velocity.rotateYSelf(phiZ);
-  triangle->v1.rotateYSelf(phiZ);
-  triangle->v2.rotateYSelf(phiZ);
-  triangle->v3.rotateYSelf(phiZ);
-  triangle->norm.rotateYSelf(phiZ);
+void CollisionSolver::rotateBack(double phiY, double phiZ, fluid::Particle &p, solid::Triangle &triangle) {
+  p.position.rotateYSelf(phiY);
+  p.velocity.rotateYSelf(phiY);
+  triangle.v1.rotateYSelf(phiY);
+  triangle.v2.rotateYSelf(phiY);
+  triangle.v3.rotateYSelf(phiY);
+  triangle.norm.rotateYSelf(phiY);
+  p.position.rotateYSelf(phiZ);
+  p.velocity.rotateYSelf(phiZ);
+  triangle.v1.rotateYSelf(phiZ);
+  triangle.v2.rotateYSelf(phiZ);
+  triangle.v3.rotateYSelf(phiZ);
+  triangle.norm.rotateYSelf(phiZ);
 }
 
 void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::Triangle *triangle, double k) {
@@ -125,7 +125,7 @@ void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::T
   if (!(norm.x == 0 && norm.z == 0)) {
     phiY = std::acos(norm.x / sqrt(norm.x * norm.x + norm.z * norm.z));
     if (norm.z < 0) phiY = -phiY;
-    phiZ = rotate(phiY, p, triangle);
+    phiZ = rotate(phiY, *p, *triangle);
   }
   double dist = p->position.y - triangle->v1.y;
   if (abs(dist) < p->radius) {
@@ -138,6 +138,7 @@ void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::T
     countIntersections += (s2.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
     countIntersections += (s3.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
     if (countIntersections % 2 != 0) {
+      Logger::logDebug("collision happened");
       double push = p->radius - abs(dist);
       if (dist < 0) push = -push;
       p->position.y += push;
@@ -146,7 +147,7 @@ void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::T
     };
   }
   if (!(norm.x == 0 && norm.z == 0))
-    rotateBack(-phiY, -phiZ, p, triangle);
+    rotateBack(-phiY, -phiZ, *p, *triangle);
 }
 
 bool CollisionSolver::edgeCollide(fluid::Particle *p, vec3f p1, vec3f p2, double k) {

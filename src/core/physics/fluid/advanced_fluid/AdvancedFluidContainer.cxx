@@ -36,7 +36,7 @@ void *AdvancedFluidContainer::getData() {
 }
 
 void AdvancedFluidContainer::simulate(double dt) {
-  flows();
+//  flows();
   interact();
   addExternalForces(dt);
   advect(dt);
