@@ -63,7 +63,7 @@ void InteractionSolver::interact(std::vector<Particle *> &particles, double k) {
     }
 
     for (auto &particle : particles) {
-      int id = int(particle->position.x * particle->velocity.y) * 239 % coreNumber;
+      int id = abs(int(particle->position.x * particle->velocity.y)) * 239 % coreNumber;
       subParticles[id].push_back(particle);
     }
 
