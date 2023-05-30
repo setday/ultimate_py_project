@@ -23,17 +23,22 @@ unreal_fluid::physics::fluid::InteractionSolver::InteractionSolver() {
   distributors.resize(coreNumber);
 }
 
-void task(CellsDistributor &distributor, std::vector<Particle *> &particles, double k, bool *ready) {
-  //CellsDistributor distributor;
+void InteractionSolver::task(unreal_fluid::physics::fluid::CellsDistributor &distributor, std::vector<Particle *> &particles, double k, bool *ready) {
   distributor.update(particles);
   for (auto &bigParticle: distributor.big_particles) {
     for (auto &particle: particles) {
-      if ((particle->position - bigParticle->position).len() <= particle->radius + bigParticle->radius)
+      double dist = (particle->position - bigParticle->position).len();
+      if (dist > particle->R + bigParticle->R) continue;
+      if (dist > particle->radius + bigParticle->radius) {
+        //        f(particle, bigParticle); /// TODO
+      } else
         CollisionSolver::particleWithParticleCollision(particle, bigParticle, k);
     }
   }
+
   for (auto p = distributor.nextPair(); p != CellsDistributor::terminator; p = distributor.nextPair())
-    CollisionSolver::particleWithParticleCollision(p.first, p.second, k);
+    if ((p.first->position - p.second->position).len() <= p.first->radius + p.second->radius)
+      CollisionSolver::particleWithParticleCollision(p.first, p.second, k);
   *ready = true;
 }
 
@@ -41,17 +46,20 @@ void InteractionSolver::interact(std::vector<Particle *> &particles, double k) {
   if (particles.size() > 100) {
     std::vector<std::vector<Particle *>> subParticles(coreNumber);
     std::vector<bool *> threadsFinished(coreNumber);
-    for (int i = 0; i < threadsFinished.size(); ++i) {
-      threadsFinished[i] = new bool;
-      *threadsFinished[i] = false;
+
+    for (int pos = 0; pos < coreNumber; ++pos) {
+      threadsFinished[pos] = new bool;
+      *threadsFinished[pos] = false;
     }
+
+    size_t beginIndex, endIndex = 0;
+
     for (int i = 0; i < coreNumber; ++i) {
-      size_t beginIndex = i * particles.size() / coreNumber;
-      size_t endIndex = (i + 1) * particles.size() / coreNumber;
+      beginIndex = endIndex;
+      endIndex = (i + 1) * particles.size() / coreNumber;
       endIndex = std::min(endIndex, particles.size());
-      for (int j = beginIndex; j < endIndex; ++j) {
+      for (size_t j = beginIndex; j < endIndex; ++j)
         subParticles[i].push_back(particles[j]);
-      }
     }
 
     //LOG_INFO("Detaching");
@@ -61,15 +69,12 @@ void InteractionSolver::interact(std::vector<Particle *> &particles, double k) {
       interactionTasks.back().detach();
     }
 
+    bool everybodyFinished = false;
     //LOG_INFO("Started");
-    while (true) {
-      bool everybodyFinished = true;
-      for (int i = 0; i < coreNumber; ++i) {
+    while (!everybodyFinished) {
+      everybodyFinished = true;
+      for (int i = 0; i < coreNumber; ++i)
         everybodyFinished &= *threadsFinished[i];
-      }
-      if (everybodyFinished) {
-        break;
-      }
     }
     //LOG_INFO("Joined");
   } else {

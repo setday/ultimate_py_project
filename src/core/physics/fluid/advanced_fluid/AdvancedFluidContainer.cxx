@@ -14,37 +14,35 @@
 
 #include "AdvancedFluidContainer.h"
 #include <random>
-#include "../../CollisionSolver.h"
 
-unreal_fluid::physics::fluid::AdvancedFluidContainer::AdvancedFluidContainer(
-        unreal_fluid::physics::fluid::FluidDescriptor descriptor
-) {
+using namespace unreal_fluid::physics::fluid;
+
+AdvancedFluidContainer::AdvancedFluidContainer(FluidDescriptor descriptor) {
   k = 0.7;
   addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, 0, 0}, 0.05, 2);
 }
 
-unreal_fluid::physics::fluid::AdvancedFluidContainer::~AdvancedFluidContainer() {
-  for (auto &particle: particles) {
+AdvancedFluidContainer::~AdvancedFluidContainer() {
+  for (auto &particle: particles)
     delete particle;
-  }
 }
 
-unreal_fluid::physics::IPhysicalObject::Type unreal_fluid::physics::fluid::AdvancedFluidContainer::getType() {
+unreal_fluid::physics::IPhysicalObject::Type AdvancedFluidContainer::getType() {
   return Type::FLUID_CONTAINER_ADVANCED;
 }
 
-void *unreal_fluid::physics::fluid::AdvancedFluidContainer::getData() {
+void *AdvancedFluidContainer::getData() {
   return &particles;
 }
 
-void unreal_fluid::physics::fluid::AdvancedFluidContainer::simulate(double dt) {
-  //  flows();
+void AdvancedFluidContainer::simulate(double dt) {
+  flows();
   interact();
   addExternalForces(dt);
   advect(dt);
 }
 
-void unreal_fluid::physics::fluid::AdvancedFluidContainer::addParticle(vec3 position, vec3 velocity, double radius, double mass) {
+void AdvancedFluidContainer::addParticle(vec3 position, vec3 velocity, double radius, double mass) {
   auto particle = new Particle;
   particle->position = position;
   particle->mass = mass;
@@ -53,21 +51,24 @@ void unreal_fluid::physics::fluid::AdvancedFluidContainer::addParticle(vec3 posi
   particles.push_back(particle);
 }
 
-void unreal_fluid::physics::fluid::AdvancedFluidContainer::flows() {
+void AdvancedFluidContainer::flows() {
   addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, 0, 0}, 0.05, 2);
 }
 
-void unreal_fluid::physics::fluid::AdvancedFluidContainer::interact() {
+void AdvancedFluidContainer::interact() {
   interactionSolver.interact(particles, k);
 }
 
-void unreal_fluid::physics::fluid::AdvancedFluidContainer::addExternalForces(double dt) {
+void AdvancedFluidContainer::addExternalForces(double dt) {
   for (auto &particle: particles) {
     particle->velocity += G * dt;
   }
 }
 
-void unreal_fluid::physics::fluid::AdvancedFluidContainer::advect(double dt) {
-  for (auto particle: particles)
+void AdvancedFluidContainer::advect(double dt) {
+  for (auto &particle: particles) {
+    particle->velocity += particle->a * dt;
+    particle->a = 0;
     particle->position += particle->velocity * dt;
+  }
 }

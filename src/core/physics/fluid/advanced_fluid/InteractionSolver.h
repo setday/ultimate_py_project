@@ -24,6 +24,8 @@ namespace unreal_fluid::physics::fluid{
     int coreNumber;
     std::vector<CellsDistributor> distributors;
     std::vector<std::thread> interactionTasks;
+    void forces(fluid::Particle *p1, fluid::Particle *p2);
+    static void task(CellsDistributor &distributor, std::vector<Particle *> &particles, double k, bool *ready);
   public:
     InteractionSolver();
     ~InteractionSolver() = default;

@@ -20,7 +20,8 @@ namespace unreal_fluid::physics::fluid {
   class Particle {
   public:
     vec3 velocity, position;
-    double radius, mass;
+    double radius, r, R, mass;
+    vec3 a = 0;
 
     Particle() = default;
     ~Particle() = default;

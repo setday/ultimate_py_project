@@ -15,28 +15,30 @@
 #pragma once
 
 #include "../../PhysicsDefinitions.h"
-#include "../IFluidContainer.h"
 #include "../CellsDistributor.h"
+#include "../IFluidContainer.h"
 #include "InteractionSolver.h"
 
 namespace unreal_fluid::physics::fluid {
-    class AdvancedFluidContainer : public IFluidContainer {
-    private:
-      double k;
-      InteractionSolver interactionSolver;
-    public:
-        explicit AdvancedFluidContainer(FluidDescriptor descriptor);
-        ~AdvancedFluidContainer() override;
-        void simulate(double dt) override;
-        Type getType() override;
-        void *getData() override;
-    private:
-        void flows();
-        void advect(double dt);
-        void addExternalForces(double dt);
-        void interact();
-        void addParticle(vec3 position, vec3 velocity, double radius, double mass);
-    };
+  class AdvancedFluidContainer : public IFluidContainer {
+  private:
+    double k;
+    InteractionSolver interactionSolver;
+
+  public:
+    explicit AdvancedFluidContainer(FluidDescriptor descriptor);
+    ~AdvancedFluidContainer() override;
+    void simulate(double dt) override;
+    Type getType() override;
+    void *getData() override;
+
+  private:
+    void flows();
+    void advect(double dt);
+    void addExternalForces(double dt);
+    void interact();
+    void addParticle(vec3 position, vec3 velocity, double radius, double mass);
+  };
 } // namespace unreal_fluid::physics::fluid
 
 // end of AdvancedFluidContainer.h
