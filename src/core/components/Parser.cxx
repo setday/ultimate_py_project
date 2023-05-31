@@ -45,7 +45,7 @@ void Parser::parseSphere(IPhysicalObject &object, std::vector<render::RenderObje
     auto renderObject = new render::RenderObject;
     renderObject->material = render::material::Bronze();
     auto r = solidSphere.radius;
-    auto mesh = render::mesh::Sphere(float(r), unsigned(500 * r), unsigned(500 * r));
+    auto mesh = render::mesh::Sphere(r, unsigned(500 * r), unsigned(500 * r));
     renderObject->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&mesh);
     renderObjects.push_back(renderObject);
   }

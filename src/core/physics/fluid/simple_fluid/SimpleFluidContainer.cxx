@@ -20,23 +20,20 @@ using namespace unreal_fluid::physics::fluid;
 
 SimpleFluidContainer::SimpleFluidContainer(FluidDescriptor descriptor) : distributor(CellsDistributor()) {
   k = 0.7;
-  /// TODO : write constructor implementation
 }
 
 SimpleFluidContainer::~SimpleFluidContainer() {
-  for (auto &particle: particles) {
+  for (auto &particle: particles)
     delete particle;
-  }
 }
 
 void SimpleFluidContainer::addExternalForces(double dt) {
-  for (auto &particle: particles) {
+  for (auto &particle: particles)
     particle->velocity += G * dt;
-  }
 }
 
 void SimpleFluidContainer::advect(double dt) {
-  for (auto particle: particles)
+  for (auto &particle: particles)
     particle->position += particle->velocity * dt;
 }
 
@@ -54,7 +51,6 @@ void SimpleFluidContainer::interact() {
     CollisionSolver::particleWithParticleCollision(p.first, p.second, k);
 }
 
-/// TODO flows and addParticle should be methods of another class
 void SimpleFluidContainer::flows() {
     addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0, 0, 0}, 0.04, 2);
 }
