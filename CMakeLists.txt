@@ -56,6 +56,7 @@ add_executable(
 
         src/utils/timer/Timer.cxx
         src/utils/logger/Logger.cxx
+        src/utils/math/Line2D.cxx
 
         # Render meshes
 
@@ -94,12 +95,14 @@ add_executable(
 
         src/core/physics/PhysicsSimulator.cxx
         src/core/physics/CollisionSolver.cxx
-        
+
+        src/core/physics/fluid/advanced_fluid/InteractionSolver.cxx
         src/core/physics/fluid/advanced_fluid/AdvancedFluidContainer.cxx
 
         src/core/physics/fluid/CellsDistributor.cxx
         src/core/physics/fluid/simple_fluid/SimpleFluidContainer.cxx
 
+        src/core/components/Parser.cxx
         src/core/components/AbstractObject.cxx
 
         # IScene
@@ -130,12 +133,6 @@ add_executable(
         # addons/flag_addon/spring_constraint/SpringConstraint.cxx
         # addons/flag_addon/flag/Flag.cxx
 
-        # Not sorted.
-        # TODO: Sort me, plz :3
-
-        src/utils/math/Line2D.cxx
-        src/core/physics/fluid/advanced_fluid/InteractionSolver.cxx
-        src/core/components/Parser.cxx
 )
 
 message(${OPENGL_LIBRARIES})

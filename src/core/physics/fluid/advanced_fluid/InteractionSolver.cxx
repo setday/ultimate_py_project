@@ -69,9 +69,12 @@ void InteractionSolver::interact(std::vector<Particle *> &particles, double k) {
 
     size_t beginIndex, endIndex = 0;
 
+    int size = particles.size() / coreNumber;
+
     for (int i = 0; i < coreNumber; ++i) {
+      subParticles[i].reserve(size);
       beginIndex = endIndex;
-      endIndex = (i + 1) * particles.size() / coreNumber;
+      endIndex = (i + 1) * size;
       endIndex = std::min(endIndex, particles.size());
       for (size_t j = beginIndex; j < endIndex; ++j)
         subParticles[i].push_back(particles[j]);

@@ -133,25 +133,28 @@ void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::T
   if (triangle->norm.y < 0) phiY = -phiY;
   double phiZ = rotate(phiY, *p, *triangle);
   double dist = p->position.y - triangle->v1.y;
+  Logger::logDebug(dist, p->radius);
   if (abs(dist) < p->radius) {
-    math::Line2D s1 = {{triangle->v1.x, triangle->v1.z}, {triangle->v2.x, triangle->v2.z}};
-    math::Line2D s2 = {{triangle->v2.x, triangle->v2.z}, {triangle->v3.x, triangle->v3.z}};
-    math::Line2D s3 = {{triangle->v3.x, triangle->v3.z}, {triangle->v1.x, triangle->v1.z}};
-    math::Line2D scanBeam({p->position.x, p->position.z}, {100'000, 100'000});
-    int countIntersections = 0;
-    countIntersections += (s1.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
-    countIntersections += (s2.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
-    countIntersections += (s3.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
-    if (countIntersections % 2 != 0) {
+//    math::Line2D s1 = {{triangle->v1.x, triangle->v1.z}, {triangle->v2.x, triangle->v2.z}};
+//    math::Line2D s2 = {{triangle->v2.x, triangle->v2.z}, {triangle->v3.x, triangle->v3.z}};
+//    math::Line2D s3 = {{triangle->v3.x, triangle->v3.z}, {triangle->v1.x, triangle->v1.z}};
+//    math::Line2D scanBeam({p->position.x, p->position.z}, {100'000, 100'000});
+//    int countIntersections = 0;
+//    countIntersections += (s1.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
+//    countIntersections += (s2.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
+//    countIntersections += (s3.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
+//    if (countIntersections % 2 != 0) {
       double push = p->radius - abs(dist);
       if (dist < 0) push = -push;
+      Logger::logDebug("before", p->position.y);
       p->position.y += push;
+      Logger::logDebug("after", p->position.y);
       p->velocity.y *= -k;
-    } else {
-      if (edgeCollide(p, triangle->v1, triangle->v2, k) ||
-          edgeCollide(p, triangle->v2, triangle->v3, k) ||
-          edgeCollide(p, triangle->v1, triangle->v3, k)) {};
-    }
+//    } else {
+//      if (edgeCollide(p, triangle->v1, triangle->v2, k) ||
+//          edgeCollide(p, triangle->v2, triangle->v3, k) ||
+//          edgeCollide(p, triangle->v1, triangle->v3, k)) {};
+//    }
   }
   rotateBack(-phiY, -phiZ, *p, *triangle);
 }

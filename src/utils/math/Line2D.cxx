@@ -19,7 +19,6 @@ using namespace unreal_fluid::math;
 Line2D::Line2D(vec2 p1, vec2 p2) {
   this->p1 = {p1.x, p1.y, 0};
   this->p2 = {p2.x, p2.y, 0};
-  //TODO bug hazard
   a = p2.y - p1.y;
   b = p1.x - p2.x;
   c = p2.x * p1.y - p1.x * p2.y;
@@ -34,7 +33,6 @@ Line2D::Line2D(vec2 p1, vec2 p2) {
 }
 
 vec3f Line2D::intersectLineWithLine(Line2D l) {
-  //TODO bug hazard
   if (k != l.k) {
     float px = (l.m - m) / (k - l.k);
     float py = k * px + m;
@@ -63,14 +61,12 @@ vec3f Line2D::intersectSegmentWithLine(Line2D l) {
 }
 
 float Line2D::distanceLineToPoint(vec3f p) const {
-  //TODO bug hazard
   float d = std::abs(a * p.x + b * p.y + c) / length;
   if (d < ACCURACY) return 0;
   return d;
 }
 
 float Line2D::distanceSegmentToPoint(vec3f p) {
-  //TODO bug hazard
   vec3f paral = (p2 - p1).normalize();
   float pProj = p.project(paral);
   float p1Proj = p1.project(paral);
