@@ -50,7 +50,7 @@ void unreal_fluid::render::Texture::_generateTexture() {
   glTexParameteri(_dimensions, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
-void unreal_fluid::render::Texture::_initTexture(int width, int height, int depth, std::size_t components, std::size_t componentType) {
+void unreal_fluid::render::Texture::_initTexture(int width, int height, int depth, std::size_t components, std::size_t componentSize) {
   switch (components) {
     case 1:
       _internalFormat = GL_R;
@@ -76,7 +76,7 @@ void unreal_fluid::render::Texture::_initTexture(int width, int height, int dept
       assert(false);
   }
 
-  switch (componentType) {
+  switch (componentSize) {
     case 1:
       _type = GL_UNSIGNED_BYTE;
       break;
@@ -90,16 +90,17 @@ void unreal_fluid::render::Texture::_initTexture(int width, int height, int dept
   resize(width, height, depth);
 }
 
-unreal_fluid::render::Texture::Texture(std::size_t components, std::size_t componentType) {
-  _initTexture(0, 0, 0, components, componentType);
+unreal_fluid::render::Texture::Texture(std::size_t components, std::size_t componentSize) {
+  _initTexture(0, 0, 0, components, componentSize);
 }
 
-unreal_fluid::render::Texture::Texture(int width, int height, std::size_t components, std::size_t componentType) {
-  _initTexture(width, height, 0, components, componentType);
+unreal_fluid::render::Texture::Texture(int width, int height, std::size_t components, std::size_t componentSize) {
+  _initTexture(width, height, 0, components, componentSize);
 }
 
-unreal_fluid::render::Texture::Texture(int width, int height, int depth, std::size_t components, std::size_t componentType) {
-  _initTexture(width, height, depth, components, componentType);
+unreal_fluid::render::Texture::Texture(int width, int height, int depth,
+                                       std::size_t components, std::size_t componentSize) {
+  _initTexture(width, height, depth, components, componentSize);
 }
 
 unreal_fluid::render::Texture::Texture(std::string_view path) {
@@ -174,25 +175,47 @@ void unreal_fluid::render::Texture::resize(int width, int height, int depth) {
   glGenerateMipmap(_dimensions);
 }
 
-void unreal_fluid::render::Texture::write(const void *data) {
+void unreal_fluid::render::Texture::write(const void *data, int xOffset, int yOffset) {
   assert(data != nullptr);
 
   glBindTexture(_dimensions, _textureID);
   switch (_dimensions) {
     case GL_TEXTURE_2D:
-      glTexSubImage2D(_dimensions, 0, 0, 0,
+      glTexSubImage2D(_dimensions, 0, xOffset, yOffset,
                       _width, _height,
-                      GL_RGBA, GL_UNSIGNED_BYTE, data);
+                      _format, _type, data);
       break;
     case GL_TEXTURE_3D:
-      glTexSubImage3D(_dimensions, 0, 0, 0, 0,
+      glTexSubImage3D(_dimensions, 0, xOffset, yOffset, 0,
                       _width, _height, _depth,
-                      GL_RGBA, GL_UNSIGNED_BYTE, data);
+                      _format, _type, data);
       break;
     default:
       assert(false);
   }
   glGenerateMipmap(_dimensions);
+}
+
+void unreal_fluid::render::Texture::setPixel(const void *data, int x, int y) {
+  assert(data != nullptr);
+
+  glBindTexture(_dimensions, _textureID);
+  switch (_dimensions) {
+    case GL_TEXTURE_2D:
+      glTexSubImage2D(_dimensions, 0, x, y,
+                      1, 1,
+                      _format, _type, data);
+      break;
+    case GL_TEXTURE_3D:
+      glTexSubImage3D(_dimensions, 0, x, y, 0,
+                      1, 1, _depth,
+                      _format, _type, data);
+      break;
+    default:
+      assert(false);
+  }
+
+  // glGenerateMipmap(_dimensions);
 }
 
 bool unreal_fluid::render::Texture::bind() const {

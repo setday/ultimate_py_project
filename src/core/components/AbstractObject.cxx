@@ -32,31 +32,41 @@ void parseGasContainer2d(physics::IPhysicalObject *container2D, std::vector<rend
   void *data = container2D->getData();
   auto &cells = *static_cast<std::vector<std::vector<physics::gas::GasCell>> *>(data);
 
-  int renderObjectPointer = 0;
-  const float cubeSize = 0.06;
+  size_t height = cells.size();
+  if (height == 0)
+    return;
 
-  int rows = cells.size();
-  if (rows == 0) return;
-  int columns = cells.front().size();
+  size_t width = cells.front().size();
+  if (width == 0)
+    return;
 
-  for (size_t row = 0; row < rows; ++row) {
-    const auto &cellRow = cells[row];
-    for (size_t col = 0; col < columns; ++col) {
-      const auto &cell = cellRow[col];
+  static std::vector<float> colors(0 * 0 * 3);
+  colors.resize(height * width * 3);
 
-      if (renderObjectPointer >= renderObjects.size()) {
-        auto cube = render::mesh::Cube(cubeSize, vec3{col - columns * 0.5f, row - rows * 0.5f, 0} * cubeSize);
+  if (renderObjects.empty()) {
+    auto cube = render::mesh::Cube(1.5);
+    auto renderObject = new render::RenderObject;
 
-        auto renderObject = new render::RenderObject;
-        renderObject->material = render::material::Debug();
-        renderObject->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&cube);
-        renderObjects.push_back(renderObject);
-      }
+    renderObject->material = render::material::Debug();
+    renderObject->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&cube);
+    renderObject->textures[0] = new unreal_fluid::render::Texture(width, height,
+                                                                  (std::size_t)3, sizeof(float));
+    renderObjects.push_back(renderObject);
+  }
 
-      renderObjects[renderObjectPointer++]->material.ambientColor = cell.color;
-      //              math::lerp(0.0, 1.0, math::clamp(1.0 - cell.amountOfGas / 100.0, 0.0, 1.0));
+  for (size_t y = 0; y < height; ++y) {
+    size_t yOffset = y * width;
+    for (size_t x = 0; x < width; ++x) {
+      const auto &cell = cells[y][x];
+      size_t arrayPosition = (yOffset + x) * 3;
+
+      colors[arrayPosition + 0] = cell.color.x;
+      colors[arrayPosition + 1] = cell.color.y;
+      colors[arrayPosition + 2] = cell.color.z;
     }
   }
+
+  renderObjects[0]->textures[0]->write(colors.data());
 }
 
 void AbstractObject::parse() {

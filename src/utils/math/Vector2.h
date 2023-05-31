@@ -124,7 +124,7 @@ namespace unreal_fluid::math {
     [[nodiscard]] T len2() const { return x * x + y * y; }
     /// Length of this vector
     /// @return length of this vector
-    [[nodiscard]] double len() const { return mySqrt(len2()); }
+    [[nodiscard]] double len() const { return root(len2()); }
     /// Alternative to len()
     /// @return length of this vector
     [[nodiscard]] double operator!() const { return len(); }
@@ -161,22 +161,6 @@ namespace unreal_fluid::math {
     /// @return cross product of this and v
     T cross(const Vector2 &v) const {
       return x * v.y - y * v.x;
-    }
-
-    /// Clamp vector to the given range
-    /// @param min - minimum value
-    /// @param max - maximum value
-    Vector2 clampSelf(const Vector2 &min, const Vector2 &max) {
-      x = std::min(std::max(x, min.x), max.x);
-      y = std::min(std::max(y, min.y), max.y);
-      return *this;
-    }
-    /// Clamp vector to the given range
-    /// @param min - minimum value
-    /// @param max - maximum value
-    Vector2 clamp(const Vector2 &min, const Vector2 &max) const {
-      return Vector2(std::min(std::max(x, min.x), max.x),
-                     std::min(std::max(y, min.y), max.y));
     }
 
     /// Get maximum component

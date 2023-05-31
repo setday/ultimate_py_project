@@ -41,26 +41,26 @@ namespace unreal_fluid::render {
   private:
     void _generateTexture();
 
-    void _initTexture(int width, int height, int depth, std::size_t components, std::size_t componentType);
+    void _initTexture(int width, int height, int depth, std::size_t components, std::size_t componentSize);
 
   public:
     /// Create empty texture
     /// @param components - number of components in the texture (1, 2, 3, 4 by default, 5 for depth component)
-    /// @param componentType - type of the texture (unsigned byte (unsigned char) by default, float, etc.)
-    Texture(std::size_t components = 4, std::size_t componentType = sizeof(unsigned char));
+    /// @param componentSize - size of component (sizeof unsigned char by default)
+    explicit Texture(std::size_t components = 4, std::size_t componentSize = sizeof(unsigned char));
     /// Create empty texture 2D
     /// @param width - width of the texture
     /// @param height - height of the texture
     /// @param components - number of components in the texture (1, 2, 3, 4 by default, 5 for depth component)
-    /// @param componentType - type of the texture (unsigned byte (unsigned char) by default, float, etc.)
-    explicit Texture(int width, int height, std::size_t components = 4, std::size_t componentType = sizeof(unsigned char));
+    /// @param componentSize - size of component (sizeof unsigned char by default)
+    explicit Texture(int width, int height, std::size_t components = 4, std::size_t componentSize = sizeof(unsigned char));
     /// Create empty texture 3D
     /// @param width - width of the texture
     /// @param height - height of the texture
     /// @param depth - depth of the texture
     /// @param components - number of components in the texture (1, 2, 3, 4 by default, 5 for depth component)
-    /// @param componentType - type of the texture (unsigned byte (unsigned char) by default, float, etc.)
-    explicit Texture(int width, int height, int depth, std::size_t components = 4, std::size_t componentType = sizeof(unsigned char));
+    /// @param componentSize - size of component (sizeof unsigned char by default)
+    explicit Texture(int width, int height, int depth, std::size_t components = 4, std::size_t componentSize = sizeof(unsigned char));
     /// Load texture from file
     /// @param path - path to the file
     /// @return true if texture was loaded, false otherwise
@@ -84,7 +84,15 @@ namespace unreal_fluid::render {
     /// @param data - data to write
     /// @attention The size of the data must be equal to the size of the texture.
     /// @attention The data must be in the format of the texture (GL_RGBA32F).
-    void write(const void* data);
+    void write(const void* data, int xOffset = 0, int yOffset = 0);
+
+    /// Set pixel in this texture
+    /// @param data - data to write
+    /// @param x - x position
+    /// @param y - y position
+    /// @attention The size of the data must be equal to the size of the texture.
+    /// @attention The data must be in the format of the texture (GL_RGBA32F).
+    void setPixel(const void* data, int x, int y);
 
     /// Bind this texture
     /// @return true if texture was bound, false otherwise
