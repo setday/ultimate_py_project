@@ -75,8 +75,10 @@ void Parser::parseContainer(IPhysicalObject &object, std::vector<render::RenderO
 
       auto renderObject = new render::RenderObject;
       renderObject->material = render::material::Water();
-      renderObject->material.ambientColor.x = 0.2f;
-      renderObject->material.diffuseColor.x = 0.2f;
+      if (object.getType() == unreal_fluid::physics::IPhysicalObject::Type::FLUID_CONTAINER_SIMPLE){
+          renderObject->material.ambientColor.x = 0.2f;
+          renderObject->material.diffuseColor.x = 0.2f;
+      }
       auto r = particles[pos]->radius;
       auto mesh = render::mesh::Sphere(float(r), 10, 10);
       renderObject->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&mesh);

@@ -138,7 +138,7 @@ void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::T
     countIntersections += (s2.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
     countIntersections += (s3.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
     if (countIntersections % 2 != 0) {
-      Logger::logDebug("collision happened");
+      //Logger::logDebug("collision happened");
       double push = p->radius - abs(dist);
       if (dist < 0) push = -push;
       p->position.y += push;
