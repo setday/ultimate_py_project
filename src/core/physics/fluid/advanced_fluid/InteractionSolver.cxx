@@ -93,7 +93,6 @@ void InteractionSolver::interact(std::vector<Particle *> &particles, double k) {
     }
     //LOG_INFO("Joined");
   } else {
-      LOG_FATAL(particles.size());
     bool *ready = new bool;
     *ready = false;
     task(distributors[0], particles, k, ready);

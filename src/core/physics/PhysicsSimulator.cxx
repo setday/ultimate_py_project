@@ -52,7 +52,7 @@ void PhysicsSimulator::interact(IPhysicalObject *dynamicObject, IPhysicalObject 
         auto triangles = (std::vector<solid::Triangle> *) solid->getData();
         for (auto &particle: *particles)
           for (auto &triangle: *triangles)
-            CollisionSolver::particleWithTriangleCollision(particle, &triangle, 0.8);
+            CollisionSolver::particleWithTriangleCollision(particle, &triangle, 0.3);
         break;
       }
       case IPhysicalObject::Type::SOLID_SPHERE: {
