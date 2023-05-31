@@ -61,6 +61,13 @@ namespace unreal_fluid::physics::gas {
     /// @brief Diffuse gas in container.
     void diffuseCells(double dt);
 
+    /// @brief Dissolve gas in cell.
+    /// @param cell cell to dissolve
+    /// @param dt time step
+    void dissolveCell(GasCell &cell, double dt);
+    /// @brief Dissolve gas in container.
+    /// @param dt time step
+    void dissolveCells(double dt);
   public:
     /* abstract class implementation */
 

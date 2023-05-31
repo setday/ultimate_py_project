@@ -20,7 +20,7 @@
 namespace unreal_fluid::physics::gas {
   class GasCell {
   public:
-    double amountOfGas = 10;  // = mass / molarMass
+    double amountOfGas = 0;  // = mass / molarMass
     double volume = 1;        // volume of cell (now 1x1x1)
     double temperature = 300; // temperature of gas
     double targetFlow = 0;
@@ -28,7 +28,7 @@ namespace unreal_fluid::physics::gas {
     vec3f color = {1, 1, 1}; // color is a quantity to define gas
 
     GasCell() = default;
-    explicit GasCell(double pressure, vec3f color = {1, 1, 1}, double temperature = 300);
+    explicit GasCell(double amountOfGas, vec3f color = {1, 1, 1}, double temperature = 300);
 
     /// @brief get pressure of gas cell
     [[nodiscard]] double getPressure() const;

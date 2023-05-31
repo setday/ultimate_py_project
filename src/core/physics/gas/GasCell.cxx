@@ -33,6 +33,9 @@ GasCell GasCell::slice(double particlesCount) {
 }
 
 void GasCell::add(GasCell cell) {
+  if (cell.amountOfGas == 0)
+    return;
+
   color = (color * amountOfGas + cell.color * cell.amountOfGas) / (amountOfGas + cell.amountOfGas);
   temperature = (temperature * amountOfGas + cell.temperature * cell.amountOfGas) / (amountOfGas + cell.amountOfGas);
   amountOfGas += cell.amountOfGas;

@@ -18,6 +18,7 @@
 #include "../render/components/mesh/presets/Cube.h"
 #include "../src/core/render/components/material/MaterialPresets.h"
 #include "../src/core/render/components/mesh/presets/Sphere.h"
+#include "../src/core/render/components/mesh/presets/Plane.h"
 
 using namespace unreal_fluid;
 
@@ -42,15 +43,21 @@ void parseGasContainer2d(physics::IPhysicalObject *container2D, std::vector<rend
 
   static std::vector<float> colors(0 * 0 * 3);
   colors.resize(height * width * 3);
+  static std::vector<float> amountOfGas(0 * 0 * 3);
+  amountOfGas.resize(height * width);
 
   if (renderObjects.empty()) {
-    auto cube = render::mesh::Cube(1.5);
+    auto cube = render::mesh::Plane(1.5, 1.5, 1, 1, {0.0, 1.0, 0.0}, {1.0, 0.0, 0.0});
     auto renderObject = new render::RenderObject;
 
     renderObject->material = render::material::Debug();
     renderObject->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&cube);
-    renderObject->textures[0] = new unreal_fluid::render::Texture(width, height,
-                                                                  (std::size_t)3, sizeof(float));
+    renderObject->textures[0] = new unreal_fluid::render::Texture((int)width, (int)height,
+                                                                  (std::size_t)3, sizeof(float)); // color
+    renderObject->textures[1] = new unreal_fluid::render::Texture((int)width, (int)height,
+                                                                  (std::size_t)1, sizeof(float)); // amountOfGas
+    renderObject->shaderProgram = render::DefaultShaderManager::GetGasProgram();
+
     renderObjects.push_back(renderObject);
   }
 
@@ -63,10 +70,13 @@ void parseGasContainer2d(physics::IPhysicalObject *container2D, std::vector<rend
       colors[arrayPosition + 0] = cell.color.x;
       colors[arrayPosition + 1] = cell.color.y;
       colors[arrayPosition + 2] = cell.color.z;
+
+      amountOfGas[yOffset + x] = cell.amountOfGas / 100.0;
     }
   }
 
   renderObjects[0]->textures[0]->write(colors.data());
+  renderObjects[0]->textures[1]->write(amountOfGas.data());
 }
 
 void AbstractObject::parse() {

@@ -17,10 +17,10 @@
 
 using namespace unreal_fluid::render;
 
-Shader::Shader(Type _type) {
+Shader::Shader(Type type) : _type(type) {
   unsigned int glType = 0;
 
-  switch (_type) {
+  switch (type) {
     case Type::VERTEX:
       glType = GL_VERTEX_SHADER;
       break;
@@ -58,6 +58,10 @@ bool Shader::build(std::string_view source) {
 
 GLuint Shader::getShaderId() const {
   return _shaderID;
+}
+
+Shader::Type Shader::getType() const {
+  return _type;
 }
 
 void Shader::getLog(std::string &log) const {

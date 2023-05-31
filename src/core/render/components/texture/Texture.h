@@ -39,8 +39,6 @@ namespace unreal_fluid::render {
     GLuint _textureID = -1;
 
   private:
-    void _generateTexture();
-
     void _initTexture(int width, int height, int depth, std::size_t components, std::size_t componentSize);
 
   public:
@@ -82,8 +80,10 @@ namespace unreal_fluid::render {
 
     /// Write data to this texture
     /// @param data - data to write
+    /// @param xOffset - x offset
+    /// @param yOffset - y offset
     /// @attention The size of the data must be equal to the size of the texture.
-    /// @attention The data must be in the format of the texture (GL_RGBA32F).
+    /// @attention The data must be in the format of the texture.
     void write(const void* data, int xOffset = 0, int yOffset = 0);
 
     /// Set pixel in this texture
@@ -91,7 +91,7 @@ namespace unreal_fluid::render {
     /// @param x - x position
     /// @param y - y position
     /// @attention The size of the data must be equal to the size of the texture.
-    /// @attention The data must be in the format of the texture (GL_RGBA32F).
+    /// @attention The data must be in the format of the texture.
     void setPixel(const void* data, int x, int y);
 
     /// Bind this texture
