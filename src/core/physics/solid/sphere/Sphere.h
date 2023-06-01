@@ -17,7 +17,7 @@
 #include "../ISolid.h"
 
 namespace unreal_fluid::physics::solid {
-  class SolidSphere : public ISolid {
+  class Sphere : public ISolid {
 
   private:
     void simulate(double dt) override{};
@@ -25,7 +25,7 @@ namespace unreal_fluid::physics::solid {
   public:
     double radius;
 
-    SolidSphere(vec3 position, double radius);
+    Sphere(vec3 position, double radius);
 
     /// Get type of object
     /// @return type of object

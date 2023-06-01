@@ -18,18 +18,15 @@
 #include "fluid/Particle.h"
 #include "solid/mesh/Plane.h"
 #include "solid/mesh/Triangle.h"
-#include "solid/sphere/SolidSphere.h"
+#include "solid/sphere/Sphere.h"
 
 namespace unreal_fluid::physics {
 
   class CollisionSolver {
   private:
     static bool edgeCollide(fluid::Particle *p, vec3f p1, vec3f p2, double k);
-    static double rotate(double phiY, fluid::Particle &p, solid::Triangle &triangle);
-    static void rotateBack(double phiY, double phiZ, fluid::Particle &p, solid::Triangle &triangle);
-    /// @brief returns pair: cos and sin of the angle for expected rotation around oZ axis
-    static std::pair<double, double> rotate(double cosY, double sinY, fluid::Particle &p, solid::Triangle &triangle);
-    static void rotateBack(double cosY, double sinY, double cosZ, double sinZ,fluid::Particle &p, solid::Triangle &triangle);
+    static void rotate(fluid::Particle *p, solid::Triangle *triangle);
+    static void rotateBack(fluid::Particle *p, solid::Triangle *triangle);
 
   public:
     /// @brief collides two particles
@@ -39,7 +36,7 @@ namespace unreal_fluid::physics {
 
     /// @brief collides particle with sphere
     /// @details takes particle p, static sphere s and uses k - coefficient of restitution - to collide them
-    static void particleWithSphereCollision(fluid::Particle *p, solid::SolidSphere *s, double k);
+    static void particleWithSphereCollision(fluid::Particle *p, solid::Sphere *s, double k);
 
     static void particleWithPlaneCollision(fluid::Particle *particle, solid::Plane *plane, double k);
     static void particleWithTriangleCollision(fluid::Particle *particle, solid::Triangle *triangle, double k);

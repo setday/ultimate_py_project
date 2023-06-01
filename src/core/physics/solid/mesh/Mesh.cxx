@@ -12,17 +12,17 @@
  * authors of this project.
  */
 
-#include "SolidMesh.h"
+#include "Mesh.h"
 
 using namespace unreal_fluid::physics::solid;
 
-SolidMesh::SolidMesh(const std::vector<Triangle> &triangles) : triangles(triangles) {}
+Mesh::Mesh(const std::vector<Triangle> &triangles) : triangles(triangles) {}
 
-unreal_fluid::physics::IPhysicalObject::Type SolidMesh::getType() {
+unreal_fluid::physics::IPhysicalObject::Type Mesh::getType() {
   return Type::SOLID_MESH;
 }
 
-void *SolidMesh::getData() {
+void *Mesh::getData() {
   return &triangles;
 }
 

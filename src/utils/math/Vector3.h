@@ -20,6 +20,10 @@
 
 namespace unreal_fluid::math {
 
+   struct Angle {
+       double cos, sin;
+   };
+
   template<typename T>
   class Vector3 {
   public:
@@ -155,42 +159,42 @@ namespace unreal_fluid::math {
       return newVec;
     }
 
-      void rotateXSelf(double cos, double sin) {
-          double cosPhi = cos, sinPhi = sin, newy, newz;
+      void rotateXSelf(math::Angle phi) {
+          double cosPhi = phi.cos, sinPhi = phi.sin, newy, newz;
           newy = cosPhi * y - sinPhi * z;
           newz = sinPhi * y + cosPhi * z;
           y = newy, z = newz;
       }
 
-      Vector3 rotateX(double cos, double sin) const {
+      Vector3 rotateX(math::Angle phi) const {
           Vector3 newVec = this;
-          newVec.rotateXSelf(cos, sin);
+          newVec.rotateXSelf(phi);
           return newVec;
       }
 
-      void rotateYSelf(double cos, double sin) {
-          double cosPhi = cos, sinPhi = sin, newx, newz;
+      void rotateYSelf(math::Angle phi) {
+          double cosPhi = phi.cos, sinPhi = phi.sin, newx, newz;
           newx = cosPhi * x + sinPhi * z;
           newz = -sinPhi * x + cosPhi * z;
           x = newx, z = newz;
       }
 
-      Vector3 rotateY(double cos, double sin) const {
+      Vector3 rotateY(math::Angle phi) const {
           Vector3 newVec = this;
-          newVec.rotateYSelf(cos, sin);
+          newVec.rotateYSelf(phi);
           return newVec;
       }
 
-      void rotateZSelf(double cos, double sin) {
-          double cosPhi = cos, sinPhi = sin, newx, newy;
+      void rotateZSelf(math::Angle phi) {
+          double cosPhi = phi.cos, sinPhi = phi.sin, newx, newy;
           newx = cosPhi * x - sinPhi * y;
           newy = sinPhi * x + cosPhi * y;
           x = newx, y = newy;
       }
 
-      Vector3 rotateZ(double cos, double sin) const {
+      Vector3 rotateZ(math::Angle phi) const {
           Vector3 newVec = this;
-          newVec.rotateZSelf(cos, sin);
+          newVec.rotateZSelf(phi);
           return newVec;
       }
 

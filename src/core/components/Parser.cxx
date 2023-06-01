@@ -15,8 +15,8 @@
 #include "Parser.h"
 #include "../physics/fluid/Particle.h"
 #include "../physics/solid/mesh/Plane.h"
-#include "../physics/solid/mesh/SolidMesh.h"
-#include "../physics/solid/sphere/SolidSphere.h"
+#include "../physics/solid/mesh/Mesh.h"
+#include "../physics/solid/sphere/Sphere.h"
 #include "../render/components/mesh/presets/Plane.h"
 #include "../src/core/render/components/material/MaterialPresets.h"
 #include "../src/core/render/components/mesh/presets/Sphere.h"
@@ -39,7 +39,7 @@ void Parser::parsePlane(IPhysicalObject &object, std::vector<render::RenderObjec
 }
 
 void Parser::parseSphere(IPhysicalObject &object, std::vector<render::RenderObject *> &renderObjects) {
-  auto solidSphere = *static_cast<solid::SolidSphere *>(object.getData());
+  auto solidSphere = *static_cast<solid::Sphere *>(object.getData());
 
   if (renderObjects.empty()) {
     auto renderObject = new render::RenderObject;
@@ -59,7 +59,7 @@ void Parser::parseMesh(IPhysicalObject &object, std::vector<render::RenderObject
   for (size_t pos = renderObjects.size(); pos < triangles.size(); ++pos) {
     const auto &triangle = triangles[pos];
     auto renderObject = new render::RenderObject();
-    auto mesh = render::mesh::BasicMesh({triangle.v1, triangle.v2, triangle.v3}, {0, 1, 2});
+    auto mesh = render::mesh::BasicMesh({triangle.getV1(), triangle.getV2(), triangle.getV3()}, {0, 1, 2});
     renderObject->bakedMesh = std::make_unique<render::mesh::BakedMesh>(&mesh);
     renderObject->material = render::material::GreenPlastic();
     renderObjects.push_back(renderObject);

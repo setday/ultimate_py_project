@@ -89,8 +89,9 @@ add_executable(
 
         # Physics
 
-        src/core/physics/solid/sphere/SolidSphere.cxx
-        src/core/physics/solid/mesh/SolidMesh.cxx
+        src/core/physics/solid/sphere/Sphere.cxx
+        src/core/physics/solid/mesh/Triangle.cxx
+        src/core/physics/solid/mesh/Mesh.cxx
         src/core/physics/solid/mesh/Plane.cxx
 
         src/core/physics/PhysicsSimulator.cxx

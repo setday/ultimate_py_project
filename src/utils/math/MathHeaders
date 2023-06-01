@@ -33,4 +33,5 @@ namespace unreal_fluid::math {
   static const double PI_2 = 1.57079632679489661923;  // pi/2
   static const double PI_4 = 0.785398163397448309616; // pi/4
   static const double SQRT2 = 1.41421356237309504880; // sqrt(2)
+
 } // namespace unreal_fluid::math

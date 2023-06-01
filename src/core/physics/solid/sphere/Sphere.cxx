@@ -12,18 +12,18 @@
  * authors of this project.
  */
 
-#include "SolidSphere.h"
+#include "Sphere.h"
 
 using namespace unreal_fluid::physics::solid;
 
-SolidSphere::SolidSphere(vec3 position, double radius) : ISolid(position),
-                                                         radius(radius) {}
+Sphere::Sphere(vec3 position, double radius) : ISolid(position),
+                                               radius(radius) {}
 
-unreal_fluid::physics::IPhysicalObject::Type SolidSphere::getType() {
+unreal_fluid::physics::IPhysicalObject::Type Sphere::getType() {
   return Type::SOLID_SPHERE;
 }
 
-void *SolidSphere::getData() {
+void *Sphere::getData() {
   return this;
 }
 

@@ -45,7 +45,7 @@ void CollisionSolver::particleWithParticleCollision(fluid::Particle *p1, fluid::
     p2->velocity += momentum * p1->mass;
 }
 
-void CollisionSolver::particleWithSphereCollision(fluid::Particle *p, solid::SolidSphere *s, double k) {
+void CollisionSolver::particleWithSphereCollision(fluid::Particle *p, solid::Sphere *s, double k) {
     vec3 diff = s->position - p->position;
 
     if (diff.len2() == 0) return;
@@ -86,109 +86,40 @@ void CollisionSolver::particleWithPlaneCollision(fluid::Particle *particle, soli
     particle->velocity *= (1 - k);
 }
 
-std::pair<double, double>
-CollisionSolver::rotate(double cosY, double sinY, fluid::Particle &p, solid::Triangle &triangle) {
-    p.position.rotateYSelf(cosY, sinY);
-    p.velocity.rotateYSelf(cosY, sinY);
-    triangle.v1.rotateYSelf(cosY, sinY);
-    triangle.v2.rotateYSelf(cosY, sinY);
-    triangle.v3.rotateYSelf(cosY, sinY);
-    triangle.norm.rotateYSelf(cosY, sinY);
-    vec3f norm = triangle.norm;
-    double cosZ, sinZ;
-    if (norm.x == 0 && norm.y == 0){
-        cosZ = 1;
-    }
-    else
-        cosZ = norm.y / std::sqrt(norm.x * norm.x + norm.y * norm.y);
-    sinZ = sqrt(1 - cosZ*cosZ);
-    if (norm.y < 0) {
-        sinZ *= -1;
-    }
-    p.position.rotateZSelf(cosZ, sinZ);
-    p.velocity.rotateZSelf(cosZ, sinZ);
-    triangle.v1.rotateZSelf(cosZ, sinZ);
-    triangle.v2.rotateZSelf(cosZ, sinZ);
-    triangle.v3.rotateZSelf(cosZ, sinZ);
-    triangle.norm.rotateZSelf(cosZ, sinZ);
-    return {cosZ, sinZ};
+void CollisionSolver::rotate(fluid::Particle *p, solid::Triangle *triangle) {
+    math::Angle phiY = triangle->getPhiY();
+    math::Angle phiZ = triangle->getPhiZ();
+    p->position.rotateYSelf(phiY);
+    p->velocity.rotateYSelf(phiY);
+    p->position.rotateZSelf(phiZ);
+    p->velocity.rotateZSelf(phiZ);
 }
 
-void
-CollisionSolver::rotateBack(double cosY, double sinY, double cosZ, double sinZ, fluid::Particle &p,
-                            solid::Triangle &triangle) {
-    p.position.rotateZSelf(cosZ, sinZ);
-    p.velocity.rotateZSelf(cosZ, sinZ);
-    triangle.v1.rotateZSelf(cosZ, sinZ);
-    triangle.v2.rotateZSelf(cosZ, sinZ);
-    triangle.v3.rotateZSelf(cosZ, sinZ);
-    triangle.norm.rotateZSelf(cosZ, sinZ);
-    p.position.rotateYSelf(cosY, sinY);
-    p.velocity.rotateYSelf(cosY, sinY);
-    triangle.v1.rotateYSelf(cosY, sinY);
-    triangle.v2.rotateYSelf(cosY, sinY);
-    triangle.v3.rotateYSelf(cosY, sinY);
-    triangle.norm.rotateYSelf(cosY, sinY);
+void CollisionSolver::rotateBack(fluid::Particle *p,
+                            solid::Triangle *triangle) {
+    math::Angle phiY = triangle->getPhiY();
+    phiY.sin *= -1;
+    math::Angle phiZ = triangle->getPhiZ();
+    phiZ.sin *= -1;
+    p->position.rotateZSelf(phiZ);
+    p->velocity.rotateZSelf(phiZ);
+    p->position.rotateYSelf(phiY);
+    p->velocity.rotateYSelf(phiY);
 }
 
-double CollisionSolver::rotate(double phiY, fluid::Particle &p, solid::Triangle &triangle) {
-    p.position.rotateYSelf(phiY);
-    p.velocity.rotateYSelf(phiY);
-    triangle.v1.rotateYSelf(phiY);
-    triangle.v2.rotateYSelf(phiY);
-    triangle.v3.rotateYSelf(phiY);
-    triangle.norm.rotateYSelf(phiY);
-    vec3f norm = triangle.norm;
-    double phiZ;
-    if (norm.x == 0 && norm.y == 0) phiZ = 0;
-    else
-        phiZ = std::acos(norm.y / std::sqrt(norm.x * norm.x + norm.y * norm.y));
-    if (norm.y < 0) phiZ = -phiZ;
-    p.position.rotateZSelf(phiZ);
-    p.velocity.rotateZSelf(phiZ);
-    triangle.v1.rotateZSelf(phiZ);
-    triangle.v2.rotateZSelf(phiZ);
-    triangle.v3.rotateZSelf(phiZ);
-    triangle.norm.rotateZSelf(phiZ);
-    return phiZ;
-}
-
-void CollisionSolver::rotateBack(double phiY, double phiZ, fluid::Particle &p, solid::Triangle &triangle) {
-    p.position.rotateZSelf(phiZ);
-    p.velocity.rotateZSelf(phiZ);
-    triangle.v1.rotateZSelf(phiZ);
-    triangle.v2.rotateZSelf(phiZ);
-    triangle.v3.rotateZSelf(phiZ);
-    triangle.norm.rotateZSelf(phiZ);
-    p.position.rotateYSelf(phiY);
-    p.velocity.rotateYSelf(phiY);
-    triangle.v1.rotateYSelf(phiY);
-    triangle.v2.rotateYSelf(phiY);
-    triangle.v3.rotateYSelf(phiY);
-    triangle.norm.rotateYSelf(phiY);
-}
-
-void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::Triangle *triangle, double k) {
-/*    double phiY;
-    if (!(triangle->norm.x == 0 && triangle->norm.z == 0)){
-        phiY = std::acos(
-                triangle->norm.x / sqrt(triangle->norm.x * triangle->norm.x + triangle->norm.z * triangle->norm.z));
-    }
-    else
-        phiY = 0;
-    if (triangle->norm.z < 0){
-        phiY *= -1;
-    }
-    double phiZ = rotate(phiY, *p, *triangle);
-    double dist = p->position.y - triangle->v1.y;
+void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::Triangle *triangle, double k)  {
+    rotate(p, triangle);
+    vec3f v1 = triangle->getRotatedV1();
+    vec3f v2 = triangle->getRotatedV2();
+    vec3f v3 = triangle->getRotatedV3();
+    double dist = p->position.y - v1.y;
     if (abs(dist) < p->radius) {
-        //LOG_INFO(triangle->norm);
-        math::Line2D s1 = {{triangle->v1.x, triangle->v1.z},
-                           {triangle->v2.x, triangle->v2.z}};
-        math::Line2D s2 = {{triangle->v2.x, triangle->v2.z},
-                           {triangle->v3.x, triangle->v3.z}};
-        math::Line2D s3 = {{triangle->v3.x, triangle->v3.z},
-                           {triangle->v1.x, triangle->v1.z}};
+        math::Line2D s1 = {{v1.x, v1.z},
+                           {v2.x, v2.z}};
+        math::Line2D s2 = {{v2.x, v2.z},
+                           {v3.x, v3.z}};
+        math::Line2D s3 = {{v3.x, v3.z},
+                           {v1.x, v1.z}};
         math::Line2D scanBeam({p->position.x, p->position.z}, {100'000, 100'000});
         int countIntersections = 0;
         countIntersections += (s1.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
@@ -202,57 +133,13 @@ void CollisionSolver::particleWithTriangleCollision(fluid::Particle *p, solid::T
             //Logger::logDebug("after", p->position.y);
             p->velocity.y *= -k;
         } else {
-            if (edgeCollide(p, triangle->v1, triangle->v2, k) ||
-                edgeCollide(p, triangle->v2, triangle->v3, k) ||
-                edgeCollide(p, triangle->v1, triangle->v3, k)) {
+            if (edgeCollide(p, v1, v2, k) ||
+                edgeCollide(p, v2, v3, k) ||
+                edgeCollide(p, v1, v3, k)) {
             };
         }
     }
-    rotateBack(-phiY, -phiZ, *p, *triangle);*/
-    double cosY, sinY, cosZ, sinZ;
-    if (!(triangle->norm.x == 0 && triangle->norm.z == 0)){
-        cosY = triangle->norm.x / std::sqrt(triangle->norm.x * triangle->norm.x + triangle->norm.z * triangle->norm.z);
-    }
-//        phiY = std::acos(
-//                triangle->norm.x / sqrt(triangle->norm.x * triangle->norm.x + triangle->norm.z * triangle->norm.z));
-    else
-        cosY = 1;
-    sinY = std::sqrt(1 - cosY*cosY);
-    if (triangle->norm.z < 0){
-        sinY *= -1;
-    }
-    auto angle = rotate(cosY, sinY, *p, *triangle);
-    cosZ = angle.first;
-    sinZ = angle.second;
-    double dist = p->position.y - triangle->v1.y;
-    if (abs(dist) < p->radius) {
-        //LOG_INFO(triangle->norm);
-        math::Line2D s1 = {{triangle->v1.x, triangle->v1.z},
-                           {triangle->v2.x, triangle->v2.z}};
-        math::Line2D s2 = {{triangle->v2.x, triangle->v2.z},
-                           {triangle->v3.x, triangle->v3.z}};
-        math::Line2D s3 = {{triangle->v3.x, triangle->v3.z},
-                           {triangle->v1.x, triangle->v1.z}};
-        math::Line2D scanBeam({p->position.x, p->position.z}, {100'000, 100'000});
-        int countIntersections = 0;
-        countIntersections += (s1.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
-        countIntersections += (s2.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
-        countIntersections += (s3.intersectSegmentWithSegment(scanBeam) != LINE2D_NULL_POINT);
-        if (countIntersections % 2 != 0) {
-            double push = p->radius - abs(dist);
-            if (dist < 0) push = -push;
-            Logger::logDebug("before", p->position.y);
-            p->position.y += push;
-            Logger::logDebug("after", p->position.y);
-            p->velocity.y *= -k;
-        } else {
-            if (edgeCollide(p, triangle->v1, triangle->v2, k) ||
-                edgeCollide(p, triangle->v2, triangle->v3, k) ||
-                edgeCollide(p, triangle->v1, triangle->v3, k)) {
-            };
-        }
-    }
-    rotateBack(cosY, -sinY, cosZ, -sinZ, *p, *triangle);
+    rotateBack(p, triangle);
 }
 
 bool CollisionSolver::edgeCollide(fluid::Particle *p, vec3f p1, vec3f p2, double k) {

@@ -5,7 +5,7 @@
 
 /* PROJECT   : UnrealFluidPhysics
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : SolidMesh.cxx
+ * FILE NAME : Mesh.cxx
  * PURPOSE   : Simple static mesh
  *
  * No part of this file may be changed and used without agreement of
@@ -19,13 +19,13 @@
 #include "Triangle.h"
 
 namespace unreal_fluid::physics::solid {
-  class SolidMesh : public ISolid {
+  class Mesh : public ISolid {
 
   private:
     std::vector<Triangle> triangles;
 
   public:
-    explicit SolidMesh(const std::vector<Triangle> &triangles);
+    explicit Mesh(const std::vector<Triangle> &triangles);
 
     void simulate(double dt) override{};
     Type getType() override;

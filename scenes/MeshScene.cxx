@@ -16,7 +16,7 @@
 #include "../src/core/components/AbstractObject.h"
 #include "../src/core/components/scene/Scene.h"
 #include "../src/core/physics/fluid/advanced_fluid/AdvancedFluidContainer.h"
-#include "../src/core/physics/solid/mesh/SolidMesh.h"
+#include "../src/core/physics/solid/mesh/Mesh.h"
 using namespace unreal_fluid;
 
 class MeshScene : public Scene {
@@ -38,7 +38,7 @@ public:
 
 
     auto triangles = new std::vector<solid::Triangle>{t};
-    auto solidMesh = new solid::SolidMesh(*triangles);
+    auto solidMesh = new solid::Mesh(*triangles);
 
     objects.push_back(new AbstractObject(solidMesh));
 

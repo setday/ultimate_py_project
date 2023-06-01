@@ -13,7 +13,7 @@
 
 #include "PhysicsSimulator.h"
 #include "CollisionSolver.h"
-#include "solid/mesh/SolidMesh.h"
+#include "solid/mesh/Mesh.h"
 
 using namespace unreal_fluid::physics;
 
@@ -52,11 +52,11 @@ void PhysicsSimulator::interact(IPhysicalObject *dynamicObject, IPhysicalObject 
         auto triangles = (std::vector<solid::Triangle> *) solid->getData();
         for (auto &particle: *particles)
           for (auto &triangle: *triangles)
-            CollisionSolver::particleWithTriangleCollision(particle, &triangle, 0.3);
+              CollisionSolver::particleWithTriangleCollision(particle, &triangle, 0.3);
         break;
       }
       case IPhysicalObject::Type::SOLID_SPHERE: {
-        auto sphere = (solid::SolidSphere *) solid;
+        auto sphere = (solid::Sphere *) solid;
         for (auto &particle: *particles)
           CollisionSolver::particleWithSphereCollision(particle, sphere, 0.02);
         break;

@@ -16,8 +16,8 @@
 #include "../src/core/components/AbstractObject.h"
 #include "../src/core/components/scene/Scene.h"
 #include "../src/core/physics/solid/mesh/Plane.h"
-#include "../src/core/physics/solid/mesh/SolidMesh.h"
-#include "../src/core/physics/solid/sphere/SolidSphere.h"
+#include "../src/core/physics/solid/mesh/Mesh.h"
+#include "../src/core/physics/solid/sphere/Sphere.h"
 #include "../src/core/physics/fluid/advanced_fluid/AdvancedFluidContainer.h"
 
 using namespace unreal_fluid;
@@ -25,10 +25,10 @@ using namespace unreal_fluid;
 class TestScene : public Scene {
 public:
   explicit TestScene(const compositor::SceneCompositor *compositor) : Scene(compositor) {
-    auto sphere1 = new physics::solid::SolidSphere({0, 0, 0}, 0.3);
+    auto sphere1 = new physics::solid::Sphere({0, 0, 0}, 0.3);
     objects.push_back(new AbstractObject(sphere1));
 
-    auto sphere2 = new physics::solid::SolidSphere({0.5, -0.5, 0}, 0.3);
+    auto sphere2 = new physics::solid::Sphere({0.5, -0.5, 0}, 0.3);
     objects.push_back(new AbstractObject(sphere2));
 
     auto fluid = new physics::fluid::AdvancedFluidContainer({});
