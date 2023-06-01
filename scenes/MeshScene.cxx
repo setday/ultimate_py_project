@@ -29,11 +29,15 @@ public:
     auto simpleFluid = new fluid::AdvancedFluidContainer({});
     objects.push_back(new AbstractObject(simpleFluid));
 
-//    solid::Triangle t1{{0.5, 0.4, 0}, {-0.5, 0.01, -0.5}, {-0.5, 0, 0.5}};
-    solid::Triangle t2{{1, 1, 0}, {-0.5, 1, -0.5}, {0, 0, 1}};
+    //solid::Triangle t{{-0.5, 0, -0.5}, {0.5, 0, 0},{-0.5, 0, 0.5}};
+    //solid::Triangle t{{0.5, 0, 0}, {-0.5, 0, -0.5}, {-0.5, 0, 0.5}};
+    //solid::Triangle t{{0.5, 0, 0}, {-0.5, 0, -0.5}, {-0.5, 0, 0.5}};
+    solid::Triangle t{{0.5, 0.4, 0}, {-0.5, 0.1, -0.5}, {-0.5, 0, 0.5}};
+    //solid::Triangle t{{0.5, 0.4, 0}, {-0.5, 0.01, -0.5}, {-0.5, 0, 0.5}};
+    //solid::Triangle t{{1, 1, 0}, {-0.5, 1, -0.5}, {0, 0, 1}};
 
 
-    auto triangles = new std::vector<solid::Triangle>{t2};
+    auto triangles = new std::vector<solid::Triangle>{t};
     auto solidMesh = new solid::SolidMesh(*triangles);
 
     objects.push_back(new AbstractObject(solidMesh));

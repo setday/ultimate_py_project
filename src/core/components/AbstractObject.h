@@ -23,7 +23,6 @@ namespace unreal_fluid {
   class AbstractObject {
     physics::IPhysicalObject *physicalObject;
     std::vector<render::RenderObject *> renderObjects;
-
   public:
     AbstractObject(physics::IPhysicalObject *physicalObject, const std::vector<render::RenderObject *> &renderObjects);
     explicit AbstractObject(physics::IPhysicalObject *physObject);

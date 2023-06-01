@@ -155,6 +155,45 @@ namespace unreal_fluid::math {
       return newVec;
     }
 
+      void rotateXSelf(double cos, double sin) {
+          double cosPhi = cos, sinPhi = sin, newy, newz;
+          newy = cosPhi * y - sinPhi * z;
+          newz = sinPhi * y + cosPhi * z;
+          y = newy, z = newz;
+      }
+
+      Vector3 rotateX(double cos, double sin) const {
+          Vector3 newVec = this;
+          newVec.rotateXSelf(cos, sin);
+          return newVec;
+      }
+
+      void rotateYSelf(double cos, double sin) {
+          double cosPhi = cos, sinPhi = sin, newx, newz;
+          newx = cosPhi * x + sinPhi * z;
+          newz = -sinPhi * x + cosPhi * z;
+          x = newx, z = newz;
+      }
+
+      Vector3 rotateY(double cos, double sin) const {
+          Vector3 newVec = this;
+          newVec.rotateYSelf(cos, sin);
+          return newVec;
+      }
+
+      void rotateZSelf(double cos, double sin) {
+          double cosPhi = cos, sinPhi = sin, newx, newy;
+          newx = cosPhi * x - sinPhi * y;
+          newy = sinPhi * x + cosPhi * y;
+          x = newx, y = newy;
+      }
+
+      Vector3 rotateZ(double cos, double sin) const {
+          Vector3 newVec = this;
+          newVec.rotateZSelf(cos, sin);
+          return newVec;
+      }
+
     Vector3 operator*(const Vector3 &vec) const {
       return Vector3(x * vec.x, y * vec.y, z * vec.z);
     }

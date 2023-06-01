@@ -27,6 +27,9 @@ namespace unreal_fluid::physics {
     static bool edgeCollide(fluid::Particle *p, vec3f p1, vec3f p2, double k);
     static double rotate(double phiY, fluid::Particle &p, solid::Triangle &triangle);
     static void rotateBack(double phiY, double phiZ, fluid::Particle &p, solid::Triangle &triangle);
+    /// @brief returns pair: cos and sin of the angle for expected rotation around oZ axis
+    static std::pair<double, double> rotate(double cosY, double sinY, fluid::Particle &p, solid::Triangle &triangle);
+    static void rotateBack(double cosY, double sinY, double cosZ, double sinZ,fluid::Particle &p, solid::Triangle &triangle);
 
   public:
     /// @brief collides two particles

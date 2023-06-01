@@ -19,7 +19,12 @@ using namespace unreal_fluid::physics::fluid;
 
 AdvancedFluidContainer::AdvancedFluidContainer(FluidDescriptor descriptor) {
   k = 0.1;
-  addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0.2, 0, 0}, 0.1, 2);
+    for (int j = 0; j < 1000; ++j) {
+        for (int i = 0; i < 4; ++i) {
+            addParticle({double(rand() % 100) / 10000, 1 + j*0.07, double(rand() % 100) / 10000}, {0, -1, 0}, 0.05, 2);
+        }
+    }
+  //addParticle({double(rand() % 100) / 100000, 1, double(rand() % 100) / 100000}, {0.2, 0, 0.3}, 0.1, 2);
 }
 
 AdvancedFluidContainer::~AdvancedFluidContainer() {
