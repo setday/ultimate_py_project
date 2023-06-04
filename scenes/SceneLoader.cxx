@@ -23,6 +23,7 @@
 #include "MeshScene.cxx"
 #include "ClTestScene.cxx"
 #include "SceneGLAdvanced.cxx"
+#include "CanyonScene.cxx"
 
 using namespace unreal_fluid;
 
@@ -32,7 +33,7 @@ public:
     Logger::logInfo("Loading scenes...");
 
     compositor->loadScene<Control>();
-    compositor->loadScene<MeshScene>();
+    compositor->loadScene<CanyonScene>();
 
     Logger::logInfo("Scenes loaded!");
 

@@ -134,7 +134,7 @@ add_executable(
         # addons/flag_addon/spring_constraint/SpringConstraint.cxx
         # addons/flag_addon/flag/Flag.cxx
 
-)
+        scenes/CanyonScene.cxx)
 
 message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
