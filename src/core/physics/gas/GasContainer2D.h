@@ -68,6 +68,9 @@ namespace unreal_fluid::physics::gas {
     /// @brief Dissolve gas in container.
     /// @param dt time step
     void dissolveCells(double dt);
+
+    void advect(double dt);
+
   public:
     /* abstract class implementation */
 

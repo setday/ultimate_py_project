@@ -40,7 +40,8 @@ void GasContainer2d::calculateAndSaveFlow(GasCell &cell1, GasCell &cell2) {
   double targetFlow = calculateFlow(cell1, cell2);
 
   if (targetFlow > 0) cell1.targetFlow += targetFlow;
-  else cell2.targetFlow -= targetFlow;
+  else
+    cell2.targetFlow -= targetFlow;
 }
 
 void GasContainer2d::calculateFlows(double dt) {
@@ -120,9 +121,10 @@ void GasContainer2d::dissolveCells(double dt) {
 
   for (size_t row = 0; row < _height; ++row) {
     for (size_t column = 0; column < _width; ++column) {
-      auto &cell = _storage[row][column];
-      if (row < edgeSize || row >= _height - edgeSize || column < edgeSize || column >= _width - edgeSize)
+      if (row < edgeSize || row >= _height - edgeSize || column < edgeSize || column >= _width - edgeSize) {
+        auto &cell = _storage[row][column];
         dissolveCell(cell, dt);
+      }
     }
   }
 }
@@ -140,6 +142,16 @@ void GasContainer2d::simulate(double dt) {
   applyFlows(dt);
   diffuseCells(dt);
   dissolveCells(dt);
+  advect(dt);
+}
+
+void GasContainer2d::advect(double dt) {
+  for (int counter = 0; counter < 100; ++counter) {
+    if (rand() & 1) continue;
+    int x = rand() % _height, y = rand() % _width;
+    auto cell = _storage[x][y];
+    cell.amountOfGas += 100 * dt * cell.amountOfGas;
+  }
 }
 
 // End of GasContainer2D.cxx

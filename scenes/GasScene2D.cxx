@@ -24,7 +24,7 @@ public:
   double dt = 0.5;
 
   explicit GasScene2D(const compositor::SceneCompositor *compositor) : Scene(compositor) {
-    auto simpleGas = new physics::gas::GasContainer2d(50, 50, 500);
+    auto simpleGas = new physics::gas::GasContainer2d(50, 50, 1500);
     objects.push_back(new AbstractObject(simpleGas));
     compositor->getSimulator()->addPhysicalObject(simpleGas);
 
