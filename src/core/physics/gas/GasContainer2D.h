@@ -38,9 +38,9 @@ namespace unreal_fluid::physics::gas {
 
   private:
     /// @brief Calculate flow between two cells.
-    /// @param cell1 first cell (potential source)
-    /// @param cell2 second cell (potential target)
-    [[nodiscard]] double calculateFlow(const GasCell &cell1, const GasCell &cell2) const;
+    /// @param x, y - cell position
+    /// @param isHorizontal - if true difference is calculated in horizontal direction else in vertical
+    [[nodiscard]] double calculateFlow(int x, int y, bool isHorizontal) const;
     /// @brief Calculate flow between two cells and save it in cells.
     /// @param cell1 first cell
     /// @param cell2 second cell
