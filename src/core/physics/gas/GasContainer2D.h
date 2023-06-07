@@ -23,8 +23,11 @@ namespace unreal_fluid::physics::gas {
   class GasContainer2d : public IPhysicalObject {
     int _height;
     int _width;
+    double cellSize = 1.0 / 512.0;
     std::vector<std::vector<GasCell>> _storage;
     std::vector<std::vector<GasCell>> _temporaryStorage;
+    std::vector<std::vector<double>> _velocityX;
+    std::vector<std::vector<double>> _velocityY;
 
   public:
     /// @brief Constructor.
@@ -41,7 +44,7 @@ namespace unreal_fluid::physics::gas {
     /// @brief Calculate flow between two cells and save it in cells.
     /// @param cell1 first cell
     /// @param cell2 second cell
-    void calculateAndSaveFlow(GasCell &cell1, GasCell &cell2);
+    void calculateAndSaveFlow(GasCell &cell1, GasCell &cell2, int x, int y, bool isHorizontal);
     /// @brief Calculate all flows in container.
     /// @param dt time step
     void calculateFlows(double dt);
@@ -69,7 +72,18 @@ namespace unreal_fluid::physics::gas {
     /// @param dt time step
     void dissolveCells(double dt);
 
-    void advect(double dt);
+    /// @brief gets velocities difference in defined direction.
+    /// @param x, y - cell position
+    /// @param isHorizontal - if true difference is calculated in horizontal direction else in vertical
+    double getVelocityDiff(int x, int y, bool isHorizontal);
+
+    /// @brief recalculates two cells velocities difference at positions (x, y) and (x + 1, y) if isHorizontal or (x, y + 1) otherwise
+    /// @param x, y - cell position
+    /// @param isHorizontal - if true difference is calculated in horizontal direction else in vertical
+    void updateCellsVelocity(int x, int y, bool isHorizontal);
+    /// @brief updates all cells velocities
+    /// @param dt time step
+    void updateVelocities(double dt);
 
   public:
     /* abstract class implementation */

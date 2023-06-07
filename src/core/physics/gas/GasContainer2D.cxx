@@ -23,6 +23,9 @@ GasContainer2d::GasContainer2d(int height, int width, int particle_number) : _he
   _storage.resize(height, std::vector<GasCell>(width));
   _temporaryStorage.resize(height, std::vector<GasCell>(width));
 
+  _velocityX.resize(height, std::vector<double>(width + 1));
+  _velocityY.resize(height + 1, std::vector<double>(width));
+
   for (int counter = 0; counter < particle_number; ++counter) {
     int x = rand() % height, y = rand() % width;
 
@@ -36,23 +39,22 @@ double GasContainer2d::calculateFlow(const GasCell &cell1, const GasCell &cell2)
   return targetFlow;
 }
 
-void GasContainer2d::calculateAndSaveFlow(GasCell &cell1, GasCell &cell2) {
-  double targetFlow = calculateFlow(cell1, cell2);
-
-  if (targetFlow > 0) cell1.targetFlow += targetFlow;
-  else
-    cell2.targetFlow -= targetFlow;
+void GasContainer2d::calculateAndSaveFlow(GasCell &cell1, GasCell &cell2, int x, int y, bool isHorizontal) {
+  double velocityDiff = getVelocityDiff(x, y, isHorizontal);
+  cell1.targetFlow += cell2.getPressure();
+  cell2.targetFlow += cell1.getPressure();
+  cell1.targetFlow -= velocityDiff * cellSize;
 }
 
 void GasContainer2d::calculateFlows(double dt) {
-  for (size_t row = 0; row < _height; ++row) {
-    for (size_t column = 0; column < _width; ++column) {
+  for (int row = 0; row < _height; ++row) {
+    for (int column = 0; column < _width; ++column) {
       auto &cell = _storage[row][column];
 
-      if (row < _height - 1) calculateAndSaveFlow(cell, _storage[row + 1][column]);
-      if (column < _width - 1) calculateAndSaveFlow(cell, _storage[row][column + 1]);
+      if (row < _height - 1) calculateAndSaveFlow(cell, _storage[row + 1][column], row, column, false);
+      if (column < _width - 1) calculateAndSaveFlow(cell, _storage[row][column + 1], row, column, true);
 
-      cell.particlesFlow = dt * std::min(cell.targetFlow, cell.amountOfGas);
+      cell.particlesFlow = std::min(cell.targetFlow / 4.0, cell.amountOfGas);
       _temporaryStorage[row][column] = cell;
     }
   }
@@ -129,6 +131,18 @@ void GasContainer2d::dissolveCells(double dt) {
   }
 }
 
+void GasContainer2d::updateCellsVelocity(int x, int y, bool isHorizontal) {
+}
+
+void GasContainer2d::updateVelocities(double dt) {
+  for (int row = 0; row < _height; ++row) {
+    for (int column = 0; column < _width; ++column) {
+      if (row < _height - 1) updateCellsVelocity(row, column, false);
+      if (column < _width - 1) updateCellsVelocity(row, column, true);
+    }
+  }
+}
+
 unreal_fluid::physics::IPhysicalObject::Type GasContainer2d::getType() {
   return Type::GAS_CONTAINER_2D;
 }
@@ -142,16 +156,12 @@ void GasContainer2d::simulate(double dt) {
   applyFlows(dt);
   diffuseCells(dt);
   dissolveCells(dt);
-  advect(dt);
 }
 
-void GasContainer2d::advect(double dt) {
-  for (int counter = 0; counter < 100; ++counter) {
-    if (rand() & 1) continue;
-    int x = rand() % _height, y = rand() % _width;
-    auto cell = _storage[x][y];
-    cell.amountOfGas += 100 * dt * cell.amountOfGas;
-  }
+double GasContainer2d::getVelocityDiff(int x, int y, bool isHorizontal) {
+  if (isHorizontal)
+    return _velocityX[x][y] - _velocityX[x][y + 1];
+  return _velocityY[x][y] - _velocityY[x + 1][y];
 }
 
 // End of GasContainer2D.cxx
