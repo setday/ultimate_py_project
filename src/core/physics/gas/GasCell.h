@@ -23,8 +23,6 @@ namespace unreal_fluid::physics::gas {
     double amountOfGas = 0;  // = mass / molarMass
     double volume = 1;        // volume of cell (now 1x1x1)
     double temperature = 300; // temperature of gas
-    double targetFlow = 0;
-    double particlesFlow = 0;
     vec3f color = {1, 1, 1}; // color is a quantity to define gas
 
     GasCell() = default;

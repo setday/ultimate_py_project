@@ -24,7 +24,8 @@ namespace unreal_fluid::physics::gas {
     int _height;
     int _width;
     std::vector<std::vector<GasCell>> _storage;
-    std::vector<std::vector<GasCell>> _temporaryStorage;
+    std::vector<std::vector<double>> _flowsX;
+    std::vector<std::vector<double>> _flowsY;
 
   public:
     /// @brief Constructor.
@@ -39,9 +40,9 @@ namespace unreal_fluid::physics::gas {
     /// @param cell2 second cell (potential target)
     [[nodiscard]] double calculateFlow(const GasCell &cell1, const GasCell &cell2) const;
     /// @brief Calculate flow between two cells and save it in cells.
-    /// @param cell1 first cell
-    /// @param cell2 second cell
-    void calculateAndSaveFlow(GasCell &cell1, GasCell &cell2);
+    /// @param cell1, cell2 cells
+    /// @param x, y - position
+    void calculateAndSaveFlow(GasCell &cell1, GasCell &cell2, int x, int y, bool isHorizontal);
     /// @brief Calculate all flows in container.
     /// @param dt time step
     void calculateFlows(double dt);

@@ -21,7 +21,8 @@ using namespace unreal_fluid::physics::gas;
 GasContainer2d::GasContainer2d(int height, int width, int particle_number) : _height(height),
                                                                              _width(width) {
   _storage.resize(height, std::vector<GasCell>(width));
-  _temporaryStorage.resize(height, std::vector<GasCell>(width));
+  _flowsX.resize(height, std::vector<double>(width + 1));
+  _flowsY.resize(height + 1, std::vector<double>(width));
 
   for (int counter = 0; counter < particle_number; ++counter) {
     int x = rand() % height, y = rand() % width;
@@ -32,63 +33,49 @@ GasContainer2d::GasContainer2d(int height, int width, int particle_number) : _he
 
 double GasContainer2d::calculateFlow(const GasCell &cell1, const GasCell &cell2) const {
   double pressureDiff = cell1.getPressure() - cell2.getPressure();
-  double targetFlow = pressureDiff / 5.0;
+  double targetFlow = pressureDiff / 10.0;
   return targetFlow;
 }
 
-void GasContainer2d::calculateAndSaveFlow(GasCell &cell1, GasCell &cell2) {
+void GasContainer2d::calculateAndSaveFlow(GasCell &cell1, GasCell &cell2, int y, int x, bool isHorizontal) {
   double targetFlow = calculateFlow(cell1, cell2);
-
-  if (targetFlow > 0) cell1.targetFlow += targetFlow;
+  if (isHorizontal) _flowsX[y][x] += targetFlow;
   else
-    cell2.targetFlow -= targetFlow;
+    _flowsY[y][x] += targetFlow;
 }
 
 void GasContainer2d::calculateFlows(double dt) {
-  for (size_t row = 0; row < _height; ++row) {
-    for (size_t column = 0; column < _width; ++column) {
+  for (int row = 0; row < _height; ++row) {
+    for (int column = 0; column < _width; ++column) {
       auto &cell = _storage[row][column];
 
-      if (row < _height - 1) calculateAndSaveFlow(cell, _storage[row + 1][column]);
-      if (column < _width - 1) calculateAndSaveFlow(cell, _storage[row][column + 1]);
-
-      cell.particlesFlow = dt * std::min(cell.targetFlow, cell.amountOfGas);
-      _temporaryStorage[row][column] = cell;
+      if (row < _height - 1) calculateAndSaveFlow(cell, _storage[row + 1][column], row, column, false);
+      if (column < _width - 1) calculateAndSaveFlow(cell, _storage[row][column + 1], row, column, true);
     }
   }
 }
 
 void GasContainer2d::applyFlow(GasCell &cell1, GasCell &cell2, double targetFlow) const {
-  if (targetFlow > 0) {
-    if (cell1.targetFlow == 0) return;
-
-    cell2.add(cell1.slice(targetFlow * cell1.particlesFlow / cell1.targetFlow));
-  } else {
-    if (cell2.targetFlow == 0) return;
-
-    cell1.add(cell2.slice(-targetFlow * cell2.particlesFlow / cell2.targetFlow));
-  }
+  if (targetFlow > 0) cell2.add(cell1.slice(targetFlow));
+  else
+    cell1.add(cell2.slice(-targetFlow));
 }
 
 void GasContainer2d::applyFlows(double dt) {
   for (size_t row = 0; row < _height; ++row) {
     for (size_t column = 0; column < _width; ++column) {
-      auto &cell = _temporaryStorage[row][column];
+      auto &cell = _storage[row][column];
 
       if (row < _height - 1) {
-        double targetFlow = calculateFlow(_storage[row][column], _storage[row + 1][column]);
-        applyFlow(cell, _temporaryStorage[row + 1][column], targetFlow);
+        double targetFlow = _flowsY[row][column];
+        applyFlow(cell, _storage[row + 1][column], targetFlow);
       }
       if (column < _width - 1) {
-        double targetFlow = calculateFlow(_storage[row][column], _storage[row][column + 1]);
-        applyFlow(cell, _temporaryStorage[row][column + 1], targetFlow);
+        double targetFlow = _flowsX[row][column];
+        applyFlow(cell, _storage[row][column + 1], targetFlow);
       }
-
-      cell.targetFlow = cell.particlesFlow = 0;
     }
   }
-
-  swap(_temporaryStorage, _storage);
 }
 
 void GasContainer2d::diffuseTwoCells(GasCell &cell1, GasCell &cell2, double dt) {
