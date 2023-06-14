@@ -1,15 +1,16 @@
 /***************************************************************
- * Copyright (C) 2023
- *    HSE SPb (Higher school of economics in Saint-Petersburg).
- ***************************************************************/
+* Copyright (C) 2023
+*    UnrealFluid Team (https://github.com/setday/unreal_fluid) and
+*    HSE SPb (Higher school of economics in Saint-Petersburg).
+***************************************************************/
 
-/* PROJECT   : ultimate_py_project
- * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : Plane.cxx
- * PURPOSE   : ${PURPOSE}
+/* PROJECT                 : UnrealFluid
+ * AUTHORS OF THIS PROJECT : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev.
+ * FILE NAME               : Plane.cxx
+ * FILE AUTHORS            : Serkov Alexander.
  *
- * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * No part of this file may be changed and used without
+ * agreement of authors of this project.
  */
 
 #include "Plane.h"
@@ -36,6 +37,8 @@ Plane::Plane(float width, float height, unsigned int widthSegments, unsigned int
     }
   }
 
+  /* Front side */
+
   for (unsigned int i = 0; i < heightSegments; ++i) {
     for (unsigned int j = 0; j <= widthSegments; ++j) {
       unsigned int first = i * (widthSegments + 1) + j;
@@ -43,6 +46,20 @@ Plane::Plane(float width, float height, unsigned int widthSegments, unsigned int
 
       indices.push_back(first);
       indices.push_back(second);
+    }
+
+    indices.push_back(RESET_INDEX);
+  }
+
+  /* Back side */
+
+  for (unsigned int i = 0; i < heightSegments; ++i) {
+    for (unsigned int j = 0; j <= widthSegments; ++j) {
+      unsigned int first = i * (widthSegments + 1) + j;
+      unsigned int second = first + widthSegments + 1;
+
+      indices.push_back(second);
+      indices.push_back(first);
     }
 
     indices.push_back(RESET_INDEX);

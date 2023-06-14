@@ -1,15 +1,17 @@
 /***************************************************************
- * Copyright (C) 2023
- *    HSE SPb (Higher school of economics in Saint-Petersburg).
- ***************************************************************/
+* Copyright (C) 2023
+*    UnrealFluid Team (https://github.com/setday/unreal_fluid) and
+*    HSE SPb (Higher school of economics in Saint-Petersburg).
+***************************************************************/
 
-/* PROJECT   : ultimate_py_project
- * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : SceneLoader.cxx
- * PURPOSE   : ${PURPOSE}
+/* PROJECT                 : UnrealFluid
+ * AUTHORS OF THIS PROJECT : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev.
+ * FILE NAME               : SceneLoader.cxx
+ * FILE AUTHORS            : Serkov Alexander.
+ * PURPOSE                 : Class that realizes render of scene.
  *
- * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * No part of this file may be changed and used without
+ * agreement of authors of this project.
  */
 
 #include "../src/core/Core.h"
@@ -18,6 +20,7 @@
 #include "Control.cxx"
 #include "TestScene.cxx"
 #include "GLTestScene.cxx"
+#include "SceneGLAdvanced.cxx"
 #include "MeshScene.cxx"
 
 using namespace unreal_fluid;
@@ -28,7 +31,8 @@ public:
     Logger::logInfo("Loading scenes...");
 
     compositor->loadScene<Control>();
-    compositor->loadScene<TestScene>();
+//    compositor->loadScene<GlTestScene>();
+    compositor->loadScene<SceneGLAdvanced>();
 
     Logger::logInfo("Scenes loaded!");
 

@@ -1,15 +1,17 @@
 /***************************************************************
- * Copyright (C) 2023
- *    HSE SPb (Higher school of economics in Saint-Petersburg).
- ***************************************************************/
+* Copyright (C) 2023
+*    UnrealFluid Team (https://github.com/setday/unreal_fluid) and
+*    HSE SPb (Higher school of economics in Saint-Petersburg).
+***************************************************************/
 
-/* PROJECT   : ultimate_py_project
- * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : ShaderManager.h
- * PURPOSE   : Compile and store shaders
+/* PROJECT                 : UnrealFluid
+ * AUTHORS OF THIS PROJECT : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev.
+ * FILE NAME               : ShaderManager.h
+ * FILE AUTHORS            : Serkov Alexander.
+ * PURPOSE                 : Compile and store shaders
  *
- * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * No part of this file may be changed and used without
+ * agreement of authors of this project.
  */
 
 #pragma once
@@ -40,8 +42,18 @@ namespace unreal_fluid::render {
 
     /// create program from shaders
     /// @param shaders Shaders to create program from
-    /// @return Program
-    const ShaderProgram * CreateProgram(const std::vector<const Shader *> &shaders);
+    /// @return Program pointer
+    ShaderProgram * CreateProgram(const std::vector<const Shader *> &shaders);
+
+    /// Load program from files
+    /// @param paths Paths to shader files
+    /// @return Program pointer
+    ShaderProgram * LoadProgram(const std::vector<std::string> &paths);
+
+    /// Load program from directory
+    /// @param dir Directory with shader files
+    /// @return Program pointer
+    ShaderProgram * LoadProgram(std::string_view dir);
 
     /// Reload shader
     /// @param shader Shader to reload
@@ -53,24 +65,30 @@ namespace unreal_fluid::render {
 
   class DefaultShaderManager : private ShaderManager {
   private:
-    static const ShaderProgram *_defaultProgram;
-    static const ShaderProgram *_rtProgram;
-    static const ShaderProgram *_postProcessingProgram;
+    static ShaderProgram *_defaultProgram;
+    static ShaderProgram *_rtProgram;
+    static ShaderProgram *_postProcessingProgram;
+
+    static ShaderProgram *_gasProgram;
 
     static DefaultShaderManager _instance;
 
   public:
     /// Get default program
     /// @return Default program
-    static const ShaderProgram * GetDefaultProgram();
+    static ShaderProgram * GetDefaultProgram();
 
     /// Get default ray tracing program
     /// @return Default ray tracing program
-    static const ShaderProgram * GetRayTracingProgram();
+    static ShaderProgram * GetRayTracingProgram();
 
     /// Get default post processing program
     /// @return Default post processing program
-    static const ShaderProgram * GetPostProcessingProgram();
+    static ShaderProgram * GetPostProcessingProgram();
+
+    /// Get default gas program
+    /// @return Default gas program
+    static ShaderProgram * GetGasProgram();
 
     /// Reload all shaders
     static void ReloadShaders();

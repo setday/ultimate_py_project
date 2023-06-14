@@ -20,8 +20,8 @@
 namespace unreal_fluid::math {
 
   template<typename T>
-  double inverseSqrt(T x) {
-    /// TODO make pure double mySqrt calculation
+  double inverseRoot(T x) {
+    /// TODO make pure double root calculation
     assert(x > 0);
     auto temp = static_cast<float>(x);
     int i = *(int *) &temp;
@@ -32,10 +32,27 @@ namespace unreal_fluid::math {
   }
 
   template<typename T>
-  double mySqrt(T x) {
+  double root(T x) {
     assert(x >= 0);
     if (x == 0 || x == 1) return x;
-    return x * inverseSqrt(x);
+    return x * inverseRoot(x);
   }
 
+  /// Clamping x to nearest value between mi (minimum) and ma (maximum) parameters
+  /// @param x - value to clamp
+  /// @param mi - minimum
+  /// @param ma - maximum
+  template<typename T>
+  T clamp(T x, T mi, T ma) {
+    return std::max(std::min(x, ma), mi);
+  }
+
+  /// Linear interpolation
+  /// @param a - first value
+  /// @param b - second value
+  /// @param t - time
+  template<typename V, typename U>
+  V lerp(V a, V b, U t) {
+    return a + (b - a) * t;
+  }
 } // namespace unreal_fluid::math

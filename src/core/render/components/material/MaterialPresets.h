@@ -1,15 +1,16 @@
 /***************************************************************
  * Copyright (C) 2023
+ *    UnrealFluid Team (https://github.com/setday/unreal_fluid) and
  *    HSE SPb (Higher school of economics in Saint-Petersburg).
  ***************************************************************/
 
-/* PROJECT   : ultimate_py_project
- * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : MaterialPresets.h
- * PURPOSE   : ${PURPOSE}
+/* PROJECT                 : UnrealFluid
+ * AUTHORS OF THIS PROJECT : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev.
+ * FILE NAME               : MaterialPresets.h
+ * FILE AUTHORS            : Serkov Alexander.
  *
- * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * No part of this file may be changed and used without
+ * agreement of authors of this project.
  */
 
 #pragma once
@@ -562,6 +563,49 @@ namespace unreal_fluid::render::material {
       isTransparent = true;
 
       name = "Water";
+    }
+  };
+
+  /* debug materials */
+
+  struct Debug : BasicMaterial {
+    Debug() : BasicMaterial() {
+      ambientColor = vec3f(1.0f, 1.0f, 1.0f);
+      diffuseColor = vec3f(0.0f, 0.0f, 0.0f);
+      specularColor = vec3f(0.0f, 0.0f, 0.0f);
+
+      specularStrength = 0.0f;
+
+      shininess = 0.0f;
+
+      reflectionStrength = 0.0f;
+      refractionStrength = 0.0f;
+
+      opacity = 0.0f;
+      isTransparent = false;
+
+      name = "Debug";
+    }
+  };
+
+  struct Lambertian : BasicMaterial {
+    Lambertian() : BasicMaterial() {
+      ambientColor = vec3f(0.0f, 0.0f, 0.0f);
+      diffuseColor = vec3f(0.55f, 0.55f, 0.55f);
+      specularColor = vec3f(0.7f, 0.7f, 0.7f);
+
+      specularStrength = 0.25f;
+
+      shininess = 32.0f;
+
+      reflectionStrength = 0.0f;
+      refractionStrength = 0.0f;
+      refractionIndex = 1.0f;
+
+      opacity = 0.0f;
+      isTransparent = false;
+
+      name = "Lamberian";
     }
   };
 } // unreal_fluid::render::material

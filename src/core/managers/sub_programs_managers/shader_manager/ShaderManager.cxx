@@ -1,18 +1,22 @@
 /***************************************************************
- * Copyright (C) 2023
- *    HSE SPb (Higher school of economics in Saint-Petersburg).
- ***************************************************************/
+* Copyright (C) 2023
+*    UnrealFluid Team (https://github.com/setday/unreal_fluid) and
+*    HSE SPb (Higher school of economics in Saint-Petersburg).
+***************************************************************/
 
-/* PROJECT   : ultimate_py_project
- * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : ShaderManager.cxx
- * PURPOSE   : Compile and store shaders
+/* PROJECT                 : UnrealFluid
+ * AUTHORS OF THIS PROJECT : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev.
+ * FILE NAME               : ShaderManager.cxx
+ * FILE AUTHORS            : Serkov Alexander.
+ * PURPOSE                 : Compile and store shaders
  *
- * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * No part of this file may be changed and used without
+ * agreement of authors of this project.
  */
 
+#include <filesystem>
 #include <fstream>
+#include <unordered_map>
 
 #include "ShaderManager.h"
 
@@ -73,8 +77,8 @@ const Shader *ShaderManager::LoadShader(std::string_view path) {
   return _shaders.back().get();
 }
 
-const ShaderProgram *ShaderManager::CreateProgram(const std::vector<const Shader *> &shaders) {
-  auto program = std::make_unique<ShaderProgram>();
+ShaderProgram *ShaderManager::CreateProgram(const std::vector<const Shader *> &shaders) {
+  std::unique_ptr<ShaderProgram> program = std::make_unique<ShaderProgram>();
 
   for (auto *shader : shaders) {
     program->attachShader(shader);
@@ -92,6 +96,48 @@ const ShaderProgram *ShaderManager::CreateProgram(const std::vector<const Shader
   _programs.push_back(std::move(program));
 
   return _programs.back().get();
+}
+
+ShaderProgram *ShaderManager::LoadProgram(const std::vector<std::string> &paths) {
+  std::vector<const Shader *> loaded(paths.size());
+
+  for (int i = 0; i < paths.size(); ++i) {
+    loaded[i] = LoadShader(paths[i]);
+
+    if (!loaded[i]) {
+      for (int j = 0; j < i; ++j) {
+        delete loaded[j];
+      }
+
+      return nullptr;
+    }
+  }
+
+  std::unordered_map<Shader::Type, int> types;
+
+  for (auto *shader : loaded) {
+    types[shader->getType()]++;
+
+    if (types[shader->getType()] > 1) {
+      LOG_ERROR("ShaderManager : Can't load program with multiple shaders of the same type");
+
+      return nullptr;
+    }
+  }
+
+  return CreateProgram(loaded);
+}
+
+ShaderProgram *ShaderManager::LoadProgram(std::string_view dir) {
+  std::vector<std::string> paths;
+  std::string realPath = std::string(SHADERS_PATH) + dir.data();
+  std::filesystem::directory_iterator dirIt(realPath);
+
+  for (auto &file : dirIt) {
+    paths.push_back(dir.data() + file.path().filename().string());
+  }
+
+  return LoadProgram(paths);
 }
 
 void ShaderManager::ReloadShader(Shader *shader) {
@@ -146,20 +192,16 @@ void ShaderManager::ReloadShaders() {
   }
 }
 
-const ShaderProgram *DefaultShaderManager::_defaultProgram = nullptr;
-const ShaderProgram *DefaultShaderManager::_rtProgram = nullptr;
-const ShaderProgram *DefaultShaderManager::_postProcessingProgram = nullptr;
+ShaderProgram *DefaultShaderManager::_defaultProgram = nullptr;
+ShaderProgram *DefaultShaderManager::_rtProgram = nullptr;
+ShaderProgram *DefaultShaderManager::_postProcessingProgram = nullptr;
 DefaultShaderManager DefaultShaderManager::_instance = DefaultShaderManager();
 
-const ShaderProgram *DefaultShaderManager::GetDefaultProgram() {
+ShaderProgram *DefaultShaderManager::GetDefaultProgram() {
   if (_defaultProgram != nullptr)
     return _defaultProgram;
 
-  const Shader *vertBase = _instance.LoadShader("default/simple.vert");
-  const Shader *fragBase = _instance.LoadShader("default/simple.frag");
-
-  if (vertBase != nullptr && fragBase != nullptr)
-    _defaultProgram = _instance.CreateProgram({vertBase, fragBase});
+  _defaultProgram = _instance.LoadProgram("default/");
 
   if (_defaultProgram == nullptr)
     Logger::logFatal("DefaultShaderManager : Default program is not loaded!",
@@ -170,15 +212,11 @@ const ShaderProgram *DefaultShaderManager::GetDefaultProgram() {
   return _defaultProgram;
 }
 
-const ShaderProgram *DefaultShaderManager::GetRayTracingProgram() {
+ShaderProgram *DefaultShaderManager::GetRayTracingProgram() {
   if (_rtProgram != nullptr)
     return _rtProgram;
 
-  const Shader *vertRT = _instance.LoadShader("rt/rt.vert");
-  const Shader *fragRT = _instance.LoadShader("rt/rt.frag");
-
-  if (fragRT != nullptr && vertRT != nullptr)
-    _rtProgram = _instance.CreateProgram({vertRT, fragRT});
+  _rtProgram = _instance.LoadProgram("rt/");
 
   if (_rtProgram == nullptr)
     Logger::logFatal("DefaultShaderManager : Ray tracing program is not loaded!",
@@ -189,15 +227,11 @@ const ShaderProgram *DefaultShaderManager::GetRayTracingProgram() {
   return _rtProgram;
 }
 
-const ShaderProgram *DefaultShaderManager::GetPostProcessingProgram() {
+ShaderProgram *DefaultShaderManager::GetPostProcessingProgram() {
   if (_postProcessingProgram != nullptr)
     return _postProcessingProgram;
 
-  const Shader *vertPP = _instance.LoadShader("pp/pp.vert");
-  const Shader *fragPP = _instance.LoadShader("pp/pp.frag");
-
-  if (fragPP != nullptr && vertPP != nullptr)
-    _postProcessingProgram = _instance.CreateProgram({vertPP, fragPP});
+  _postProcessingProgram = _instance.LoadProgram("pp/");
 
   if (_postProcessingProgram == nullptr)
     Logger::logFatal("DefaultShaderManager : Post processing program is not loaded!",
@@ -206,6 +240,23 @@ const ShaderProgram *DefaultShaderManager::GetPostProcessingProgram() {
   Logger::logInfo("DefaultShaderManager : Post processing program is loaded!");
 
   return _postProcessingProgram;
+}
+
+ShaderProgram *DefaultShaderManager::GetGasProgram() {
+  static ShaderProgram *program = nullptr;
+
+  if (program != nullptr)
+    return program;
+
+  program = _instance.LoadProgram("gas/");
+
+  if (program == nullptr)
+    Logger::logFatal("DefaultShaderManager : Gas program is not loaded!",
+                     "It can cause a segmentation fault, so the program will be closed!");
+
+  Logger::logInfo("DefaultShaderManager : Gas program is loaded!");
+
+  return program;
 }
 
 void DefaultShaderManager::ReloadShaders() {

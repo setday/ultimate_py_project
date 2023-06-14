@@ -1,15 +1,17 @@
 /***************************************************************
- * Copyright (C) 2023
- *    HSE SPb (Higher school of economics in Saint-Petersburg).
- ***************************************************************/
+* Copyright (C) 2023
+*    UnrealFluid Team (https://github.com/setday/unreal_fluid) and
+*    HSE SPb (Higher school of economics in Saint-Petersburg).
+***************************************************************/
 
-/* PROJECT   : ultimate_py_project
- * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : WindowCompositor.cxx
- * PURPOSE   : This is wrapper class for the glfw.
+/* PROJECT                 : UnrealFluid
+ * AUTHORS OF THIS PROJECT : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev.
+ * FILE NAME               : WindowCompositor.cxx
+ * FILE AUTHORS            : Serkov Alexander.
+ * PURPOSE                 : This is wrapper class for the glfw.
  *
- * No part of this file may be changed and used without agreement of
- * authors of this project.
+ * No part of this file may be changed and used without
+ * agreement of authors of this project.
  */
 
 #include "WindowCompositor.h"
@@ -26,6 +28,10 @@ WindowCompositor::WindowCompositor() {
     Logger::logError("Failed to initialize GLFW!");
     return;
   }
+
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
   glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
@@ -107,7 +113,7 @@ void WindowCompositor::resizeCallback(GLFWwindow *window, int width, int height)
   }
 }
 
-void WindowCompositor::addResizeCallback(std::function<void(int width, int height)> callback) {
+void WindowCompositor::addResizeCallback(const std::function<void(int width, int height)>&callback) {
   _resizeCallbacks.emplace_back(callback);
 }
 
