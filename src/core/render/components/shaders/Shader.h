@@ -40,7 +40,7 @@ namespace unreal_fluid::render {
     Type _type;
 
   public:
-    explicit Shader(Type _type);
+    explicit Shader(Type type);
     ~Shader();
 
     /// Build shader from string of source code
@@ -51,6 +51,11 @@ namespace unreal_fluid::render {
     /// Get shader id
     /// @return Shader id
     GLuint getShaderId() const;
+
+    /// Get shader type
+    /// @return Shader type
+    Type getType() const;
+
     /// Get log
     /// @param log Log
     void getLog(std::string &log) const;

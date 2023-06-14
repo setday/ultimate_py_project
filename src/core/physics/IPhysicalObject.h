@@ -25,9 +25,18 @@ namespace unreal_fluid::physics {
 
   public:
     enum class Type {
-      SIMPLE_FLUID_CONTAINER,
+      DEFAULT,
+
+      /* solid objects */
       SOLID_SPHERE,
-      SOLID_MESH
+      SOLID_MESH,
+      SOLID_QUBE,
+
+      /* fluid objects */
+      SIMPLE_FLUID_CONTAINER,
+
+      /* gas objects */
+      GAS_CONTAINER_2D,
     };
 
     virtual ~IPhysicalObject() = default;

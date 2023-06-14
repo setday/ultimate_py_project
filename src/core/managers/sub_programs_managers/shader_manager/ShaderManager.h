@@ -42,8 +42,18 @@ namespace unreal_fluid::render {
 
     /// create program from shaders
     /// @param shaders Shaders to create program from
-    /// @return Program
+    /// @return Program pointer
     ShaderProgram * CreateProgram(const std::vector<const Shader *> &shaders);
+
+    /// Load program from files
+    /// @param paths Paths to shader files
+    /// @return Program pointer
+    ShaderProgram * LoadProgram(const std::vector<std::string> &paths);
+
+    /// Load program from directory
+    /// @param dir Directory with shader files
+    /// @return Program pointer
+    ShaderProgram * LoadProgram(std::string_view dir);
 
     /// Reload shader
     /// @param shader Shader to reload
@@ -59,6 +69,8 @@ namespace unreal_fluid::render {
     static ShaderProgram *_rtProgram;
     static ShaderProgram *_postProcessingProgram;
 
+    static ShaderProgram *_gasProgram;
+
     static DefaultShaderManager _instance;
 
   public:
@@ -73,6 +85,10 @@ namespace unreal_fluid::render {
     /// Get default post processing program
     /// @return Default post processing program
     static ShaderProgram * GetPostProcessingProgram();
+
+    /// Get default gas program
+    /// @return Default gas program
+    static ShaderProgram * GetGasProgram();
 
     /// Reload all shaders
     static void ReloadShaders();

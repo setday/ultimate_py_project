@@ -60,7 +60,7 @@ void Camera::updatePosition() {
   _interpolationFactor += 0.1f;
 
   if (_interpolationFactor < 1.f) {
-    _position = _position.lerped(_targetPosition, _interpolationFactor);
+    _position = math::lerp(_position, _targetPosition, _interpolationFactor);
     updateViewMatrix();
   } else {
     _position = _targetPosition;

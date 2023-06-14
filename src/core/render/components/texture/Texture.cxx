@@ -14,43 +14,23 @@
  */
 
 #define TEXTURE_PATH "../assets/textures/"
+#define GL_TEX_IMAGE_2D(width, height, format, type, data) \
+  glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, type, data)
+#define GL_TEX_IMAGE_3D(width, height, depth, format, type, data) \
+  glTexImage3D(GL_TEXTURE_3D, 0, format, width, height, depth, 0, format, type, data)
+#define GL_TEX_SUB_IMAGE_2D(xoffset, yoffset, width, height, format, type, data) \
+  glTexSubImage2D(GL_TEXTURE_2D, 0, xoffset, yoffset, width, height, format, type, data)
+#define GL_TEX_SUB_IMAGE_3D(xoffset, yoffset, zoffset, width, height, depth, format, type, data) \
+  glTexSubImage3D(GL_TEXTURE_3D, 0, xoffset, yoffset, zoffset, width, height, depth, format, type, data)
 
 #include "Texture.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../../../utils/external/image_loader/stb_image.h"
 
-void unreal_fluid::render::Texture::_generateTexture() {
-  if (_textureID == -1)
-    glGenTextures(1, &_textureID);
+void unreal_fluid::render::Texture::_initTexture(int width, int height, int depth, std::size_t components, std::size_t componentSize) {
+  _dimensions = (depth == 0) ? GL_TEXTURE_2D : GL_TEXTURE_3D;
 
-  glBindTexture(_dimensions, _textureID);
-  switch (_dimensions) {
-    case GL_TEXTURE_2D:
-      glTexImage2D(GL_TEXTURE_2D, 0, _internalFormat,
-                   _width, _height,
-                   0, _format, _type, nullptr);
-      break;
-    case GL_TEXTURE_3D:
-      glTexImage3D(GL_TEXTURE_3D, 0, _internalFormat,
-                   _width, _height, _depth,
-                   0, _format, _type, nullptr);
-      break;
-    default:
-      assert(false);
-  }
-
-  if (_internalFormat == GL_DEPTH_COMPONENT)
-    return;
-
-  glGenerateMipmap(_dimensions);
-  glTexParameteri(_dimensions, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(_dimensions, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameteri(_dimensions, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(_dimensions, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-}
-
-void unreal_fluid::render::Texture::_initTexture(int width, int height, int depth, std::size_t components, std::size_t componentType) {
   switch (components) {
     case 1:
       _internalFormat = GL_R;
@@ -76,7 +56,7 @@ void unreal_fluid::render::Texture::_initTexture(int width, int height, int dept
       assert(false);
   }
 
-  switch (componentType) {
+  switch (componentSize) {
     case 1:
       _type = GL_UNSIGNED_BYTE;
       break;
@@ -88,18 +68,27 @@ void unreal_fluid::render::Texture::_initTexture(int width, int height, int dept
   }
 
   resize(width, height, depth);
+
+  if (_internalFormat == GL_DEPTH_COMPONENT)
+    return;
+
+  glTexParameteri(_dimensions, GL_TEXTURE_MIN_FILTER, GL_LINEAR); /// TODO: add option to change this
+  glTexParameteri(_dimensions, GL_TEXTURE_MAG_FILTER, GL_LINEAR); /// TODO: add option to change this
+  glTexParameteri(_dimensions, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(_dimensions, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
-unreal_fluid::render::Texture::Texture(std::size_t components, std::size_t componentType) {
-  _initTexture(0, 0, 0, components, componentType);
+unreal_fluid::render::Texture::Texture(std::size_t components, std::size_t componentSize) {
+  _initTexture(0, 0, 0, components, componentSize);
 }
 
-unreal_fluid::render::Texture::Texture(int width, int height, std::size_t components, std::size_t componentType) {
-  _initTexture(width, height, 0, components, componentType);
+unreal_fluid::render::Texture::Texture(int width, int height, std::size_t components, std::size_t componentSize) {
+  _initTexture(width, height, 0, components, componentSize);
 }
 
-unreal_fluid::render::Texture::Texture(int width, int height, int depth, std::size_t components, std::size_t componentType) {
-  _initTexture(width, height, depth, components, componentType);
+unreal_fluid::render::Texture::Texture(int width, int height, int depth,
+                                       std::size_t components, std::size_t componentSize) {
+  _initTexture(width, height, depth, components, componentSize);
 }
 
 unreal_fluid::render::Texture::Texture(std::string_view path) {
@@ -142,31 +131,16 @@ void unreal_fluid::render::Texture::resize(int width, int height, int depth) {
   _height = height;
   _depth = depth;
 
-  if (_textureID == -1) {
-    _dimensions = GL_TEXTURE_2D;
-    if (depth > 0)
-      _dimensions = GL_TEXTURE_3D;
-
-    _generateTexture();
-
-    return;
-  }
+  if (_textureID == -1)
+    glGenTextures(1, &_textureID);
 
   glBindTexture(_dimensions, _textureID);
-  switch (_dimensions) {
-    case GL_TEXTURE_2D:
-      glTexImage2D(GL_TEXTURE_2D, 0, _internalFormat,
-                   _width, _height,
-                   0, _format, _type, nullptr);
-      break;
-    case GL_TEXTURE_3D:
-      glTexImage3D(GL_TEXTURE_3D, 0, _internalFormat,
-                   _width, _height, _depth,
-                   0, _format, _type, nullptr);
-      break;
-    default:
-      assert(false);
-  }
+  if (_dimensions == GL_TEXTURE_2D)
+    GL_TEX_IMAGE_2D(_width, _height, _format, _type, nullptr);
+  else if (_dimensions == GL_TEXTURE_3D)
+    GL_TEX_IMAGE_3D(_width, _height, _depth, _format, _type, nullptr);
+//  else
+//    assert(false);
 
   if (_internalFormat == GL_DEPTH_COMPONENT)
     return;
@@ -174,25 +148,39 @@ void unreal_fluid::render::Texture::resize(int width, int height, int depth) {
   glGenerateMipmap(_dimensions);
 }
 
-void unreal_fluid::render::Texture::write(const void *data) {
+void unreal_fluid::render::Texture::write(const void *data, int xOffset, int yOffset) {
   assert(data != nullptr);
 
   glBindTexture(_dimensions, _textureID);
-  switch (_dimensions) {
-    case GL_TEXTURE_2D:
-      glTexSubImage2D(_dimensions, 0, 0, 0,
-                      _width, _height,
-                      GL_RGBA, GL_UNSIGNED_BYTE, data);
-      break;
-    case GL_TEXTURE_3D:
-      glTexSubImage3D(_dimensions, 0, 0, 0, 0,
-                      _width, _height, _depth,
-                      GL_RGBA, GL_UNSIGNED_BYTE, data);
-      break;
-    default:
-      assert(false);
-  }
+  if (_dimensions == GL_TEXTURE_2D)
+    GL_TEX_SUB_IMAGE_2D(xOffset, yOffset,
+                        _width - xOffset, _height - yOffset,
+                        _format, _type, data);
+  else if (_dimensions == GL_TEXTURE_3D)
+    GL_TEX_SUB_IMAGE_3D(xOffset, yOffset, 0,
+                        _width - xOffset, _height - yOffset, _depth,
+                        _format, _type, data);
+//  else
+//    assert(false);
   glGenerateMipmap(_dimensions);
+}
+
+void unreal_fluid::render::Texture::setPixel(const void *data, int x, int y) {
+  assert(data != nullptr);
+
+  glBindTexture(_dimensions, _textureID);
+  if (_dimensions == GL_TEXTURE_2D)
+    GL_TEX_SUB_IMAGE_2D(x, y,
+                        1, 1,
+                        _format, _type, data);
+  else if (_dimensions == GL_TEXTURE_3D)
+    GL_TEX_SUB_IMAGE_3D(x, y, 0,
+                        1, 1, 1,
+                        _format, _type, data);
+  else
+    assert(false);
+
+  // glGenerateMipmap(_dimensions);
 }
 
 bool unreal_fluid::render::Texture::bind() const {
