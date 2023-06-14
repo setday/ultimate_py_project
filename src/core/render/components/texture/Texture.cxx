@@ -139,8 +139,8 @@ void unreal_fluid::render::Texture::resize(int width, int height, int depth) {
     GL_TEX_IMAGE_2D(_width, _height, _format, _type, nullptr);
   else if (_dimensions == GL_TEXTURE_3D)
     GL_TEX_IMAGE_3D(_width, _height, _depth, _format, _type, nullptr);
-  else
-    assert(false);
+//  else
+//    assert(false);
 
   if (_internalFormat == GL_DEPTH_COMPONENT)
     return;
@@ -160,8 +160,8 @@ void unreal_fluid::render::Texture::write(const void *data, int xOffset, int yOf
     GL_TEX_SUB_IMAGE_3D(xOffset, yOffset, 0,
                         _width - xOffset, _height - yOffset, _depth,
                         _format, _type, data);
-  else
-    assert(false);
+//  else
+//    assert(false);
   glGenerateMipmap(_dimensions);
 }
 

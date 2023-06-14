@@ -15,7 +15,8 @@
 #include "SceneCompositor.h"
 
 #include "components/scene/Scene.h"
-#include "./../scenes/SceneLoader.cxx"
+#include "../scenes/GasScene2D.cxx"
+#include "../scenes/SceneLoader.cxx"
 
 using namespace unreal_fluid::compositor;
 
@@ -39,6 +40,7 @@ void SceneCompositor::init() {
   _renderer = std::make_unique<render::Renderer>();
 
   loadScene<SceneLoader>();
+//  loadScene<GasScene2D>();
 
   Logger::logInfo("SceneCompositor initialized!");
 }
