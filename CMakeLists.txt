@@ -54,6 +54,7 @@ add_executable(
 
         # Utils
 
+        src/utils/checker/Checker.cpp
         src/utils/timer/Timer.cxx
         src/utils/logger/Logger.cxx
 
@@ -129,4 +130,4 @@ message(${OPENGL_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/sub_programs/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/src/sub_programs/)
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/objects/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/objects/)
+# file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/objects/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/objects/)
