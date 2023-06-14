@@ -73,7 +73,7 @@ void SceneCompositor::render() {
   _renderingTimer.incrementCounter();
   _timer.incrementCounter();
 
-  if (_timer.getCounter() >= 400 || _timer.getElapsedTime() >= 1.5) {
+  if (_timer.getCounter() >= 80 || _timer.getElapsedTime() >= 1.5) {
     Logger::logInfo(
             "\n", "-------------------------------------------->\n",
             "| Time to crate a frame: ", _timer.getAverageTime<utils::Timer::TimeType::MILLISECONDS>(), " ms\n",

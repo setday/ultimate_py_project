@@ -5,22 +5,12 @@
 
 /* PROJECT   : ultimate_py_project
  * AUTHORS   : Serkov Alexander, Daniil Vikulov, Daniil Martsenyuk, Vasily Lebedev
- * FILE NAME : PhysicalScene.cxx
- * PURPOSE   : Class that realizes update of physical scene.
+ * FILE NAME : GasContainer.cxx
+ * PURPOSE   : ${PURPOSE}
  *
  * No part of this file may be changed and used without agreement of
  * authors of this project.
  */
 
-#include "PhysicalScene.h"
+#include "GasContainer.h"
 
-using namespace unreal_fluid;
-
-void PhysicalScene::update() {
-  compositor->getSimulator()->simulate(dt);
-  for (auto &object: objects)
-    if (object->getPhysicalObject() != nullptr)
-      object->parse();
-}
-
-// end of PhysicalScene.cxx

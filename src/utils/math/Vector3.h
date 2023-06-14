@@ -103,7 +103,7 @@ namespace unreal_fluid::math {
 
     [[nodiscard]] T len2() const { return x * x + y * y + z * z; }
 
-    [[nodiscard]] double len() const { return mySqrt(len2()); }
+    [[nodiscard]] double len() const { return root(len2()); }
 
     [[nodiscard]] double operator!() const { return len(); }
 
@@ -132,23 +132,6 @@ namespace unreal_fluid::math {
     T project(const Vector3 &v) {
       if (len() == 0) return 0;
       return this->dot(v) / v.len();
-    }
-    
-    /// Linear interpolation between two vectors
-    /// @param v - vector to interpolate to
-    /// @param t - interpolation coefficient
-    /// @attention This is experimental and may be removed in future
-    Vector3 lerped(const Vector3 &v, float t) const {
-      return *this * (1 - t) + v * t;
-    }
-
-    /// Clamp vector to the given range
-    /// @param min - minimum value
-    /// @param max - maximum value
-    Vector3 clamp(const Vector3 &min, const Vector3 &max) const {
-      return Vector3(std::min(std::max(x, min.x), max.x),
-                     std::min(std::max(y, min.y), max.y),
-                     std::min(std::max(z, min.z), max.z));
     }
 
     /// Get maximum value of vector
@@ -207,8 +190,8 @@ namespace unreal_fluid::math {
 
     /// Check if vector is zero
     /// @return true if vector is zero, false otherwise
-    bool isZero() const {
-      return x == 0 && y == 0 && z == 0;
+    static bool isZero(const Vector3 &vec) {
+      return vec.x == 0 && vec.y == 0 && vec.z == 0;
     }
 
     /// @brief Dot product of two vectors
@@ -264,27 +247,6 @@ namespace unreal_fluid::math {
       assert(!isZero(result));
 
       return result.normalizeSelf();
-    }
-
-    /// @brief Linear interpolation between two vectors
-    /// @param from - vector to interpolate from
-    /// @param to - vector to interpolate to
-    /// @param t - interpolation coefficient
-    /// @return interpolated vector
-    /// @attention (1 - t) * from + t * to
-    static Vector3 lerp(const Vector3 &from, const Vector3 &to, float t) {
-      return from * (1 - t) + to * t;
-    }
-
-    /// @brief Clamp vector to the given range
-    /// @param vec - vector to clamp
-    /// @param min - minimum value
-    /// @param max - maximum value
-    /// @return clamped vector
-    static Vector3 clamp(const Vector3 &vec, const Vector3 &min, const Vector3 &max) {
-      return Vector3(std::min(std::max(vec.x, min.x), max.x),
-                     std::min(std::max(vec.y, min.y), max.y),
-                     std::min(std::max(vec.z, min.z), max.z));
     }
 
     /// @brief Get maximum value of vector

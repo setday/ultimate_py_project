@@ -566,6 +566,28 @@ namespace unreal_fluid::render::material {
     }
   };
 
+  /* debug materials */
+
+  struct Debug : BasicMaterial {
+    Debug() : BasicMaterial() {
+      ambientColor = vec3f(1.0f, 1.0f, 1.0f);
+      diffuseColor = vec3f(0.0f, 0.0f, 0.0f);
+      specularColor = vec3f(0.0f, 0.0f, 0.0f);
+
+      specularStrength = 0.0f;
+
+      shininess = 0.0f;
+
+      reflectionStrength = 0.0f;
+      refractionStrength = 0.0f;
+
+      opacity = 0.0f;
+      isTransparent = false;
+
+      name = "Debug";
+    }
+  };
+
   struct Lambertian : BasicMaterial {
     Lambertian() : BasicMaterial() {
       ambientColor = vec3f(0.0f, 0.0f, 0.0f);
