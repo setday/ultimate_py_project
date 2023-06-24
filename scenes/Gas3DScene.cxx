@@ -21,7 +21,6 @@ using namespace unreal_fluid;
 
 class Gas3DScene : public Scene {
 public:
-  double dt = 0.002;
   physics::gas::GasContainer *simpleGas;
 
   explicit Gas3DScene(const compositor::SceneCompositor *compositor) : Scene(compositor) {
@@ -31,6 +30,8 @@ public:
 
     compositor->getRenderer()->camera.setPositionHard({0, 0, 2.2});
     compositor->getRenderer()->camera.setDirection({0, 0, -1});
+
+    dt = 0.5;
   }
 };
 

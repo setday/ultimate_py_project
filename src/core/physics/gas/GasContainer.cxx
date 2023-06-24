@@ -147,7 +147,7 @@ void GasContainer::dissolveCell(GasCell &cell, double dt) {
 }
 
 void GasContainer::dissolveCells(double dt) {
-  double edgeSize = 3;
+  double edgeSize = 2;
 
   for (int row = 0; row < _height; ++row) {
     for (int column = 0; column < _width; ++column) {
@@ -180,6 +180,6 @@ void *GasContainer::getData() {
 void GasContainer::simulate(double dt) {
   calculateFlows(dt);
   applyFlows(dt);
-  diffuseCells(dt);
-  dissolveCells(dt);
+  diffuseCells(dt / 10);
+  dissolveCells(dt / 100);
 }

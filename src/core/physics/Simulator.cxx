@@ -18,7 +18,8 @@ using namespace unreal_fluid::physics;
 
 void Simulator::addPhysicalObject(IPhysicalObject *physicalObject) {
   if (physicalObject->getType() == IPhysicalObject::Type::SIMPLE_FLUID_CONTAINER ||
-      physicalObject->getType() == IPhysicalObject::Type::GAS_CONTAINER_2D)
+      physicalObject->getType() == IPhysicalObject::Type::GAS_CONTAINER_2D ||
+      physicalObject->getType() == IPhysicalObject::Type::GAS_CONTAINER_3D)
     dynamicObjects.push_back(physicalObject);
   else
     solidObjects.push_back(physicalObject);

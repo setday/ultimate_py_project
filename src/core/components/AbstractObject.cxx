@@ -165,7 +165,7 @@ void parseGasContainer3d(physics::IPhysicalObject *container3D, std::vector<rend
         size_t xyzOffset = xyOffset + z * width * height;
         const auto &cell = cells[y][x][z];
 
-        amountOfGas[xyzOffset] = cell.amountOfGas > 10 ? 1 : 0;
+        amountOfGas[xyzOffset] = cell.amountOfGas / 100.0;
         colors[xyzOffset * 3 + 0] = cell.color.x;
         colors[xyzOffset * 3 + 1] = cell.color.y;
         colors[xyzOffset * 3 + 2] = cell.color.z;
