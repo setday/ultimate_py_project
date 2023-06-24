@@ -21,11 +21,11 @@ using namespace unreal_fluid;
 
 class Gas3DScene : public Scene {
 public:
-  double dt = 0.5;
+  double dt = 0.002;
   physics::gas::GasContainer *simpleGas;
 
   explicit Gas3DScene(const compositor::SceneCompositor *compositor) : Scene(compositor) {
-    simpleGas = new physics::gas::GasContainer(10, 10, 10);
+    simpleGas = new physics::gas::GasContainer(10, 10, 10, 1000);
     objects.push_back(new AbstractObject(simpleGas));
     compositor->getSimulator()->addPhysicalObject(simpleGas);
 

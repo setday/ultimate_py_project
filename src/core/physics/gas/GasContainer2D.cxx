@@ -32,22 +32,22 @@ GasContainer2d::GasContainer2d(int height, int width, int particle_number) : _he
 
   for (int i = height * 0 / 6; i < height * 6 / 6; i++) {
     for (int j = width * 0 / 6; j < width * 6 / 6; j++) {
-//      _storage[i][j] = GasCell(70, vec3f(0, 0, 0));
-//      _storage[i][j].temperature = 300;
+      //      _storage[i][j] = GasCell(70, vec3f(0, 0, 0));
+      //      _storage[i][j].temperature = 300;
     }
   }
 
   for (int i = height * 4 / 6; i < height * 5 / 6; i++) {
     for (int j = width * 1 / 6; j < width * 5 / 6; j++) {
-//       _storage[i][j] = GasCell(70, vec3f(0, 0, 1));
-//       _storage[i][j].temperature = 100;
+      //       _storage[i][j] = GasCell(70, vec3f(0, 0, 1));
+      //       _storage[i][j].temperature = 100;
     }
   }
 
   for (int i = height * 1 / 6; i < height * 2 / 6; i++) {
     for (int j = width * 1 / 6; j < width * 5 / 6; j++) {
-//       _storage[i][j] = GasCell(70, vec3f(1, 0, 0));
-//       _storage[i][j].temperature = 400;
+      //       _storage[i][j] = GasCell(70, vec3f(1, 0, 0));
+      //       _storage[i][j].temperature = 400;
     }
   }
 }
@@ -61,11 +61,11 @@ double GasContainer2d::calculateFlow(const GasCell &cell1, const GasCell &cell2,
 void GasContainer2d::calculateAndSaveFlow(GasCell &cell1, GasCell &cell2, int y, int x, bool isHorizontal, double dt) {
   double targetFlow = calculateFlow(cell1, cell2, dt);
 
-   // if (!isHorizontal && cell2.temperature < 200 && (cell1.getPressure() - cell2.getPressure()) < 0)
-   //   targetFlow += (cell1.getPressure() - cell2.getPressure()) / 10.0 * dt;
+  // if (!isHorizontal && cell2.temperature < 200 && (cell1.getPressure() - cell2.getPressure()) < 0)
+  //   targetFlow += (cell1.getPressure() - cell2.getPressure()) / 10.0 * dt;
 
-   // if (!isHorizontal && cell2.temperature > 300 && (cell1.getPressure() - cell2.getPressure()) > 0)
-   //   targetFlow += (cell1.getPressure() - cell2.getPressure()) / 10.0 * dt;
+  // if (!isHorizontal && cell2.temperature > 300 && (cell1.getPressure() - cell2.getPressure()) > 0)
+  //   targetFlow += (cell1.getPressure() - cell2.getPressure()) / 10.0 * dt;
 
   if (isHorizontal)
     _flowsX[y][x] = targetFlow;
@@ -182,7 +182,7 @@ void GasContainer2d::simulate(double dt) {
   applyFlows(dt);
   diffuseCells(dt / 10);
   dissolveCells(dt / 100);
-//  advect(dt);
+  //  advect(dt);
 }
 
 void GasContainer2d::advect(double dt) {

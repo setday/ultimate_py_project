@@ -99,7 +99,7 @@ add_executable(
         src/core/components/AbstractObject.cxx
 
         src/core/physics/gas/GasCell.cxx
-        src/core/physics/gas/GasContainer2D.cxx
+#        src/core/physics/gas/GasContainer2D.cxx
         src/core/physics/gas/GasContainer.cxx
 
         # IScene
