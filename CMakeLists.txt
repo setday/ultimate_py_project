@@ -100,6 +100,7 @@ add_executable(
 
         src/core/physics/gas/GasCell.cxx
         src/core/physics/gas/GasContainer2D.cxx
+        src/core/physics/gas/GasContainer.cxx
 
         # IScene
 
@@ -115,6 +116,7 @@ add_executable(
         #scenes/GlTestScene.cxx
         scenes/Control.cxx
         scenes/GasScene2D.cxx
+        scenes/Gas3DScene.cxx
         scenes/SceneLoader.cxx
 
         # Core

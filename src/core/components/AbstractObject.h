@@ -24,7 +24,15 @@ namespace unreal_fluid {
     physics::IPhysicalObject *physicalObject;
     std::vector<render::RenderObject *> renderObjects;
 
+
   public:
+    enum ParserMode {
+      DEBUG = 0,
+      RELEASE = 1,
+    };
+
+    static ParserMode mode;
+
     AbstractObject(physics::IPhysicalObject *physicalObject, const std::vector<render::RenderObject *> &renderObjects);
     explicit AbstractObject(physics::IPhysicalObject *physObject);
     explicit AbstractObject(physics::fluid::FluidDescriptor descriptor);

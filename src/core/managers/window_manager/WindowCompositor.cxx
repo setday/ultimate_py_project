@@ -36,6 +36,8 @@ WindowCompositor::WindowCompositor() {
   glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
   glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 
+//  glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+
   Logger::logInfo("Window compositor initialized!");
 }
 

@@ -18,6 +18,7 @@
 
 namespace unreal_fluid {
   class PhysicalScene : public virtual IScene {
+  protected:
     double dt = 0.02;
 
   public:

@@ -20,7 +20,8 @@ uniform vec3 diffuseColor;
 uniform vec3 specularColor;
 uniform float shininess;
 
-uniform sampler2D tex0;
+uniform sampler3D tex0;
+uniform sampler3D tex1;
 
 uniform int texturesCount;
 
@@ -96,11 +97,39 @@ void main()
     }
 
     if (texturesCount > 0) {
-        colorTexture = vec4(texture(tex0, texCoords).rgb, 1.0);
+        vec3 texCoords = realVertexPosition + vec3(5.5, 5.5, 25.5);
+        texCoords = texCoords / 10.0;
+        colorTexture = vec4(texture(tex0, texCoords).rrr, 0.5);
     } else {
-        colorTexture = vec4(color, 1.0);
+        colorTexture = vec4(color, 0.5);
     }
 
     positionTexture = vec4(vertexPosition, 1);
     normalTexture = vec4(vertexNormal, 1);
+
+    color = vec3(0.1, 0.1, 0.1);
+
+    int steps = 256;
+    float stepSize = 100.0 / float(steps);
+    float delta = 1.0 / float(steps);
+
+    // volume ray marching
+
+    vec3 rayOrigin = realVertexPosition + vec3(5.5, 5.5, 25.5);
+    vec3 rayDirection = -normalize(camera.position - realVertexPosition);
+
+    float alpha = 0.0;
+
+    vec3 p = rayOrigin;
+
+    for (int i = 0; i < steps; i++) {
+        p += rayDirection * stepSize;
+        float d = texture(tex0, p / 10.0).r * stepSize * (1.0 - alpha);
+        color += texture(tex1, p / 10.0).rgb * d;
+        alpha += d;
+    }
+
+    alpha = clamp(alpha, 0.0, 1.0);
+
+    colorTexture = vec4(color, alpha);
 }

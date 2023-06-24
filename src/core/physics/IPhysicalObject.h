@@ -37,6 +37,7 @@ namespace unreal_fluid::physics {
 
       /* gas objects */
       GAS_CONTAINER_2D,
+      GAS_CONTAINER_3D,
     };
 
     virtual ~IPhysicalObject() = default;

@@ -70,6 +70,7 @@ namespace unreal_fluid::render {
     static ShaderProgram *_postProcessingProgram;
 
     static ShaderProgram *_gasProgram;
+    static ShaderProgram *_gas3DProgram;
 
     static DefaultShaderManager _instance;
 
@@ -89,6 +90,10 @@ namespace unreal_fluid::render {
     /// Get default gas program
     /// @return Default gas program
     static ShaderProgram * GetGasProgram();
+
+    /// Get default gas 3D program
+    /// @return Default gas 3D program
+    static ShaderProgram * GetGas3DProgram();
 
     /// Reload all shaders
     static void ReloadShaders();

@@ -133,6 +133,11 @@ ShaderProgram *ShaderManager::LoadProgram(std::string_view dir) {
   std::string realPath = std::string(SHADERS_PATH) + dir.data();
   std::filesystem::directory_iterator dirIt(realPath);
 
+  if (!std::filesystem::exists(realPath)) {
+    LOG_ERROR("ShaderManager : Can't open directory: ", realPath);
+    return nullptr;
+  }
+
   for (auto &file : dirIt) {
     paths.push_back(dir.data() + file.path().filename().string());
   }
@@ -255,6 +260,23 @@ ShaderProgram *DefaultShaderManager::GetGasProgram() {
                      "It can cause a segmentation fault, so the program will be closed!");
 
   Logger::logInfo("DefaultShaderManager : Gas program is loaded!");
+
+  return program;
+}
+
+ShaderProgram *DefaultShaderManager::GetGas3DProgram() {
+  static ShaderProgram *program = nullptr;
+
+  if (program != nullptr)
+    return program;
+
+  program = _instance.LoadProgram("gas_3d/");
+
+  if (program == nullptr)
+    Logger::logFatal("DefaultShaderManager : Gas3D program is not loaded!",
+                     "It can cause a segmentation fault, so the program will be closed!");
+
+  Logger::logInfo("DefaultShaderManager : Gas3D program is loaded!");
 
   return program;
 }

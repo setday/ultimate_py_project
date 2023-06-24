@@ -30,7 +30,7 @@ Plane::Plane(float width, float height, unsigned int widthSegments, unsigned int
 
       vec3f position = x * right + y * forward;
       vec3f normal = up;
-      vec2f texCoord = {(float) i / widthSegments, (float) j / heightSegments};
+      vec2f texCoord = {(float) j / widthSegments, (float) i / heightSegments};
 
 
       vertices.emplace_back(position, normal, texCoord);

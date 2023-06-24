@@ -100,6 +100,17 @@ public:
 
       Logger::logInfo("Ray tracing mode enabled");
     }
+    if (key == GLFW_KEY_F7 && action == GLFW_PRESS) {
+      if (AbstractObject::mode == AbstractObject::ParserMode::DEBUG) {
+        AbstractObject::mode = AbstractObject::ParserMode::RELEASE;
+
+        Logger::logInfo("Parser mode changed to RELEASE");
+      } else {
+        AbstractObject::mode = AbstractObject::ParserMode::DEBUG;
+
+        Logger::logInfo("Parser mode changed to DEBUG");
+      }
+    }
   }
 
   void resizeBindings(int width, int height) const {

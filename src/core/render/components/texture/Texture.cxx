@@ -14,10 +14,12 @@
  */
 
 #define TEXTURE_PATH "../assets/textures/"
+
 #define GL_TEX_IMAGE_2D(width, height, format, type, data) \
   glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, type, data)
 #define GL_TEX_IMAGE_3D(width, height, depth, format, type, data) \
   glTexImage3D(GL_TEXTURE_3D, 0, format, width, height, depth, 0, format, type, data)
+
 #define GL_TEX_SUB_IMAGE_2D(xoffset, yoffset, width, height, format, type, data) \
   glTexSubImage2D(GL_TEXTURE_2D, 0, xoffset, yoffset, width, height, format, type, data)
 #define GL_TEX_SUB_IMAGE_3D(xoffset, yoffset, zoffset, width, height, depth, format, type, data) \
@@ -29,43 +31,33 @@
 #include "../../../../utils/external/image_loader/stb_image.h"
 
 void unreal_fluid::render::Texture::_initTexture(int width, int height, int depth, std::size_t components, std::size_t componentSize) {
+  static GLenum internalFormatTable[5][2] = {
+      /// ubyte     float
+      {GL_R8,     GL_R32F},     // 1 component
+      {GL_RG8,    GL_RG32F},    // 2 components
+      {GL_RGB8,   GL_RGB32F},   // 3 components
+      {GL_RGBA8,  GL_RGBA32F},  // 4 components
+      {GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT32F}  // 5 components
+  };
+  static GLenum formatTable[5] = {
+      GL_RED,   // 1 component
+      GL_RG,    // 2 components
+      GL_RGB,   // 3 components
+      GL_RGBA,  // 4 components
+      GL_DEPTH_COMPONENT  // 5 components
+  };
+  static GLenum typeTable[2] = {
+      GL_UNSIGNED_BYTE, // 1 byte
+      GL_FLOAT          // 4 bytes
+  };
+
+  int typeID = (componentSize == 1) ? 0 : 1;
+
   _dimensions = (depth == 0) ? GL_TEXTURE_2D : GL_TEXTURE_3D;
 
-  switch (components) {
-    case 1:
-      _internalFormat = GL_R;
-      _format = GL_RED;
-      break;
-    case 2:
-      _internalFormat = GL_RG;
-      _format = GL_RG;
-      break;
-    case 3:
-      _internalFormat = GL_RGB;
-      _format = GL_RGB;
-      break;
-    case 4:
-      _internalFormat = GL_RGBA;
-      _format = GL_RGBA;
-      break;
-    case 5:
-      _internalFormat = GL_DEPTH_COMPONENT;
-      _format = GL_DEPTH_COMPONENT;
-      break;
-    default:
-      assert(false);
-  }
-
-  switch (componentSize) {
-    case 1:
-      _type = GL_UNSIGNED_BYTE;
-      break;
-    case 4:
-      _type = GL_FLOAT;
-      break;
-    default:
-      assert(false);
-  }
+  _internalFormat = internalFormatTable[components - 1][typeID];
+  _format = formatTable[components - 1];
+  _type = typeTable[typeID];
 
   resize(width, height, depth);
 
@@ -74,8 +66,9 @@ void unreal_fluid::render::Texture::_initTexture(int width, int height, int dept
 
   glTexParameteri(_dimensions, GL_TEXTURE_MIN_FILTER, GL_LINEAR); /// TODO: add option to change this
   glTexParameteri(_dimensions, GL_TEXTURE_MAG_FILTER, GL_LINEAR); /// TODO: add option to change this
-  glTexParameteri(_dimensions, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(_dimensions, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri(_dimensions, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+  glTexParameteri(_dimensions, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+  glTexParameteri(_dimensions, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER);
 }
 
 unreal_fluid::render::Texture::Texture(std::size_t components, std::size_t componentSize) {

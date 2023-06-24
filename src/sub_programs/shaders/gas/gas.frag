@@ -56,7 +56,8 @@ vec3 applyPointLight(vec3 lightColor, vec3 lightPosition, vec3 normal, vec3 view
 
 void main()
 {
-    colorTexture = vec4(texture(tex0, texCoords).rgb, texture(tex1, texCoords).r);
+     colorTexture = vec4(texture(tex0, texCoords).rgb, texture(tex1, texCoords).r);
+//    colorTexture = vec4(texture(tex1, texCoords).rrr / 2, 1);
     positionTexture = vec4(vertexPosition, 1);
     normalTexture = vec4(vertexNormal, 1);
 }

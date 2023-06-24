@@ -27,6 +27,7 @@ double GasCell::getPressure() const {
 }
 
 GasCell GasCell::slice(double particlesCount) {
+  particlesCount = fmin(particlesCount, amountOfGas);
   GasCell newCell(particlesCount, color, temperature);
   amountOfGas -= particlesCount;
   return newCell;

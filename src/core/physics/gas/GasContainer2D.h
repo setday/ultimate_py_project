@@ -35,19 +35,21 @@ namespace unreal_fluid::physics::gas {
     GasContainer2d(int height, int width, int particle_number);
 
   private:
-    /// @brief Calculate flow between two cells.
+    /// @brief Calculate targetFlow between two cells.
     /// @param cell1 first cell (potential source)
     /// @param cell2 second cell (potential target)
-    [[nodiscard]] double calculateFlow(const GasCell &cell1, const GasCell &cell2) const;
-    /// @brief Calculate flow between two cells and save it in cells.
+    /// @param dt time step
+    [[nodiscard]] double calculateFlow(const GasCell &cell1, const GasCell &cell2, double dt) const;
+    /// @brief Calculate targetFlow between two cells and save it in cells.
     /// @param cell1, cell2 cells
     /// @param x, y - position
-    void calculateAndSaveFlow(GasCell &cell1, GasCell &cell2, int x, int y, bool isHorizontal);
+    /// @param dt time step
+    void calculateAndSaveFlow(GasCell &cell1, GasCell &cell2, int x, int y, bool isHorizontal, double dt);
     /// @brief Calculate all flows in container.
     /// @param dt time step
     void calculateFlows(double dt);
 
-    /// @brief Apply flow between two cells.
+    /// @brief Apply targetFlow between two cells.
     /// @param cell1 first cell
     /// @param cell2 second cell
     void applyFlow(GasCell &cell1, GasCell &cell2, double targetFlow) const;

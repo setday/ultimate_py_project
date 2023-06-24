@@ -72,6 +72,9 @@ void Renderer::renderObjects(const std::vector<render::RenderObject *> &objects)
   }
 
   for (const render::RenderObject *object : objects) {
+    if (!object->isVisible || object->shaderProgram == nullptr)
+      continue;
+
     ShaderProgram *program = object->shaderProgram;
 
     program->activate();

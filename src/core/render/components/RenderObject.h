@@ -35,6 +35,8 @@ namespace unreal_fluid::render {
 
     int isEmitter = 0; /// TODO: remove this field
 
+    bool isVisible = true;
+
     /// Default constructor.
     RenderObject() = default;
     /// Load render object from file.

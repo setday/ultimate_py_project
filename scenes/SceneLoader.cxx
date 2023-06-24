@@ -19,6 +19,7 @@
 #include "Control.cxx"
 #include "GLTestScene.cxx"
 #include "GasScene2D.cxx"
+#include "Gas3DScene.cxx"
 #include "MeshScene.cxx"
 #include "TestScene.cxx"
 
@@ -30,7 +31,7 @@ public:
     Logger::logInfo("Loading scenes...");
 
     compositor->loadScene<Control>();
-    compositor->loadScene<GasScene2D>();
+    compositor->loadScene<Gas3DScene>();
 
     Logger::logInfo("Scenes loaded!");
 
